@@ -28,7 +28,7 @@ import { generais, veioNegro, slugify } from '../data/canon.js';
         <div class="c-7-12">
           <div class="crest-head" data-reveal><img class="crest" src="/img/brasoes/generais-brilhantes.svg" alt="Brasão dos Generais Brilhantes" width="120" height="144" /><h3 class="t-h3">Patentes</h3></div>
           <ol class="ladder">
-            {generais.patentes.map(([n, t, c]) => <li data-reveal><b>{n}</b><h4>{t}</h4><p>{c}</p></li>)}
+            {generais.patentes.map(([n, t, c]) => <li data-reveal class="ladder__rank"><b>{n}</b><h4>{t}</h4><p>{c}</p><img class="rank-crest" src={`/img/brasoes/patente-${slugify(t)}.svg`} alt={`Insígnia de ${t}`} width="56" height="67" loading="lazy" /></li>)}
           </ol>
           <p class="t-small" style="margin-top:16px" data-reveal>Missões dos Generais dão Méritos (Estrelas Douradas).</p>
         </div>
@@ -41,9 +41,12 @@ import { generais, veioNegro, slugify } from '../data/canon.js';
       <SectionHead num="02" label="Tropas" title="Três tropas, <em>uma ordem</em>." lead="Uma mesma tropa pode ter dois ou mais Generais; o número de Generais não define a importância da tropa." />
       <div class="cols-3">
         {generais.tropas.map((t) => (
-          <article class="card" data-reveal style="padding:0;overflow:hidden">
-            <ImageSlot src={`generais/${slugify(t.nome)}`} label={t.nome} ratio="4 / 3" />
-            <div style="padding:clamp(20px,2.2vw,28px)">
+          <article class="card" data-reveal style="padding:0">
+            <div class="path__media">
+              <ImageSlot src={`generais/${slugify(t.nome)}`} label={t.nome} ratio="4 / 3" />
+              <img class="path__crest troop-crest" src={`/img/brasoes/${slugify(t.nome)}.svg`} alt={`Brasão das ${t.nome}`} width="88" height="106" loading="lazy" />
+            </div>
+            <div style="padding:clamp(20px,2.2vw,28px);padding-top:clamp(40px,4vw,52px)">
               <h3 class="t-h3">{t.nome}</h3>
               <dl class="kv" style="margin-top:18px">
                 <dt>Função</dt><dd>{t.funcao}</dd>
@@ -69,7 +72,7 @@ import { generais, veioNegro, slugify } from '../data/canon.js';
         <div class="c-7-12 stack" style="--s:1.4rem">
           <div class="crest-head" data-reveal><img class="crest" src="/img/brasoes/veio-negro.svg" alt="Brasão do Veio Negro" width="120" height="144" /><h3 class="t-h3">Patentes</h3></div>
           <ol class="ladder ladder--blood">
-            {veioNegro.patentes.map(([n, t, c]) => <li data-reveal><b>{n}</b><h4>{t}</h4><p>{c}</p></li>)}
+            {veioNegro.patentes.map(([n, t, c]) => <li data-reveal class="ladder__rank"><b>{n}</b><h4>{t}</h4><p>{c}</p><img class="rank-crest" src={`/img/brasoes/patente-${slugify(t)}.svg`} alt={`Insígnia de ${t}`} width="56" height="67" loading="lazy" /></li>)}
           </ol>
           <p class="t-body" data-reveal>Missões do Veio Negro dão {veioNegro.moeda}. Elas servem para subir de patente do mesmo jeito que os Méritos servem aos Generais.</p>
           <div class="btns" data-reveal><a class="btn" href="/missoes/">Ver Missões</a></div>

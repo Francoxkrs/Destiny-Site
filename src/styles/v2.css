@@ -357,3 +357,9 @@ ul.ticks li::before { border-color: var(--mana); }
 .path .chip { margin-top: 8px; }
 .origin__crests { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .origin__crests img { width: 26px; height: auto; opacity: 0.9; }
+
+/* brasões das tropas e insígnias das patentes */
+.troop-crest { width: 80px; bottom: -30px; }
+.ladder > li.ladder__rank { grid-template-columns: 54px 1fr 64px; }
+.ladder__rank .rank-crest { grid-column: 3; grid-row: 1 / span 2; align-self: center; width: 64px; height: auto; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35)); }
+@media (max-width: 640px) { .ladder > li.ladder__rank { grid-template-columns: 44px 1fr 44px; } .ladder__rank .rank-crest { width: 44px; } }

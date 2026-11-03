@@ -137,6 +137,36 @@ E['veio-negro'] = (f'<path d="M0,-44 L32,0 L0,44 L-32,0 Z" fill="{INK}" stroke="
                    f'<path d="M-32,0 H32 M-14,-24 L-8,0 L0,44 M14,-24 L8,0 L0,44" fill="none" stroke="{BONE}" stroke-width="1.5" opacity=".5"/>'
                    f'<path d="M2,-44 L-6,-24 L6,-12 L-4,4 L8,18 L-2,32 L2,44" fill="none" stroke="{VIOLET}" stroke-width="4" stroke-linejoin="round"/>')
 
+# tropas dos Generais Brilhantes
+SG = f'fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"'
+E['tropas-de-reconhecimento'] = (f'<path d="M-44,0 C-26,-26 26,-26 44,0 C26,26 -26,26 -44,0 Z" {S}/><circle r="15" fill="{GOLD}"/><circle r="6" fill="{INK}"/>'
+                                 f'<path d="M0,-44 V-30 M0,30 V44 M-50,0 H-46 M46,0 H50" {SG}/>')
+E['tropas-de-abate'] = (f'<circle r="34" {S}/><circle r="18" fill="none" stroke="{BONE}" stroke-width="2.5"/>'
+                        f'<path d="M0,-46 V-24 M0,24 V46 M-46,0 H-24 M24,0 H46" {S}/>'
+                        f'<path fill="{GOLD}" d="M0,-12 L4,-2 L0,12 L-4,-2 Z"/><path d="M-12,0 L-2,-3 L12,0 L-2,3 Z" fill="{GOLD}"/>')
+E['tropas-de-conquista'] = (f'<path d="M-26,44 V-6 H-18 V-14 H-10 V-6 H-2 V-14 H6 V-6 H14 V44 Z" fill="{BONE}"/><rect x="-10" y="18" width="10" height="26" fill="{INK}"/>'
+                            f'<path d="M24,44 V-44" stroke="{BONE}" stroke-width="4" stroke-linecap="round"/><path d="M24,-42 L48,-34 L24,-24 Z" fill="{GOLD}"/>')
+# patentes: estrelas para os Generais, pedras para o Veio Negro
+def star5(r, col, cx=0, cy=0):
+    pts = []
+    for i in range(10):
+        rr = r if i % 2 == 0 else r * .42
+        a = -math.pi/2 + i * math.pi / 5
+        pts.append(f'{cx+rr*math.cos(a):.1f},{cy+rr*math.sin(a):.1f}')
+    return f'<polygon points="{" ".join(pts)}" fill="{col}"/>'
+def chevrons(n, col):
+    return ''.join(f'<path d="M-30,{34+i*0} L0,{18} L30,{34}" transform="translate(0,{i*12})" fill="none" stroke="{col}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>' for i in range(n))
+E['patente-recruta-brilhante'] = star5(30, GOLD, 0, -10) + chevrons(1, BONE)
+E['patente-tenente-brilhante'] = star5(22, GOLD, -18, -12) + star5(22, GOLD, 18, -12) + chevrons(2, BONE)
+E['patente-general-brilhante'] = radiant(GOLD).replace('<polygon', '<polygon transform="translate(0,-10) scale(.8)"') + star5(10, INK, 0, -10) + chevrons(3, BONE)
+E['patente-pedra-bruta'] = (f'<path d="M-30,10 L-22,-22 L4,-34 L28,-16 L32,14 L8,30 L-20,28 Z" fill="{BONE}"/>'
+                            f'<path d="M-22,-22 L-4,-4 L4,-34 M-4,-4 L28,-16 M-4,-4 L8,30 M-4,-4 L-30,10" fill="none" stroke="{INK}" stroke-width="2" opacity=".55"/>')
+E['patente-lapidador'] = (f'<path d="M-26,-6 L-14,-24 H14 L26,-6 L0,30 Z" fill="{BONE}"/><path d="M-26,-6 H26 M-14,-24 L-6,-6 L0,30 M14,-24 L6,-6 L0,30" fill="none" stroke="{INK}" stroke-width="2"/>'
+                          f'<path d="M24,-40 L40,-24" stroke="{VIOLET}" stroke-width="6" stroke-linecap="round"/><path d="M22,-26 L12,-16" stroke="{VIOLET}" stroke-width="4" stroke-linecap="round"/>')
+E['patente-quilate'] = (f'<path d="M-38,-8 L-22,-32 H22 L38,-8 L0,42 Z" fill="{VIOLET}"/>'
+                        f'<path d="M-38,-8 H38 M-22,-32 L-10,-8 L0,42 M22,-32 L10,-8 L0,42 M0,-32 L-10,-8 M0,-32 L10,-8" fill="none" stroke="{INK}" stroke-width="2.2"/>'
+                        f'<path d="M-46,-34 L-40,-28 M46,-34 L40,-28 M0,-48 V-40" stroke="{BONE}" stroke-width="3" stroke-linecap="round"/>')
+
 def brasao(key, classe, origem=None, borda=RED, topo=None):
     sh = SHIELD[classe]
     top = topo if topo is not None else {'Realeza': crown(), 'Nobreza': nobre(), 'Plebe': plebe()}.get(classe, '')
@@ -168,4 +198,14 @@ if __name__ == '__main__':
         open(os.path.join(OUT, k + '.svg'), 'w').write(brasao(k, f['classe'], f['origem']))
     open(os.path.join(OUT, 'generais-brilhantes.svg'), 'w').write(brasao('generais-brilhantes', 'Ordem', None, GOLD, crown(GOLD, INK)))
     open(os.path.join(OUT, 'veio-negro.svg'), 'w').write(brasao('veio-negro', 'Ordem', None, VIOLET, f'<path d="M70,44 L100,20 L130,44" fill="none" stroke="{VIOLET}" stroke-width="3"/>'))
+    gtop = f'<path d="M70,44 L100,22 L130,44" fill="none" stroke="{GOLD}" stroke-width="3"/><circle cx="100" cy="22" r="3.5" fill="{GOLD}"/>'
+    vtop = f'<path d="M70,44 L100,20 L130,44" fill="none" stroke="{VIOLET}" stroke-width="3"/>'
+    for k in ('tropas-de-reconhecimento', 'tropas-de-abate', 'tropas-de-conquista'):
+        open(os.path.join(OUT, k + '.svg'), 'w').write(brasao(k, 'Ordem', None, GOLD, gtop))
+    for k in ('recruta-brilhante', 'tenente-brilhante', 'general-brilhante'):
+        E['patente-' + k] = '<g transform="translate(0,-10) scale(1.25)">' + E['patente-' + k] + '</g>'
+        open(os.path.join(OUT, 'patente-' + k + '.svg'), 'w').write(brasao('patente-' + k, 'Plebe', None, GOLD, ''))
+    for k in ('pedra-bruta', 'lapidador', 'quilate'):
+        E['patente-' + k] = '<g transform="translate(0,-10) scale(1.25)">' + E['patente-' + k] + '</g>'
+        open(os.path.join(OUT, 'patente-' + k + '.svg'), 'w').write(brasao('patente-' + k, 'Plebe', None, VIOLET, ''))
     print(len(os.listdir(OUT)))

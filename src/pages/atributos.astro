@@ -1,0 +1,195 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import Table from '../components/Table.astro';
+import {
+  atributos, classificacoes, manaNiveis, romanos, controleFaixas, acrescimosFaixas, confronto, ferimentos, turno,
+} from '../data/canon.js';
+
+const nomesCls = classificacoes.map((c) => c.nome);
+const maxMana = manaNiveis[manaNiveis.length - 1];
+---
+<Base title="Atributos" slug="atributos" description="Os seis atributos, as classificações, os Acréscimos, o confronto sem dados, os Ferimentos e o turno.">
+  <PageHero
+    slug="atributos"
+    title="Atributos"
+    lead="Seis atributos descrevem o personagem. Nenhuma ação usa dado: o resultado sai da comparação entre classificações, Acréscimos e circunstâncias."
+    intro="Força, Resistência e Velocidade são físicos e sobem por classificação. Poder Mágico, Mana e Controle Mágico são mágicos e sobem por nível."
+    image="atributos/capa"
+    imageLabel="Dois magos em confronto"
+  />
+
+  <section class="sec">
+    <div class="wrap">
+      <SectionHead num="01" label="Os seis atributos" title="Três do corpo. <em>Três da mana.</em>" />
+      <div class="cols-3">
+        {atributos.map((a, i) => (
+          <div class="card" data-reveal>
+            <div style="display:flex;justify-content:space-between;gap:12px"><span class="card__num">0{i + 1}</span><span class:list={['chip', a.grupo === 'Mágico' ? 'chip--mana' : '']}>{a.grupo} · {a.escala}</span></div>
+            <h3 class="t-h3 card__title">{a.nome}</h3>
+            <p class="card__text">{a.texto}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="02" label="Classificações físicas" title="Oito patamares, <em>de Comum a Transcendental</em>." lead="Dois personagens na mesma classificação não são idênticos: a classificação é um patamar, e os Acréscimos marcam a diferença dentro dele." />
+      <div class="scale" data-bars>
+        {classificacoes.map((c, i) => (
+          <div class="scale__row" data-reveal>
+            <span class="scale__i">{String(i + 1).padStart(2, '0')}</span>
+            <span class="scale__name">{c.nome}</span>
+            <p class="scale__txt"><small>Força destrói</small>{c.forca}</p>
+            <p class="scale__txt"><small>Resistência aguenta</small>{c.resistencia}</p>
+            <div class="scale__bar" style={`--w:${(c.vel / 200) * 100}%`}><i></i><span>{c.vel} km/h</span></div>
+          </div>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px">Velocidade máxima de cada classificação. 200 km/h é o limite natural.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="03" label="Atributos mágicos" title="Poder, reserva <em>e precisão</em>." />
+      <div class="grid">
+        <div class="c-1-4 stack" style="--s:1rem">
+          <h3 class="t-h3" data-reveal>Poder Mágico <span class="t-mana">I–VI</span></h3>
+          <p class="t-body" data-reveal>Amplifica o atributo que a magia usa enquanto ela está ativa. O nível é o número de Acréscimos: Poder Mágico III dá +3.</p>
+          <p class="t-body" data-reveal>Feitiços externalizados recebem 100% desses Acréscimos; Reforço Corporal recebe 50%, arredondado para baixo.</p>
+        </div>
+        <div class="c-5-12">
+          <h3 class="t-h3" data-reveal>Mana <span class="t-mana">I–X</span></h3>
+          <div class="bars" data-bars style="margin-top:28px" aria-label="Reserva de Mana por nível">
+            {manaNiveis.map((m, i) => (
+              <div><b>{m.toLocaleString('pt-BR')}</b><i style={`--h:${(m / maxMana) * 100}%`}></i><span>{romanos[i]}</span></div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:clamp(48px,6vw,90px)">
+        <h3 class="t-h3" data-reveal>Controle Mágico <span class="t-mana">0–100%</span></h3>
+        <p class="t-body" style="margin:12px 0 28px" data-reveal>Mede a precisão com que o personagem usa a própria mana. Reduz o custo de Mana e libera Estágios e Técnicas.</p>
+        <Table head={['Controle', 'Desconto de Mana']} rows={controleFaixas.map(([f, d]) => [f, `${d}%`])} numCols={[1]} />
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="acrescimos">
+    <div class="wrap">
+      <SectionHead num="04" label="Acréscimos" title="Dez passos <em>até o próximo patamar</em>." lead="Os Acréscimos são valores adicionais aplicados temporariamente a um atributo. Permitem ultrapassar parcialmente o desempenho natural numa situação específica e podem levar a uma classificação superior quando somam o necessário." />
+      <div class="grid" style="align-items:start">
+        <div class="c-1-6 stack" style="--s:1.2rem">
+          <p class="t-body" data-reveal>Vêm de magias, Conhecimentos, Classes, Famílias, Milagres, Traços, equipamentos e poções, sempre ligados ao atributo correspondente.</p>
+          <ul class="ticks" data-reveal>
+            <li>A menor unidade é <b>0,1</b> Acréscimo e a maior que uma aplicação pode dar é <b>1</b>.</li>
+            <li>Fontes diferentes se acumulam até o limite de <b>10 por atributo</b>.</li>
+            <li><b>10 Acréscimos</b> sobem uma classificação completa enquanto mantidos: Força Comum + 10 age como Força Incomum.</li>
+            <li>O que passar de 10 não gera nada.</li>
+            <li>Exceção: o <b>Poder Mágico</b> dá de +1 (nível I) a +6 (nível VI) numa única aplicação.</li>
+          </ul>
+        </div>
+        <div class="c-7-12">
+          <Table head={['Acréscimos', 'O que representam']} rows={acrescimosFaixas} />
+        </div>
+      </div>
+
+      <div class="sim" style="margin-top:clamp(40px,6vw,80px)" data-sim="acrescimos" data-cls={JSON.stringify(nomesCls)} data-faixas={JSON.stringify(acrescimosFaixas)} data-reveal>
+        <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px">
+          <span class="eyebrow"><b>Teste</b>Some Acréscimos</span><span class="t-label">Arraste para ver o efeito</span>
+        </div>
+        <div class="sim__grid">
+          <div class="field">
+            <label for="acr-base">Classificação base</label>
+            <select class="select" id="acr-base" name="base">{nomesCls.slice(0, -1).map((n, i) => <option value={i}>{n}</option>)}</select>
+          </div>
+          <div class="field">
+            <label for="acr-v">Acréscimos <output data-out>+0</output></label>
+            <input type="range" id="acr-v" name="acr" min="0" max="10" step="0.1" value="3.5" />
+            <div class="meter" aria-hidden="true">{Array.from({ length: 10 }).map(() => <i></i>)}</div>
+          </div>
+        </div>
+        <div class="sim__out" aria-live="polite"><p class="sim__result" data-result></p><p class="sim__why" data-why></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="confronto">
+    <div class="wrap">
+      <SectionHead num="05" label="Confronto sem dados" title="Compare. <em>Não role.</em>" lead="Quando duas ações se encontram, o narrador compara nesta ordem e para no primeiro passo que decide." />
+      <div class="nodice" style="margin-bottom:clamp(40px,6vw,80px)">
+        {confronto.map(([t, d], i) => (
+          <div data-reveal><b>Passo 0{i + 1}</b><div><h3>{t}</h3><p>{d}</p></div></div>
+        ))}
+      </div>
+      <p class="t-lead" style="max-width:40ch;margin-bottom:clamp(40px,6vw,72px)" data-reveal>Velocidade decide quem age primeiro e se a esquiva funciona: se a Velocidade de quem esquiva for igual ou maior que a do ataque, a esquiva acontece.</p>
+
+      <div class="sim" data-sim="confronto" data-cls={JSON.stringify(nomesCls)} data-fer={JSON.stringify(ferimentos)} data-reveal>
+        <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;align-items:center">
+          <span class="eyebrow"><b>Simulador</b>Um golpe, sem dados</span>
+          <div class="field" style="min-width:min(100%,320px)">
+            <label for="modo">Situação</label>
+            <select class="select" id="modo" name="modo">
+              <option value="for">Golpe: Força contra Resistência</option>
+              <option value="vel">Esquiva: Velocidade contra Velocidade</option>
+            </select>
+          </div>
+        </div>
+        <div class="sim__grid sim__grid--3">
+          <div class="sim__side">
+            <span class="t-label t-mana" data-a-attr>Força de quem ataca</span>
+            <div class="field"><label for="a-cls">Classificação</label><select class="select" id="a-cls" name="a-cls">{nomesCls.map((n, i) => <option value={i} selected={i === 2}>{n}</option>)}</select></div>
+            <div class="field"><label for="a-acr">Acréscimos <output data-a-out>+0</output></label><input type="range" id="a-acr" name="a-acr" min="0" max="10" step="0.1" value="3" /></div>
+          </div>
+          <p class="sim__vs" aria-hidden="true">contra</p>
+          <div class="sim__side">
+            <span class="t-label t-mana" data-d-attr>Resistência de quem defende</span>
+            <div class="field"><label for="d-cls">Classificação</label><select class="select" id="d-cls" name="d-cls">{nomesCls.map((n, i) => <option value={i} selected={i === 1}>{n}</option>)}</select></div>
+            <div class="field"><label for="d-acr">Acréscimos <output data-d-out>+0</output></label><input type="range" id="d-acr" name="d-acr" min="0" max="10" step="0.1" value="6" /></div>
+          </div>
+        </div>
+        <div class="sim__out" aria-live="polite"><p class="sim__result" data-result></p><p class="sim__why" data-why></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="ferimentos">
+    <div class="wrap">
+      <SectionHead num="06" label="Ferimentos" title="O dano é a <em>distância</em> entre ataque e defesa." lead="Curas comuns tratam Ferimentos I e II. Ferimentos III exigem Medicina Avançada ou um Sacerdote da Mana. Ferimentos IV exigem tratamento fora de combate." />
+      <div class="wounds">
+        {ferimentos.map(([n, nome, sup, efeito], i) => (
+          <div class="wound" style={`--i:${i}`} data-reveal>
+            <span class="wound__lvl">{n}</span>
+            <h3 class="t-h3">{nome}</h3>
+            <dl class="kv"><dt>Supera por</dt><dd>{sup}</dd></dl>
+            <p class="t-small">{efeito}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap grid" style="align-items:center">
+      <div class="c-1-5 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>07</b>Turno</span>
+        <h2 class="t-h2" data-split>Três ações <em>por vez</em>.</h2>
+        <p class="t-body" data-reveal>Efeitos medidos em turnos contam os turnos do próprio personagem.</p>
+      </div>
+      <div class="c-6-12">
+        <ol class="steps">{turno.map(([t, d]) => <li data-reveal><div><h3>{t}</h3><p>{d}</p></div></li>)}</ol>
+      </div>
+    </div>
+    <div class="wrap" style="margin-top:clamp(48px,7vw,100px)">
+      <ImageSlot src="atributos/turno" label="Um turno de combate em Diamond" ratio="21 / 9" />
+    </div>
+  </section>
+
+  <NextPage slug="atributos" />
+</Base>

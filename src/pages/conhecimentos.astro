@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import Table from '../components/Table.astro';
+import { conhecimentos, capsulas, slugify } from '../data/canon.js';
+
+const categorias = [
+  ['Comuns', 'Estudos, giros, Cápsulas, sorteios e eventos', conhecimentos.comuns.length],
+  ['Incomuns', 'Giros, Cápsulas, sorteios e eventos. Nunca por Estudos', conhecimentos.incomuns.length],
+  ['Perdidos', 'Cápsulas Perdidas, sorteios e eventos', conhecimentos.perdidos.length],
+];
+---
+<Base title="Conhecimentos" slug="conhecimentos" description="Os Conhecimentos Comuns, Incomuns e Perdidos, o limite de seis e as Cápsulas vendidas no Fosso.">
+  <PageHero
+    slug="conhecimentos"
+    title="Conhecimentos"
+    lead="Conhecimentos são o que o personagem aprendeu e domina, de esgrima a artes demoníacas."
+    intro="Todo personagem tem no máximo 6, de qualquer categoria, e esse limite não cresce. Conhecimentos dados por raça, classe, família ou evento não ocupam esses espaços."
+    image="conhecimentos/capa"
+    imageLabel="Estantes do Grande Arquivo de Valcristal"
+  />
+
+  <section class="sec--tight">
+    <div class="wrap cols-3">
+      {categorias.map(([t, d, n]) => (
+        <div class="stat" data-reveal>
+          <p class="stat__n" data-count={n} data-pad="2">{String(n).padStart(2, '0')}</p>
+          <h3 class="t-h3" style="margin-top:12px">{t}</h3>
+          <p class="t-small" style="margin-top:8px">{d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="01" label="Comuns" title="O que se aprende <em>estudando</em>." lead="A coluna de dias mostra quantos dias de Estudo cada um exige numa Biblioteca. O Científico só se estuda no Grande Arquivo de Valcristal." />
+      <Table head={['Conhecimento', 'Efeitos', 'Dias de estudo']} rows={conhecimentos.comuns} numCols={[2]} />
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="02" label="Incomuns" title="O que se ganha, <em>nunca se estuda</em>." lead="Incomuns chegam por giros na criação, Cápsulas, sorteios e eventos. Os quatro marcados abaixo só vêm de sorteios e eventos." />
+      <Table head={['Conhecimento', 'Efeitos']} rows={conhecimentos.incomuns} />
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="03" label="Perdidos" title="O que o mundo <em>tentou esquecer</em>." />
+      <div class="cols-3">
+        {conhecimentos.perdidos.map(([t, d]) => (
+          <article class="card" data-reveal style="padding:0;overflow:hidden;border-color:rgba(214,180,106,.3)">
+            <ImageSlot src={`conhecimentos/${slugify(t)}`} label={t} ratio="4 / 3" compact />
+            <div style="padding:clamp(20px,2.2vw,28px)">
+              <span class="chip chip--gold">Perdido</span>
+              <h3 class="t-h3 card__title">{t}</h3>
+              <p class="card__text">{d}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="capsulas">
+    <div class="wrap grid" style="align-items:start">
+      <div class="c-1-5 stack" style="--s:1.4rem">
+        <span class="eyebrow" data-reveal><b>04</b>Cápsulas de Conhecimento</span>
+        <h2 class="t-h2" data-split>Vendidas <em>no Fosso</em>.</h2>
+        <p class="t-body" data-reveal>Quem consome uma Cápsula aprende o Conhecimento na hora e para sempre. Ninguém pergunta de onde elas vêm.</p>
+        <ImageSlot src="conhecimentos/capsulas" label="Uma Cápsula de Conhecimento" ratio="1 / 1" />
+      </div>
+      <div class="c-6-12">
+        <Table head={['Cápsula', 'Conteúdo', 'Preço']} rows={capsulas} numCols={[2]} />
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="conhecimentos" />
+</Base>

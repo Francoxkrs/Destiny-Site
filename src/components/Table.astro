@@ -1,0 +1,14 @@
+---
+// Tabela responsiva: no celular cada linha vira um bloco com rótulos.
+const { head = [], rows = [], numCols = [], class: cls = '' } = Astro.props;
+---
+<div class:list={['tbl-wrap', cls]} data-reveal>
+  <table class="tbl">
+    <thead><tr>{head.map((h) => <th scope="col">{h}</th>)}</tr></thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>{r.map((c, i) => <td data-label={head[i]} class={numCols.includes(i) ? 'num' : undefined} set:html={String(c)} />)}</tr>
+      ))}
+    </tbody>
+  </table>
+</div>

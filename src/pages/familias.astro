@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import { classesSociais, familias, slugify } from '../data/canon.js';
+
+const leitura = [
+  ['Magias de Linhagem', 'O modelo pode trocar a magia girada por uma destas, se houver vaga.'],
+  ['Herança', 'O que a alma traz da vida passada. Conhecimentos de família não ocupam os seis espaços.'],
+  ['Giro de Linhagem', 'Um giro extra e exclusivo da família, feito no /criar-personagem, com a chance indicada.'],
+  ['Marco', 'O que a família desperta ao alcançar um Estágio.'],
+  ['Raridade', 'Comum aparece nos modelos com frequência; Rara aparece pouco; Sorteio só vem de sorteios e eventos.'],
+];
+const filtros = [
+  ['todas', 'Todas'], ['realeza', 'Realeza'], ['nobreza', 'Nobreza'], ['plebe', 'Plebe'],
+  ['humanos', 'Humanos'], ['anoes', 'Anões'], ['bruxas', 'Bruxas'], ['elfos', 'Elfos'],
+  ['rara', 'Raras'], ['sorteio', 'De sorteio'],
+];
+const rarChip = { Comum: '', Rara: 'chip--gold', Sorteio: 'chip--violet' };
+const ordem = ['Realeza', 'Nobreza', 'Plebe'];
+const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.indexOf(b.classe));
+---
+<Base title="Famílias" slug="familias" description="As três classes sociais e as 24 famílias de outras vidas que um Retornado pode carregar.">
+  <PageHero
+    slug="familias"
+    title="Famílias"
+    lead="Toda alma lembra um nome de família. Ele vem de Clover, de Spades, de Heart, do Reino Subterrâneo ou da Floresta das Bruxas. O corpo é de Diamond."
+    intro="As 24 famílias do servidor continuam, refeitas como Linhagens da vida passada: cada uma com Herança, Magias de Linhagem e Marcos por Estágio."
+    image="familias/capa"
+    imageLabel="Brasões das famílias"
+  />
+
+  <section class="sec">
+    <div class="wrap">
+      <SectionHead num="01" label="Classes sociais" title="A desigualdade <em>está no sangue</em>." lead="Ao longo de gerações, cada classe casou dentro de si e concentrou linhagens mágicas diferentes. Um plebeu pode ficar mais forte que um nobre, mas começa atrás. Quem perde o título mantém a linhagem e os atributos." />
+      <div class="social">
+        {[...classesSociais].reverse().map((c) => (
+          <article data-reveal>
+            <ImageSlot src={`familias/classe-${slugify(c.nome)}`} label={`${c.nome} · ${c.regiao}`} ratio="16 / 10" compact />
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+              <h3 class="t-h3">{c.nome}</h3><span class="t-label t-mana">{c.regiao}</span>
+            </div>
+            <dl class="kv">
+              <dt>Dinheiro inicial</dt><dd>{c.dinheiro}</dd>
+              <dt>Poder Mágico</dt><dd>{c.pm}</dd>
+              <dt>Mana</dt><dd>{c.mana}</dd>
+              <dt>Controle Mágico</dt><dd>{c.controle}</dd>
+            </dl>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:20px" data-reveal>Os atributos mágicos da classe valem para Humanos. Para as outras raças, a classe só define dinheiro e região de nascimento.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="02" label="Como ler uma família" title="Cinco campos, <em>uma linhagem</em>." />
+      <div class="cols-3">
+        {leitura.map(([t, d], i) => (
+          <div class="card" data-reveal>
+            <span class="card__num">0{i + 1}</span>
+            <h3 class="t-h4 card__title">{t}</h3>
+            <p class="card__text">{d}</p>
+          </div>
+        ))}
+        <div class="card" data-reveal>
+          <span class="card__num">Conversões</span>
+          <p class="card__text">“+1 up” virou +1 classificação ou nível; Perícia virou Conhecimento; Mana Sense virou Percepção de Mana; level 10 a 35 viraram do 8º ao 3º Estágio. Dinheiro de família e híbridos saíram.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="03" label="As 24 famílias" title="Escolha uma <em>vida passada</em>." lead="No /criar-personagem a família vem no modelo, sorteada entre as da raça. Famílias Comuns pesam 6, Raras pesam 1 e as de Sorteio nunca aparecem por lá." />
+      <div class="filters" data-filter-group="#fam-grid" role="group" aria-label="Filtrar famílias">
+        {filtros.map(([v, l], i) => <button class="filter-btn" type="button" data-filter={v} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
+        <span class="t-label filters__count" data-filter-count aria-live="polite">{familias.length} famílias</span>
+      </div>
+      <div class="fam-grid" id="fam-grid">
+        {lista.map((f) => (
+          <article class="fam" data-tags={[slugify(f.classe), slugify(f.raca), slugify(f.raridade)].join(' ')} data-reveal>
+            <header class="fam__head">
+              <img class="fam__crest" src={`/img/brasoes/${slugify(f.nome)}.svg`} alt={`Brasão da família ${f.nome}`} width="88" height="106" loading="lazy" />
+              <div>
+                <h3 class="fam__name">{f.nome}</h3>
+                <div class="fam__meta">
+                  <span class="chip">{f.classe}</span>
+                  <span class:list={['chip', rarChip[f.raridade]]}>{f.raridade}{f.vagas ? ` · ${f.vagas} vagas` : ''}</span>
+                </div>
+              </div>
+            </header>
+            <div class="fam__body">
+              <p class="fam__lema">{f.lema}</p>
+              <dl class="fam__row"><dt>Vida passada</dt><dd>{f.origem} · {f.raca}</dd></dl>
+              <dl class="fam__row"><dt>Magias de Linhagem</dt><dd>{f.magias}</dd></dl>
+              <dl class="fam__row"><dt>Herança</dt><dd><ul>{f.heranca.map((h) => <li>{h}</li>)}</ul></dd></dl>
+              {f.giro && <dl class="fam__row"><dt>Giro de Linhagem</dt><dd class="t-mana">{f.giro}</dd></dl>}
+            </div>
+            {f.marco && <footer class="fam__foot"><b>Marco</b>{f.marco}</footer>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="familias" />
+</Base>

@@ -1,0 +1,181 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import Table from '../components/Table.astro';
+import Arrow from '../components/Arrow.astro';
+import { site, segundaVida, primeirosPassos, criacao, magias, conhecimentos } from '../data/canon.js';
+
+const soEvento = (d) => /sorteios e eventos\)?$/i.test(d) || /Só sorteios/i.test(d);
+const pools = {
+  magia: magias.filter((m) => m.chance).map((m) => ({ label: m.raridade, w: m.chance, items: m.lista })),
+  conh: [
+    { label: 'Comum', w: 80, items: conhecimentos.comuns.map((c) => c[0]) },
+    { label: 'Incomum', w: 20, items: conhecimentos.incomuns.filter((c) => !soEvento(c[1])).map((c) => c[0]) },
+  ],
+  grim: [
+    { label: 'Comum', w: 92, items: ['Grimório Comum'] },
+    { label: 'Lendário', w: 8, items: ['Grimório Lendário'] },
+  ],
+};
+const modelos = [
+  { raca: 'Humanos', familia: 'Voltia', classe: 'Mago de Batalha', social: 'Nobreza' },
+  { raca: 'Humanos', familia: 'Agrippa', classe: 'Mago do Caos', social: 'Plebe' },
+  { raca: 'Bruxas', familia: 'Unsworth', classe: 'Mago Arcano', social: 'Plebe' },
+];
+const discordExterno = site.discord !== '#';
+---
+<Base title="Começar" slug="comecar" description="Como criar um personagem no Black Destiny: os três modelos, os giros, a aprovação e a ficha em imagem gerada pelo bot.">
+  <PageHero
+    slug="comecar"
+    title="Começar"
+    lead="O personagem nasce no bot com /criar-personagem: três modelos prontos, giros para distribuir entre eles e a escolha final de um."
+    intro="Os giros só existem aqui. Depois da criação, nada no jogo usa sorte."
+    image="comecar/capa"
+    imageLabel="Um Retornado abre os olhos em Diamond"
+  />
+
+  <section class="sec">
+    <div class="wrap grid">
+      <div class="c-1-5 stack" style="--s:1.4rem">
+        <span class="eyebrow" data-reveal><b>01</b>{segundaVida.titulo}</span>
+        <h2 class="t-h2" data-split>Você já foi <em>alguém</em>.</h2>
+        <p class="t-body" data-reveal>{segundaVida.texto}</p>
+      </div>
+      <ol class="steps c-7-12">
+        {primeirosPassos.map(([t, d]) => <li data-reveal><div><h3>{t}</h3><p set:html={d.replace(/(\/[a-z-]+)/g, '<code>$1</code>')} /></div></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="modelos">
+    <div class="wrap">
+      <SectionHead num="02" label="Os três modelos" title="Três vidas possíveis. <em>Você fica com uma.</em>" lead="O bot gera três modelos, cada um com Raça, Família (e com ela a Classe Social) e Classe de Mago já definidas. Esses três campos não são girados pelo jogador." />
+      <div class="cols-3" style="margin-bottom:clamp(48px,6vw,88px)">
+        {criacao.modelos.map(([t, d], i) => (
+          <div class="card" data-reveal><span class="card__num">0{i + 1}</span><h3 class="t-h3 card__title">{t}</h3><p class="card__text">{d}</p></div>
+        ))}
+      </div>
+
+      <div class="sim" data-sim="criacao" data-pools={JSON.stringify(pools)} data-reveal>
+        <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:28px">
+          <span class="eyebrow"><b>Teste</b>Gire e distribua</span>
+          <button class="chip" type="button" data-reset>Recomeçar</button>
+        </div>
+        <div class="grid" style="align-items:center;margin-bottom:28px">
+          <div class="c-1-5">
+            <p class="t-label" data-spin-kind>Escolha o que girar</p>
+            <p class="sim__result" style="margin-top:10px" data-spin-result><span data-spin-name>Comece girando</span></p>
+          </div>
+          <div class="c-6-12 btns" style="justify-content:flex-end">
+            <button class="btn" type="button" data-spin="magia">Girar Magia · <b>4</b></button>
+            <button class="btn" type="button" data-spin="conh">Girar Conhecimento · <b>4</b></button>
+            <button class="btn" type="button" data-spin="grim">Girar Grimório · <b>2</b></button>
+            <button class="btn" type="button" data-discard>Descartar</button>
+          </div>
+        </div>
+        <div class="models">
+          {modelos.map((m, i) => (
+            <article class="model" data-model>
+              <div style="display:flex;justify-content:space-between;gap:12px"><span class="t-label">Modelo 0{i + 1}</span><span class="t-label t-mana">{m.social}</span></div>
+              <div class="model__slots">
+                <div class="model__slot is-fixed"><b>Raça</b>{m.raca}</div>
+                <div class="model__slot is-fixed"><b>Família</b>{m.familia}</div>
+                <div class="model__slot is-fixed"><b>Classe</b>{m.classe}</div>
+                <div class="model__slot" data-slot-kind="magia" data-empty="sem magia"><b>Magia</b><span>sem magia</span></div>
+                <div class="model__slot" data-slot-kind="conh" data-empty="vazio"><b>Conhec.</b><span>vazio</span></div>
+                <div class="model__slot" data-slot-kind="conh" data-empty="vazio"><b>Conhec.</b><span>vazio</span></div>
+                <div class="model__slot" data-slot-kind="grim" data-empty="Comum (padrão)"><b>Grimório</b><span>Comum (padrão)</span></div>
+              </div>
+              <button class="btn btn--solid" type="button" data-place disabled>Colocar aqui <Arrow /></button>
+            </article>
+          ))}
+        </div>
+        <p class="t-small" style="margin-top:20px">Demonstração com as chances reais. No bot também entram os giros extras de raça e os Giros de Linhagem de cada família.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="03" label="Os giros" title="O que você <em>sorteia</em>." lead="Cada resultado aparece na tela e o jogador escolhe em qual dos três modelos colocá-lo. Se as magias acabarem antes de todos terem uma, o bot dá um giro final ao modelo que ficou sem." />
+      <Table head={['Giro', 'Quantidade', 'Regra']} rows={criacao.giros} />
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap grid" style="align-items:start">
+      <div class="c-1-5 stack" style="--s:1.4rem">
+        <span class="eyebrow" data-reveal><b>04</b>Escolha e aprovação</span>
+        <h2 class="t-h2" data-split>Um modelo <em>vira gente</em>.</h2>
+      </div>
+      <ol class="steps c-6-12">{criacao.escolha.map((t) => <li data-reveal><div><p style="margin:0;color:var(--bone);font-size:1.05rem" set:html={t.replace(/(\/[a-z-]+)/g, '<code>$1</code>')} /></div></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="ficha">
+    <div class="wrap">
+      <SectionHead num="05" label="A Ficha" title="Uma janela de status, <em>gerada pelo bot</em>." lead="A ficha é uma imagem no estilo de uma janela de status, atualizada a cada mudança. Use /ficha para ver a sua." />
+      <div class="grid" style="align-items:center">
+        <div class="c-1-7" data-reveal>
+          <div class="status" aria-label="Prévia da ficha">
+            <p class="status__title">STATUS</p>
+            <div class="status__id">
+              <ImageSlot src="comecar/ficha-retrato" label="Retrato do personagem" ratio="1 / 1" mini parallax={false} />
+              <div>
+                <p class="status__name">Kael Voltia</p>
+                <div class="status__kv">
+                  <div><span>Raça</span>Humano</div>
+                  <div><span>Classe social</span>Nobreza</div>
+                  <div><span>Classe</span>Mago de Batalha</div>
+                  <div><span>Milagre</span>—</div>
+                </div>
+              </div>
+            </div>
+            <div class="status__hr"></div>
+            <div class="status__stats">
+              <div><span>ESTÁGIO</span><b>9º</b></div>
+              <div><span>PONTOS DE ESTÁGIO</span><b>0 / 3</b></div>
+            </div>
+            <div class="status__bar" style="--v:100%;margin-top:14px"><span>MANA</span><i></i><span>200 / 200</span></div>
+            <div class="status__hr"></div>
+            <div class="status__stats">
+              <div><span>FORÇA</span><b>Comum <em>+0</em></b></div>
+              <div><span>PODER MÁGICO</span><b>I</b></div>
+              <div><span>RESISTÊNCIA</span><b>Comum <em>+0</em></b></div>
+              <div><span>MANA</span><b>II</b></div>
+              <div><span>VELOCIDADE</span><b>Comum <em>+0</em></b></div>
+              <div><span>CONTROLE</span><b>5%</b></div>
+            </div>
+            <div class="status__hr"></div>
+            <div class="status__cols">
+              <div><h6>MAGIA</h6><ul><li>Relâmpago</li><li>Grimório Comum</li><li>Feitiços 2 / 3</li></ul></div>
+              <div><h6>SABER</h6><ul><li>Conhecimentos 1 / 6</li><li>Traços 0 / 3</li><li>Percepção de Mana</li></ul></div>
+              <div><h6>CARREIRA</h6><ul><li>Méritos 0</li><li>1.000 Yuls · 0 Cristais</li><li>Treinos 6 / 6</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="c-8-12">
+          <dl class="kv">
+            {criacao.ficha.map(([t, d]) => <><dt>{t}</dt><dd style="text-align:left">{d}</dd></>)}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-final sec--line">
+    <div class="wrap">
+      <span class="eyebrow" style="justify-content:center" data-reveal><b>◆</b>Pronto para voltar?</span>
+      <p class="t-display" data-split>Use <em>/criar-personagem</em>.</p>
+      <div class="btns" data-reveal>
+        <a class="btn btn--solid" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Entrar no servidor <Arrow /></a>
+        <a class="btn" href="/mundo/" data-magnetic>Conhecer o mundo</a>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="comecar" />
+</Base>

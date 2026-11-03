@@ -1,0 +1,29 @@
+---
+import ImageSlot from './ImageSlot.astro';
+import { paginas, capitulos } from '../data/canon.js';
+const { slug, intro, lead, image, imageLabel, ratio = '21 / 9' } = Astro.props;
+const p = paginas.find((x) => x.slug === slug);
+const c = capitulos.find((x) => x.id === p.cap);
+---
+<section class="page-hero">
+  <span class="page-hero__kanji" aria-hidden="true" data-hero-fade>{c.kanji}</span>
+  <div class="wrap">
+    <div class="page-hero__meta" data-hero-fade>
+      <nav class="crumbs t-label" aria-label="Trilha">
+        <a href="/">Black Destiny</a><span>/</span><span>Cap. {c.id} · {c.nome}</span><span>/</span><span class="t-mana">{p.titulo}</span>
+      </nav>
+    </div>
+    <div class="page-hero__title">
+      <h1 class="t-h1" data-hero-title set:html={Astro.props.title ?? p.titulo} />
+    </div>
+    <div class="grid page-hero__grid">
+      <p class="t-lead c-1-7" data-hero-fade>{lead ?? p.resumo}</p>
+      {intro && <p class="t-body c-8-12" data-hero-fade set:html={intro} />}
+    </div>
+  </div>
+  {image && (
+    <div class="page-hero__media" data-hero-media>
+      <ImageSlot src={image} label={imageLabel ?? p.titulo} ratio={ratio} tag="Arte de capa" eager />
+    </div>
+  )}
+</section>

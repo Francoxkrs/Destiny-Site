@@ -1,0 +1,21 @@
+---
+import Arrow from './Arrow.astro';
+import ImageSlot from './ImageSlot.astro';
+import { paginas, capitulos } from '../data/canon.js';
+const { slug } = Astro.props;
+const i = paginas.findIndex((x) => x.slug === slug);
+const n = paginas[(i + 1) % paginas.length];
+const c = capitulos.find((x) => x.id === n.cap);
+const muda = paginas[i]?.cap !== n.cap;
+---
+<a class="next" href={`/${n.slug}/`} data-cursor="Virar a página">
+  <div class="next__bg" aria-hidden="true"><ImageSlot src={`${n.slug}/capa`} label={n.titulo} ratio="21 / 9" compact parallax={false} /></div>
+  <div class="wrap">
+    <div class="next__label">
+      <span class="eyebrow"><b>{muda ? `Cap. ${c.id}` : n.num}</b>{muda ? c.nome : 'Próxima página'}</span>
+      <span class="t-label">{n.resumo}</span>
+    </div>
+    <p class="next__title t-display">{n.titulo}<Arrow class="" /></p>
+  </div>
+  <span class="next__bar"></span>
+</a>

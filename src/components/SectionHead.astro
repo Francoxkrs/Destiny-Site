@@ -1,0 +1,14 @@
+---
+const { num, label, title, lead, class: cls = '' } = Astro.props;
+---
+<header class:list={['sec-head', cls]}>
+  <div class="sec-head__top">
+    <span class="eyebrow"><b>{num}</b>{label}</span>
+    <slot name="aside" />
+  </div>
+  <div class="grid">
+    <h2 class="t-h2 c-1-7" data-split set:html={title} />
+    {lead && <p class="t-body c-8-12 sec-head__lead" data-reveal>{lead}</p>}
+  </div>
+  <slot />
+</header>

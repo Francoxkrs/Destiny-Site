@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import { racas, slugify } from '../data/canon.js';
+
+const rotulos = ['Força', 'Resistência', 'Velocidade', 'Poder Mágico', 'Mana', 'Controle'];
+const chances = [['85%', 'Humanos'], ['08%', 'Anões'], ['07%', 'Bruxas'], ['—', 'Elfos, só por linhagem']];
+---
+<Base title="Raças" slug="racas" description="Humanos, Anões, Bruxas e Elfos: atributos iniciais, dons e como cada raça aparece na criação.">
+  <PageHero
+    slug="racas"
+    title="As <em>Raças</em>"
+    lead="A raça vem pronta no modelo do /criar-personagem. Ela define os atributos de partida e dons que nenhum treino ensina."
+    intro="Para Humanos, a classe social da família define os atributos mágicos iniciais. As outras raças trazem os próprios valores e usam a classe só para dinheiro e região de nascimento."
+    image="racas/capa"
+    imageLabel="As quatro raças lado a lado"
+  />
+
+  <section class="sec--tight">
+    <div class="wrap">
+      <div class="cols-4">
+        {chances.map(([n, l]) => (
+          <div class="stat" data-reveal><p class="stat__n">{n}</p><p class="stat__l t-label">{l}</p></div>
+        ))}
+      </div>
+      <p class="t-label" style="margin-top:20px" data-reveal>Chance de cada raça aparecer num modelo do /criar-personagem</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line" style="padding-bottom:0">
+    <div class="wrap">
+      <SectionHead num="01" label="As quatro raças" title="Quem a alma <em>era</em>, e quem ela <em>é</em>." />
+      <div>
+        {racas.map((r, i) => (
+          <article class="race">
+            <div class="race__media">
+              <ImageSlot src={`racas/${slugify(r.nome)}`} label={r.nome} ratio="4 / 5" />
+            </div>
+            <div>
+              <div class="race__name">
+                <h3 class="t-h2" data-split>{r.nome}</h3>
+                <span class="t-label">0{i + 1}</span>
+              </div>
+              <div class="chips" style="margin-top:20px" data-reveal><span class="chip chip--mana">{r.obtencao}</span></div>
+              <p class="t-lead" style="margin-top:28px" data-reveal>{r.texto}</p>
+              <dl class="attrs" data-reveal>
+                {r.atributos.map((a, j) => <div><dt>{rotulos[j]}</dt><dd>{a}</dd></div>)}
+              </dl>
+              <dl class="gifts">
+                {r.habilidades.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap grid">
+      <div class="c-1-5"><span class="eyebrow" data-reveal><b>02</b>Leitura rápida</span></div>
+      <div class="c-6-12 stack" style="--s:1rem">
+        <p class="t-lead" data-reveal>“Pela classe” quer dizer que o Humano usa o Poder Mágico, a Mana e o Controle da classe social da família: Plebe, Nobreza ou Realeza.</p>
+        <p class="t-body" data-reveal>Os atributos físicos (Força, Resistência e Velocidade) são classificações; Poder Mágico vai de I a VI, Mana de I a X e Controle de 0 a 100%. Tudo isso está explicado em Atributos.</p>
+        <div data-reveal><a class="btn" href="/atributos/">Ver Atributos</a></div>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="racas" />
+</Base>

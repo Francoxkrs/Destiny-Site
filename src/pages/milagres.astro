@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import Table from '../components/Table.astro';
+import { milagres, tracos, sincronia, exclusivasAntigas, slugify } from '../data/canon.js';
+---
+<Base title="Milagres e Traços" slug="milagres" description="Os oito Milagres, os doze Traços e a Sincronia: as marcas mais fortes e os talentos pequenos de cada alma.">
+  <PageHero
+    slug="milagres"
+    title="Milagres <em>e Traços</em>"
+    lead="Milagres são bênçãos raras da própria mana, as marcas mais fortes que uma alma pode carregar. Traços são talentos pequenos que somam."
+    intro="Cada personagem tem no máximo um Milagre e até três Traços. Milagres vêm de sorteios, eventos, algumas famílias e do Despertar no 1º Estágio."
+    image="milagres/capa"
+    imageLabel="Uma alma tocada pela mana"
+  />
+
+  <section class="sec">
+    <div class="wrap">
+      <SectionHead num="01" label="Os oito Milagres" title="Um por alma. <em>Nunca dois.</em>" lead="No 1º Estágio, o Despertar deixa escolher um Milagre a quem ainda não tem. Alguns custam caro: Tengentsu e Absorção e Emissão tiram a própria magia." />
+      <div class="miracles">
+        {milagres.map((m, i) => (
+          <article class="miracle" data-reveal>
+            <ImageSlot src={`milagres/${slugify(m.nome)}`} label={m.nome} ratio="16 / 9" />
+            <div class="miracle__body">
+              <div class="miracle__title">
+                <h3 class="t-h3">{m.nome}</h3>
+                <span class="t-label">0{i + 1}</span>
+              </div>
+              {(m.antes || m.restricao) && (
+                <div class="chips">
+                  {m.antes && <span class="chip">antes {m.antes}</span>}
+                  {m.restricao && <span class="chip chip--blood">{m.restricao}</span>}
+                </div>
+              )}
+              <p class="t-body">{m.texto}</p>
+              <ul class="ticks">{m.efeitos.map((e) => <li>{e}</li>)}</ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="02" label="Os doze Traços" title="Pequenas vantagens, <em>no limite de três</em>." lead="Traços são as antigas Habilidades Livres, refeitas: nenhum concede mais de 1 Acréscimo por aplicação. Vêm de famílias, sorteios, eventos e do Despertar de Traço, uma escolha livre no 7º, no 5º e no 3º Estágio." />
+      <Table head={['Traço', 'Efeito']} rows={tracos} />
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap grid" style="align-items:center">
+      <div class="c-1-6">
+        <ImageSlot src="milagres/sincronia" label="Sincronia entre dois Retornados" ratio="4 / 3" />
+      </div>
+      <div class="c-8-12 stack" style="--s:1.4rem">
+        <span class="eyebrow" data-reveal><b>03</b>Estado especial</span>
+        <h2 class="t-h2" data-split><em>Sincronia</em></h2>
+        <span class="chip" data-reveal>antes Estado de Sincronia</span>
+        <p class="t-body" data-reveal>{sincronia}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec--tight sec--line">
+    <div class="wrap grid">
+      <div class="c-1-5"><span class="eyebrow" data-reveal><b>04</b>Para quem já jogava</span></div>
+      <div class="c-6-12 stack" style="--s:1rem">
+        <p class="t-lead" data-reveal>Para onde foram as habilidades exclusivas antigas?</p>
+        <p class="t-body" data-reveal>{exclusivasAntigas}</p>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="milagres" />
+</Base>

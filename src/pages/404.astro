@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import Gem from '../components/Gem.astro';
+---
+<Base title="Página não encontrada" slug="404">
+  <section class="cta-final" style="min-height:100svh;display:grid;place-items:center">
+    <Gem class="cta-final__gem" stroke={0.4} />
+    <div class="wrap">
+      <span class="eyebrow" style="justify-content:center"><b>404</b>Alma perdida</span>
+      <h1 class="t-display" data-hero-title>Esta página <em>não voltou</em>.</h1>
+      <div class="btns"><a class="btn btn--solid" href="/">Voltar ao início <Arrow /></a></div>
+    </div>
+  </section>
+</Base>

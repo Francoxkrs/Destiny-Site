@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import Table from '../components/Table.astro';
+import { magias, grimorios, grauPorEstagio, tiposFeitico, funcoes, maestria, slugify } from '../data/canon.js';
+
+const trio = [
+  ['Magia', 'O atributo mágico do personagem: fogo, cristal, sombras. Vem do giro na criação.'],
+  ['Grimório', 'O livro que registra os feitiços. Recebido na Torre dos Grimórios, com um diamante na capa.'],
+  ['Feitiço', 'Cada técnica escrita no Grimório. Criada pelo jogador e aprovada pelo Conselho Mágico.'],
+];
+---
+<Base title="Magia" slug="magia" description="As magias por raridade, os cinco tipos de Grimório e as regras de feitiço: Grau, Tipo, Função e Maestria.">
+  <PageHero
+    slug="magia"
+    title="Magia, <em>Grimório</em> e Feitiço"
+    lead="A magia vem do giro na criação. Os feitiços, você escreve."
+    intro="O Grimório precisa estar aberto para os feitiços funcionarem; ao fechá-lo, todos os feitiços ativos acabam. Longe do usuário além da distância máxima, ele para de funcionar."
+    image="magia/capa"
+    imageLabel="Um Grimório se abrindo"
+  />
+
+  <section class="sec--tight">
+    <div class="wrap cols-3">
+      {trio.map(([t, d], i) => (
+        <div class="stat" data-reveal><p class="t-label t-mana">0{i + 1}</p><h3 class="t-h2" style="margin-top:14px">{t}</h3><p class="t-body" style="margin-top:12px">{d}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="01" label="Magias" title="Cada magia tem <em>vagas</em>." lead="Quando as vagas acabam, a magia sai do giro até uma vaga abrir. Magias Exclusivas só vêm de eventos, sorteios e famílias; a Magia Original é criada junto com o Conselho Mágico." />
+      <div data-bars>
+        {magias.map((m) => (
+          <div class:list={['rarity', `r-${slugify(m.raridade)}`]} data-reveal>
+            <div>
+              <h3 class="rarity__name">{m.raridade}</h3>
+              <div class="rarity__meta">
+                <span class="t-label">{m.chance ? `${m.chance}% no giro · ${m.vagas} vagas por magia` : 'Fora do giro · vagas definidas em cada caso'}</span>
+                <div class="rarity__chance" style={`--w:${m.chance ? (m.chance / 45) * 100 : 100}%`}><i></i></div>
+              </div>
+            </div>
+            <div class="chips">{m.lista.map((x) => <span class="chip">{x}</span>)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="02" label="Grimórios" title="Cinco livros. <em>Um diamante na capa.</em>" lead="Na criação, o giro dá 92% de chance de Grimório Comum e 8% de Lendário. Os outros vêm de sorteios, eventos, famílias ou da costura feita por quem domina a ciência." />
+      <div class="grims">
+        {grimorios.map((g) => (
+          <article class="grim" data-reveal>
+            <ImageSlot src={`grimorios/${slugify(g.nome)}`} label={`Grimório ${g.nome}`} ratio="3 / 4" />
+            <h3 class="t-h3">{g.nome}</h3>
+            <p class="t-small">{g.texto}</p>
+            <dl class="kv">
+              <dt>Iniciais</dt><dd>{g.iniciais}</dd>
+              <dt>Por Estágio</dt><dd>{g.ganho}</dd>
+              <dt>Máximo</dt><dd>{g.max}</dd>
+              <dt>Mana guardada</dt><dd>{g.mana}</dd>
+              <dt>Distância</dt><dd>{g.distancia}</dd>
+              <dt>Obtenção</dt><dd>{g.obtencao}</dd>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="03" label="Feitiços" title="Escreva. Envie. <em>Domine.</em>" lead="O jogador escreve o feitiço e envia ao Conselho Mágico pelo bot. Todo feitiço tem Nome, Grau, Tipo, Função Mágica, Custo, Efeito e Duração." />
+      <div class="grid" style="align-items:start">
+        <div class="c-1-7">
+          <article class="spell" data-reveal data-tilt>
+            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="t-label t-mana">Exemplo de feitiço</span><span class="t-label">Magia de Cristal</span></div>
+            <h3 class="t-h2" style="margin-top:18px">Lança <em>Facetada</em></h3>
+            <dl class="spell__grid">
+              <div><dt>Grau</dt><dd>II</dd></div>
+              <div><dt>Tipo</dt><dd>Externalizado</dd></div>
+              <div><dt>Função</dt><dd>Ataque</dd></div>
+              <div><dt>Custo</dt><dd>25 de Mana</dd></div>
+            </dl>
+            <p class="spell__fx"><b>Efeito:</b> uma lança de cristal disparada em linha reta. Usa a Força da magia com os Acréscimos do Poder Mágico. Na Afinidade certa, como dentro de uma mina, recebe +1 Acréscimo. <b>Duração:</b> instantânea.</p>
+          </article>
+        </div>
+        <div class="c-8-12 stack" style="--s:1.2rem">
+          <h3 class="t-h3" data-reveal>Grau máximo por Estágio</h3>
+          <Table head={['Estágio', 'Grau máximo']} rows={grauPorEstagio} />
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:clamp(56px,7vw,110px);align-items:start">
+        <div class="c-1-6">
+          <h3 class="t-h3" data-reveal>Tipos</h3>
+          <ol class="steps" style="margin-top:20px">{tiposFeitico.map(([t, d]) => <li data-reveal><div><h4>{t}</h4><p>{d}</p></div></li>)}</ol>
+        </div>
+        <div class="c-7-12 stack" style="--s:1.6rem">
+          <h3 class="t-h3" data-reveal>Funções Mágicas</h3>
+          <div data-reveal><p class="t-label" style="margin-bottom:10px">Básicas · todos têm</p><div class="chips">{funcoes.basicas.map((f) => <span class="chip">{f}</span>)}</div></div>
+          <div data-reveal><p class="t-label" style="margin-bottom:10px">Avançadas · vêm de Conhecimentos</p><div class="chips">{funcoes.avancadas.map((f) => <span class="chip chip--mana">{f}</span>)}</div></div>
+          <div data-reveal><p class="t-label" style="margin-bottom:10px">Perdidas · vêm de Conhecimentos Perdidos</p><div class="chips">{funcoes.perdidas.map((f) => <span class="chip chip--gold">{f}</span>)}</div></div>
+          <h3 class="t-h3" style="margin-top:2.4rem" data-reveal>Maestria <span class="t-mana">0–3</span></h3>
+          <p class="t-body" data-reveal>Cada feitiço ganha 1 ponto de Maestria a cada 5 cenas registradas em que foi usado.</p>
+          <Table head={['Maestria', 'Efeito']} rows={maestria} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="magia" />
+</Base>

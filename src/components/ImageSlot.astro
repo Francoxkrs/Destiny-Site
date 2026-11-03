@@ -1,0 +1,59 @@
+---
+// Espaço para imagem. Procura public/img/<src>.(webp|jpg|jpeg|png|avif|gif).
+// Se o arquivo existir, mostra a imagem; se não, mostra um quadro com o caminho e o tamanho sugerido,
+// para o Silas saber exatamente onde colocar cada arte.
+import fs from 'node:fs';
+import path from 'node:path';
+import Gem from './Gem.astro';
+
+const {
+  src,
+  label = 'Imagem',
+  tag = 'Espaço para imagem',
+  ratio = '16 / 10',
+  compact = false,
+  parallax = true,
+  alt,
+  class: cls = '',
+  eager = false,
+  mini = false,
+} = Astro.props;
+
+const exts = ['webp', 'jpg', 'jpeg', 'png', 'avif', 'gif'];
+const pub = path.join(process.cwd(), 'public', 'img');
+const found = exts.find((e) => fs.existsSync(path.join(pub, `${src}.${e}`)));
+const url = found ? `/img/${src}.${found}` : null;
+
+const [rw, rh] = ratio.split('/').map((n) => parseFloat(n));
+const w = rw >= rh ? 1600 : Math.round(1600 * (rw / rh));
+const h = Math.round(w * (rh / rw));
+---
+<div
+  class:list={['slot', url ? 'slot--filled' : 'slot--empty', compact && 'slot--compact', mini && 'slot--mini', cls]}
+  style={`--ratio:${ratio}`}
+  data-slot
+  data-img={src}
+  data-parallax-slot={parallax ? '' : undefined}
+>
+  <div class="slot__media">
+    {url && <img src={url} alt={alt ?? label} loading={eager ? 'eager' : 'lazy'} decoding="async" />}
+  </div>
+  {!url && (
+    <>
+      <span class="slot__corner slot__corner--tl"></span>
+      <span class="slot__corner slot__corner--tr"></span>
+      <span class="slot__corner slot__corner--bl"></span>
+      <span class="slot__corner slot__corner--br"></span>
+      <div class="slot__center">
+        <div>
+          <Gem class="slot__icon" />
+          {mini ? <span class="sr-only">{label}</span> : <p class="slot__label">{label}</p>}
+        </div>
+      </div>
+      {!mini && <div class="slot__info" aria-hidden="true">
+        <div class="slot__top"><span class="slot__tag">{tag}</span>{!compact && <span class="slot__path">{w}×{h}</span>}</div>
+        <div class="slot__bottom"><span class="slot__path">public/img/{src}.jpg</span></div>
+      </div>}
+    </>
+  )}
+</div>

@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import Gem from '../components/Gem.astro';
+import { regioes, cristais, eventosDiamond, reinos, slugify } from '../data/canon.js';
+
+const fmt = (n) => (typeof n === 'number' ? n.toLocaleString('pt-BR') : n);
+const crystalClass = ['crystal--branco', 'crystal--negro', 'crystal--dourado'];
+---
+<Base title="O Mundo" slug="mundo" description="Diamond, suas cinco regiões, os Cristais de Mana e os quatro reinos do continente.">
+  <PageHero
+    slug="mundo"
+    title="O <em>Mundo</em>"
+    lead="Quatro reinos dividem o continente: Clover a leste, Diamond a oeste, Heart ao sul e Spades ao norte, além da Zona Neutra. O jogo acontece em Diamond."
+    intro="Um reino que esgotou a própria terra e sobrevive de ciência, guerra e dos últimos Cristais de Mana. Toda alma que volta, volta aqui."
+    image="mundo/capa"
+    imageLabel="Mapa do continente, com Diamond a oeste"
+  />
+
+  <section class="sec">
+    <div class="wrap">
+      <SectionHead num="01" label="Diamond" title="A terra que <em>secou</em>." />
+      <div class="grid" style="align-items:start">
+        <div class="c-1-6 stack" style="--s:1.2rem">
+          <p class="t-lead" data-reveal>Diamond viveu décadas extraindo tudo o que o solo tinha. Hoje restam minas vazias, fome, doenças e uma população que o território mal sustenta.</p>
+          <p class="t-body" data-reveal>Da escassez nasceu a maior cultura científica do mundo: pesquisadores usam ciência e magia para compensar o que a terra não dá, e o Rei usa os resultados para fazer guerra.</p>
+          <p class="t-body" data-reveal>O reino é governado pelo Rei de Diamond, que comanda diretamente os Generais Brilhantes. A expansão sobre os vizinhos não é ambição, é sobrevivência: Diamond invade porque precisa do que os outros têm.</p>
+        </div>
+        <div class="c-8-12">
+          <ImageSlot src="mundo/valcristal" label="Valcristal, a capital" ratio="3 / 4" />
+          <p class="t-label slot-cap">Valcristal · Palácio de Cristal · A Coroa</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="02" label="Regiões" title="Cinco regiões, <em>três destinos</em>." lead="A classe social da família da vida passada decide onde o Retornado renasce: Realeza na Coroa, Nobreza no Lapidário, Plebe nos Veios. Ninguém renasce no Fosso. Alguns só acabam lá." />
+      <div class="cols-3">
+        {regioes.map((r, i) => (
+          <article class="card" data-reveal style="padding:0">
+            <ImageSlot src={`regioes/${slugify(r.nome)}`} label={r.nome} ratio="4 / 3" />
+            <div style="padding:clamp(20px,2.2vw,28px)">
+              <div style="display:flex;justify-content:space-between;gap:12px"><span class="card__num">0{i + 1}</span><span class="chip chip--mana">{r.quem}</span></div>
+              <h3 class="t-h3 card__title">{r.nome}</h3>
+              <p class="card__text">{r.texto}</p>
+            </div>
+          </article>
+        ))}
+        <article class="card" data-reveal style="display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+          <span class="card__num">Zona de Forte Mana</span>
+          <div>
+            <h3 class="t-h3">Onde a mana ainda <em>respira</em></h3>
+            <p class="card__text">Em Diamond, as únicas zonas de Forte Mana são as Câmaras de Mana do Lapidário, que são artificiais, e as jazidas de Cristal. Nelas a regeneração dobra e o Controle Mágico sobe mais rápido.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="03" label="Cristais de Mana" title="O último recurso <em>valioso</em>." lead="Os Brancos são raros, os Negros são raríssimos e o Dourado é lenda. São necessários para subir aos Estágios mais altos, e por isso movem a economia, o crime e a guerra." />
+      <div class="cols-3">
+        {cristais.map((c, i) => (
+          <article class:list={['crystal', crystalClass[i]]} data-reveal>
+            <div class="crystal__gem">
+              <svg viewBox="0 0 64 64" aria-hidden="true">
+                <defs>
+                  <linearGradient id={`cg${i}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--c1)" /><stop offset="1" stop-color="var(--c2)" /></linearGradient>
+                </defs>
+                <path d="M19 9h26l13 16L32 57 6 25z" fill={`url(#cg${i})`} stroke="var(--c1)" stroke-width=".6" />
+                <path d="M6 25h52M19 9l-3 16 16 32 16-32-3-16M16 25l9-16M48 25l-9-16M25 9l7 16 7-16" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".5" />
+              </svg>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+              <h3 class="t-h3">{c.nome}</h3>
+              <span class="t-label">{c.raridade}</span>
+            </div>
+            <dl class="kv"><dt>Usado para</dt><dd>{c.uso}</dd></dl>
+            <p class="t-body">{c.texto}</p>
+          </article>
+        ))}
+      </div>
+      <div style="margin-top:clamp(40px,6vw,80px)">
+        <ImageSlot src="mundo/jazida" label="Uma das últimas jazidas de Cristal" ratio="21 / 9" />
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap grid">
+      <div class="c-1-5">
+        <span class="eyebrow" data-reveal><b>04</b>Eventos de Diamond</span>
+        <h2 class="t-h2" data-split style="margin-top:24px">O calendário <em>do reino</em>.</h2>
+        <p class="t-body" style="margin-top:24px" data-reveal>Eventos movem o servidor inteiro: dão Cristais, Conhecimentos, Magias Exclusivas e postos que não se conseguem de outro jeito. As regras de cada edição saem pelo bot.</p>
+        <div style="margin-top:32px"><ImageSlot src="mundo/eventos" label="Exame da Forja" ratio="4 / 3" /></div>
+      </div>
+      <ol class="steps c-7-12">
+        {eventosDiamond.map(([t, d]) => <li data-reveal><div><h3>{t}</h3><p>{d}</p></div></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="05" label="Os quatro reinos" title="Vistos de <em>Diamond</em>." lead="Os outros reinos não são jogáveis como ponto de partida, mas são de onde vêm as almas. Cada Retornado lembra um deles." />
+      <div style="margin-bottom:clamp(32px,4vw,56px)"><ImageSlot src="mundo/mapa" label="Mapa dos quatro reinos" ratio="16 / 9" /></div>
+      <div class="cols-4">
+        {reinos.map((r) => (
+          <article class:list={['realm', r.foco && 'realm--focus']} data-reveal>
+            <ImageSlot src={`reinos/${slugify(r.nome)}`} label={r.nome} ratio="4 / 5" compact />
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+              <h3 class="t-h3">{r.nome}</h3><span class="realm__sym" aria-hidden="true">{r.simbolo}</span>
+            </div>
+            <span class:list={['chip', r.foco ? 'chip--mana' : '']}>{r.foco ? 'Onde você renasce' : r.pos}</span>
+            <p class="t-small">{r.texto}</p>
+            <dl class="kv">
+              <dt>Extensão</dt><dd>{fmt(r.dados.extensao)} km²</dd>
+              <dt>População</dt><dd>{fmt(r.dados.populacao)}</dd>
+              <dt>Densidade</dt><dd>{r.dados.densidade} hab/km²</dd>
+              <dt>Riqueza</dt><dd>{r.dados.riqueza}</dd>
+              <dt>Mana</dt><dd>{r.dados.mana}</dd>
+              <dt>Desenvolvimento</dt><dd>{r.dados.desenvolvimento}</dd>
+              <dt>Ambientes</dt><dd>{r.dados.ambientes}</dd>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="mundo" />
+</Base>

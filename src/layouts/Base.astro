@@ -1,0 +1,158 @@
+---
+import '../styles/global.css';
+import '../styles/v2.css';
+import Gem from '../components/Gem.astro';
+import Arrow from '../components/Arrow.astro';
+import { site, paginas, capitulos } from '../data/canon.js';
+
+const { title, description = 'Servidor de RP de texto no Discord inspirado em Black Clover. Toda alma volta, e toda alma volta em Diamond.', slug = 'inicio' } = Astro.props;
+const atual = paginas.find((p) => p.slug === slug);
+const fullTitle = title ? `${title} · ${site.nome}` : `${site.nome} · RP de Black Clover no Discord`;
+const discordExterno = site.discord !== '#';
+const cap = atual ? capitulos.find((c) => c.id === atual.cap) : null;
+const titulos = Object.fromEntries([['/', 'Black Destiny'], ...paginas.map((p) => [`/${p.slug}/`, p.titulo])]);
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0b" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/img/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Shippori+Mincho+B1:wght@800&display=swap" />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          if (sessionStorage.getItem('bd-seen')) d.classList.add('no-preloader');
+          if (sessionStorage.getItem('bd-nav')) d.classList.add('is-entering');
+        } catch (e) { d.classList.add('no-preloader'); }
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('no-preloader');
+        // Garantia: se os scripts falharem, mostra tudo depois de 4 s.
+        setTimeout(function () { if (!window.__bdReady) { d.classList.add('reveal-all', 'no-preloader'); d.classList.remove('is-entering'); } }, 4000);
+      })();
+    </script>
+  </head>
+  <body data-page={slug}>
+    <a class="skip" href="#main">Pular para o conteúdo</a>
+    <div class="guides" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+    <div class="preloader" aria-hidden="true">
+      <div class="preloader__half preloader__half--a"></div>
+      <div class="preloader__half preloader__half--b"></div>
+      <div class="preloader__in">
+        <span class="preloader__kanji">黒の運命</span>
+        <p class="preloader__title"><span>Black</span> <em>Destiny</em></p>
+        <p class="preloader__sub t-label">Toda alma volta</p>
+      </div>
+      <span class="preloader__count">000</span>
+      <span class="preloader__bar"></span>
+      <svg class="preloader__slash" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="62" y1="-2" x2="38" y2="102" pathLength="1" /></svg>
+    </div>
+
+    <div class="transition" aria-hidden="true">
+      <div class="transition__panel transition__panel--a"></div>
+      <div class="transition__panel transition__panel--b"></div>
+      <svg class="transition__slash" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="62" y1="-2" x2="38" y2="102" pathLength="1" /></svg>
+      <p class="transition__title" data-transition-title></p>
+    </div>
+    <script is:inline>
+      try { var t = sessionStorage.getItem('bd-nav'); if (t && t !== '1') document.querySelector('[data-transition-title]').textContent = t; } catch (e) {}
+    </script>
+    <script is:inline type="application/json" id="bd-titles" set:html={JSON.stringify(titulos)}></script>
+
+    <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span></span></span></div>
+
+    <header class="hdr">
+      <div class="wrap hdr__in">
+        <a href="/" class="brand" aria-label="Black Destiny, início"><Gem /><span>Black Destiny</span></a>
+        <p class="hdr__where">{atual && cap ? <><b>Cap. {cap.id}</b> {cap.nome} <i>/</i> {atual.titulo}</> : <><b>黒</b> Reino de Diamond</>}</p>
+        <div class="hdr__actions">
+          <a class="btn hdr__discord" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Discord</a>
+          <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+            <span class="menu-btn__label" data-menu-label>Capítulos</span>
+            <span class="menu-btn__icon"><span></span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <nav class="menu" id="menu" aria-label="Sistemas">
+      <div class="wrap menu__in">
+        <div class="menu__chapters">
+          {capitulos.map((c) => (
+            <div class="menu__chap" data-menu-item>
+              <p class="menu__chap-h"><span class="k">{c.kanji}</span><b>Cap. {c.id}</b>{c.nome}</p>
+              <ul class="menu__list">
+                {paginas.filter((p) => p.cap === c.id).map((p) => (
+                  <li>
+                    <a href={`/${p.slug}/`} aria-current={p.slug === slug ? 'page' : undefined}>
+                      <span class="n">{p.num}</span><span class="t">{p.titulo}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div class="menu__side" data-menu-item>
+          <p class="menu__quote">Toda alma volta. <em>Nenhuma volta igual.</em></p>
+          <p>Um RP de texto no Discord inspirado em Black Clover. Você foi alguém em outro reino; agora renasce em Diamond, um reino que esgotou a própria terra.</p>
+          <div class="btns">
+            <a class="btn btn--solid" href="/comecar/">Criar personagem <Arrow /></a>
+            <a class="btn" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener">Entrar no Discord</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__cols">
+          <div>
+            <p class="t-h2">Sua alma <em>já voltou</em>.<br />Falta você.</p>
+            <div class="btns" style="margin-top:28px">
+              <a class="btn btn--solid" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Entrar no servidor <Arrow /></a>
+            </div>
+          </div>
+          {[['I', 'II'], ['III'], ['IV', 'V']].map((ids) => (
+            <div>
+              {ids.map((id) => {
+                const c = capitulos.find((x) => x.id === id);
+                return (
+                  <>
+                    <h4 class="t-label">Cap. {c.id} · {c.nome}</h4>
+                    <ul>{paginas.filter((p) => p.cap === id).map((p) => <li><a href={`/${p.slug}/`}>{p.titulo}</a></li>)}</ul>
+                  </>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+        <p class="footer__big" aria-hidden="true"><span>Black</span> <em>Destiny</em></p>
+        <div class="footer__bottom">
+          <span class="t-label">© {new Date().getFullYear()} Black Destiny · Servidor de fãs, sem fins lucrativos</span>
+          <span class="t-label">Black Clover © Yūki Tabata / Shueisha</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      import '../scripts/main.js';
+    </script>
+  </body>
+</html>

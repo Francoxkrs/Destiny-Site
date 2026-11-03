@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import { generais, veioNegro, slugify } from '../data/canon.js';
+---
+<Base title="Carreiras" slug="generais" description="Os Generais Brilhantes, o Exame da Forja e o Veio Negro: os dois caminhos de carreira em Diamond.">
+  <PageHero
+    slug="generais"
+    title="Carreiras"
+    lead="Em Diamond há dois caminhos: servir ao Rei nos Generais Brilhantes ou trabalhar contra a ordem no Veio Negro."
+    intro="Cada jogador pertence a no máximo um dos dois por vez. Os dois lados normalmente se opõem, sempre de acordo com o contexto do RP."
+    image="generais/capa"
+    imageLabel="A Forja, sede dos Generais Brilhantes"
+  />
+
+  <section class="sec">
+    <div class="wrap">
+      <SectionHead num="01" label="Generais Brilhantes" title="Forjados, <em>não nascidos</em>." lead={generais.texto} />
+      <div class="grid" style="align-items:start">
+        <div class="c-1-6 stack" style="--s:1.6rem">
+          <div class="card" data-reveal><span class="t-label t-gold">Cultura</span><p class="t-lead" style="margin-top:12px">{generais.cultura}</p></div>
+          <div class="card" data-reveal><span class="t-label t-gold">Exame da Forja</span><p class="t-body" style="margin-top:12px">{generais.exame}</p></div>
+          <p class="t-body" data-reveal>{generais.vaga}</p>
+        </div>
+        <div class="c-7-12">
+          <div class="crest-head" data-reveal><img class="crest" src="/img/brasoes/generais-brilhantes.svg" alt="Brasão dos Generais Brilhantes" width="120" height="144" /><h3 class="t-h3">Patentes</h3></div>
+          <ol class="ladder">
+            {generais.patentes.map(([n, t, c]) => <li data-reveal><b>{n}</b><h4>{t}</h4><p>{c}</p></li>)}
+          </ol>
+          <p class="t-small" style="margin-top:16px" data-reveal>Missões dos Generais dão Méritos (Estrelas Douradas).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise">
+    <div class="wrap">
+      <SectionHead num="02" label="Tropas" title="Três tropas, <em>uma ordem</em>." lead="Uma mesma tropa pode ter dois ou mais Generais; o número de Generais não define a importância da tropa." />
+      <div class="cols-3">
+        {generais.tropas.map((t) => (
+          <article class="card" data-reveal style="padding:0;overflow:hidden">
+            <ImageSlot src={`generais/${slugify(t.nome)}`} label={t.nome} ratio="4 / 3" />
+            <div style="padding:clamp(20px,2.2vw,28px)">
+              <h3 class="t-h3">{t.nome}</h3>
+              <dl class="kv" style="margin-top:18px">
+                <dt>Função</dt><dd>{t.funcao}</dd>
+                <dt>Atuação</dt><dd>{t.atuacao}</dd>
+                <dt>Comando</dt><dd>{t.comando}</dd>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line">
+    <div class="wrap">
+      <SectionHead num="03" label="Veio Negro" title="O sindicato <em>do Fosso</em>." lead={veioNegro.texto}>
+        <span slot="aside" class="chip chip--blood">Proposta</span>
+      </SectionHead>
+      <div class="grid" style="align-items:start">
+        <div class="c-1-6">
+          <ImageSlot src="generais/veio-negro" label="Uma reunião no Fosso" ratio="4 / 5" />
+        </div>
+        <div class="c-7-12 stack" style="--s:1.4rem">
+          <div class="crest-head" data-reveal><img class="crest" src="/img/brasoes/veio-negro.svg" alt="Brasão do Veio Negro" width="120" height="144" /><h3 class="t-h3">Patentes</h3></div>
+          <ol class="ladder ladder--blood">
+            {veioNegro.patentes.map(([n, t, c]) => <li data-reveal><b>{n}</b><h4>{t}</h4><p>{c}</p></li>)}
+          </ol>
+          <p class="t-body" data-reveal>Missões do Veio Negro dão {veioNegro.moeda}. Elas servem para subir de patente do mesmo jeito que os Méritos servem aos Generais.</p>
+          <div class="btns" data-reveal><a class="btn" href="/missoes/">Ver Missões</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="generais" />
+</Base>

@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import NextPage from '../components/NextPage.astro';
+import { profissoes as p, slugify } from '../data/canon.js';
+
+const abas = [['regras', 'Regras'], ['graus', 'Graus'], ['oficios', 'Os doze ofícios'], ['ligacoes', 'Como liga']];
+const classes = ['Plebe', 'Nobreza', 'Realeza', 'Nenhuma'];
+---
+<Base title="Profissões" slug="profissoes" description="Os doze ofícios de Diamond: licença, Jornada de Trabalho, salário por grau e como cada um liga Conhecimentos, Classe Social, Terras e Economia.">
+  <PageHero
+    slug="profissoes"
+    title="As <em>Profissões</em>"
+    lead="Entre uma missão e outra, alguém tem que tirar o ferro da rocha, costurar a ferida e registrar o contrato."
+    intro={p.texto}
+    image="profissoes/capa"
+    imageLabel="Uma forja acesa nos Veios"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="regras">
+    <div class="wrap">
+      <SectionHead num="01" label="Regras" title="Um ofício, <em>uma licença</em>." lead="O ofício paga sempre, até sem missão no quadro. Duas missões F por dia ainda rendem mais; a Profissão é a renda que não falha." />
+      <dl class="gifts">
+        {p.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="graus">
+    <div class="wrap grid" style="align-items:start;row-gap:32px">
+      <div class="c-1-5 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>02</b>Graus</span>
+        <h2 class="t-h2" data-split>De Aprendiz <em>a Mestre</em>.</h2>
+        <p class="t-body" data-reveal>Cada Jornada conta para o próximo grau. O salário é bruto: o Dízimo da sua classe sai na hora.</p>
+        <div data-reveal><a class="btn" href="/economia/#impostos">Ver os impostos</a></div>
+      </div>
+      <ol class="ladder c-6-12">
+        {p.graus.map(([n, t, req, sal]) => <li data-reveal><b>{n}</b><h4>{t}</h4><p><span class="t-label">Requisito</span> {req}<br /><span class="t-label">Paga</span> {sal}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="oficios">
+    <div class="wrap">
+      <SectionHead num="03" label="Os doze ofícios" title="Cada classe <em>começa perto</em> do seu." lead="A classe nativa paga a licença barata. As outras pagam cinco vezes mais, mas podem entrar." />
+      <div class="filters" data-filter-group="#jobs" role="group" aria-label="Filtrar por classe nativa">
+        <button class="filter-btn" type="button" data-filter="todas" aria-pressed="true">Todas</button>
+        {classes.map((c) => <button class="filter-btn" type="button" data-filter={slugify(c)} aria-pressed="false">{c === 'Nenhuma' ? 'Fosso' : c}</button>)}
+        <span class="t-label filters__count" data-filter-count data-um="ofício" data-varios="ofícios" aria-live="polite">{p.lista.length} ofícios</span>
+      </div>
+      <div class="jobs" id="jobs">
+        {p.lista.map((o) => (
+          <article class="job" data-reveal data-tags={slugify(o.classe)}>
+            <ImageSlot src={`profissoes/${slugify(o.nome)}`} label={o.nome} ratio="16 / 10" compact />
+            <div class="job__body">
+              <div class="chips"><span class:list={['chip', o.classe === 'Realeza' ? 'chip--gold' : o.classe === 'Nobreza' ? 'chip--violet' : 'chip--blood']}>{o.classe === 'Nenhuma' ? 'Fosso' : o.classe}</span><span class="chip">{o.onde}</span></div>
+              <h3 class="t-h3">{o.nome}</h3>
+              <dl class="kv">
+                <dt>Conhecimento</dt><dd>{o.conhecimento}</dd>
+                <dt>Produz</dt><dd>{o.produz}</dd>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px" data-reveal>Ofícios de outras terras ou ofícios únicos podem ser criados com a Staff, seguindo esta tabela.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="ligacoes">
+    <div class="wrap">
+      <SectionHead num="04" label="Como liga" title="O eixo <em>do mundo</em>." lead="A Profissão é onde a origem do personagem, a terra que ele tem e a economia do reino se encontram." />
+      <dl class="gifts">
+        {p.ligacoes.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+      <div class="btns" style="margin-top:32px" data-reveal>
+        <a class="btn" href="/mineracao/">Mineração</a>
+        <a class="btn" href="/itens/">Itens Mágicos</a>
+        <a class="btn" href="/terras/">Terras</a>
+        <a class="btn" href="/conhecimentos/">Conhecimentos</a>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="profissoes" />
+</Base>

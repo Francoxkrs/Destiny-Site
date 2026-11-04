@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { paginas, capitulos, glossario, comecePorAqui } from '../data/canon.js';
+
+const link = (u) => (u.includes('#') ? `/${u.replace('#', '/#')}` : `/${u}/`);
+const tira = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+const ordenado = glossario.slice().sort((a, b) => tira(a[0]).localeCompare(tira(b[0]), 'pt'));
+const letras = [...new Set(ordenado.map(([t]) => tira(t)[0].toUpperCase()))];
+const porPagina = Object.fromEntries(paginas.map((p) => [p.slug, p]));
+---
+<Base title="Índice" slug="indice" description="Todos os sistemas do Black Destiny num lugar: o mapa por capítulo, a ordem de leitura para quem chegou agora e o glossário de A a Z.">
+  <section class="page-hero page-hero--idx">
+    <span class="page-hero__kanji" aria-hidden="true" data-hero-fade>目次</span>
+    <div class="wrap">
+      <div class="page-hero__meta" data-hero-fade>
+        <nav class="crumbs t-label" aria-label="Trilha"><a href="/">Black Destiny</a><span>/</span><span class="t-mana">Índice</span></nav>
+      </div>
+      <div class="page-hero__title"><h1 class="t-h1" data-hero-title>O <em>Índice</em></h1></div>
+      <div class="grid page-hero__grid">
+        <p class="t-lead c-1-7" data-hero-fade>Tudo o que existe em Diamond, numa página só. Procure uma regra, siga a ordem de leitura ou abra o glossário.</p>
+      </div>
+      <button class="idx-search" type="button" data-search-open data-hero-fade>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg>
+        <span>Buscar regra, termo ou página</span><kbd>Ctrl K</kbd>
+      </button>
+    </div>
+  </section>
+
+  <PageNav items={[['comece', 'Comece por aqui'], ['mapa', 'Mapa dos sistemas'], ['glossario', 'Glossário']]} />
+
+  <section class="sec" id="comece">
+    <div class="wrap">
+      <SectionHead num="01" label="Comece por aqui" title="Cinco páginas <em>e você joga</em>." lead="Se você acabou de chegar, leia nesta ordem. O resto você consulta quando precisar." />
+      <ol class="start">
+        {comecePorAqui.map(([s, por], i) => (
+          <li data-reveal>
+            <a href={`/${s}/`}>
+              <span class="start__n">0{i + 1}</span>
+              <b>{porPagina[s].titulo}</b>
+              <span class="t-small">{por}</span>
+              <Arrow class="start__a" />
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="mapa">
+    <div class="wrap">
+      <SectionHead num="02" label="Mapa dos sistemas" title="Seis capítulos, <em>vinte páginas</em>." lead="Cada página traz no topo um resumo de 30 segundos e, logo abaixo, as abas da página. Aqui está o resumo de todas." />
+      <div class="atlas">
+        {capitulos.map((c) => (
+          <div class="atlas__chap" data-reveal>
+            <p class="atlas__h"><span class="k" aria-hidden="true">{c.kanji}</span><b>Cap. {c.id}</b>{c.nome}</p>
+            <p class="t-small atlas__t">{c.texto}</p>
+            <ul class="atlas__list">
+              {paginas.filter((p) => p.cap === c.id).map((p) => (
+                <li>
+                  <details>
+                    <summary><span class="n">{p.num}</span><span class="t">{p.titulo}</span><span class="d">{p.resumo}</span></summary>
+                    <ol class="atlas__ess">{(p.essencial || []).map((t) => <li>{t}</li>)}</ol>
+                    <a class="atlas__go" href={`/${p.slug}/`}>Abrir {p.titulo} <Arrow /></a>
+                  </details>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="glossario">
+    <div class="wrap">
+      <SectionHead num="03" label="Glossário" title="Os termos <em>de A a Z</em>." lead="Clique num termo para ir à regra completa. Nas outras páginas, os termos sublinhados mostram a definição ao passar o mouse." />
+      <div class="gloss-tools">
+        <input class="gloss-filter" type="search" placeholder="Filtrar o glossário" aria-label="Filtrar o glossário" data-gloss-filter />
+        <nav class="gloss-az" aria-label="Letras">{letras.map((l) => <a href={`#letra-${l}`}>{l}</a>)}</nav>
+      </div>
+      <div class="gloss" data-gloss>
+        {letras.map((l) => (
+          <div class="gloss__grp" id={`letra-${l}`} data-gloss-grp>
+            <p class="gloss__l" aria-hidden="true">{l}</p>
+            <dl>
+              {ordenado.filter(([t]) => tira(t)[0].toUpperCase() === l).map(([t, d, u]) => (
+                <div data-gloss-item data-k={tira(`${t} ${d}`).toLowerCase()}>
+                  <dt><a href={link(u)}>{t}</a></dt>
+                  <dd>{d} <a class="gloss__pg" href={link(u)}>{porPagina[u.split('#')[0]]?.titulo}</a></dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const f = document.querySelector('[data-gloss-filter]');
+  f?.addEventListener('input', () => {
+    const q = f.value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+    document.querySelectorAll('[data-gloss-grp]').forEach((g) => {
+      let n = 0;
+      g.querySelectorAll('[data-gloss-item]').forEach((it) => { const on = !q || it.dataset.k.includes(q); it.hidden = !on; if (on) n++; });
+      g.hidden = n === 0;
+    });
+  });
+</script>

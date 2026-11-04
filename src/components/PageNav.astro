@@ -1,0 +1,11 @@
+---
+// Sumário fixo da página: abas que seguem a rolagem (o mesmo das Criaturas).
+// items = [[id, nome], ...]
+const { items = [], label = 'Nesta página' } = Astro.props;
+---
+<nav class="tabs" aria-label={label} data-pagenav>
+  <div class="wrap tabs__in">
+    <span class="tabs__h" aria-hidden="true">Nesta página</span>
+    {items.map(([id, nome], i) => <a href={`#${id}`} data-tab={id}><span>{String(i + 1).padStart(2, '0')}</span>{nome}</a>)}
+  </div>
+</nav>

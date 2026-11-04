@@ -11,26 +11,34 @@ export const site = {
 export const capitulos = [
   { id: 'I', kanji: '目覚', nome: 'Onde você acorda', texto: 'Diamond, o reino que esgotou a própria terra.' },
   { id: 'II', kanji: '前世', nome: 'Quem você foi', texto: 'A família e a raça que a sua alma carrega de outra vida.' },
-  { id: 'III', kanji: '魔導', nome: 'O Grimório', texto: 'O que a sua alma sabe fazer, e como isso se mede sem dados.' },
+  { id: 'III', kanji: '魔導', nome: 'O Grimório', texto: 'O que a sua alma sabe fazer, como isso se mede sem dados e o quanto o corpo aguenta.' },
   { id: 'IV', kanji: '道', nome: 'O Caminho', texto: 'Como crescer, o que domar, a quem servir e o que caçar.' },
-  { id: 'V', kanji: '始', nome: 'O Despertar', texto: 'Criar o personagem e abrir os olhos.' },
+  { id: 'V', kanji: '生業', nome: 'O Sustento', texto: 'Ofício, minas, forja, terra e Yuls num reino que está acabando.' },
+  { id: 'VI', kanji: '始', nome: 'O Despertar', texto: 'Criar o personagem e abrir os olhos.' },
 ];
 
+// essencial = "Em 30 segundos": três linhas com o que importa de cada página.
 export const paginas = [
-  { slug: 'mundo', cap: 'I', num: '01', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos' },
-  { slug: 'familias', cap: 'II', num: '02', titulo: 'Famílias', resumo: 'Classes sociais e as 24 linhagens' },
-  { slug: 'racas', cap: 'II', num: '03', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas e Elfos' },
-  { slug: 'classes', cap: 'III', num: '04', titulo: 'Classes de Mago', resumo: 'Oito estilos de combate' },
-  { slug: 'milagres', cap: 'III', num: '05', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana' },
-  { slug: 'magia', cap: 'III', num: '06', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços' },
-  { slug: 'mana', cap: 'III', num: '07', titulo: 'Mana', resumo: 'Reserva, custo e Técnicas de Mana' },
-  { slug: 'atributos', cap: 'III', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados' },
-  { slug: 'progressao', cap: 'IV', num: '09', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios' },
-  { slug: 'conhecimentos', cap: 'IV', num: '10', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos' },
-  { slug: 'criaturas', cap: 'IV', num: '11', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares' },
-  { slug: 'missoes', cap: 'IV', num: '12', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot' },
-  { slug: 'generais', cap: 'IV', num: '13', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro' },
-  { slug: 'comecar', cap: 'V', num: '14', titulo: 'Começar', resumo: 'Criação de personagem e Ficha' },
+  { slug: 'mundo', cap: 'I', num: '01', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos', essencial: ['Todo personagem renasce em Diamond, o reino que esgotou a própria terra.', 'A Coroa, o Lapidário e os Veios separam Realeza, Nobreza e Plebe; o Fosso é o mercado negro.', 'Clover, Spades e Heart são os reinos de onde as almas vieram.'] },
+  { slug: 'familias', cap: 'II', num: '02', titulo: 'Famílias', resumo: 'Classes sociais e as 24 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
+  { slug: 'racas', cap: 'II', num: '03', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas e Elfos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
+  { slug: 'classes', cap: 'III', num: '04', titulo: 'Classes de Mago', resumo: 'Oito estilos de combate', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma pede um Conhecimento e dá uma passiva; a Classe Avançada vem depois.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
+  { slug: 'milagres', cap: 'III', num: '05', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras que mudam as regras do personagem.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
+  { slug: 'magia', cap: 'III', num: '06', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
+  { slug: 'mana', cap: 'III', num: '07', titulo: 'Mana', resumo: 'Reserva, custo e Técnicas de Mana', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.'] },
+  { slug: 'atributos', cap: 'III', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
+  { slug: 'ferimentos', cap: 'III', num: '09', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
+  { slug: 'progressao', cap: 'IV', num: '10', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
+  { slug: 'conhecimentos', cap: 'IV', num: '11', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
+  { slug: 'criaturas', cap: 'IV', num: '12', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
+  { slug: 'missoes', cap: 'IV', num: '13', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
+  { slug: 'generais', cap: 'IV', num: '14', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
+  { slug: 'profissoes', cap: 'V', num: '15', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
+  { slug: 'mineracao', cap: 'V', num: '16', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
+  { slug: 'itens', cap: 'V', num: '17', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
+  { slug: 'terras', cap: 'V', num: '18', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
+  { slug: 'economia', cap: 'V', num: '19', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
+  { slug: 'comecar', cap: 'VI', num: '20', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
 ];
 
 export const regioes = [
@@ -182,6 +190,7 @@ export const tracos = [
   ['Presença Impactante', 'Uma vez por cena, -1 Acréscimo em oponentes por 3 turnos'],
   ['Determinação Total', 'Imune a Presença Impactante; Estudos 10% mais rápidos'],
   ['Resistência a Malefícios', '+1 de Resistência contra veneno, maldição e queimadura'],
+  ['Alma Indomável', '+0,5% extra em cada treino de Controle; ao despertar, abre o Feitiço de Alma'],
   ['Ligação Natural', 'Entende criaturas; Domação com uma cena a menos, +1 no limite de vinculadas e Assimilação 2 turnos mais longa'],
 ];
 
@@ -216,7 +225,7 @@ export const acrescimosFaixas = [
 export const ferimentos = [
   ['I', 'Leve', 'Só por Acréscimos', 'Nenhum efeito mecânico'],
   ['II', 'Moderado', '1 classificação', '-1 Acréscimo nos atributos físicos'],
-  ['III', 'Grave', '2 classificações', '-1 classificação nos atributos físicos'],
+  ['III', 'Grave', '2 classificações', '-1 classificação nos atributos físicos e Sangramento'],
   ['IV', 'Crítico', '3 ou mais', 'Incapacitado; morte só quando a cena permite'],
 ];
 
@@ -297,6 +306,7 @@ export const conhecimentos = {
     ['Retórica', 'Distingue verdade e mentira; convence NPCs; tutorias de graça'],
     ['Ciências Aplicadas', 'Criações especializadas; experimentos 50% mais rápidos (sorteios e eventos)'],
     ['Maldição', 'Função Maldição com +1 Acréscimo (sorteios e eventos)'],
+    ['Cirurgia Arcana', 'Trata Ferimentos IV, corrige Sequelas e implanta próteses (só no Lapidário)'],
     ['Armadilha', 'Função Armadilha com +1 Acréscimo (sorteios e eventos)'],
     ['Anti-Maldição', 'Função Anti-Maldição com +1; +1 de Resistência contra maldições (sorteios e eventos)'],
   ],
@@ -560,5 +570,334 @@ export const criaturas = {
     ],
   },
 };
+
+/* ==========================================================================
+   Sistemas novos (2026-11-04): Ferimentos, Feitiço de Alma, Profissões,
+   Mineração, Itens Mágicos, Terras e Economia. Aprovados pelo Silas no plano.
+   ========================================================================== */
+
+export const feridas = {
+  texto: 'Os quatro graus de Ferimento formam a Trilha de Ferimentos, a barra de vida do personagem. Cada golpe que passa da Resistência ocupa uma casa; as casas cheias transbordam para o grau de cima, e um ferimento sem tratamento piora sozinho.',
+  trilha: [['I', 'Leve', 3], ['II', 'Moderado', 2], ['III', 'Grave', 1], ['IV', 'Crítico', 1]],
+  regras: [
+    ['Acúmulo', 'Se o grau já está cheio, o ferimento novo sobe um grau. Quatro golpes leves seguidos viram um Moderado: é assim que danos pequenos e repetidos derrubam alguém mais forte.'],
+    ['Pior grau', 'Os efeitos não somam casa por casa: vale o pior grau marcado, mais -1 Acréscimo extra se houver dois graus diferentes ocupados.'],
+    ['Região atingida', 'Um II ou III num braço pesa só na Força daquele braço; numa perna, na Velocidade; na cabeça, no Controle (-5% enquanto durar).'],
+    ['Traços', 'Vigor Superior ignora Ferimentos II e Controle Corporal ignora um III por 3 turnos, como já era.'],
+  ],
+  agravamento: [
+    ['I', 'Nada', 'Sim, no fim da cena'],
+    ['II', 'Vira III se o personagem lutar ou fizer Treino Físico antes de tratar', 'Sim, após 24 h reais de descanso'],
+    ['III', 'Sangramento: vira IV após 6 turnos em combate ou 12 h reais fora dele', 'Não; precisa de Medicina Avançada ou Sacerdote da Mana'],
+    ['IV', 'Morte ou Sequela ao fim da cena, se ninguém estabilizar', 'Não; precisa de Cirurgia'],
+  ],
+  diamond: 'Em Diamond pesa mais: nos Veios não há médicos, então o tratamento custa Yuls ou depende de outro jogador. Quem tem Doença de Mana agrava um grau mais rápido, e quem está Desnutrido já começa a cena com uma casa de Ferimento I marcada.',
+  sequelas: 'Sobreviver a um Ferimento IV sem Cirurgia deixa uma marca permanente: cicatriz, perda de um olho ou de um membro, falha de mana. O jogador escolhe a Sequela com o narrador. Algumas só se corrigem com uma prótese do Lapidário.',
+  tratar: [
+    ['Estabilizar', 'Para o Agravamento por 1 cena', 'Qualquer um com kit médico; Medicinal sem kit', '1 turno'],
+    ['Tratar I e II', 'Remove o ferimento', 'Conhecimento Medicinal ou Função Restauração', 'I: 1 turno · II: 3 turnos'],
+    ['Tratar III', 'Desce para II', 'Medicina Avançada ou Sacerdote da Mana', '5 turnos'],
+    ['Cirurgia', 'Desce IV para III; evita ou corrige uma Sequela', 'Cirurgia Arcana', '1 cena fora de combate'],
+  ],
+  bonus: 'Os bônus continuam somando: Medicinal cura 1 turno mais rápido, Medicina Avançada 3, Mãos Restauradoras 1, Consultório 1. O mínimo é 1 turno. Curar com feitiço custa a Mana do Grau usado: Grau II trata até Ferimento II, Grau III trata o III.',
+  curandeiro: [
+    ['Mãos Restauradoras', 'Passiva · criação', 'Restauração custa 20% menos e cura 1 turno mais rápido.'],
+    ['Triagem', '7º Estágio', 'Vê a Trilha de Ferimentos de quem toca e estabiliza sem kit.'],
+    ['Sacerdote da Mana', 'Classe Avançada · 5º Estágio', 'Cura Ferimentos III e transfere até 20% da Mana por turno.'],
+    ['Voto de Vida', '3º Estágio', 'Uma vez por cena, devolve um aliado do Ferimento IV ao III na hora.'],
+  ],
+  conhecimentos: [
+    ['Medicinal', 'Comum', 'Trata I e II; estabiliza sem kit'],
+    ['Herbalístico', 'Comum', 'Poções de cura: removem um I fora de combate'],
+    ['Medicina Avançada', 'Incomum', 'Trata III; diagnostica doenças e maldições'],
+    ['Cirurgia Arcana', 'Incomum · só no Lapidário', 'Trata IV, corrige Sequelas, implanta próteses'],
+    ['Ressurreição', 'Perdido', 'Volta da morte, só em evento'],
+  ],
+  extras: 'A família Swallowtail cura com qualquer magia, e o Milagre Absorção e Emissão causa Ferimento II quando passa do limite. Os dois se encaixam sem mudança. Na ficha do bot, a trilha aparece como uma barra de 7 casas.',
+};
+
+export const feiticoAlma = {
+  texto: 'O Traço Alma Indomável deixa o personagem criar um único Feitiço de Alma: uma técnica pessoal que dobra as regras da própria magia, como a corrente de alma de um plebeu sem mana ou uma maga que vira a própria magia. O Traço respeita o teto dos Traços; o poder está no feitiço, e ele custa caro.',
+  ganho: [
+    ['O Traço', '+0,5% extra em cada treino de Controle, e nada além disso até despertar. Ocupa uma das 3 vagas de Traço.'],
+    ['Despertar', 'Numa cena de vida ou morte, com narrador, estando em Ferimento III ou com Mana abaixo de 25%. Como a Sincronia, não se compra nem se gira.'],
+    ['Requisitos', '6º Estágio e 30% de Controle. O feitiço é desenhado com o Conselho Mágico e fica preso à magia do personagem.'],
+    ['Limite', 'Um Feitiço de Alma por personagem, usado uma vez por cena.'],
+  ],
+  vias: [
+    { nome: 'Vínculo', inspiracao: 'A corrente de alma', efeito: 'Prende o lançador e um alvo numa regra: a Mana dos dois fica igual à do menor, ou nenhum dos dois lança feitiços, ou nenhum foge. Dura até um cair.', preco: 'A regra vale para o lançador também; quebrar a corrente antes do fim dá Ferimento III.' },
+    { nome: 'Fusão', inspiracao: 'Virar a própria mana', efeito: 'O corpo vira a própria magia por 3 turnos: golpes físicos o atravessam, +1 classificação no atributo da magia e Grau máximo +1.', preco: '100 de Mana por turno; ao terminar, Exaustão Mágica e um Ferimento II.' },
+    { nome: 'Ruptura', inspiracao: 'A regra quebrada', efeito: 'Quebra uma regra da própria magia uma vez por cena: o fogo que congela, a corrente que corta mana.', preco: 'Custa o dobro do Grau, e o feitiço seguinte sai com -1 Acréscimo.' },
+  ],
+  diamond: 'O Vínculo favorece quem tem pouca mana. Em Diamond, onde o reino tem Mana Baixa e a Plebe nasce com Mana I, ele dá ao fraco uma arma contra o nobre; com o Milagre Insignificância, pode ser a assinatura de um personagem inteiro. A Fusão é o contrário: só quem tem reserva grande aguenta.',
+};
+
+export const profissoes = {
+  texto: 'A Profissão é o que o personagem faz quando não está lutando. Ela pede um Conhecimento, precisa de uma licença que a Classe Social facilita ou dificulta, rende Yuls por ciclo e produz os Recursos e os itens que movem o Mercado.',
+  regras: [
+    ['Quantas', 'Uma Profissão principal. Uma secundária a partir do 6º Estágio.'],
+    ['Licença', 'Emitida pela Corporação do ofício, na Coroa: 200 Yuls para a classe nativa do ofício e 1.000 para as outras. Ofícios do Fosso não têm licença nem pagam imposto, mas podem render prisão.'],
+    ['Jornada de Trabalho', 'Um post de RP de 500 caracteres, 1 por ciclo, como os treinos. Rende o salário do grau e conta para subir de grau.'],
+    ['Carreiras', 'Generais e membros do Veio Negro podem ter ofício. A Forja paga soldo; o Veio Negro paga em Antiméritos e contrabando.'],
+  ],
+  graus: [
+    ['I', 'Aprendiz', 'Licença', '40 Yuls por Jornada'],
+    ['II', 'Oficial', '15 Jornadas', '100 Yuls por Jornada'],
+    ['III', 'Mestre', '40 Jornadas, 6º Estágio e uma Obra-Prima avaliada pela Staff', '250 Yuls por Jornada; ensina Aprendizes e abre Corporação'],
+  ],
+  lista: [
+    { nome: 'Mineiro', conhecimento: 'Nenhum', classe: 'Plebe', onde: 'Os Veios', produz: 'Minério e Cristais residuais' },
+    { nome: 'Caçador', conhecimento: 'Arquearia ou Combate', classe: 'Plebe', onde: 'Fronteira Cinzenta', produz: 'Couro, carne e Partes de Criaturas' },
+    { nome: 'Ferreiro', conhecimento: 'Produção', classe: 'Plebe', onde: 'Os Veios', produz: 'Lingotes, armas, armaduras e ferramentas' },
+    { nome: 'Boticário', conhecimento: 'Herbalístico', classe: 'Plebe', onde: 'Os Veios', produz: 'Poções, remédios e consumíveis' },
+    { nome: 'Cultivador de Estufa', conhecimento: 'Herbalístico ou Botânica Arcana', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Comida e ervas raras' },
+    { nome: 'Médico', conhecimento: 'Medicinal', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Tratamento cobrado e cirurgias' },
+    { nome: 'Engenheiro', conhecimento: 'Científico ou Engenharia', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Máquinas, catalisadores, próteses e encantamentos' },
+    { nome: 'Lapidador de Cristais', conhecimento: 'Científico', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Lentes, Núcleos e Pó de Cristal' },
+    { nome: 'Mercador', conhecimento: 'Oratória', classe: 'Nobreza', onde: 'Qualquer cidade', produz: 'Compra e revende; abre Loja' },
+    { nome: 'Notário', conhecimento: 'Retórica', classe: 'Realeza', onde: 'A Coroa', produz: 'Registra Contratos e Escrituras' },
+    { nome: 'Magistrado', conhecimento: 'Retórica', classe: 'Realeza', onde: 'A Coroa', produz: 'Julga e cobra impostos de terras' },
+    { nome: 'Contrabandista', conhecimento: 'Oratória', classe: 'Nenhuma', onde: 'O Fosso', produz: 'Recursos sem imposto e itens proibidos' },
+  ],
+  ligacoes: [
+    ['Classe Social', 'A Plebe começa perto das minas, a Nobreza das academias, a Realeza dos cartórios. Trocar de mundo custa caro, mas é possível.'],
+    ['Conhecimentos', 'Quem compra uma Cápsula ou estuda numa Biblioteca agora tem um motivo econômico para isso.'],
+    ['Terras', 'Uma Oficina, Loja, Estufa, Laboratório ou Consultório na própria terra dá bônus ao ofício.'],
+    ['Sistema de Criação', 'Ferreiro, Boticário, Engenheiro e Lapidador são o Sistema de Criação: tudo o que eles fazem segue a página Itens Mágicos.'],
+  ],
+};
+
+export const mineracao = {
+  texto: 'Minerar sustenta os Veios e abastece as forjas. Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados, e toda jazida se esgota. Para achar coisa melhor é preciso descer mais fundo, onde a mina cobra em Ferimentos.',
+  jazidas: [
+    ['Esgotada', '1 Carvão', '—', 'Sem fim', 'A maioria dos Veios'],
+    ['Pobre', '2 Ferro Cinzento', '1 Cobre Rúnico', '40', 'Veios, minas comunitárias'],
+    ['Comum', '3 Ferro Cinzento, 1 Cobre Rúnico', '1 Pó de Cristal', '30', 'Concessões de Mina'],
+    ['Rica', '3 Ferro Cinzento, 1 Cobre Rúnico, 1 Quartzo de Mana', '1 Cristal Branco', '20', 'Concessões raras, prêmios de evento'],
+    ['Veio Virgem', 'Como a Rica, mais 1 Ferro Estelar', '1 Cristal Branco e 1 Obsidiana Viva', '10', 'Só por Prospecção ou conquista na Fronteira'],
+  ],
+  reserva: 'Toda jazida tem uma Reserva, contada em Jornadas. Quando ela acaba, a jazida desce um grau. É o problema de Diamond em escala pequena.',
+  modificadores: [
+    ['Ferramenta', 'Uma picareta Incomum ou melhor rende +1 do Recurso Comum por Jornada; uma Rara encurta o Achado para 8 Jornadas.'],
+    ['Magia', 'Terra, Cristal, Ferro e Aço contam como Afinidade: +1 do Recurso Incomum da jazida.'],
+    ['Força', 'Com Força Colossal ou maior, o Mineiro faz duas Jornadas por ciclo, mas a segunda gasta Reserva em dobro.'],
+    ['Grau do ofício', 'Oficial ganha +1 Ferro Cinzento por Jornada. Mestre lê a rocha e sabe quantas Jornadas a Reserva ainda tem.'],
+  ],
+  profundas: 'Abaixo das galerias esgotadas ficam as Minas Profundas, perto do Fosso. Uma expedição é uma missão pelo bot, com narrador, de Rank D a A. A recompensa é dividida pelo grupo: Obsidiana Viva no Rank B, Cristal Negro no Rank A.',
+  perigos: [
+    ['Desabamento', 'Ferimento II em todos, ou III em quem está na frente', 'Resistência Extrema ou um Engenheiro no grupo'],
+    ['Gás de Mana', 'Doença de Mana após 3 turnos', 'Pele de Mana ou máscara de Engenheiro'],
+    ['Criaturas das profundezas', 'Confronto com uma criatura do Bestiário', 'Combate; um Caçador no grupo'],
+    ['Escuridão total', '-1 Acréscimo em Velocidade sem luz', 'Lanterna de Quartzo, magia de luz ou fogo'],
+  ],
+  prospeccao: 'Um Mineiro Oficial ou Mestre pode gastar 3 Jornadas procurando um veio novo numa região. No fim, a Staff revela o que ele achou conforme a região e o Renome, sem sorteio. A jazida nova precisa de Concessão da Coroa (um Contrato com Notário) ou vira mina ilegal do Veio Negro.',
+  refino: [
+    ['3 Ferro Cinzento + 1 Carvão', '1 Lingote de Ferro', 'Ferreiro', '1 Jornada'],
+    ['2 Cobre Rúnico', '1 Fio Rúnico (conduz mana)', 'Ferreiro ou Engenheiro', '1 Jornada'],
+    ['2 Quartzo de Mana', '1 Lente de Quartzo', 'Lapidador', '1 Jornada'],
+    ['1 Cristal Branco', '1 Núcleo Branco ou 3 Pó de Cristal', 'Lapidador com Laboratório', '2 Jornadas'],
+    ['2 Ferro Estelar', '1 Lingote Estelar', 'Ferreiro Mestre', '2 Jornadas'],
+  ],
+  escolha: 'O Cristal Branco tem dois destinos que competem: subir de Estágio ou virar o núcleo de um item Épico. Cada um que sai da mina obriga uma escolha.',
+};
+
+export const itens = {
+  texto: 'Todo item tem três partes: o material define a qualidade máxima, o artesão define a qualidade que consegue fazer, e os encantamentos gravam mana no objeto. Cada item rastreia de volta a uma mina, uma caçada ou uma estufa.',
+  qualidades: [
+    ['Comum', 'Nenhum', 'Ferro, couro, madeira', 'Aprendiz', '0', '100'],
+    ['Incomum', '+0,5 Acréscimo', 'Lingote de Ferro + Fio Rúnico', 'Oficial', '1 (Grau I e II)', '800'],
+    ['Rara', '+1 Acréscimo', 'Lingote Estelar ou Parte Mágica de Criatura', 'Oficial com Oficina', '1 (até Grau III)', '4.000'],
+    ['Épica', '+1,5 Acréscimo', 'Material Raro + Núcleo Branco', 'Mestre', '2', '15.000'],
+    ['Obra-Prima', '+2 Acréscimos e uma propriedade única', 'Obsidiana Viva ou Cristal Negro', 'Mestre, aprovado pela Staff', '3', 'Só por encomenda'],
+  ],
+  nota: 'A Katana de qualidade Incomum dos Sukehiro já segue esta escala. Os bônus contam no teto de 10 Acréscimos por atributo, como tudo.',
+  tipos: [
+    ['Armas', 'Ferreiro', 'Força ou Velocidade com a arma; soma com Esgrima, Arquearia e Combate'],
+    ['Armaduras', 'Ferreiro', 'Resistência; uma Rara ou melhor absorve o primeiro Ferimento I da cena'],
+    ['Catalisadores', 'Engenheiro ou Lapidador', 'Acréscimos dos feitiços da própria magia (anéis, cajados, amuletos)'],
+    ['Ferramentas', 'Ferreiro ou Engenheiro', 'A profissão: picareta, kit médico, kit de forja'],
+    ['Próteses', 'Engenheiro + Médico com Cirurgia Arcana', 'Corrigem uma Sequela; as Raras ou melhores aceitam encantamento'],
+    ['Consumíveis', 'Boticário', 'Poções, bombas e óleos de uso único, pela regra do Herbalístico'],
+  ],
+  encantamentos: [
+    ['Afiado', '+0,5 Acréscimo extra de Força com a arma', '1 Pó de Cristal'],
+    ['Leve', '+0,5 Acréscimo de Velocidade ao usar', '1 Pó de Cristal'],
+    ['Condutor', 'Canaliza a magia do dono: +0,5 Acréscimo nos feitiços lançados através dele', '2 Pó de Cristal + Fio Rúnico'],
+    ['Reservatório', 'Guarda 50 de Mana (100 num Épico) que o dono usa como sua', '2 Pó de Cristal + Lente de Quartzo'],
+    ['Rúnico', 'Guarda um feitiço do dono, solto sem gastar a ação principal, 1 vez por cena', '3 Pó de Cristal'],
+    ['Resguardo', '+0,5 de Resistência contra magia', '2 Pó de Cristal'],
+    ['Vital', 'Uma vez por cena, cura um Ferimento I do dono', '2 Pó de Cristal + Erva rara'],
+  ],
+  quemEncanta: 'Encantar é gravar um efeito com Pó de Cristal. Quem encanta é um Engenheiro ou um Mago Artífice, cuja passiva Oficina já grava um feitiço num objeto.',
+  desgaste: [
+    ['Rachar', 'Um item usado contra algo duas classificações acima dele racha e perde o bônus até ser consertado.'],
+    ['Conserto', '1 Jornada de um Ferreiro e 20% do material original.'],
+    ['Histórico', 'Itens Raros ou melhores têm nome e histórico no bot: quem fez e de que mina veio o material. Um item roubado pode ser rastreado.'],
+  ],
+  compra: 'Comuns e Incomuns estão nas lojas de NPC; Raros, só com artesãos jogadores ou na Coroa; Épicos e Obras-Primas, só por Contrato de Encomenda. O Fosso vende de tudo, inclusive itens proibidos, por ×1,5 do preço de Mercado.',
+};
+
+export const terras = {
+  texto: 'Em Diamond a terra é o bem mais disputado porque quase toda ela morreu. O jogador compra um lote, constrói o que o ofício precisa e paga para mantê-lo vivo. A falta de terra boa também explica a guerra: Diamond quer as terras férteis de Clover.',
+  tipos: [
+    ['Barraco', 'Os Veios', 'Qualquer um', '800 Yuls', 'Moradia; corta o custo de vida pela metade'],
+    ['Lote Urbano', 'Qualquer cidade', 'Qualquer um', '3.000 (Veios) a 20.000 (Coroa)', '1 construção'],
+    ['Concessão de Mina', 'Os Veios', 'Nobreza, ou Plebe com Contrato com um nobre', '15.000 Yuls', 'Uma jazida Comum (ver Mineração)'],
+    ['Estufa de Mana', 'O Lapidário', 'Nobreza e Realeza', '25.000 Yuls', 'Comida e ervas mesmo em terra morta'],
+    ['Feudo', 'A Coroa e a Fronteira', 'Realeza, ou General Brilhante como prêmio', 'Só por concessão do Rei', 'Vários lotes; cobra imposto de NPCs'],
+    ['Toca', 'O Fosso', 'Membros do Veio Negro', 'Sem escritura', 'Esconderijo e loja ilegal'],
+  ],
+  vigor: [
+    ['Morta', 'Nada brota.'],
+    ['Exausta', 'Produz metade.'],
+    ['Fraca', 'Produz o normal.'],
+    ['Viva', 'Produz o dobro. Raríssima em Diamond; terras conquistadas em Clover nascem Vivas.'],
+  ],
+  vigorTexto: 'O Vigor sobe com um Cultivador de Estufa ou um Cristal Branco enterrado, e cai com eventos como a Colheita Cristalina.',
+  construcoes: [
+    ['Oficina', 'Produções 20% mais rápidas (soma com o Mago Artífice)', 'Ferreiro, Engenheiro'],
+    ['Loja', 'Vende a jogadores e NPCs sem intermediário; +10% no preço de venda', 'Mercador, qualquer um'],
+    ['Estufa', 'Produz Recursos de comida e ervas por semana', 'Cultivador, Boticário'],
+    ['Laboratório', 'Pesquisa e refino de Cristais', 'Lapidador, Engenheiro'],
+    ['Consultório', 'Cirurgias e tratamento cobrado; cura 1 turno mais rápido', 'Médico'],
+    ['Armazém', 'Guarda Recursos sem perda no Inverno da Fome', 'Mercador, Mineiro'],
+  ],
+  manter: [
+    ['Imposto territorial', '2% do valor da propriedade por semana, pago ao Tesouro.'],
+    ['Atraso', '2 semanas sem pagar tiram uma construção; 4 semanas, a Coroa toma a terra.'],
+    ['Proteção', 'O Veio Negro pode cobrar proteção nos Veios. Recusar abre uma missão de defesa.'],
+    ['Herança', 'Uma terra pode ser vendida, arrendada ou deixada de herança por Contrato. Quando o personagem morre, ela vai para o próximo Retornado do mesmo jogador, com 50% de imposto.'],
+  ],
+};
+
+export const economia = {
+  texto: 'Tudo o que vem da terra está acabando em Diamond: comida, madeira, minério e Cristais ficam caros, e quem controla esses Recursos controla o reino.',
+  moedas: [
+    ['Yul', 'A moeda legal de todos os reinos. Tudo no bot é contado em Yuls.'],
+    ['Cristais de Mana', 'Não são moeda, mas valem como ouro. A Coroa compra todo Cristal Branco por 3.000 Yuls; no Fosso pagam 4.000, sem perguntas.'],
+    ['Antiméritos', 'A moeda do Veio Negro. Só vale no Fosso.'],
+  ],
+  riquezas: [
+    ['Miserável', 'Menos de 200 Yuls', 'Guardas desconfiam; só consegue Contratos no Fosso'],
+    ['Pobre', '200 a 2.000', 'Normal nos Veios'],
+    ['Confortável', '2.000 a 20.000', 'Entra nas academias do Lapidário'],
+    ['Rico', '20.000 a 200.000', 'Preços -5% com mercadores; alvo de extorsão'],
+    ['Opulento', 'Mais de 200.000', 'Audiência com a Coroa; pode financiar missões'],
+  ],
+  riquezasTexto: 'O patrimônio (Yuls, Cristais, terras e itens) coloca o personagem numa faixa, que muda como os NPCs o tratam.',
+  comercio: [
+    ['Com NPC', 'Compra pelo preço de mercado e vende por metade.'],
+    ['Entre jogadores', 'Livre, pelo bot, com o preço que combinarem. A venda paga o Dízimo.'],
+    ['Loja própria', 'Uma Loja na própria terra vende a NPCs pelo preço cheio + 10%.'],
+  ],
+  regioes: [
+    ['Os Veios', '×0,8', '×1,5', '×1,3'],
+    ['O Lapidário', '×1', '×1,2', '×1'],
+    ['A Coroa', '×1,3', '×1', '×0,9'],
+    ['O Fosso', '×1,2, sem imposto', '×1', '×1,5, inclusive proibidos'],
+  ],
+  eventos: 'Eventos mexem nos preços por um ciclo inteiro: no Inverno da Fome a comida vale ×3; na Colheita Cristalina o Cristal cai para ×0,7; na Ofensiva da Fronteira armas e poções valem ×2.',
+  tesouro: 'O Tesouro da Coroa (240.000.000 Yuls, em queda) paga os soldos dos Generais e as recompensas das missões, e recebe os impostos. Se cair abaixo de 200.000.000 num evento, as recompensas em Yuls das missões dos Generais caem 25% até ele subir de novo.',
+  impostos: [
+    ['Dízimo', '10% Plebe, 15% Nobreza, 20% Realeza, sobre salário e venda', 'O bot, na hora'],
+    ['Territorial', '2% do valor da propriedade por semana', 'O bot, toda semana'],
+    ['Taxa de Cristal', '20% sobre Cristais vendidos fora da Coroa', 'Fiscais; no Fosso não há'],
+  ],
+  sonegar: 'Vender no Fosso não paga imposto. Quem é pego, por missão de General ou denúncia, paga o triplo ou vai preso.',
+  contratosTexto: 'Um acordo entre personagens, registrado no bot e assinado pelos dois. Com um Notário presente, ele vale na Coroa; sem Notário, vale só entre as partes.',
+  contratos: [
+    ['Emprego', 'Um Mestre Ferreiro paga 60 Yuls por Jornada a um Aprendiz'],
+    ['Empréstimo', '5.000 Yuls, devolvidos como 6.000 em 4 semanas'],
+    ['Arrendamento', 'Usa a mina de um nobre e entrega metade do minério'],
+    ['Encomenda', 'Uma espada Rara por 4.000 Yuls, entregue em 2 semanas'],
+    ['Escolta', 'Protege uma carga até a Fronteira'],
+    ['Sociedade', 'Dois sócios dividem o lucro de uma Loja'],
+  ],
+  quebra: 'Quebrar um Contrato registrado dá multa igual ao valor dele, paga à outra parte, e marca a ficha: nenhum Contrato com Notário por 4 semanas.',
+  recursos: [
+    ['Carvão', 'Comum', 'Minas', '5'],
+    ['Ferro Cinzento', 'Comum', 'Minas', '10'],
+    ['Água limpa (barril)', 'Comum', 'Poços, Estufas', '10'],
+    ['Ração (1 semana)', 'Comum', 'Estufas, caça', '30'],
+    ['Erva medicinal', 'Comum', 'Estufas', '25'],
+    ['Couro de Besta', 'Comum', 'Caça', '50'],
+    ['Madeira', 'Incomum', 'Fronteira, importada de Clover', '60'],
+    ['Cobre Rúnico', 'Incomum', 'Minas Pobres a Ricas', '40'],
+    ['Quartzo de Mana', 'Incomum', 'Minas Ricas', '80'],
+    ['Pó de Cristal', 'Incomum', 'Refino, Achados', '150'],
+    ['Erva rara', 'Rara', 'Estufa de Mana', '120'],
+    ['Parte Mágica de Criatura', 'Rara', 'Caça de criaturas mágicas', '300'],
+    ['Ferro Estelar', 'Rara', 'Veios Virgens, meteoritos', '400'],
+    ['Obsidiana Viva', 'Épica', 'Minas Profundas', '1.200'],
+    ['Cristal Branco', 'Rara', 'Achados, missões C e B', '3.000'],
+    ['Cristal Negro', 'Épica', 'Minas Profundas, missões A', '25.000'],
+    ['Cristal Dourado', 'Lenda', 'Só em evento', 'Não se vende'],
+  ],
+  custoVida: [
+    ['Os Veios', '50 Yuls por semana'],
+    ['O Lapidário', '200 Yuls por semana'],
+    ['A Coroa', '600 Yuls por semana'],
+  ],
+  desnutrido: 'Quem não paga o sustento fica Desnutrido: uma casa de Ferimento I fica marcada até ele comer. Um Barraco próprio corta o custo pela metade. É assim que a fome dos Veios aparece na ficha, não só no texto.',
+};
+
+// Glossário: termo, definição curta, página (e seção) onde está a regra.
+export const glossario = [
+  ['Achado', 'Recurso garantido a cada 10 Jornadas na mesma jazida.', 'mineracao#jazidas'],
+  ['Acréscimo', 'Valor extra num atributo, de 0,1 a 1 por aplicação; 10 sobem uma classificação.', 'atributos#acrescimos'],
+  ['Afinidade', 'Quando o ambiente favorece a magia: +1 Acréscimo.', 'mana'],
+  ['Agravamento', 'Ferimento sem tratamento que piora sozinho.', 'ferimentos#agravamento'],
+  ['Alma Indomável', 'Traço que abre o Feitiço de Alma.', 'milagres#feitico-de-alma'],
+  ['Antiméritos', 'A moeda de honra do Veio Negro, as Estrelas Negras.', 'generais'],
+  ['Cápsula de Conhecimento', 'Compra de um Conhecimento sem estudar.', 'conhecimentos#capsulas'],
+  ['Classe de Mago', 'O estilo de combate do personagem.', 'classes'],
+  ['Classe Social', 'Plebe, Nobreza ou Realeza: define região, dinheiro e atributos iniciais.', 'familias'],
+  ['Classificação', 'Patamar de um atributo físico, de Comum a Transcendental.', 'atributos'],
+  ['Concessão', 'Direito de explorar uma jazida, dado pela Coroa por Contrato.', 'mineracao#prospeccao'],
+  ['Confronto', 'Comparação sem dados: classificação, depois Acréscimos, depois circunstâncias.', 'atributos#confronto'],
+  ['Contrato', 'Acordo entre personagens registrado no bot.', 'economia#contratos'],
+  ['Controle Mágico', 'Precisão no uso da mana, de 0 a 100%.', 'atributos'],
+  ['Cristal de Mana', 'Branco, Negro ou Dourado: exigido nos Estágios altos e valioso no Mercado.', 'progressao'],
+  ['Custo de vida', 'Sustento semanal: 50, 200 ou 600 Yuls conforme a região.', 'economia#recursos'],
+  ['Desnutrido', 'Quem não paga o sustento: uma casa de Ferimento I marcada.', 'economia#recursos'],
+  ['Dízimo', 'Imposto sobre salário e venda: 10, 15 ou 20%.', 'economia#impostos'],
+  ['Encantamento', 'Efeito gravado num item com Pó de Cristal.', 'itens#encantamentos'],
+  ['Estágio', 'Nível de poder do personagem, do 9º ao 1º.', 'progressao'],
+  ['Exaustão Mágica', 'Mana zero: -1 classificação nos atributos físicos.', 'mana'],
+  ['Feitiço de Alma', 'Técnica única que dobra as regras da própria magia.', 'milagres#feitico-de-alma'],
+  ['Ferimento', 'Dano de I (Leve) a IV (Crítico), marcado na Trilha.', 'ferimentos'],
+  ['Grau', 'Nível de um feitiço, de I a V.', 'magia'],
+  ['Grimório', 'O livro que guarda os feitiços.', 'magia'],
+  ['Jazida', 'Mina com grau e Reserva; rende Recursos por Jornada.', 'mineracao#jazidas'],
+  ['Jornada de Trabalho', 'Post de 500 caracteres por ciclo que paga o salário do ofício.', 'profissoes#regras'],
+  ['Licença', 'Permissão para exercer um ofício, emitida pela Corporação.', 'profissoes#regras'],
+  ['Maestria', 'Domínio de um feitiço, de 0 a 3.', 'magia'],
+  ['Méritos', 'A moeda de honra dos Generais Brilhantes.', 'generais'],
+  ['Milagre', 'Bênção rara que muda as regras do personagem.', 'milagres'],
+  ['Minas Profundas', 'Expedições de Rank D a A abaixo das galerias esgotadas.', 'mineracao#minas-profundas'],
+  ['Obra-Prima', 'A qualidade máxima de um item: +2 Acréscimos.', 'itens#qualidade'],
+  ['Poder Mágico', 'De I a VI: o nível é o número de Acréscimos da magia.', 'atributos'],
+  ['Pó de Cristal', 'Recurso que paga os encantamentos.', 'economia#recursos'],
+  ['Qualidade', 'Comum, Incomum, Rara, Épica ou Obra-Prima.', 'itens#qualidade'],
+  ['Recursos', 'Materiais da economia: minério, cristal, comida, ervas.', 'economia#recursos'],
+  ['Reserva', 'Quantas Jornadas uma jazida aguenta antes de descer um grau.', 'mineracao#jazidas'],
+  ['Retornado', 'Alma de outro reino que renasce em Diamond.', 'mundo'],
+  ['Sequela', 'Marca permanente de quem sobrevive a um Ferimento IV sem cirurgia.', 'ferimentos#agravamento'],
+  ['Sincronia', 'Vínculo entre dois ou três personagens forjado em perigo.', 'milagres'],
+  ['Técnica de Mana', 'Uso da mana fora do Grimório, como Percepção ou Zona de Mana.', 'mana#tecnicas'],
+  ['Traço', 'Talento menor: até 3, nenhum com mais de 1 Acréscimo.', 'milagres'],
+  ['Trilha de Ferimentos', 'A barra de vida: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'ferimentos#trilha'],
+  ['Vigor', 'O quanto uma terra produz: Morta, Exausta, Fraca ou Viva.', 'terras#vigor'],
+  ['Yul', 'A moeda de todos os reinos.', 'economia#moedas'],
+];
+
+// Ordem de leitura para quem acabou de chegar.
+export const comecePorAqui = [
+  ['mundo', 'Onde você vai acordar.'],
+  ['familias', 'Quem a sua alma foi.'],
+  ['atributos', 'Como se luta sem dados.'],
+  ['profissoes', 'Como se vive em Diamond.'],
+  ['comecar', 'Como criar o personagem.'],
+];
 
 export const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

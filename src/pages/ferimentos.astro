@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { feridas as f, ferimentos } from '../data/canon.js';
+
+const abas = [['trilha', 'A Trilha'], ['golpe', 'O golpe'], ['agravamento', 'Agravamento'], ['tratar', 'Tratar'], ['curandeiro', 'Curadores']];
+const casas = f.trilha.flatMap(([g, nome, n]) => Array.from({ length: n }, () => [g, nome]));
+---
+<Base title="Ferimentos" slug="ferimentos" description="A Trilha de Ferimentos do Black Destiny: a barra de vida, o acúmulo, o agravamento, as curas e o Mago Curandeiro.">
+  <PageHero
+    slug="ferimentos"
+    title="Os <em>Ferimentos</em>"
+    lead="Ninguém tem pontos de vida. Tem sete casas, e cada golpe que passa da Resistência ocupa uma delas."
+    intro={f.texto}
+    image="ferimentos/capa"
+    imageLabel="Um mago ferido nas galerias dos Veios"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="trilha">
+    <div class="wrap">
+      <SectionHead num="01" label="A Trilha de Ferimentos" title="Sete casas. <em>Uma vida.</em>" lead="Três Leves, dois Moderados, um Grave e um Crítico. Teste abaixo: dê golpes, veja o acúmulo subir de grau e trate o personagem." />
+
+      <div class="trail" data-trail data-reveal>
+        <div class="trail__bar" role="img" aria-label="Trilha de Ferimentos com sete casas">
+          {f.trilha.map(([g, nome, n]) => (
+            <div class="trail__grp" data-grau={g}>
+              <p class="trail__lbl"><b>{g}</b>{nome}</p>
+              <div class="trail__cells">{Array.from({ length: n }).map(() => <span class="trail__cell" data-cell={g}></span>)}</div>
+            </div>
+          ))}
+        </div>
+        <div class="trail__ctl">
+          <span class="t-label">Golpe que passa da Resistência por</span>
+          <div class="btns">
+            <button class="btn" type="button" data-hit="I">Só Acréscimos</button>
+            <button class="btn" type="button" data-hit="II">1 classificação</button>
+            <button class="btn" type="button" data-hit="III">2 classificações</button>
+            <button class="btn" type="button" data-hit="IV">3 ou mais</button>
+          </div>
+          <div class="btns">
+            <button class="btn btn--ink" type="button" data-heal>Tratar o pior</button>
+            <button class="btn btn--ink" type="button" data-reset>Recomeçar</button>
+          </div>
+          <p class="trail__out" data-out aria-live="polite">Sem ferimentos. Nenhum efeito.</p>
+        </div>
+      </div>
+      <script is:inline type="application/json" id="trail-data" set:html={JSON.stringify(ferimentos)}></script>
+
+      <dl class="gifts" style="margin-top:clamp(40px,5vw,72px)">
+        {f.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="golpe">
+    <div class="wrap">
+      <SectionHead num="02" label="Como um golpe vira ferimento" title="O dano é a <em>distância</em>." lead="O confronto é o mesmo de Atributos: ataque contra Resistência, sem dados. A diferença entre os dois define o grau." />
+      <div class="wounds">
+        {ferimentos.map(([n, nome, sup, efeito], i) => (
+          <div class="wound" style={`--i:${i}`} data-reveal>
+            <span class="wound__lvl">{n}</span>
+            <h3 class="t-h3">{nome}</h3>
+            <dl class="kv"><dt>Supera por</dt><dd>{sup}</dd></dl>
+            <p class="t-small">{efeito}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="agravamento">
+    <div class="wrap">
+      <SectionHead num="03" label="Agravamento" title="A ferida que <em>cresce sozinha</em>." lead={f.diamond} />
+      <Table head={['Grau', 'Sem tratamento', 'Some sozinho?']} rows={f.agravamento} />
+      <div class="grid" style="margin-top:clamp(40px,5vw,72px);align-items:center;row-gap:32px">
+        <div class="c-1-5"><ImageSlot src="ferimentos/sequela" label="Uma prótese do Lapidário" ratio="4 / 5" /></div>
+        <div class="c-6-12 stack" style="--s:1.2rem">
+          <span class="eyebrow" data-reveal><b>IV</b>Sequelas</span>
+          <h3 class="t-h2" data-split>O corpo <em>lembra</em>.</h3>
+          <p class="t-body" data-reveal>{f.sequelas}</p>
+          <div class="btns" data-reveal><a class="btn" href="/itens/#tipos">Próteses em Itens Mágicos</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="tratar">
+    <div class="wrap">
+      <SectionHead num="04" label="Tratar" title="Estancar, tratar, <em>costurar</em>." lead={f.bonus} />
+      <Table head={['Ação', 'O que faz', 'Quem pode', 'Tempo']} rows={f.tratar} />
+      <div style="margin-top:clamp(40px,5vw,72px)">
+        <span class="eyebrow" data-reveal><b>A</b>Conhecimentos de cura</span>
+        <div style="margin-top:20px"><Table head={['Conhecimento', 'Tipo', 'O que trata']} rows={f.conhecimentos} /></div>
+        <p class="t-small" style="margin-top:16px" data-reveal>{f.extras}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="curandeiro">
+    <div class="wrap">
+      <SectionHead num="05" label="A classe curadora" title="O Mago <em>Curandeiro</em>." lead="A classe dos curadores ganha uma escada completa, do primeiro curativo a arrancar um aliado da morte." />
+      <div class="grid" style="align-items:start;row-gap:32px">
+        <div class="c-1-5"><ImageSlot src="ferimentos/curandeiro" label="Um Sacerdote da Mana" ratio="4 / 5" /></div>
+        <div class="c-6-12">
+          <ol class="ladder ladder--blood">
+            {f.curandeiro.map(([n, q, d], i) => <li data-reveal><b>{['I', 'II', 'III', 'IV'][i]}</b><h4>{n} <small class="t-label">· {q}</small></h4><p>{d}</p></li>)}
+          </ol>
+          <div class="btns" style="margin-top:28px" data-reveal>
+            <a class="btn" href="/classes/">Todas as Classes de Mago</a>
+            <a class="btn" href="/profissoes/">O ofício de Médico</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="ferimentos" />
+</Base>
+
+<script>
+  const root = document.querySelector('[data-trail]');
+  if (root) {
+    const fer = JSON.parse(document.getElementById('trail-data').textContent);
+    const ordem = ['I', 'II', 'III', 'IV'];
+    const cap = { I: 3, II: 2, III: 1, IV: 1 };
+    let marc = { I: 0, II: 0, III: 0, IV: 0 };
+    const out = root.querySelector('[data-out]');
+    const draw = (msg) => {
+      ordem.forEach((g) => root.querySelectorAll(`[data-cell="${g}"]`).forEach((c, i) => c.classList.toggle('is-on', i < marc[g])));
+      const pior = [...ordem].reverse().find((g) => marc[g] > 0);
+      const graus = ordem.filter((g) => marc[g] > 0).length;
+      let txt = pior ? `Pior grau: ${pior} ${fer[ordem.indexOf(pior)][1]}. ${fer[ordem.indexOf(pior)][3]}.` : 'Sem ferimentos. Nenhum efeito.';
+      if (graus > 1) txt += ' Dois graus ocupados: mais -1 Acréscimo.';
+      out.textContent = (msg ? msg + ' ' : '') + txt;
+    };
+    const hit = (g) => {
+      let i = ordem.indexOf(g);
+      let msg = '';
+      while (i < 4 && marc[ordem[i]] >= cap[ordem[i]]) { i++; msg = 'O grau estava cheio e o ferimento subiu.'; }
+      if (i >= 4) { draw('A trilha está cheia: o personagem cai e a cena decide se morre.'); return; }
+      marc[ordem[i]]++;
+      draw(msg);
+    };
+    root.querySelectorAll('[data-hit]').forEach((b) => b.addEventListener('click', () => hit(b.dataset.hit)));
+    root.querySelector('[data-heal]').addEventListener('click', () => {
+      const pior = [...ordem].reverse().find((g) => marc[g] > 0);
+      if (!pior) return draw('');
+      marc[pior]--;
+      if (pior !== 'I' && pior !== 'II') { marc[ordem[ordem.indexOf(pior) - 1]] = Math.min(cap[ordem[ordem.indexOf(pior) - 1]], marc[ordem[ordem.indexOf(pior) - 1]] + 1); draw(`O ${pior} desceu um grau.`); }
+      else draw(`O ${pior} foi tratado.`);
+    });
+    root.querySelector('[data-reset]').addEventListener('click', () => { marc = { I: 0, II: 0, III: 0, IV: 0 }; draw(''); });
+  }
+</script>

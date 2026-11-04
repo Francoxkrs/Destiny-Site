@@ -1,16 +1,21 @@
 ---
 import '../styles/global.css';
 import '../styles/v2.css';
+import '../styles/sistemas.css';
 import Gem from '../components/Gem.astro';
 import Arrow from '../components/Arrow.astro';
-import { site, paginas, capitulos } from '../data/canon.js';
+import { site, paginas, capitulos, glossario } from '../data/canon.js';
 
 const { title, description = 'Servidor de RP de texto no Discord inspirado em Black Clover. Toda alma volta, e toda alma volta em Diamond.', slug = 'inicio' } = Astro.props;
 const atual = paginas.find((p) => p.slug === slug);
 const fullTitle = title ? `${title} · ${site.nome}` : `${site.nome} · RP de Black Clover no Discord`;
 const discordExterno = site.discord !== '#';
 const cap = atual ? capitulos.find((c) => c.id === atual.cap) : null;
-const titulos = Object.fromEntries([['/', 'Black Destiny'], ...paginas.map((p) => [`/${p.slug}/`, p.titulo])]);
+const titulos = Object.fromEntries([['/', 'Black Destiny'], ['/indice/', 'Índice'], ...paginas.map((p) => [`/${p.slug}/`, p.titulo])]);
+const busca = {
+  paginas: paginas.map((p) => ({ t: p.titulo, d: p.resumo, u: `/${p.slug}/`, c: `Cap. ${p.cap}`, e: (p.essencial || []).join(' ') })),
+  termos: glossario.map(([t, d, u]) => ({ t, d, u: `/${u.replace('#', '/#')}`.replace(/\/?$/, (m) => (u.includes('#') ? '' : '/')) })),
+};
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -78,6 +83,8 @@ const titulos = Object.fromEntries([['/', 'Black Destiny'], ...paginas.map((p) =
         <a href="/" class="brand" aria-label="Black Destiny, início"><Gem /><span>Black Destiny</span></a>
         <p class="hdr__where">{atual && cap ? <><b>Cap. {cap.id}</b> {cap.nome} <i>/</i> {atual.titulo}</> : <><b>黒</b> Reino de Diamond</>}</p>
         <div class="hdr__actions">
+          <button class="hdr__search" type="button" data-search-open aria-label="Buscar no site (Ctrl+K)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg><span>Buscar</span><kbd>Ctrl K</kbd></button>
+          <a class="hdr__idx" href="/indice/" aria-current={slug === 'indice' ? 'page' : undefined}>Índice</a>
           <a class="btn hdr__discord" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Discord</a>
           <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
             <span class="menu-btn__label" data-menu-label>Capítulos</span>
@@ -110,11 +117,26 @@ const titulos = Object.fromEntries([['/', 'Black Destiny'], ...paginas.map((p) =
           <p>Um RP de texto no Discord inspirado em Black Clover. Você foi alguém em outro reino; agora renasce em Diamond, um reino que esgotou a própria terra.</p>
           <div class="btns">
             <a class="btn btn--solid" href="/comecar/">Criar personagem <Arrow /></a>
+            <a class="btn" href="/indice/">Índice e glossário</a>
             <a class="btn" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener">Entrar no Discord</a>
           </div>
         </div>
       </div>
     </nav>
+
+    <div class="search" data-search hidden>
+      <div class="search__veil" data-search-close></div>
+      <div class="search__box" role="dialog" aria-modal="true" aria-label="Buscar no site">
+        <div class="search__field">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg>
+          <input type="search" placeholder="Buscar regra, termo ou página" autocomplete="off" spellcheck="false" data-search-input aria-label="Buscar" />
+          <button type="button" class="search__x" data-search-close aria-label="Fechar">Esc</button>
+        </div>
+        <ul class="search__res" data-search-res role="listbox"></ul>
+        <p class="search__hint t-label"><span>↑ ↓ escolher</span><span>Enter abrir</span><a href="/indice/">Ver o índice completo</a></p>
+      </div>
+    </div>
+    <script is:inline type="application/json" id="bd-search" set:html={JSON.stringify(busca)}></script>
 
     <main id="main">
       <slot />
@@ -129,7 +151,7 @@ const titulos = Object.fromEntries([['/', 'Black Destiny'], ...paginas.map((p) =
               <a class="btn btn--solid" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Entrar no servidor <Arrow /></a>
             </div>
           </div>
-          {[['I', 'II'], ['III'], ['IV', 'V']].map((ids) => (
+          {[['I', 'II', 'III'], ['IV'], ['V', 'VI']].map((ids) => (
             <div>
               {ids.map((id) => {
                 const c = capitulos.find((x) => x.id === id);
@@ -143,6 +165,7 @@ const titulos = Object.fromEntries([['/', 'Black Destiny'], ...paginas.map((p) =
             </div>
           ))}
         </div>
+        <p class="footer__idx"><a href="/indice/">Índice, glossário e busca <Arrow /></a></p>
         <p class="footer__big" aria-hidden="true"><span>Black</span> <em>Destiny</em></p>
         <div class="footer__bottom">
           <span class="t-label">© {new Date().getFullYear()} Black Destiny · Servidor de fãs, sem fins lucrativos</span>

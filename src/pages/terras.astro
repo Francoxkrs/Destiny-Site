@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { terras as t, slugify } from '../data/canon.js';
+
+const abas = [['propriedades', 'Propriedades'], ['vigor', 'Vigor do solo'], ['construcoes', 'Construções'], ['manter', 'Manter a terra']];
+---
+<Base title="Terras" slug="terras" description="Barracos, lotes, minas, estufas e feudos: como comprar terra em Diamond, o Vigor do solo, as construções e o imposto territorial.">
+  <PageHero
+    slug="terras"
+    title="As <em>Terras</em>"
+    lead="Num reino que secou, um palmo de chão vivo vale mais que um título."
+    intro={t.texto}
+    image="terras/capa"
+    imageLabel="Uma estufa de mana no meio do planalto seco"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="propriedades">
+    <div class="wrap">
+      <SectionHead num="01" label="Propriedades" title="Do barraco <em>ao feudo</em>." lead="A Classe Social limita o que se pode ter. Um Contrato com um nobre, uma Carta do Rei ou um posto de General abrem portas." />
+      <div class="lands">
+        {t.tipos.map(([nome, onde, quem, preco, uso]) => (
+          <article class="land" data-reveal>
+            <ImageSlot src={`terras/${slugify(nome)}`} label={nome} ratio="16 / 10" compact />
+            <div class="land__body">
+              <span class="chip">{onde}</span>
+              <h3 class="t-h3">{nome}</h3>
+              <p class="t-small">{uso}</p>
+              <dl class="kv">
+                <dt>Quem pode</dt><dd>{quem}</dd>
+                <dt>Preço</dt><dd>{preco}</dd>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="vigor">
+    <div class="wrap">
+      <SectionHead num="02" label="Vigor do solo" title="Quanto a terra <em>ainda dá</em>." lead={t.vigorTexto} />
+      <div class="vigor">
+        {t.vigor.map(([n, d], i) => (
+          <div class="vigor__step" style={`--i:${i}`} data-reveal>
+            <span class="vigor__bar"><i></i></span>
+            <h3 class="t-h3">{n}</h3>
+            <p class="t-small">{d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="construcoes">
+    <div class="wrap">
+      <SectionHead num="03" label="Construções" title="O que se ergue <em>no lote</em>." lead="Cada Lote Urbano comporta uma construção; Concessões, Estufas e Feudos comportam mais. O bônus vale para quem trabalha ali." />
+      <Table head={['Construção', 'Bônus', 'Quem mais usa']} rows={t.construcoes} />
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="manter">
+    <div class="wrap grid" style="align-items:start;row-gap:32px">
+      <div class="c-1-5 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>04</b>Manter a terra</span>
+        <h2 class="t-h2" data-split>A Coroa <em>sempre cobra</em>.</h2>
+        <div class="btns" data-reveal><a class="btn" href="/economia/#contratos">Contratos</a><a class="btn" href="/economia/#impostos">Impostos</a></div>
+      </div>
+      <dl class="gifts c-6-12" style="margin-top:0">
+        {t.manter.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <NextPage slug="terras" />
+</Base>

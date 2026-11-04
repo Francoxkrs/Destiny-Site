@@ -20,6 +20,12 @@ const c = capitulos.find((x) => x.id === p.cap);
       <p class="t-lead c-1-7" data-hero-fade>{lead ?? p.resumo}</p>
       {intro && <p class="t-body c-8-12" data-hero-fade set:html={intro} />}
     </div>
+    {p.essencial && (
+      <aside class="essencial" data-hero-fade aria-label="Em 30 segundos">
+        <p class="essencial__h"><b>30s</b>Em 30 segundos</p>
+        <ol class="essencial__list">{p.essencial.map((t, i) => <li><span>{i + 1}</span>{t}</li>)}</ol>
+      </aside>
+    )}
   </div>
   {image && (
     <div class="page-hero__media" data-hero-media>

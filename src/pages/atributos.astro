@@ -161,7 +161,7 @@ const maxMana = manaNiveis[manaNiveis.length - 1];
 
   <section class="sec sec--line" id="ferimentos">
     <div class="wrap">
-      <SectionHead num="06" label="Ferimentos" title="O dano é a <em>distância</em> entre ataque e defesa." lead="Curas comuns tratam Ferimentos I e II. Ferimentos III exigem Medicina Avançada ou um Sacerdote da Mana. Ferimentos IV exigem tratamento fora de combate." />
+      <SectionHead num="06" label="Ferimentos" title="O dano é a <em>distância</em> entre ataque e defesa." lead="O quanto o ataque passa da Resistência define o grau. Os ferimentos ocupam a Trilha de Ferimentos, acumulam e pioram sem tratamento: a regra completa está na página Ferimentos." />
       <div class="wounds">
         {ferimentos.map(([n, nome, sup, efeito], i) => (
           <div class="wound" style={`--i:${i}`} data-reveal>
@@ -172,6 +172,7 @@ const maxMana = manaNiveis[manaNiveis.length - 1];
           </div>
         ))}
       </div>
+      <div class="btns" style="margin-top:32px" data-reveal><a class="btn" href="/ferimentos/">Ver a Trilha de Ferimentos e as curas</a></div>
     </div>
   </section>
 

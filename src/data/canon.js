@@ -12,7 +12,7 @@ export const capitulos = [
   { id: 'I', kanji: '目覚', nome: 'Onde você acorda', texto: 'Diamond, o reino que esgotou a própria terra.' },
   { id: 'II', kanji: '前世', nome: 'Quem você foi', texto: 'A família e a raça que a sua alma carrega de outra vida.' },
   { id: 'III', kanji: '魔導', nome: 'O Grimório', texto: 'O que a sua alma sabe fazer, e como isso se mede sem dados.' },
-  { id: 'IV', kanji: '道', nome: 'O Caminho', texto: 'Como crescer, a quem servir e o que caçar.' },
+  { id: 'IV', kanji: '道', nome: 'O Caminho', texto: 'Como crescer, o que domar, a quem servir e o que caçar.' },
   { id: 'V', kanji: '始', nome: 'O Despertar', texto: 'Criar o personagem e abrir os olhos.' },
 ];
 
@@ -27,9 +27,10 @@ export const paginas = [
   { slug: 'atributos', cap: 'III', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados' },
   { slug: 'progressao', cap: 'IV', num: '09', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios' },
   { slug: 'conhecimentos', cap: 'IV', num: '10', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos' },
-  { slug: 'missoes', cap: 'IV', num: '11', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot' },
-  { slug: 'generais', cap: 'IV', num: '12', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro' },
-  { slug: 'comecar', cap: 'V', num: '13', titulo: 'Começar', resumo: 'Criação de personagem e Ficha' },
+  { slug: 'criaturas', cap: 'IV', num: '11', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares' },
+  { slug: 'missoes', cap: 'IV', num: '12', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot' },
+  { slug: 'generais', cap: 'IV', num: '13', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro' },
+  { slug: 'comecar', cap: 'V', num: '14', titulo: 'Começar', resumo: 'Criação de personagem e Ficha' },
 ];
 
 export const regioes = [
@@ -181,7 +182,7 @@ export const tracos = [
   ['Presença Impactante', 'Uma vez por cena, -1 Acréscimo em oponentes por 3 turnos'],
   ['Determinação Total', 'Imune a Presença Impactante; Estudos 10% mais rápidos'],
   ['Resistência a Malefícios', '+1 de Resistência contra veneno, maldição e queimadura'],
-  ['Ligação Natural', 'Entende e doma animais; +1 no limite de vinculados'],
+  ['Ligação Natural', 'Entende criaturas; Domação com uma cena a menos, +1 no limite de vinculadas e Assimilação 2 turnos mais longa'],
 ];
 
 export const classificacoes = [
@@ -485,4 +486,79 @@ export const sincronia = 'Um vínculo entre dois ou três personagens que já pa
 export const exclusivasAntigas = 'Prodígio e Adorado pela Mana viraram o Milagre Amado pela Mana; Dupla Alma, Tengentsu e Absorção e Emissão são Milagres; Berserk virou a Fúria de Batalha dos Voltia; Corpo Amaldiçoado ficou com os Roselei; Doença de Mana ficou com os Lichita; Reencarnação Élfica virou Giro de Linhagem; Hibridismo virou o Marco dos Pappitson no 7º Estágio.';
 
 // Utilitário: transforma um nome em caminho de arquivo (para os espaços de imagem).
+// ——— Criaturas (proposta para o Silas revisar) ———
+export const criaturas = {
+  texto: 'Diamond secou a própria terra, e as criaturas que sobraram ou fugiram para as bordas do reino ou beberam mana demais. Toda criatura tem um Rank, como as missões, e atributos como os de um personagem: classificações físicas, Acréscimos e, nas mágicas, uma magia própria.',
+  tipos: [
+    ['Bestas Comuns', 'Animais sem mana: corvos, cabras de planalto, cães de mina. Domáveis desde o 9º Estágio.', 'F a E'],
+    ['Bestas Mágicas', 'Animais que carregam mana e uma Habilidade Natural ligada a ela. Mais raras em Diamond, comuns perto da Fronteira.', 'D a A'],
+    ['Quimeras', 'Criaturas montadas nos laboratórios do Lapidário a partir de várias outras. Instáveis e cobiçadas; muitas escapam para o Fosso.', 'C a A'],
+    ['Espíritos e Lendas', 'Seres de mana pura ou bestas antigas. Só aparecem em eventos e nunca são domados à força.', 'S'],
+  ],
+  bestiario: [
+    { nome: 'Corvo-de-Cinza', rank: 'F', tipo: 'Besta Comum', onde: 'Fronteira Cinzenta', fisico: 'Comum', natural: 'Mensageiro: leva bilhetes até 5 km e volta sozinho.' },
+    { nome: 'Cão-de-Mina', rank: 'F', tipo: 'Besta Comum', onde: 'Os Veios', fisico: 'Comum', natural: 'Faro de Gás: sente gás e desabamento antes de acontecer.' },
+    { nome: 'Cabra-de-Planalto', rank: 'E', tipo: 'Besta Comum', onde: 'Planaltos áridos', fisico: 'Incomum', natural: 'Montaria de encosta: escala paredes de pedra com o cavaleiro.' },
+    { nome: 'Lobo-da-Fronteira', rank: 'D', tipo: 'Besta Mágica', onde: 'Fronteira Cinzenta', fisico: 'Incomum (+4 em Velocidade)', natural: 'Matilha: +1 Acréscimo para cada aliado lutando ao lado.' },
+    { nome: 'Serpente-de-Cristal', rank: 'C', tipo: 'Besta Mágica', onde: 'Jazidas profundas', fisico: 'Sobre-Humana', natural: 'Escamas de Cristal: +1 de Resistência contra feitiços.' },
+    { nome: 'Quimera do Lapidário', rank: 'B', tipo: 'Quimera', onde: 'O Lapidário e o Fosso', fisico: 'Extrema', natural: 'Enxerto: tem duas Habilidades Naturais, mas perde o controle com Ferimento III.' },
+    { nome: 'Grifo-Cinzento', rank: 'A', tipo: 'Besta Mágica', onde: 'Picos da Fronteira', fisico: 'Colossal', natural: 'Voo de Guerra: carrega dois cavaleiros e mergulha com +1 classificação de Força.' },
+    { nome: 'Verme de Cristal Negro', rank: 'S', tipo: 'Lenda', onde: 'Onde a mana morreu', fisico: 'Titânica', natural: 'Devora mana: feitiços a 20 m custam o dobro.' },
+  ],
+  domacao: [
+    ['Encontro', 'A criatura aparece numa missão, num evento ou numa cena de caça com narrador. Fora disso, não existe criatura para domar.'],
+    ['Aproximação', 'Dois caminhos. Confiança: cenas de aproximação (alimentar, curar, proteger), sem ferir a criatura. Subjugação: vencer o confronto sem matar, deixando-a em Ferimento III. Criatura subjugada começa Arisca.'],
+    ['Laço', 'Um ritual de vínculo: o personagem gasta 50 de Mana por Rank acima de F (F custa 25) e marca a criatura com a própria mana. Bestas Comuns dispensam o ritual.'],
+    ['Registro', 'O narrador registra a criatura na ficha, com Rank, atributos e Habilidade Natural. A partir daí ela acompanha o personagem e tem ficha própria.'],
+  ],
+  cenas: [['F', '1', '9º'], ['E', '2', '9º'], ['D', '3', '8º'], ['C', '4', '6º'], ['B', '5', '5º'], ['A', '7', '3º'], ['S', 'Só em evento', '1º']],
+  limite: 'Cada personagem mantém 1 criatura vinculada, mais 1 no 6º Estágio e mais 1 no 3º. O Traço Ligação Natural soma +1. Conjurados e o familiar de uma Bruxa não contam nesse limite.',
+  vinculo: [
+    ['Arisca', 'Recém-subjugada. Obedece ordens simples e foge com Ferimento II.'],
+    ['Domada', 'Recém-vinculada (ou Arisca depois de 3 cenas juntos). Luta, carrega e vigia.'],
+    ['Leal', 'Depois de 5 missões ou cenas narradas juntos. Age sozinha a favor do dono e entende ordens complexas.'],
+    ['Elo', 'Depois de 10 cenas e uma situação de vida ou morte enfrentada juntos. Libera a Assimilação.'],
+  ],
+  regras: [
+    ['Ação em combate', 'A criatura age no turno do dono, com ação e reação próprias. Ordens dadas no meio da cena custam o movimento do dono.'],
+    ['Treino', '1 Treino de Criatura por ciclo, de 1 hora e 400 caracteres. Sobe Força, Resistência ou Velocidade da criatura na mesma tabela dos Treinos Físicos.'],
+    ['Teto', 'Uma criatura nunca passa a classificação física mais alta que o Rank dela permite: F e E param em Incomum, D em Sobre-Humana, C em Extrema, B em Colossal, A em Monstruosa.'],
+    ['Ferimentos e morte', 'Criaturas usam a mesma tabela de Ferimentos. Uma criatura morta não volta; o vínculo quebra e o dono sofre Ferimento I.'],
+    ['Maus-tratos', 'Criatura ferida pelo dono ou abandonada numa cena cai um nível de vínculo. Abaixo de Arisca, ela foge.'],
+    ['Comércio', 'Bestas Comuns são vendidas nos Veios. Quimeras só pelo Veio Negro, no Fosso, ou com Conhecimento Científico, no Lapidário.'],
+  ],
+  assimilacao: {
+    texto: 'Quando o vínculo chega a Elo, a mana do dono e a da criatura aprendem a ocupar o mesmo corpo. A criatura some dentro do personagem, e o corpo dele assume a forma dela: asas, garras, escamas, faro.',
+    graus: [
+      { nome: 'Assimilação Parcial', req: '6º Estágio · Controle 30% · Vínculo Elo', custo: '15 de Mana por turno', duracao: 'Até 5 turnos', efeitos: ['Uma parte da criatura no corpo (asas, garras, olhos, escamas).', '+2 Acréscimos num atributo físico ligado a essa parte.', 'Usa a Habilidade Natural da criatura.'] },
+      { nome: 'Assimilação Total', req: '3º Estágio · Controle 60% · Vínculo Elo', custo: '40 de Mana por turno', duracao: 'Até 5 turnos', efeitos: ['O corpo inteiro vira um híbrido com a criatura.', 'Em cada atributo físico, usa a classificação da criatura se ela for maior.', '+1 Acréscimo nos feitiços coerentes com a criatura.', 'Usa a Habilidade Natural e se move como ela (voo, escalada, mergulho).'] },
+    ],
+    custos: [
+      ['Exaustão Bestial', 'Ao sair da Assimilação: -1 Acréscimo nos atributos físicos por 3 turnos, e a criatura fica fora da cena.'],
+      ['Dano dividido', 'Ferimentos sofridos durante a Assimilação passam para os dois. Se a criatura morrer nesse estado, o dono sofre Ferimento III.'],
+      ['Uma de cada vez', 'Só uma criatura assimilada por vez e uma Assimilação por cena.'],
+      ['Mana zero', 'Se a Mana acabar, a Assimilação se desfaz na hora e a Exaustão dobra para 6 turnos.'],
+    ],
+    treino: 'Para aprender cada grau, o personagem precisa de 6 Treinos de Técnica feitos ao lado da criatura (Elfos e a Anomalia Mágica pela metade, como nas Técnicas de Mana).',
+  },
+  familiar: {
+    texto: 'Uma Bruxa não doma: ela pactua. O Pacto Familiar cria um feitiço próprio que dá corpo a um familiar, um ser feito da mana dela e moldado pela magia que ela carrega. O feitiço não ocupa espaço no Grimório.',
+    regras: [
+      ['Quem pode', 'Só Bruxas, de qualquer família (Enoteca, Trinity, Unsworth ou outra). Um familiar por Bruxa.'],
+      ['Forma', 'Definida com o Conselho Mágico, coerente com a magia: uma aranha de fios, um gato de névoa, uma coruja de barreiras.'],
+      ['Grau', 'O feitiço do familiar acompanha o Grau máximo do Estágio da Bruxa (Grau II no 9º, III no 7º, IV no 5º, V no 3º).'],
+      ['Atributos', 'Classificações físicas uma abaixo das da Bruxa (mínimo Comum) e +1 Acréscimo por nível de Poder Mágico dela, distribuídos na criação.'],
+      ['Traço da Magia', 'Uma habilidade tirada da magia da Bruxa: teia de Fios, sono de Sonhos, escudo de Barreiras. Definida com o Conselho Mágico.'],
+      ['Ligação', 'Fala com a Bruxa pela mente até a distância do Grimório dela e enxerga o que o familiar enxerga uma vez por cena.'],
+      ['Invocação', 'Aparece com o Grimório aberto e pelo custo do feitiço. Fica até a Bruxa dispensar, dormir ou ficar sem Mana.'],
+      ['Morte', 'Um familiar destruído volta depois de 24 horas reais, com a memória intacta. A Bruxa sofre Ferimento I na hora.'],
+    ],
+    marcos: [
+      ['6º Estágio', 'O familiar ganha um segundo Traço da Magia.'],
+      ['3º Estágio', 'Assimilação Familiar: a Bruxa assimila o familiar sem precisar do vínculo Elo e sem custo de Mana por turno.'],
+      ['Pacto com uma criatura', 'Em vez de criar um familiar, a Bruxa pode pactuar com uma criatura já domada e Leal. Ela vira o familiar: mantém os próprios atributos, ganha o Traço da Magia e sai do limite de vinculadas.'],
+    ],
+  },
+};
+
 export const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

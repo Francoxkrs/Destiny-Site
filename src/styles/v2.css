@@ -363,3 +363,22 @@ ul.ticks li::before { border-color: var(--mana); }
 .ladder > li.ladder__rank { grid-template-columns: 54px 1fr 64px; }
 .ladder__rank .rank-crest { grid-column: 3; grid-row: 1 / span 2; align-self: center; width: 64px; height: auto; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35)); }
 @media (max-width: 640px) { .ladder > li.ladder__rank { grid-template-columns: 44px 1fr 44px; } .ladder__rank .rank-crest { width: 44px; } }
+
+/* Criaturas: abas fixas e bestiário */
+.tabs { position: sticky; top: 0; z-index: 50; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(8px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.tabs__in { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.tabs__in::-webkit-scrollbar { display: none; }
+.tabs a { flex: 0 0 auto; display: flex; align-items: baseline; gap: 10px; padding: 18px 18px 16px; font-family: var(--f-display); font-size: 1.15rem; color: var(--mute); border-bottom: 2px solid transparent; transition: color .25s, border-color .25s; }
+.tabs a span { font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; color: var(--blood); }
+.tabs a:hover, .tabs a.is-on { color: var(--bone); border-bottom-color: var(--blood); }
+.sec[id] { scroll-margin-top: 70px; }
+.beasts { display: grid; gap: clamp(12px, 1.6vw, 24px); margin-top: clamp(40px, 5vw, 72px); }
+@media (min-width: 700px) { .beasts { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .beasts { grid-template-columns: repeat(4, 1fr); } }
+.beast { border: 1px solid var(--line); background: var(--ink); display: flex; flex-direction: column; }
+.beast__media { position: relative; }
+.beast__rank { position: absolute; left: 12px; top: 12px; z-index: 3; width: 44px; height: 44px; display: grid; place-items: center; font-family: var(--f-display); font-size: 1.6rem; color: var(--bone); background: var(--blood); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.beast__body { padding: clamp(18px, 2vw, 24px); display: flex; flex-direction: column; flex: 1; }
+.beast__nat { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-2); }
+.tabs { transition: top .35s cubic-bezier(.2,.7,.2,1); }
+body:has(.hdr:not(.is-hidden)) .tabs { top: var(--hdr); }

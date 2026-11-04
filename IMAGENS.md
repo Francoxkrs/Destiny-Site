@@ -158,6 +158,22 @@ Algumas imagens aparecem em mais de um lugar com recortes diferentes (por exempl
 | `public/img/generais/tropas-de-conquista.jpg` | 4/3 | Carreiras (4/3) |
 | `public/img/generais/veio-negro.jpg` | 4/5 | Carreiras (4/5) |
 
+## Criaturas
+
+| Arquivo | Proporção | Onde aparece |
+|---|---|---|
+| `public/img/criaturas/capa.jpg` | 21/9 | Criaturas (21/9), Início (4/5) |
+| `public/img/criaturas/corvo-de-cinza.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/cao-de-mina.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/cabra-de-planalto.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/lobo-da-fronteira.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/serpente-de-cristal.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/quimera-do-lapidario.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/grifo-cinzento.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/verme-de-cristal-negro.jpg` | 4/3 | Criaturas (4/3) |
+| `public/img/criaturas/assimilacao.jpg` | 4/5 | Criaturas (4/5) |
+| `public/img/criaturas/familiar.jpg` | 4/5 | Criaturas (4/5) |
+
 ## Missões
 
 | Arquivo | Proporção | Onde aparece |

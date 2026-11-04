@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { criaturas, slugify } from '../data/canon.js';
+
+const c = criaturas;
+const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas']];
+---
+<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
+  <PageHero
+    slug="criaturas"
+    title="As <em>Criaturas</em>"
+    lead="O que sobrou de vivo em Diamond fugiu para as bordas ou bebeu mana demais. Algumas dessas coisas aceitam um dono."
+    intro={c.texto}
+    image="criaturas/capa"
+    imageLabel="Uma besta de cristal nas jazidas"
+  />
+
+  <nav class="tabs" aria-label="Seções de Criaturas">
+    <div class="wrap tabs__in">
+      {abas.map(([id, nome], i) => <a href={`#${id}`} data-tab={id}><span>0{i + 1}</span>{nome}</a>)}
+    </div>
+  </nav>
+
+  <section class="sec" id="bestiario">
+    <div class="wrap">
+      <SectionHead num="01" label="Bestiário" title="Quatro tipos, <em>um Rank</em> cada." lead="O Rank de uma criatura é o mesmo das missões: diz o perigo dela e o Estágio que o personagem precisa para tentar domá-la." />
+      <div class="cols-4">
+        {c.tipos.map(([n, d, r]) => (
+          <article class="card" data-reveal>
+            <span class="chip chip--blood">Rank {r}</span>
+            <h3 class="t-h3" style="margin-top:16px">{n}</h3>
+            <p class="t-small" style="margin-top:10px">{d}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="beasts">
+        {c.bestiario.map((b) => (
+          <article class="beast" data-reveal>
+            <div class="beast__media">
+              <ImageSlot src={`criaturas/${slugify(b.nome)}`} label={b.nome} ratio="4 / 3" />
+              <span class="beast__rank">{b.rank}</span>
+            </div>
+            <div class="beast__body">
+              <h3 class="t-h3">{b.nome}</h3>
+              <dl class="kv" style="margin-top:14px">
+                <dt>Tipo</dt><dd>{b.tipo}</dd>
+                <dt>Onde</dt><dd>{b.onde}</dd>
+                <dt>Físico</dt><dd>{b.fisico}</dd>
+              </dl>
+              <p class="t-small beast__nat">{b.natural}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px" data-reveal>O bestiário cresce com os eventos. Os narradores podem criar criaturas novas seguindo estes Ranks.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="domacao">
+    <div class="wrap">
+      <SectionHead num="02" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
+      <ol class="flow">
+        {c.domacao.map(([t, d], i) => (
+          <li data-reveal>
+            <span class="flow__n">0{i + 1}</span>
+            <h3 class="t-h3">{t}</h3>
+            <p class="t-small">{d}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="grid" style="margin-top:clamp(48px,6vw,90px);align-items:start;row-gap:40px">
+        <div class="c-1-6 stack" style="--s:1.2rem">
+          <span class="eyebrow" data-reveal><b>A</b>Cenas de Confiança por Rank</span>
+          <Table head={['Rank', 'Cenas', 'Estágio mínimo']} rows={c.cenas} />
+          <p class="t-small" data-reveal>Cada cena precisa de pelo menos 500 caracteres com a criatura. Na Subjugação, as cenas são trocadas pelo confronto.</p>
+        </div>
+        <div class="c-7-12 stack" style="--s:1.2rem">
+          <span class="eyebrow" data-reveal><b>B</b>Vínculo</span>
+          <ol class="ladder">
+            {c.vinculo.map(([t, d], i) => <li data-reveal><b>{['I', 'II', 'III', 'IV'][i]}</b><h4>{t}</h4><p>{d}</p></li>)}
+          </ol>
+          <p class="t-body" data-reveal>{c.limite}</p>
+        </div>
+      </div>
+
+      <dl class="gifts" style="margin-top:clamp(40px,5vw,72px)">
+        {c.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="assimilacao">
+    <div class="wrap">
+      <SectionHead num="03" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
+      <div class="grid" style="align-items:start;row-gap:32px">
+        <div class="c-1-5">
+          <ImageSlot src="criaturas/assimilacao" label="Um cavaleiro com asas de grifo" ratio="4 / 5" />
+        </div>
+        <div class="c-6-12 cols-2">
+          {c.assimilacao.graus.map((g) => (
+            <article class="card" data-reveal>
+              <h3 class="t-h3">{g.nome}</h3>
+              <dl class="kv" style="margin-top:16px">
+                <dt>Requisito</dt><dd>{g.req}</dd>
+                <dt>Custo</dt><dd>{g.custo}</dd>
+                <dt>Duração</dt><dd>{g.duracao}</dd>
+              </dl>
+              <ul class="ticks">{g.efeitos.map((e) => <li>{e}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </div>
+      <dl class="gifts" style="margin-top:clamp(40px,5vw,72px)">
+        {c.assimilacao.custos.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+      <p class="t-body" style="margin-top:20px" data-reveal>{c.assimilacao.treino}</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="familiar">
+    <div class="wrap">
+      <SectionHead num="04" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
+      <div class="grid" style="align-items:start;row-gap:32px">
+        <div class="c-1-5 stack" style="--s:1.2rem">
+          <ImageSlot src="criaturas/familiar" label="Uma Bruxa e o seu familiar" ratio="4 / 5" />
+        </div>
+        <div class="c-6-12">
+          <dl class="gifts" style="margin-top:0">
+            {c.familiar.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+          </dl>
+        </div>
+      </div>
+      <div class="cols-3" style="margin-top:clamp(40px,5vw,72px)">
+        {c.familiar.marcos.map(([n, d]) => (
+          <article class="card" data-reveal>
+            <span class="chip chip--violet">Marco</span>
+            <h3 class="t-h3" style="margin-top:16px">{n}</h3>
+            <p class="t-small" style="margin-top:10px">{d}</p>
+          </article>
+        ))}
+      </div>
+      <div class="btns" style="margin-top:32px" data-reveal><a class="btn" href="/racas/">Ver as Bruxas em Raças</a></div>
+    </div>
+  </section>
+
+  <NextPage slug="criaturas" />
+</Base>
+
+<script>
+  const links = [...document.querySelectorAll('.tabs a')];
+  const secs = links.map((a) => document.getElementById(a.dataset.tab));
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      links.forEach((a) => a.classList.toggle('is-on', a.dataset.tab === e.target.id));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  secs.forEach((s) => s && io.observe(s));
+</script>

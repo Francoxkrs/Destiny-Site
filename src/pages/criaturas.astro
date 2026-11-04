@@ -5,6 +5,7 @@ import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import Table from '../components/Table.astro';
 import NextPage from '../components/NextPage.astro';
+import PageNav from '../components/PageNav.astro';
 import { criaturas, slugify } from '../data/canon.js';
 
 const c = criaturas;
@@ -20,11 +21,7 @@ const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilac
     imageLabel="Uma besta de cristal nas jazidas"
   />
 
-  <nav class="tabs" aria-label="Seções de Criaturas">
-    <div class="wrap tabs__in">
-      {abas.map(([id, nome], i) => <a href={`#${id}`} data-tab={id}><span>0{i + 1}</span>{nome}</a>)}
-    </div>
-  </nav>
+  <PageNav items={abas} />
 
   <section class="sec" id="bestiario">
     <div class="wrap">
@@ -152,15 +149,3 @@ const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilac
 
   <NextPage slug="criaturas" />
 </Base>
-
-<script>
-  const links = [...document.querySelectorAll('.tabs a')];
-  const secs = links.map((a) => document.getElementById(a.dataset.tab));
-  const io = new IntersectionObserver((es) => {
-    es.forEach((e) => {
-      if (!e.isIntersecting) return;
-      links.forEach((a) => a.classList.toggle('is-on', a.dataset.tab === e.target.id));
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  secs.forEach((s) => s && io.observe(s));
-</script>

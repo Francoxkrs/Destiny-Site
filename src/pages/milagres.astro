@@ -5,9 +5,10 @@ import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
-import { milagres, tracos, sincronia, exclusivasAntigas, slugify } from '../data/canon.js';
+import PageNav from '../components/PageNav.astro';
+import { milagres, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } from '../data/canon.js';
 ---
-<Base title="Milagres e Traços" slug="milagres" description="Os oito Milagres, os doze Traços e a Sincronia: as marcas mais fortes e os talentos pequenos de cada alma.">
+<Base title="Milagres e Traços" slug="milagres" description="Os oito Milagres, os treze Traços, o Feitiço de Alma e a Sincronia: as marcas mais fortes e os talentos pequenos de cada alma.">
   <PageHero
     slug="milagres"
     title="Milagres <em>e Traços</em>"
@@ -17,7 +18,9 @@ import { milagres, tracos, sincronia, exclusivasAntigas, slugify } from '../data
     imageLabel="Uma alma tocada pela mana"
   />
 
-  <section class="sec">
+  <PageNav items={[['milagres', 'Milagres'], ['tracos', 'Traços'], ['feitico-de-alma', 'Feitiço de Alma'], ['sincronia', 'Sincronia']]} />
+
+  <section class="sec" id="milagres">
     <div class="wrap">
       <SectionHead num="01" label="Os oito Milagres" title="Um por alma. <em>Nunca dois.</em>" lead="No 1º Estágio, o Despertar deixa escolher um Milagre a quem ainda não tem. Alguns custam caro: Tengentsu e Absorção e Emissão tiram a própria magia." />
       <div class="miracles">
@@ -44,20 +47,41 @@ import { milagres, tracos, sincronia, exclusivasAntigas, slugify } from '../data
     </div>
   </section>
 
-  <section class="sec sec--line sec--raise">
+  <section class="sec sec--line sec--raise" id="tracos">
     <div class="wrap">
-      <SectionHead num="02" label="Os doze Traços" title="Pequenas vantagens, <em>no limite de três</em>." lead="Traços são as antigas Habilidades Livres, refeitas: nenhum concede mais de 1 Acréscimo por aplicação. Vêm de famílias, sorteios, eventos e do Despertar de Traço, uma escolha livre no 7º, no 5º e no 3º Estágio." />
+      <SectionHead num="02" label="Os treze Traços" title="Pequenas vantagens, <em>no limite de três</em>." lead="Traços são as antigas Habilidades Livres, refeitas: nenhum concede mais de 1 Acréscimo por aplicação. Vêm de famílias, sorteios, eventos e do Despertar de Traço, uma escolha livre no 7º, no 5º e no 3º Estágio." />
       <Table head={['Traço', 'Efeito']} rows={tracos} />
     </div>
   </section>
 
-  <section class="sec sec--line">
+  <section class="sec sec--line chap--paper" id="feitico-de-alma">
+    <div class="wrap">
+      <SectionHead num="03" label="Feitiço de Alma" title="Quando a alma <em>quebra a regra</em>." lead={feiticoAlma.texto} />
+      <dl class="gifts">
+        {feiticoAlma.ganho.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+      <div class="cols-3" style="margin-top:clamp(40px,5vw,72px)">
+        {feiticoAlma.vias.map((v, i) => (
+          <article class="card via" data-reveal>
+            <ImageSlot src={`milagres/via-${slugify(v.nome)}`} label={`Via: ${v.nome}`} ratio="4 / 3" compact />
+            <span class="chip chip--blood" style="margin-top:18px">Via 0{i + 1} · {v.inspiracao}</span>
+            <h3 class="t-h2" style="margin-top:12px">{v.nome}</h3>
+            <p class="t-body" style="margin-top:12px">{v.efeito}</p>
+            <p class="t-small via__preco"><b>O preço:</b> {v.preco}</p>
+          </article>
+        ))}
+      </div>
+      <p class="t-body" style="margin-top:28px" data-reveal>{feiticoAlma.diamond}</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="sincronia">
     <div class="wrap grid" style="align-items:center">
       <div class="c-1-6">
         <ImageSlot src="milagres/sincronia" label="Sincronia entre dois Retornados" ratio="4 / 3" />
       </div>
       <div class="c-8-12 stack" style="--s:1.4rem">
-        <span class="eyebrow" data-reveal><b>03</b>Estado especial</span>
+        <span class="eyebrow" data-reveal><b>04</b>Estado especial</span>
         <h2 class="t-h2" data-split><em>Sincronia</em></h2>
         <span class="chip" data-reveal>antes Estado de Sincronia</span>
         <p class="t-body" data-reveal>{sincronia}</p>
@@ -67,7 +91,7 @@ import { milagres, tracos, sincronia, exclusivasAntigas, slugify } from '../data
 
   <section class="sec--tight sec--line">
     <div class="wrap grid">
-      <div class="c-1-5"><span class="eyebrow" data-reveal><b>04</b>Para quem já jogava</span></div>
+      <div class="c-1-5"><span class="eyebrow" data-reveal><b>05</b>Para quem já jogava</span></div>
       <div class="c-6-12 stack" style="--s:1rem">
         <p class="t-lead" data-reveal>Para onde foram as habilidades exclusivas antigas?</p>
         <p class="t-body" data-reveal>{exclusivasAntigas}</p>

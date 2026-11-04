@@ -33,6 +33,168 @@ if (!reduce) {
 }
 window.__lenis = lenis;
 
+/* ---------------------------------------------------------------- navegação: sumário, busca e glossário */
+const slugifyTxt = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+// Sumário: páginas sem abas próprias ganham um, montado das seções que têm rótulo.
+function autoToc() {
+  if ($('[data-pagenav]') || !$('.page-hero')) return;
+  const secs = $$('main > section').filter((s) => $('.eyebrow', s));
+  if (secs.length < 2) return;
+  const items = secs.map((s, i) => {
+    const eb = $('.eyebrow', s);
+    const nome = Array.from(eb.childNodes).filter((n) => n.nodeName !== 'B').map((n) => n.textContent).join('').trim();
+    if (!s.id) s.id = slugifyTxt(nome) || `secao-${i + 1}`;
+    return [s.id, nome];
+  });
+  const nav = document.createElement('nav');
+  nav.className = 'tabs';
+  nav.setAttribute('aria-label', 'Nesta página');
+  nav.dataset.pagenav = '';
+  nav.innerHTML = `<div class="wrap tabs__in"><span class="tabs__h" aria-hidden="true">Nesta página</span>${items.map(([id, n], i) => `<a href="#${id}" data-tab="${id}"><span>${String(i + 1).padStart(2, '0')}</span>${n}</a>`).join('')}</div>`;
+  $('.page-hero').after(nav);
+  // o id só existe depois do script: leva até a seção pedida no endereço
+  const alvo = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (alvo) addEventListener('load', () => setTimeout(() => (window.__lenis ? window.__lenis.scrollTo(alvo, { offset: -80, immediate: true }) : alvo.scrollIntoView()), 50));
+}
+autoToc();
+
+// Marca a aba da seção visível.
+function pageNavSpy() {
+  const nav = $('[data-pagenav]');
+  if (!nav) return;
+  const links = $$('a[data-tab]', nav);
+  const secs = links.map((a) => document.getElementById(a.dataset.tab)).filter(Boolean);
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      links.forEach((a) => {
+        const on = a.dataset.tab === e.target.id;
+        a.classList.toggle('is-on', on);
+        if (on) {
+          const box = a.parentElement;
+          box.scrollTo({ left: a.offsetLeft - box.clientWidth / 3, behavior: 'smooth' });
+        }
+      });
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  secs.forEach((s) => io.observe(s));
+}
+pageNavSpy();
+
+const searchData = (() => { try { return JSON.parse($('#bd-search')?.textContent || '{}'); } catch { return {}; } })();
+const norm = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// Busca: páginas, termos do glossário e seções de cada página (busca.json, gerado no build).
+function search() {
+  const box = $('[data-search]');
+  if (!box) return;
+  const input = $('[data-search-input]', box);
+  const list = $('[data-search-res]', box);
+  let secoes = null;
+  let sel = 0;
+  let res = [];
+  const base = [
+    ...(searchData.paginas || []).map((p) => ({ ...p, k: 'Página', w: 3 })),
+    ...(searchData.termos || []).map((p) => ({ ...p, k: 'Termo', w: 2 })),
+  ];
+  const loadSecoes = () => {
+    if (secoes) return;
+    secoes = [];
+    fetch(new URL('/busca.json', location.href)).then((r) => (r.ok ? r.json() : [])).then((j) => { secoes = j.map((s) => ({ ...s, k: 'Seção', w: 1 })); if (!box.hidden) render(); }).catch(() => {});
+  };
+  const score = (it, q) => {
+    const t = norm(it.t);
+    const d = norm(`${it.d || ''} ${it.e || ''}`);
+    let sc = 0;
+    for (const w of q) {
+      if (t.startsWith(w)) sc += 6;
+      else if (t.includes(w)) sc += 4;
+      else if (d.includes(w)) sc += 1;
+      else return 0;
+    }
+    return sc + it.w;
+  };
+  const render = () => {
+    const q = norm(input.value).split(/\s+/).filter(Boolean);
+    res = q.length
+      ? [...base, ...(secoes || [])].map((it) => [score(it, q), it]).filter(([s]) => s > 0).sort((a, b) => b[0] - a[0]).slice(0, 12).map(([, it]) => it)
+      : (searchData.paginas || []).map((p) => ({ ...p, k: 'Página' }));
+    sel = 0;
+    list.innerHTML = res.length
+      ? res.map((r, i) => `<li role="option" aria-selected="${i === sel}"><a href="${esc(r.u)}"><span class="search__k">${r.k}</span><b>${esc(r.t)}</b><span class="search__d">${r.c ? `${esc(r.c)} · ` : ''}${esc(r.d || '')}</span></a></li>`).join('')
+      : '<li class="search__none">Nada encontrado. Tente outra palavra ou abra o Índice.</li>';
+  };
+  const mark = () => $$('li[role="option"]', list).forEach((li, i) => { li.setAttribute('aria-selected', String(i === sel)); if (i === sel) li.scrollIntoView({ block: 'nearest' }); });
+  const open = () => {
+    box.hidden = false;
+    html.classList.add('search-open');
+    window.__lenis?.stop();
+    loadSecoes();
+    render();
+    requestAnimationFrame(() => input.focus());
+  };
+  const close = () => {
+    box.hidden = true;
+    html.classList.remove('search-open');
+    window.__lenis?.start();
+  };
+  $$('[data-search-open]').forEach((b) => b.addEventListener('click', open));
+  $$('[data-search-close]', box).forEach((b) => b.addEventListener('click', close));
+  input.addEventListener('input', render);
+  addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if (box.hidden) open(); else close(); return; }
+    if (box.hidden) {
+      if (e.key === '/' && !/input|textarea|select/i.test(document.activeElement?.tagName || '')) { e.preventDefault(); open(); }
+      return;
+    }
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(res.length - 1, sel + 1); mark(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); mark(); }
+    else if (e.key === 'Enter' && res[sel] && document.activeElement === input) { e.preventDefault(); close(); location.href = res[sel].u; }
+  });
+  list.addEventListener('click', (e) => { if (e.target.closest('a')) close(); });
+}
+search();
+
+// Termos com dica: a primeira vez que um termo do glossário aparece no texto, ele mostra a definição.
+function glossTips() {
+  const termos = (searchData.termos || []).slice().sort((a, b) => b.t.length - a.t.length);
+  if (!termos.length || !$('.page-hero')) return;
+  const aqui = location.pathname.replace(/index\.html$/, '');
+  const usados = new Set();
+  const alvos = $$('main p.t-body, main p.t-small, main .gifts dd, main .tbl td, main .ticks li, main .kv dd, main .ladder p');
+  const skip = (n) => n.parentElement?.closest('a, button, h1, h2, h3, h4, .term, .tabs, .page-hero');
+  const regs = termos.map((t) => [t, new RegExp(`(^|[^\\p{L}])(${t.t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?)(?![\\p{L}])`, 'u')]);
+  for (const el of alvos) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    for (const node of nodes) {
+      if (skip(node)) continue;
+      for (const [t, re] of regs) {
+        if (usados.has(t.t)) continue;
+        const m = node.textContent.match(re);
+        if (!m) continue;
+        usados.add(t.t);
+        const after = node.splitText(m.index + m[1].length);
+        after.splitText(m[2].length);
+        const mesmo = t.u.split('#')[0] === aqui;
+        const tag = document.createElement(mesmo ? 'span' : 'a');
+        tag.className = 'term';
+        if (mesmo) tag.tabIndex = 0;
+        else tag.href = t.u;
+        tag.dataset.def = t.d;
+        tag.textContent = after.textContent;
+        after.replaceWith(tag);
+        break;
+      }
+    }
+  }
+}
+glossTips();
+
 // âncoras internas
 $$('a[href^="#"]').forEach((a) => {
   a.addEventListener('click', (e) => {
@@ -605,7 +767,7 @@ function filters() {
         it.hidden = !show;
         if (show) n++;
       });
-      if (count) count.textContent = `${n} ${n === 1 ? 'família' : 'famílias'}`;
+      if (count) count.textContent = `${n} ${n === 1 ? (count.dataset.um || 'família') : (count.dataset.varios || 'famílias')}`;
       Flip.from(state, {
         duration: reduce ? 0 : 0.7, ease: 'expo.inOut', absolute: true, scale: false,
         onEnter: (els) => gsap.fromTo(els, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }),

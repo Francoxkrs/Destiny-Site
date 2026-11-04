@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { mineracao as m } from '../data/canon.js';
+
+const abas = [['jazidas', 'Jazidas'], ['rendimento', 'Rendimento'], ['minas-profundas', 'Minas Profundas'], ['prospeccao', 'Prospecção'], ['refino', 'Refino']];
+---
+<Base title="Mineração" slug="mineracao" description="Jazidas, Reserva e Achados, Minas Profundas, Prospecção e Refino: como se tira Recursos da terra morta de Diamond.">
+  <PageHero
+    slug="mineracao"
+    title="A <em>Mineração</em>"
+    lead="Diamond cavou até o fundo. O que sobrou está mais embaixo, e a mina sempre cobra."
+    intro={m.texto}
+    image="mineracao/capa"
+    imageLabel="Galerias dos Veios à luz de lanterna"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="jazidas">
+    <div class="wrap">
+      <SectionHead num="01" label="Jazidas" title="Toda mina <em>acaba</em>." lead={m.reserva} />
+      <div class="veins">
+        {m.jazidas.map(([g, rende, achado, reserva, onde], i) => (
+          <article class="vein" style={`--i:${i}`} data-reveal>
+            <span class="vein__n">0{i + 1}</span>
+            <h3 class="t-h3">{g}</h3>
+            <dl class="kv">
+              <dt>Por Jornada</dt><dd>{rende}</dd>
+              <dt>Achado</dt><dd>{achado}</dd>
+              <dt>Reserva</dt><dd>{reserva}{reserva !== 'Sem fim' && ' Jornadas'}</dd>
+            </dl>
+            <p class="t-small">{onde}</p>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px" data-reveal>O Achado vem a cada 10 Jornadas na mesma jazida. Nada é sorteado: o bot conta as Jornadas e entrega.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="rendimento">
+    <div class="wrap grid" style="align-items:start;row-gap:32px">
+      <div class="c-1-5 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>02</b>O que muda o rendimento</span>
+        <h2 class="t-h2" data-split>Picareta, magia <em>e braço</em>.</h2>
+        <ImageSlot src="mineracao/picareta" label="Uma picareta de Ferro Estelar" ratio="4 / 5" />
+      </div>
+      <dl class="gifts c-6-12" style="margin-top:0">
+        {m.modificadores.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="minas-profundas">
+    <div class="wrap">
+      <SectionHead num="03" label="Minas Profundas" title="Mais fundo, <em>mais caro</em>." lead={m.profundas} />
+      <Table head={['Perigo', 'O que acontece', 'Como evitar']} rows={m.perigos} />
+      <div class="btns" style="margin-top:28px" data-reveal>
+        <a class="btn" href="/ferimentos/">Ferimentos</a>
+        <a class="btn" href="/missoes/">Missões</a>
+        <a class="btn" href="/criaturas/">Bestiário</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="prospeccao">
+    <div class="wrap grid" style="align-items:center;row-gap:32px">
+      <div class="c-1-6"><ImageSlot src="mineracao/prospeccao" label="Um veio virgem na Fronteira" ratio="4 / 3" /></div>
+      <div class="c-8-12 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>04</b>Prospecção</span>
+        <h2 class="t-h2" data-split>Achar <em>o que ninguém achou</em>.</h2>
+        <p class="t-body" data-reveal>{m.prospeccao}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="refino">
+    <div class="wrap">
+      <SectionHead num="05" label="Refino" title="Da rocha <em>à forja</em>." lead="O minério sai bruto. Antes de virar item, ele passa pela mão de um artesão." />
+      <Table head={['Bruto', 'Refinado', 'Quem refina', 'Custo']} rows={m.refino} />
+      <p class="t-lead" style="margin-top:32px" data-reveal>{m.escolha}</p>
+      <div class="btns" style="margin-top:24px" data-reveal><a class="btn" href="/itens/">O que se faz com isso</a></div>
+    </div>
+  </section>
+
+  <NextPage slug="mineracao" />
+</Base>

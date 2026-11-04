@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { itens as it, slugify } from '../data/canon.js';
+
+const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 'Encantamentos'], ['desgaste', 'Desgaste e compra']];
+---
+<Base title="Itens Mágicos" slug="itens" description="Qualidade, materiais, tipos de item, encantamentos com Pó de Cristal e desgaste: o sistema de itens mágicos ligado aos Recursos.">
+  <PageHero
+    slug="itens"
+    title="Os Itens <em>Mágicos</em>"
+    lead="Toda espada de Diamond começou como pedra numa galeria dos Veios."
+    intro={it.texto}
+    image="itens/capa"
+    imageLabel="Uma lâmina sendo encantada no Lapidário"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="qualidade">
+    <div class="wrap">
+      <SectionHead num="01" label="Qualidade" title="Cinco degraus, <em>do ferro ao cristal</em>." lead={it.nota} />
+      <div class="tiers">
+        {it.qualidades.map(([q, bonus, mat, art, enc, preco], i) => (
+          <article class="tier" style={`--i:${i}`} data-reveal>
+            <ImageSlot src={`itens/${slugify(q)}`} label={`Item ${q}`} ratio="1 / 1" compact mini />
+            <h3 class="t-h3">{q}</h3>
+            <p class="tier__bonus">{bonus}</p>
+            <dl class="kv">
+              <dt>Material</dt><dd>{mat}</dd>
+              <dt>Artesão</dt><dd>{art}</dd>
+              <dt>Encantos</dt><dd>{enc}</dd>
+              <dt>Preço</dt><dd>{preco}{/^[\d.]+$/.test(preco) && ' Yuls'}</dd>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="tipos">
+    <div class="wrap">
+      <SectionHead num="02" label="Tipos de item" title="Quem faz <em>o quê</em>." lead="O bônus de qualidade melhora o que o item faz. Uma arma Rara dá +1 Acréscimo ao atacar com ela; um catalisador Raro, +1 nos feitiços." />
+      <Table head={['Tipo', 'Quem faz', 'O que o bônus melhora']} rows={it.tipos} />
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="encantamentos">
+    <div class="wrap">
+      <SectionHead num="03" label="Encantamentos" title="Mana gravada <em>no metal</em>." lead={it.quemEncanta} />
+      <div class="enchants">
+        {it.encantamentos.map(([n, d, c]) => (
+          <article class="card" data-reveal>
+            <span class="chip chip--blood">{c}</span>
+            <h3 class="t-h3" style="margin-top:14px">{n}</h3>
+            <p class="t-small" style="margin-top:8px">{d}</p>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px" data-reveal>O número de encantamentos que cabe num item depende da qualidade. O Pó de Cristal vem do refino e dos Achados da Mineração.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="desgaste">
+    <div class="wrap grid" style="align-items:start;row-gap:32px">
+      <div class="c-1-6 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>04</b>Desgaste e compra</span>
+        <h2 class="t-h2" data-split>Nada dura <em>para sempre</em>.</h2>
+        <p class="t-body" data-reveal>{it.compra}</p>
+        <div class="btns" data-reveal><a class="btn" href="/economia/#mercado">Preços no Mercado</a></div>
+      </div>
+      <dl class="gifts c-7-12" style="margin-top:0">
+        {it.desgaste.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <NextPage slug="itens" />
+</Base>

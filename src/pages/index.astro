@@ -4,7 +4,7 @@ import ImageSlot from '../components/ImageSlot.astro';
 import Arrow from '../components/Arrow.astro';
 import {
   site, paginas, capitulos, regioes, segundaVida, classesSociais, familias, classesMago, milagres, magias, estagios,
-  confronto, primeirosPassos, generais, veioNegro, slugify,
+  confronto, primeirosPassos, generais, veioNegro, comecePorAqui, slugify,
 } from '../data/canon.js';
 
 const totalMagias = magias.reduce((s, m) => s + m.lista.length, 0);
@@ -19,6 +19,7 @@ const stats = [
 const discordExterno = site.discord !== '#';
 const cap = Object.fromEntries(capitulos.map((c) => [c.id, c]));
 const pags = (id) => paginas.filter((p) => p.cap === id);
+const porSlug = Object.fromEntries(paginas.map((p) => [p.slug, p]));
 
 const prologo = [
   { pre: 'Você viveu em', reino: 'Clover', img: 'inicio/prologo-clover', k: '生' },
@@ -107,6 +108,28 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
       </div>
       <ol class="prologue__ticks" aria-hidden="true">
         {prologo.map((p, i) => <li data-pro-tick><b>{['I', 'II', 'III', 'IV'][i]}</b>{p.reino}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <!-- COMECE POR AQUI -->
+  <section class="sec sec--tight start-sec">
+    <div class="wrap">
+      <div class="start-sec__head">
+        <span class="eyebrow" data-reveal><b>Novo aqui?</b>Comece por aqui</span>
+        <a class="btn" href="/indice/" data-reveal>Índice e glossário <Arrow /></a>
+      </div>
+      <ol class="start">
+        {comecePorAqui.map(([s, por], i) => (
+          <li data-reveal>
+            <a href={`/${s}/`}>
+              <span class="start__n">0{i + 1}</span>
+              <b>{porSlug[s].titulo}</b>
+              <span class="t-small">{por}</span>
+              <Arrow class="start__a" />
+            </a>
+          </li>
+        ))}
       </ol>
     </div>
   </section>
@@ -328,13 +351,46 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <span class="chap__num" aria-hidden="true" data-chap-num>V</span>
     <div class="wrap chap__in">
       <span class="chap__kanji" aria-hidden="true">{cap.V.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo V</b>Começar</span>
+      <span class="eyebrow" data-reveal><b>Capítulo V</b>{pags('V').map((p) => p.titulo).join(' · ')}</span>
       <h2 class="chap__title" data-split>{cap.V.nome}</h2>
+      <p class="chap__text" data-reveal>A terra secou, o Tesouro esvazia e o Cristal vale mais que uma vida nos Veios. Entre uma missão e outra, alguém tem que minerar, forjar, curar e cobrar.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--tight idx" data-index-wrap>
+    <div class="wrap">
+      <ul class="index-list" data-index>
+        {pags('V').map((p) => (
+          <li>
+            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
+              <span class="index-item__n">{p.num}</span>
+              <span class="index-item__t">{p.titulo}</span>
+              <span class="index-item__d">{p.resumo}</span>
+              <Arrow class="index-item__a" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="index-preview" aria-hidden="true">
+      <div class="index-preview__frame">
+        {pags('V').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPÍTULO VI -->
+  <section class="chap chap--paper" data-chap>
+    <span class="chap__num" aria-hidden="true" data-chap-num>VI</span>
+    <div class="wrap chap__in">
+      <span class="chap__kanji" aria-hidden="true">{cap.VI.kanji}</span>
+      <span class="eyebrow" data-reveal><b>Capítulo VI</b>Começar</span>
+      <h2 class="chap__title" data-split>{cap.VI.nome}</h2>
       <p class="chap__text" data-reveal>O bot cuida da criação, da ficha e das missões. Você cuida da história.</p>
     </div>
   </section>
 
-  <section class="sec sec--tight">
+  <section class="sec sec--tight chap--paper">
     <div class="wrap grid">
       <div class="c-1-5 stack" style="--s:1.6rem">
         <h3 class="t-h2" data-split>Do Discord à <em>primeira missão</em>.</h3>

@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { economia as e } from '../data/canon.js';
+
+const abas = [['moedas', 'Moedas'], ['riquezas', 'Riquezas'], ['comercio', 'Comércio'], ['mercado', 'Mercado'], ['tesouro', 'Tesouro'], ['impostos', 'Impostos'], ['contratos', 'Contratos'], ['recursos', 'Recursos']];
+---
+<Base title="Economia" slug="economia" description="Yuls, Cristais, faixas de riqueza, comércio, mercado por região, Tesouro, impostos, contratos, Recursos e custo de vida em Diamond.">
+  <PageHero
+    slug="economia"
+    title="A <em>Economia</em>"
+    lead="Quem controla o que sai da terra controla o reino. E a terra está acabando."
+    intro={e.texto}
+    image="economia/capa"
+    imageLabel="Um mercado nos Veios durante o Inverno da Fome"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="moedas">
+    <div class="wrap grid" style="align-items:start;row-gap:32px">
+      <div class="c-1-5 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>01</b>Moedas</span>
+        <h2 class="t-h2" data-split>Yul, cristal <em>e estrela negra</em>.</h2>
+        <ImageSlot src="economia/moedas" label="Yuls e um Cristal Branco" ratio="4 / 3" />
+      </div>
+      <dl class="gifts c-6-12" style="margin-top:0">
+        {e.moedas.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="riquezas">
+    <div class="wrap">
+      <SectionHead num="02" label="Riquezas" title="O quanto você <em>tem</em> muda quem você é." lead={e.riquezasTexto} />
+      <div class="wealth">
+        {e.riquezas.map(([n, faixa, efeito], i) => (
+          <div class="wealth__step" style={`--i:${i}`} data-reveal>
+            <span class="t-label">{faixa}</span>
+            <h3 class="t-h3">{n}</h3>
+            <p class="t-small">{efeito}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="comercio">
+    <div class="wrap">
+      <SectionHead num="03" label="Comércio" title="Comprar, vender, <em>pechinchar</em>." lead="Todo comércio passa pelo bot, que cobra o Dízimo na hora." />
+      <div class="cols-3">
+        {e.comercio.map(([n, d]) => <article class="card" data-reveal><h3 class="t-h3">{n}</h3><p class="t-small" style="margin-top:10px">{d}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="mercado">
+    <div class="wrap">
+      <SectionHead num="04" label="Mercado" title="Preço base <em>× região × evento</em>." lead="Cada Recurso e item tem um preço base (tabela Recursos). A região e o evento do momento multiplicam esse preço." />
+      <Table head={['Região', 'Minério e Cristal', 'Comida e madeira', 'Itens mágicos']} rows={e.regioes} />
+      <p class="t-body" style="margin-top:24px" data-reveal>{e.eventos}</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="tesouro">
+    <div class="wrap grid" style="align-items:center;row-gap:32px">
+      <div class="c-1-6"><ImageSlot src="economia/tesouro" label="O cofre do Palácio de Cristal" ratio="4 / 3" /></div>
+      <div class="c-8-12 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>05</b>Tesouro</span>
+        <h2 class="t-h2" data-split>O cofre <em>que esvazia</em>.</h2>
+        <p class="t-body" data-reveal>{e.tesouro}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="impostos">
+    <div class="wrap">
+      <SectionHead num="06" label="Impostos" title="A Coroa <em>leva a parte dela</em>." lead={e.sonegar} />
+      <Table head={['Imposto', 'Quanto', 'Quem cobra']} rows={e.impostos} />
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="contratos">
+    <div class="wrap">
+      <SectionHead num="07" label="Contratos" title="A palavra <em>vira lei</em>." lead={e.contratosTexto} />
+      <Table head={['Tipo', 'Exemplo']} rows={e.contratos} />
+      <p class="t-body" style="margin-top:24px" data-reveal>{e.quebra}</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="recursos">
+    <div class="wrap">
+      <SectionHead num="08" label="Recursos" title="Tudo vem <em>daqui</em>." lead="A Mineração, as Estufas e a caça produzem estes materiais. Os Itens Mágicos e as Profissões usam os mesmos nomes. Preço base em Yuls." />
+      <Table head={['Recurso', 'Raridade', 'De onde vem', 'Preço base']} rows={e.recursos} numCols={[3]} />
+      <div class="grid" style="margin-top:clamp(40px,5vw,72px);align-items:start;row-gap:32px">
+        <div class="c-1-5 stack" style="--s:1.2rem">
+          <span class="eyebrow" data-reveal><b>A</b>Custo de vida</span>
+          <h3 class="t-h2" data-split>Comer <em>custa</em>.</h3>
+        </div>
+        <div class="c-6-12 stack" style="--s:1.2rem">
+          <dl class="kv" data-reveal>{e.custoVida.map(([r, v]) => <><dt>{r}</dt><dd>{v}</dd></>)}</dl>
+          <p class="t-body" data-reveal>{e.desnutrido}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="economia" />
+</Base>

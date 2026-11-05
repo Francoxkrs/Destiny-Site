@@ -53,10 +53,10 @@ ul.ticks li::before { border-color: var(--mana); }
 /* ---------- botões: corte reto, tinta sobe na diagonal ---------- */
 .btn { border-radius: 0; height: 50px; padding: 0 24px; font-weight: 500; letter-spacing: 0.18em; }
 .btn::before { border-radius: 0; background: var(--bone); transform: translateX(-102%) skewX(-18deg); transform-origin: left; width: 125%; left: -12%; }
-.btn:hover::before { transform: translateX(0) skewX(-18deg); }
+@media (hover: hover) { .btn:hover::before { transform: translateX(0) skewX(-18deg); } }
 .btn--solid { background: var(--mana); color: #fff; border-color: var(--mana); }
 .btn--solid::before { background: var(--bone); }
-.btn--solid:hover { color: var(--ink); border-color: var(--bone); }
+@media (hover: hover) { .btn--solid:hover { color: var(--ink); border-color: var(--bone); } }
 .btn--ink { border-color: var(--line-2); }
 .chip { border-radius: 0; }
 .menu-btn, .menu-btn__icon { border-radius: 0; }
@@ -67,7 +67,7 @@ ul.ticks li::before { border-color: var(--mana); }
 /* ---------- imagens: retícula de mangá ---------- */
 .slot { border-color: var(--line); background: var(--ink-2); }
 .slot--filled .slot__media img { filter: grayscale(0.35) contrast(1.06); transition: filter 0.9s var(--ease), transform 1.4s var(--ease); }
-.slot--filled:hover .slot__media img { filter: grayscale(0) contrast(1.04); }
+@media (hover: hover) { .slot--filled:hover .slot__media img { filter: grayscale(0) contrast(1.04); } }
 .slot--filled::after {
   content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background-image: var(--dots); background-size: 4px 4px; mix-blend-mode: multiply; opacity: 0.32;
@@ -94,7 +94,8 @@ ul.ticks li::before { border-color: var(--mana); }
 .menu__list { display: block !important; }
 .menu__list a { padding: 8px 0; }
 .menu__list .t { font-weight: 650; font-size: clamp(1.7rem, 2.6vw, 2.6rem); }
-.menu__list a:hover .t, .menu__list a[aria-current='page'] .t { font-style: normal; color: var(--mana); }
+.menu__list a[aria-current='page'] .t { font-style: normal; color: var(--mana); }
+@media (hover: hover) { .menu__list a:hover .t { font-style: normal; color: var(--mana); } }
 .menu__quote { font-family: var(--f-display); font-weight: 700; font-size: clamp(2rem, 3.4vw, 3.4rem); line-height: 1; }
 .menu__quote em { font-style: normal; color: var(--mana); }
 @media (min-width: 1000px) { .menu__in { grid-template-columns: 2.2fr 1fr; } }
@@ -146,8 +147,8 @@ ul.ticks li::before { border-color: var(--mana); }
 .next__bg .slot { height: 100%; aspect-ratio: auto; border: 0; }
 .next__bg .slot__media { inset: 0; transform: scale(1.12); transition: transform 1.6s var(--ease); }
 .next__bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 10, 11, 0.92), rgba(10, 10, 11, 0.55)); }
-.next:hover .next__bg { opacity: 1; }
-.next:hover .next__bg .slot__media { transform: scale(1); }
+@media (hover: hover) { .next:hover .next__bg { opacity: 1; } }
+@media (hover: hover) { .next:hover .next__bg .slot__media { transform: scale(1); } }
 .next__bg .slot--empty { display: none; }
 .next__title { font-weight: 800; }
 
@@ -259,7 +260,7 @@ ul.ticks li::before { border-color: var(--mana); }
 }
 .chap--paper.chap, .chap--paper.origins, .chap--paper.sec { background-image: radial-gradient(circle at center, rgba(13, 13, 14, 0.07) 0.8px, transparent 1.2px); background-size: 5px 5px; }
 .chap--paper + .chap--paper { border-top-color: transparent; }
-.chap--paper .btn:hover { color: #ebe4d4; }
+@media (hover: hover) { .chap--paper .btn:hover { color: #ebe4d4; } }
 .chap--paper .btn::before { background: #0d0d0e; }
 .chap--paper .btn--solid { color: #fff; }
 .chap--paper .slot--filled::after { opacity: 0.2; }
@@ -272,14 +273,15 @@ ul.ticks li::before { border-color: var(--mana); }
 @media (min-width: 900px) { .origin:nth-child(odd) { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); } }
 .origin__img { position: absolute; inset: 0; }
 .origin__img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.3) brightness(0.78); transform: scale(1.08); transition: filter 0.9s var(--ease), transform 1.4s var(--ease); }
-.origin:hover .origin__img img { filter: grayscale(0) contrast(1.05) brightness(0.62); transform: scale(1); }
+@media (hover: hover) { .origin:hover .origin__img img { filter: grayscale(0) contrast(1.05) brightness(0.62); transform: scale(1); } }
 .origin::after { content: ''; position: absolute; inset: 0; background-image: var(--dots), linear-gradient(180deg, transparent 30%, rgba(10, 10, 11, 0.92)); background-size: 4px 4px, auto; pointer-events: none; }
 .origin__body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: clamp(18px, 1.8vw, 26px); display: grid; gap: 8px; }
 .origin__body .t-label { color: rgba(241, 235, 223, 0.6); }
 .origin__sym { font-size: 1.6rem; color: #ff3b2e; line-height: 1; }
 .origin__name { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.4rem, 3.6vw, 3.6rem); line-height: 0.9; }
 .origin__fams { font-size: 0.86rem; line-height: 1.45; color: rgba(241, 235, 223, 0.72); max-height: 0; overflow: hidden; transition: max-height 0.8s var(--ease); }
-.origin:hover .origin__fams, .origin:focus-visible .origin__fams { max-height: 12em; }
+.origin:focus-visible .origin__fams { max-height: 12em; }
+@media (hover: hover) { .origin:hover .origin__fams { max-height: 12em; } }
 @media (hover: none), (max-width: 899px) { .origin__fams { max-height: none; } }
 .origins__cta { margin-top: clamp(28px, 4vw, 48px); }
 
@@ -303,7 +305,7 @@ ul.ticks li::before { border-color: var(--mana); }
 
 /* ---------- índice por capítulo ---------- */
 .index-item__t { font-weight: 700; }
-.index-item:hover .index-item__t { font-style: normal; color: var(--mana); }
+@media (hover: hover) { .index-item:hover .index-item__t { font-style: normal; color: var(--mana); } }
 .index-preview .slot { border: 0; }
 
 /* ---------- dois caminhos ---------- */
@@ -349,7 +351,7 @@ ul.ticks li::before { border-color: var(--mana); }
 
 /* ---------- brasões ---------- */
 .fam__crest { width: 88px; height: auto; display: block; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5)); transition: transform 0.6s var(--ease); }
-.fam:hover .fam__crest { transform: rotate(-4deg) scale(1.05); }
+@media (hover: hover) { .fam:hover .fam__crest { transform: rotate(-4deg) scale(1.05); } }
 .crest-head { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
 .crest { width: 96px; height: auto; flex: none; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5)); }
 .path__media { position: relative; }
@@ -370,7 +372,8 @@ ul.ticks li::before { border-color: var(--mana); }
 .tabs__in::-webkit-scrollbar { display: none; }
 .tabs a { flex: 0 0 auto; display: flex; align-items: baseline; gap: 10px; padding: 18px 18px 16px; font-family: var(--f-display); font-size: 1.15rem; color: var(--mute); border-bottom: 2px solid transparent; transition: color .25s, border-color .25s; }
 .tabs a span { font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; color: var(--blood); }
-.tabs a:hover, .tabs a.is-on { color: var(--bone); border-bottom-color: var(--blood); }
+.tabs a.is-on { color: var(--bone); border-bottom-color: var(--blood); }
+@media (hover: hover) { .tabs a:hover { color: var(--bone); border-bottom-color: var(--blood); } }
 .sec[id] { scroll-margin-top: 70px; }
 .beasts { display: grid; gap: clamp(12px, 1.6vw, 24px); margin-top: clamp(40px, 5vw, 72px); }
 @media (min-width: 700px) { .beasts { grid-template-columns: repeat(2, 1fr); } }
@@ -385,7 +388,7 @@ body:has(.hdr:not(.is-hidden)) .tabs { top: var(--hdr); }
 
 /* Bestiário rupestre (2026-11-05): as artes já vêm pintadas na pedra; sem o cinza do resto do site. */
 .slot--rupestre.slot--filled .slot__media img { filter: sepia(0.08) contrast(1.04); }
-.slot--rupestre.slot--filled:hover .slot__media img { filter: sepia(0) contrast(1.08) brightness(1.05); }
+@media (hover: hover) { .slot--rupestre.slot--filled:hover .slot__media img { filter: sepia(0) contrast(1.08) brightness(1.05); } }
 .slot--rupestre { box-shadow: inset 0 0 40px rgba(20, 10, 4, 0.55); }
 .beast__sci { margin-top: 4px; font-family: var(--f-kanji); font-size: 0.92rem; color: var(--bone-2); opacity: 0.75; letter-spacing: 0.01em; }
 

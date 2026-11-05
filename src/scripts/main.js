@@ -8,6 +8,8 @@ import Lenis from 'lenis';
 import { initSims } from './sims.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
+// No celular a barra de endereço muda a altura da tela ao rolar; isso não deve recalcular as animações.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const html = document.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -64,21 +66,30 @@ function pageNavSpy() {
   const nav = $('[data-pagenav]');
   if (!nav) return;
   const links = $$('a[data-tab]', nav);
-  const secs = links.map((a) => document.getElementById(a.dataset.tab)).filter(Boolean);
-  const io = new IntersectionObserver((es) => {
-    es.forEach((e) => {
-      if (!e.isIntersecting) return;
-      links.forEach((a) => {
-        const on = a.dataset.tab === e.target.id;
-        a.classList.toggle('is-on', on);
-        if (on) {
-          const box = a.parentElement;
-          box.scrollTo({ left: a.offsetLeft - box.clientWidth / 3, behavior: 'smooth' });
-        }
-      });
+  const secs = links.map((a) => document.getElementById(a.dataset.tab));
+  // Acende só a seção que está no meio da tela; acima da primeira ou abaixo da última, nenhuma fica acesa.
+  let atual = null;
+  let pendente = false;
+  const marca = () => {
+    pendente = false;
+    const meio = innerHeight * 0.45;
+    let ativo = null;
+    secs.forEach((s, i) => {
+      if (!s) return;
+      const r = s.getBoundingClientRect();
+      if (r.top <= meio && r.bottom > meio) ativo = links[i];
     });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  secs.forEach((s) => io.observe(s));
+    if (ativo === atual) return;
+    atual = ativo;
+    links.forEach((a) => a.classList.toggle('is-on', a === ativo));
+    if (ativo) {
+      const box = ativo.parentElement;
+      box.scrollTo({ left: ativo.offsetLeft - box.clientWidth / 3, behavior: 'smooth' });
+    }
+  };
+  addEventListener('scroll', () => { if (!pendente) { pendente = true; requestAnimationFrame(marca); } }, { passive: true });
+  addEventListener('resize', marca);
+  marca();
 }
 pageNavSpy();
 
@@ -198,6 +209,30 @@ function glossTips() {
   }
 }
 glossTips();
+
+// Posição das dicas: a caixa desliza para o lado para nunca passar da borda da tela.
+// No celular (sem hover), tocar num termo da própria página abre e fecha a dica.
+function tipPlace(t) {
+  const r = t.getClientRects()[0] || t.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  const w = Math.min(280, vw - 32);
+  const mid = r.left + r.width / 2;
+  const shift = Math.max(16 - (mid - w / 2), Math.min(0, vw - 16 - (mid + w / 2)));
+  t.style.setProperty('--tip-x', `${Math.round(shift)}px`);
+}
+function tipsBind() {
+  const close = () => $$('.term.is-open').forEach((t) => t.classList.remove('is-open'));
+  document.addEventListener('pointerover', (e) => { const t = e.target.closest?.('.term'); if (t) tipPlace(t); });
+  document.addEventListener('focusin', (e) => { const t = e.target.closest?.('.term'); if (t) tipPlace(t); });
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('span.term');
+    const aberto = t?.classList.contains('is-open');
+    close();
+    if (t && !aberto) { tipPlace(t); t.classList.add('is-open'); }
+  });
+  addEventListener('scroll', close, { passive: true });
+}
+tipsBind();
 
 // âncoras internas
 $$('a[href^="#"]').forEach((a) => {
@@ -476,8 +511,14 @@ function speedlines() {
     return g;
   });
   let k = 0;
+  let timer = null;
   sets[0].style.opacity = '1';
-  setInterval(() => { sets[k].style.opacity = '0'; k = (k + 1) % 3; sets[k].style.opacity = '1'; }, 140);
+  const tick = () => { sets[k].style.opacity = '0'; k = (k + 1) % 3; sets[k].style.opacity = '1'; };
+  // só pisca enquanto a capa está na tela (no celular, o loop parado poupa bateria)
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !timer) timer = setInterval(tick, 140);
+    else if (!e.isIntersecting && timer) { clearInterval(timer); timer = null; }
+  }).observe(svg);
 }
 
 function coverScroll() {
@@ -575,7 +616,8 @@ function chapters() {
     gsap.to(img, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
     const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 55%', once: true } });
     tl.fromTo(sfx, { scale: 3.2, opacity: 0, rotate: -24 }, { scale: 1, opacity: 1, rotate: -8, duration: 0.55, ease: 'back.out(2.4)' })
-      .fromTo(sec, { x: 0 }, { keyframes: [{ x: -14 }, { x: 11 }, { x: -7 }, { x: 4 }, { x: 0 }], duration: 0.35, ease: 'none' }, 0.12);
+      // treme o conteúdo, não a seção: a seção corta o excesso e a página nunca fica mais larga que a tela
+      .fromTo([img, $('.impact__in', sec)], { x: 0 }, { keyframes: [{ x: -14 }, { x: 11 }, { x: -7 }, { x: 4 }, { x: 0 }], duration: 0.35, ease: 'none' }, 0.12);
   });
 
   $$('[data-awaken]').forEach((sec) => {

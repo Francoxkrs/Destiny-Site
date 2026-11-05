@@ -94,7 +94,7 @@ const busca = {
       </div>
     </header>
 
-    <nav class="menu" id="menu" aria-label="Sistemas">
+    <nav class="menu" id="menu" aria-label="Sistemas" data-lenis-prevent>
       <div class="wrap menu__in">
         <div class="menu__chapters">
           {capitulos.map((c) => (
@@ -124,7 +124,7 @@ const busca = {
       </div>
     </nav>
 
-    <div class="search" data-search hidden>
+    <div class="search" data-search hidden data-lenis-prevent>
       <div class="search__veil" data-search-close></div>
       <div class="search__box" role="dialog" aria-modal="true" aria-label="Buscar no site">
         <div class="search__field">

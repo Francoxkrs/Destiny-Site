@@ -22,12 +22,12 @@ const rarChip = { Comum: '', Rara: 'chip--gold', Sorteio: 'chip--violet' };
 const ordem = ['Realeza', 'Nobreza', 'Plebe'];
 const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.indexOf(b.classe));
 ---
-<Base title="Famílias" slug="familias" description="As três classes sociais e as 24 famílias de outras vidas que um Marcado pode carregar.">
+<Base title="Famílias" slug="familias" description="As três classes sociais e as 25 famílias de outras vidas que um Marcado pode carregar.">
   <PageHero
     slug="familias"
     title="Famílias"
     lead="Toda alma lembra um nome de família. Ele vem de Clover, de Spades, de Heart, do Reino Subterrâneo ou da Floresta das Bruxas. O corpo é de Diamond."
-    intro="As 24 famílias do servidor continuam, refeitas como Linhagens da vida passada: cada uma com Herança, Magias de Linhagem e Marcos por Estágio."
+    intro="As famílias do servidor continuam, refeitas como Linhagens da vida passada: cada uma com Herança, Magias de Linhagem e Marcos por Estágio."
     image="familias/capa"
     imageLabel="Brasões das famílias"
   />
@@ -72,7 +72,7 @@ const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.index
 
   <section class="sec sec--line">
     <div class="wrap">
-      <SectionHead num="03" label="As 24 famílias" title="Escolha uma <em>vida passada</em>." lead="No /criar-personagem a família vem no modelo, sorteada entre as da raça. Famílias Comuns pesam 6, Raras pesam 1 e as de Sorteio nunca aparecem por lá." />
+      <SectionHead num="03" label="As 25 famílias" title="Escolha uma <em>vida passada</em>." lead="No /criar-personagem a família vem no modelo, sorteada entre as da raça. Famílias Comuns pesam 6, Raras pesam 1 e as de Sorteio nunca aparecem por lá." />
       <div class="filters" data-filter-group="#fam-grid" role="group" aria-label="Filtrar famílias">
         {filtros.map(([v, l], i) => <button class="filter-btn" type="button" data-filter={v} aria-pressed={i === 0 ? 'true' : 'false'}>{l}</button>)}
         <span class="t-label filters__count" data-filter-count aria-live="polite">{familias.length} famílias</span>

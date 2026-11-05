@@ -41,7 +41,7 @@ import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, t
 
   <section class="sec sec--line sec--raise" id="custo">
     <div class="wrap">
-      <SectionHead num="02" label="Calculadora" title="Quanto custa <em>o seu feitiço</em>?" lead="Os descontos se somam até 50%. A Instabilidade do Mago do Caos aumenta o custo em 10% depois dos descontos." />
+      <SectionHead num="02" label="Calculadora" title="Quanto custa <em>o seu feitiço</em>?" lead="Os descontos se somam até 50%. A Mana Indomável do Mago do Caos aumenta o custo em 10% depois dos descontos." />
       <div class="sim" data-sim="custo" data-graus={JSON.stringify(custoGrau)} data-faixas={JSON.stringify(controleFaixas)} data-niveis={JSON.stringify(manaNiveis)} data-reveal>
         <div class="sim__grid">
           <div class="sim__side">
@@ -54,7 +54,7 @@ import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, t
             <div class="field">
               <span class="lbl">Modificadores</span>
               <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="arcano" /> Fluxo Refinado (Mago Arcano, externalizado)</label>
-              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="caos" /> Instabilidade (Mago do Caos)</label>
+              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="caos" /> Mana Indomável (Mago do Caos)</label>
               <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="elfo" /> Comunhão com a Mana (Elfo)</label>
             </div>
           </div>

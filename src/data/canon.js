@@ -25,20 +25,21 @@ export const paginas = [
   { slug: 'classes', cap: 'III', num: '04', titulo: 'Classes de Mago', resumo: 'Oito estilos de combate', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma pede um Conhecimento e dá uma passiva; a Classe Avançada vem depois.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
   { slug: 'milagres', cap: 'III', num: '05', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras que mudam as regras do personagem.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
   { slug: 'magia', cap: 'III', num: '06', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
-  { slug: 'mana', cap: 'III', num: '07', titulo: 'Mana', resumo: 'Reserva, custo e Técnicas de Mana', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.'] },
+  { slug: 'mana', cap: 'III', num: '07', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
   { slug: 'atributos', cap: 'III', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
   { slug: 'ferimentos', cap: 'III', num: '09', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
-  { slug: 'progressao', cap: 'IV', num: '10', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
-  { slug: 'conhecimentos', cap: 'IV', num: '11', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
-  { slug: 'criaturas', cap: 'IV', num: '12', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
-  { slug: 'missoes', cap: 'IV', num: '13', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
-  { slug: 'generais', cap: 'IV', num: '14', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
-  { slug: 'profissoes', cap: 'V', num: '15', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
-  { slug: 'mineracao', cap: 'V', num: '16', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
-  { slug: 'itens', cap: 'V', num: '17', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
-  { slug: 'terras', cap: 'V', num: '18', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
-  { slug: 'economia', cap: 'V', num: '19', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
-  { slug: 'comecar', cap: 'VI', num: '20', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
+  { slug: 'discos', cap: 'III', num: '10', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Nenhum disco dá Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
+  { slug: 'progressao', cap: 'IV', num: '11', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
+  { slug: 'conhecimentos', cap: 'IV', num: '12', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
+  { slug: 'criaturas', cap: 'IV', num: '13', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
+  { slug: 'missoes', cap: 'IV', num: '14', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
+  { slug: 'generais', cap: 'IV', num: '15', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
+  { slug: 'profissoes', cap: 'V', num: '16', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
+  { slug: 'mineracao', cap: 'V', num: '17', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
+  { slug: 'itens', cap: 'V', num: '18', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
+  { slug: 'terras', cap: 'V', num: '19', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
+  { slug: 'economia', cap: 'V', num: '20', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
+  { slug: 'comecar', cap: 'VI', num: '21', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
 ];
 
 export const regioes = [
@@ -91,7 +92,7 @@ export const racas = [
   },
   {
     nome: 'Anões', atributos: ['Incomum', 'Incomum', 'Comum', 'I', 'II', '10%'], obtencao: 'Modelos (raro), sorteios e eventos',
-    texto: 'Quase extintos depois de séculos caçados pelos Humanos. Em Diamond, são capturados para os laboratórios; um Anão Retornado vive escondido. Forja, comida farta e verdade definem seu povo.',
+    texto: 'Quase extintos depois de séculos caçados pelos Humanos. Em Diamond, são capturados para os laboratórios; um Anão Marcado vive escondido. Forja, comida farta e verdade definem seu povo.',
     habilidades: [
       ['Discernimento Anão', 'Distingue o verdadeiro do falso; mentiras não funcionam contra ele.'],
       ['Visão Verdadeira', 'Enxerga através de ilusões enquanto tiver mais Mana atual que quem as mantém.'],
@@ -101,7 +102,7 @@ export const racas = [
   },
   {
     nome: 'Bruxas', atributos: ['Comum', 'Comum', 'Comum', 'II', 'I', '10%'], obtencao: 'Modelos (raro), sorteios e eventos',
-    texto: 'Criadas pela magia da Rainha das Bruxas e educadas nas artes obscuras. Uma Bruxa Retornada renasce longe da Floresta das Bruxas e, por isso, já nasce sob a Maldição da Rainha.',
+    texto: 'Criadas pela magia da Rainha das Bruxas e educadas nas artes obscuras. Uma Bruxa Marcada renasce longe da Floresta das Bruxas e, por isso, já nasce sob a Maldição da Rainha.',
     habilidades: [
       ['Aptidão Arcana', 'Na criação, o modelo Bruxa recebe 2 giros extras de Magia, só para ele.'],
       ['Pacto Familiar', 'Cria um familiar com um feitiço que não ocupa espaço no Grimório.'],
@@ -111,7 +112,7 @@ export const racas = [
   },
   {
     nome: 'Elfos', atributos: ['Sobre-Humana', 'Sobre-Humana', 'Sobre-Humana', 'III', 'V', '35%'], obtencao: 'Família Licht, Reencarnação Élfica, sorteios e eventos',
-    texto: 'A raça mais dotada de magia que já existiu, exterminada pelos Humanos. Foram os primeiros Retornados conhecidos. Em Diamond, são caçados como cobaias de valor inestimável.',
+    texto: 'A raça mais dotada de magia que já existiu, exterminada pelos Humanos. Foram os primeiros Marcados conhecidos. Em Diamond, são caçados como cobaias de valor inestimável.',
     habilidades: [
       ['Comunhão com a Mana', 'Regenera Mana em dobro e paga metade do custo de tudo.'],
       ['Aprendizado Natural', 'Aprende Técnicas de Mana sozinho, com metade dos treinos.'],
@@ -130,7 +131,7 @@ export const classesSociais = [
 
 // classe: Realeza | Nobreza | Plebe ; raridade: Comum | Rara | Sorteio
 export const familias = [
-  { nome: 'Kira', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Família governante de Clover, juízes do trono.', magias: 'Balança; Luz só para o primeiro Retornado', heranca: ['Milagre Amado pela Mana', 'Conhecimento em Retórica', 'Zona de Mana um Estágio antes'], marco: '4º Estágio: Conhecimento em Arcanologia' },
+  { nome: 'Kira', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Família governante de Clover, juízes do trono.', magias: 'Balança; Luz só para o primeiro Marcado', heranca: ['Milagre Amado pela Mana', 'Conhecimento em Retórica', 'Zona de Mana um Estágio antes'], marco: '4º Estágio: Conhecimento em Arcanologia' },
   { nome: 'Vermillion', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Linhagem real de sangue quente.', magias: 'Fogo, Plantas, Cerejeira', heranca: ['Conhecimento em Combate', 'Força e Resistência +1 classificação'], marco: '5º Estágio: Milagre Mana Distinta (Mana Quente), se não tiver Milagre' },
   { nome: 'Silva', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Casa real ligada aos Elfos, obcecada por controle.', magias: 'Mercúrio, Névoa, Água', heranca: ['Percepção de Mana', 'Conhecimento em Magia', 'Forma Mágica um Estágio antes'], giro: '30% de Milagre Vaso Defeituoso', marco: '8º Estágio: o primeiro com Água recebe o feitiço Leviatã (Grau III)' },
   { nome: 'Grinberryal', classe: 'Realeza', origem: 'Spades', raca: 'Humanos', raridade: 'Rara', vagas: 3, lema: 'Antiga família real de Spades, derrubada pela Tríade.', magias: 'Sol, Lua, Estrela (se não houver usuário)', heranca: ['Milagre Amado pela Mana', 'Mana +1 nível', 'Conhecimento em Magia'], marco: '6º Estágio: pode reivindicar a coroa de Spades em evento' },
@@ -338,7 +339,7 @@ export const ranks = [
 
 export const segundaVida = {
   titulo: 'A Segunda Vida',
-  texto: 'Ninguém sabe por que certas almas voltam, nem por que todas voltam em Diamond. Os estudiosos do Lapidário chamam o fenômeno de Retorno e os renascidos de Retornados. Um Retornado lembra fragmentos da vida anterior: um nome de família, uma magia, um juramento. O resto ele precisa descobrir.',
+  texto: 'Ninguém sabe por que certas almas voltam, nem por que todas voltam em Diamond. Toda alma que volta traz no corpo uma Marca, um sinal que a mana de Diamond reconhece, e por isso os renascidos são chamados de Marcados. Um Marcado lembra fragmentos da vida anterior: um nome de família, uma magia, um juramento. O resto ele precisa descobrir.',
 };
 
 export const primeirosPassos = [
@@ -421,7 +422,7 @@ export const bibliotecas = [
 ];
 
 export const generais = {
-  texto: 'A força militar de elite de Diamond nasce de experimentos. Crianças e jovens passam por procedimentos, treinos e condições extremas; muitos não sobrevivem, e os que sobrevivem são educados para obedecer, combater e eliminar. Os Retornados que se apresentam ao Exame da Forja passam por uma versão abreviada desse processo.',
+  texto: 'A força militar de elite de Diamond nasce de experimentos. Crianças e jovens passam por procedimentos, treinos e condições extremas; muitos não sobrevivem, e os que sobrevivem são educados para obedecer, combater e eliminar. Os Marcados que se apresentam ao Exame da Forja passam por uma versão abreviada desse processo.',
   cultura: 'Força, obediência e opressão. A posição na hierarquia depende de quem a ocupa e pode ser tomada em desafio. Uma ordem direta do Rei não pode ser recusada por ninguém.',
   exame: 'Seleção anual na Coroa. Quem passa entra como Recruta Brilhante. As regras de cada edição são publicadas pelo bot.',
   patentes: [
@@ -520,7 +521,7 @@ export const criaturas = {
   ],
   rupestre: 'Ninguém em Diamond desenhou estas criaturas. Os registros vêm das paredes das cavernas abaixo dos Veios, pintados com ocre e carvão por alguém que viu tudo isto muito antes do reino existir.',
   patrocinadoras: {
-    texto: 'Antes de Diamond secar, três coisas já moravam embaixo dele. Não têm Rank, não aparecem nas paredes das cavernas e ninguém as doma. São as Patrocinadoras: escolhem um Retornado, bancam a segunda vida dele e um dia cobram.',
+    texto: 'Antes de Diamond secar, três coisas já moravam embaixo dele. Não têm Rank, não aparecem nas paredes das cavernas e ninguém as doma. São as Patrocinadoras: escolhem um Marcado, bancam a segunda vida dele e um dia cobram.',
     lista: [
       { nome: 'Gan', img: 'gan', epiteto: 'A Que Empresta', dominio: 'Dívida e fortuna', aparencia: 'Uma boca dourada sem rosto, cercada de moedas que giram como luas pequenas.', patrocinio: 'Todo pagamento que o escolhido recebe vem com +10% de Yuls.', preco: 'Gan cobra o que empresta: se o escolhido ficar com Yuls negativos, perde um item à escolha do narrador.' },
       { nome: 'Org', img: 'org', epiteto: 'A Que Cresce', dominio: 'Carne, criaturas e o que ainda está vivo', aparencia: 'Uma massa verde de raízes e olhos que se move por baixo da terra morta.', patrocinio: 'As criaturas aceitam o escolhido: a Domação pede uma cena a menos (mínimo 1), e Ferimentos II fecham com 12 h de descanso em vez de 24 h.', preco: 'O corpo do escolhido começa a florescer: no 6º Estágio ganha uma Sequela estética (musgo, folhas, olhos a mais) que não sai mais.' },
@@ -783,7 +784,7 @@ export const terras = {
     ['Imposto territorial', '2% do valor da propriedade por semana, pago ao Tesouro.'],
     ['Atraso', '2 semanas sem pagar tiram uma construção; 4 semanas, a Coroa toma a terra.'],
     ['Proteção', 'O Veio Negro pode cobrar proteção nos Veios. Recusar abre uma missão de defesa.'],
-    ['Herança', 'Uma terra pode ser vendida, arrendada ou deixada de herança por Contrato. Quando o personagem morre, ela vai para o próximo Retornado do mesmo jogador, com 50% de imposto.'],
+    ['Herança', 'Uma terra pode ser vendida, arrendada ou deixada de herança por Contrato. Quando o personagem morre, ela vai para o próximo Marcado do mesmo jogador, com 50% de imposto.'],
   ],
 };
 
@@ -844,6 +845,8 @@ export const economia = {
     ['Pó de Cristal', 'Incomum', 'Refino, Achados', '150'],
     ['Erva rara', 'Rara', 'Estufa de Mana', '120'],
     ['Parte Mágica de Criatura', 'Rara', 'Caça de criaturas mágicas', '300'],
+    ['Disco Bruto (em branco)', 'Incomum', 'Veio Negro, no Fosso', '150'],
+    ['Disco Lapidado (em branco)', 'Rara', 'Oficinas do Lapidário', '400'],
     ['Ferro Estelar', 'Rara', 'Veios Virgens, meteoritos', '400'],
     ['Obsidiana Viva', 'Épica', 'Minas Profundas', '1.200'],
     ['Cristal Branco', 'Rara', 'Achados, missões C e B', '3.000'],
@@ -898,15 +901,101 @@ export const glossario = [
   ['Qualidade', 'Comum, Incomum, Rara, Épica ou Obra-Prima.', 'itens#qualidade'],
   ['Recursos', 'Materiais da economia: minério, cristal, comida, ervas.', 'economia#recursos'],
   ['Reserva', 'Quantas Jornadas uma jazida aguenta antes de descer um grau.', 'mineracao#jazidas'],
-  ['Retornado', 'Alma de outro reino que renasce em Diamond.', 'mundo'],
+  ['Marcado', 'Alma de outro reino que renasce em Diamond com uma Marca no corpo. Todo personagem é um Marcado.', 'mundo'],
   ['Sequela', 'Marca permanente de quem sobrevive a um Ferimento IV sem cirurgia.', 'ferimentos#agravamento'],
   ['Sincronia', 'Vínculo entre dois ou três personagens forjado em perigo.', 'milagres'],
   ['Técnica de Mana', 'Uso da mana fora do Grimório, como Percepção ou Zona de Mana.', 'mana#tecnicas'],
+  ['Disco', 'Runa gravada em cristal e engastada no corpo; faz uma coisa só, sem gastar Mana.', 'discos'],
+  ['Encaixe', 'Quantos Discos o corpo aguenta: 2, mais 1 no 6º e no 3º Estágio.', 'discos#regras'],
+  ['Rejeição', 'O peso de um Disco no corpo; passar do limite causa Cristalização.', 'discos#regras'],
+  ['Instabilidade', 'Marcas de uso dos Discos fortes; no limite, o efeito colateral acontece.', 'discos#regras'],
+  ['Respiração de Mana', 'Técnica de Diamond que tira mana do pó de cristal do ar.', 'mana#diamond'],
+  ['Técnica Rúnica', 'Técnica que leva a Matriz Rúnica mais longe: runas condicionais, inscritas, em cadeia.', 'mana#runas'],
   ['Traço', 'Talento menor: até 3, nenhum com mais de 1 Acréscimo.', 'milagres'],
   ['Trilha de Ferimentos', 'A barra de vida: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'ferimentos#trilha'],
   ['Vigor', 'O quanto uma terra produz: Morta, Exausta, Fraca ou Viva.', 'terras#vigor'],
   ['Yul', 'A moeda de todos os reinos.', 'economia#moedas'],
 ];
+
+/* ==========================================================================
+   Sistemas exclusivos de Diamond (2026-11-05): Discos de Engaste, Técnicas
+   de Mana de Diamond e Técnicas Rúnicas. Aprovados pelo Silas no documento.
+   ========================================================================== */
+
+export const discos = {
+  texto: 'O Lapidário aprendeu a cortar Cristais de Mana em discos finos e gravar neles uma runa. Um disco engastado no corpo (nuca, antebraço, peito, olho) faz uma coisa só, sempre, sem gastar a Mana do dono. Os Generais Brilhantes saem da Forja cheios deles, a Nobreza compra discos lapidados e a Plebe dos Veios se vira com discos brutos do Veio Negro.',
+  regras: [
+    ['Encaixes', 'Todo corpo aguenta 2 discos. +1 Encaixe no 6º Estágio e +1 no 3º.'],
+    ['Rejeição', 'Cada disco tem Rejeição de 1 a 3. O corpo aguenta Rejeição 5, +1 por classificação de Resistência acima de Comum.'],
+    ['Cristalização', 'Passar do limite de Rejeição deixa uma Sequela permanente: a pele em volta do disco vira cristal e o personagem perde 5% de Controle por ponto acima.'],
+    ['Instabilidade', 'Os discos mais fortes ganham 1 marca a cada uso. Quando as marcas chegam ao limite do disco, o efeito colateral acontece na hora. As marcas somem no começo de cada ciclo. É um contador, não sorte: o jogador sempre sabe quanto falta.'],
+    ['Sobrecarga', '1 vez por cena, o disco rende o dobro por 1 turno. Custa 1 Ferimento I na hora e conta 2 marcas de Instabilidade.'],
+    ['Engaste e Desengaste', 'Só com Cirurgia Arcana ou Conhecimento Científico, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
+    ['Sem Acréscimos', 'Nenhum disco dá Acréscimo. Eles dão funções: sentidos, memória, mana guardada, truques.'],
+  ],
+  lapidacao: [
+    ['Bruto', 'Veio Negro, no Fosso', '+1', '150 Yuls'],
+    ['Lapidado', 'Oficinas do Lapidário', 'Normal', '400 Yuls'],
+    ['Facetado', 'Libardirt e contratos da Coroa', 'Normal, efeito +50%', '1.200 Yuls + Pó de Cristal'],
+    ['Brilhante', 'Só a Forja e eventos', '-1', 'Não está à venda'],
+  ],
+  linhas: [
+    ['Sentidos', 'O que o corpo não percebe sozinho.'],
+    ['Mente', 'Memória, línguas mortas e conversa à distância.'],
+    ['Transporte', 'Para quem cruza o reino seco.'],
+    ['Mana', 'Mana guardada, feitiços prontos e gravados.'],
+    ['Corpo', 'Aguentar o que mataria um corpo comum.'],
+    ['Ilegal', 'Apreendidos pela Guarda da Coroa. Ser pego com um dá multa ou missão punitiva.'],
+  ],
+  lista: [
+    { nome: 'Lente de Mana', linha: 'Sentidos', onde: 'Olho', rejeicao: 1, efeito: 'Vê o fluxo de mana a até 30 m e nota feitiços sendo preparados.' },
+    { nome: 'Olho Térmico', linha: 'Sentidos', onde: 'Olho', rejeicao: 1, efeito: 'Enxerga calor através de fumaça, poeira e escuridão.' },
+    { nome: 'Sentinela', linha: 'Sentidos', onde: 'Nuca', rejeicao: 1, efeito: 'Acorda o dono quando algo com mana chega a 20 m; ninguém o pega dormindo.' },
+    { nome: 'Disco de Pulso', linha: 'Sentidos', onde: 'Ouvido', rejeicao: 1, efeito: 'Ouve batimentos a até 5 m: percebe medo, pressa e nervosismo. Não detecta mentira.' },
+    { nome: 'Leitor de Runas', linha: 'Sentidos', onde: 'Olho', rejeicao: 1, efeito: 'Lê qualquer runa, escrita antiga e as pinturas das cavernas; vê quantos turnos faltam para uma runa armada disparar.' },
+    { nome: 'Disco de Memória', linha: 'Mente', onde: 'Nuca', rejeicao: 2, efeito: 'Guarda 1 Conhecimento Comum tirado de uma Cápsula de Conhecimento.' },
+    { nome: 'Cartógrafo', linha: 'Mente', onde: 'Nuca', rejeicao: 1, efeito: 'Grava toda rota percorrida; o dono nunca se perde e desenha mapas exatos.' },
+    { nome: 'Registrador', linha: 'Mente', onde: 'Olho', rejeicao: 2, efeito: 'Grava 1 cena com imagem e som; vale como prova em Contratos e julgamentos.' },
+    { nome: 'Âncora', linha: 'Mente', onde: 'Nuca', rejeicao: 2, efeito: '1 vez por cena, ignora uma ilusão, um sono ou um controle mental.' },
+    { nome: 'Par Ressonante', linha: 'Mente', onde: 'Ouvido', rejeicao: 1, efeito: 'Vendido em pares: os dois portadores falam pela mente a até 1 km.' },
+    { nome: 'Estribo', linha: 'Transporte', onde: 'Perna', rejeicao: 2, efeito: 'Liga o portador a uma montaria, carroça ou barco: o veículo anda o dobro e não cansa, e viagens entre regiões de Diamond levam metade do tempo.' },
+    { nome: 'Bateria de Mana', linha: 'Mana', onde: 'Peito', rejeicao: 3, efeito: 'Guarda até 100 de Mana para usar depois; recarrega fora de combate.', instavel: '3 descargas no ciclo: explode. Ferimento III no peito, a Mana guardada se perde e o disco quebra.' },
+    { nome: 'Conduíte', linha: 'Mana', onde: 'Antebraço', rejeicao: 2, efeito: '1 feitiço escolhido custa 15% menos Mana.' },
+    { nome: 'Gatilho', linha: 'Mana', onde: 'Antebraço', rejeicao: 2, efeito: 'Guarda 1 feitiço próprio já pronto e solta como reação, sem gastar o turno.', instavel: '3 marcas: o feitiço guardado dispara sozinho, no turno que o narrador escolher.' },
+    { nome: 'Disco de Gravação', linha: 'Mana', onde: 'Antebraço', rejeicao: 3, efeito: 'Grava 1 feitiço Grau I ou II de outra pessoa (com permissão dela); usa 1 vez por cena.', instavel: '2 marcas: o feitiço sai descontrolado e acerta o alvo mais próximo, aliado ou não.' },
+    { nome: 'Selo', linha: 'Mana', onde: 'Mão', rejeicao: 1, efeito: 'Marca uma porta, um baú ou um grimório: só o dono abre sem arrombar.' },
+    { nome: 'Filtro', linha: 'Corpo', onde: 'Peito', rejeicao: 1, efeito: 'Imune a gás de mina, poeira tóxica e venenos comuns.' },
+    { nome: 'Hemostático', linha: 'Corpo', onde: 'Peito', rejeicao: 2, efeito: 'Ferimentos III não sangram por 1 cena: o Agravamento para.' },
+    { nome: 'Coração de Reserva', linha: 'Corpo', onde: 'Peito', rejeicao: 2, efeito: 'Ao chegar no Ferimento IV, fica de pé por mais 2 turnos antes de cair.', instavel: '1 uso: depois disso o disco racha e precisa ser trocado.' },
+    { nome: 'Disco Fantasma', linha: 'Ilegal', onde: 'Nuca', rejeicao: 2, efeito: 'Esconde a mana do dono de quem sente mana.' },
+    { nome: 'Mímico', linha: 'Ilegal', onde: 'Rosto', rejeicao: 3, efeito: 'Cópia total de alguém que o portador tocou: rosto, corpo, voz, cheiro e assinatura de mana, por 1 cena. Só não copia a magia nem as memórias.', instavel: '2 marcas: o portador se perde na cópia e, por 1 cena, acredita ser a pessoa copiada.' },
+    { nome: 'Chave-Mestra', linha: 'Ilegal', onde: 'Mão', rejeicao: 2, efeito: 'Abre Selos e fechaduras comuns em 1 turno.' },
+    { nome: 'Disco Berserk', linha: 'Ilegal', onde: 'Nuca', rejeicao: 3, efeito: 'Sobrecarga sem custo de Ferimento, mas o dono não distingue aliado de inimigo naquele turno.', instavel: '2 marcas: apaga e acorda com Ferimento II, sem lembrar a cena.' },
+  ],
+};
+
+export const tecnicasDiamond = {
+  texto: 'O reino secou e a mana no ar ficou rala. Quem vive aqui aprendeu a tirar mana de onde quase não tem. Seguem as regras das outras Técnicas de Mana (Treinos de Técnica; Elfos e Anomalia Mágica pela metade). Estrangeiros não as aprendem.',
+  lista: [
+    { nome: 'Respiração de Mana', estagio: '9º', controle: '10%', quem: 'Qualquer Marcado', texto: 'Respira o pó de cristal do ar e recupera 3% de Mana por turno sem lançar feitiço (6% numa Zona de Forte Mana). Fora de Diamond, onde a mana é densa, fica Embriagado de Mana: -5% de Controle até se acostumar (3 cenas). Com uma Bateria de Mana engastada, o que passar do máximo vai para a bateria.', ideia: 'As Respirações de Demon Slayer' },
+    { nome: 'Corpo Seco', estagio: '9º', controle: '10%', quem: 'Só Plebe, ou quem viveu 1 mês real nos Veios', texto: 'O corpo aprende a gastar quase nada: aguenta 3 dias sem comida e água sem ficar Desnutrido, e a parte de comida do custo de vida cai pela metade.', ideia: 'A disciplina da água dos Fremen, em Duna' },
+    { nome: 'Eco de Veio', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Encosta a mão na pedra e sente o que se move a até 50 m pela vibração da mana no chão. Na Mineração, revela o grau de uma jazida sem gastar Jornada.', ideia: 'O sentido sísmico da Toph, em Avatar, e o En de Hunter x Hunter' },
+    { nome: 'Passo Cintilante', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Solta mana pelas solas e reaparece a até 10 m, como reação. No máximo 2 vezes por cena e nunca em turnos seguidos. Custa 20 de Mana e dobra no segundo uso da cena (40).', ideia: 'O Shunpo de Bleach e o Soru de One Piece' },
+    { nome: 'Couraça de Pó', estagio: '5º', controle: '40%', quem: 'Qualquer Marcado', texto: 'Junta o pó de cristal do ar numa casca na pele por 3 turnos: o primeiro Ferimento I de cada turno é anulado. 20 de Mana por turno; não funciona molhado.', ideia: 'O Ken de Hunter x Hunter e o Hierro de Bleach' },
+  ],
+};
+
+export const runas = {
+  texto: 'Um disco é uma runa gravada em cristal. Diamond leva a Matriz Rúnica mais longe que qualquer reino: os runistas do Lapidário gravam runas em pedra, em metal (Cobre e Fio Rúnico) e no próprio corpo. Tudo aqui parte da Matriz Rúnica (6º Estágio, Controle 30%, até 5 runas preparadas). Quem tem o Milagre Insignificância aprende estas técnicas sem o requisito de Estágio.',
+  lista: [
+    { nome: 'Leitura Rúnica', estagio: '8º', controle: '15%', texto: 'Lê runas alheias: sabe o que cada uma faz e quando dispara. Com 1 turno de toque, desarma uma runa de Grau igual ou menor que o seu máximo. Não exige a Matriz.' },
+    { nome: 'Runa Condicional', estagio: '6º', controle: '30%', texto: 'A runa dispara sozinha quando uma condição declarada acontece ("quando alguém abrir esta porta", "quando eu cair"). Fica armada até o fim da cena.' },
+    { nome: 'Inscrição', estagio: '5º', controle: '40%', texto: 'Grava a runa numa parede, arma ou objeto, e ela dura 1 semana real. Serve para armadilhas, proteção de Terras e armas com feitiço. Custa 1 Fio Rúnico por runa.' },
+    { nome: 'Runa em Cadeia', estagio: '5º', controle: '40%', texto: 'Liga até 3 runas preparadas: quando uma dispara, as outras disparam juntas no mesmo turno.' },
+    { nome: 'Selo Rúnico', estagio: '4º', controle: '50%', texto: 'Grava uma runa de selo num grimório, num feitiço ativo ou numa criatura: o alvo fica selado por 3 turnos, ou até alguém desarmar a runa. Custa 2 runas da Matriz.' },
+    { nome: 'Voto de Cristal', estagio: '4º', controle: '50%', texto: 'Grava no próprio corpo uma runa de restrição declarada em cena (ex.: "só uso um feitiço nesta luta"). Enquanto cumprir, um feitiço escolhido dobra de alcance ou custa metade da Mana. Quebrar o voto racha a runa: Ferimento II na hora.', ideia: 'Os Votos Vinculantes de Jujutsu Kaisen e as Restrições do Nen' },
+  ],
+};
 
 // Ordem de leitura para quem acabou de chegar.
 export const comecePorAqui = [

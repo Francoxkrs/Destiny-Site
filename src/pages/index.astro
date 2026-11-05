@@ -104,7 +104,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
             <li data-pro-line>{p.pre} <em class={i === 3 ? 'is-home' : ''}>{p.reino}</em>.</li>
           ))}
         </ol>
-        <p class="prologue__end" data-pro-end>Você é um <em>Retornado</em>.</p>
+        <p class="prologue__end" data-pro-end>Você é um <em>Marcado</em>.</p>
       </div>
       <ol class="prologue__ticks" aria-hidden="true">
         {prologo.map((p, i) => <li data-pro-tick><b>{['I', 'II', 'III', 'IV'][i]}</b>{p.reino}</li>)}
@@ -148,12 +148,12 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
   <section class="sec sec--tight">
     <div class="wrap grid" style="align-items:center">
       <div class="c-1-5">
-        <ImageSlot src="inicio/retornado" label="Um Retornado desperta em Diamond" ratio="4 / 5" />
+        <ImageSlot src="inicio/marcado" label="Um Marcado desperta em Diamond" ratio="4 / 5" />
       </div>
       <div class="c-7-12 stack" style="--s:1.6rem">
         <span class="eyebrow" data-reveal><b>◆</b>{segundaVida.titulo}</span>
         <h3 class="t-h2" data-split>Uma alma de outro reino. <em>Um corpo de Diamond.</em></h3>
-        <p class="t-body" data-reveal>A família da vida passada define os atributos e os dons que a alma carrega. A classe social dessa família decide onde o Retornado renasce.</p>
+        <p class="t-body" data-reveal>A família da vida passada define os atributos e os dons que a alma carrega. A classe social dessa família decide onde o Marcado renasce.</p>
         <dl class="kv" data-reveal>
           {classesSociais.map((c) => <><dt>{c.nome}</dt><dd>renasce em <span class="t-mana">{c.regiao}</span> · {c.dinheiro}</dd></>)}
         </dl>
@@ -224,9 +224,9 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <span class="chap__num" aria-hidden="true" data-chap-num>III</span>
     <div class="wrap chap__in">
       <span class="chap__kanji" aria-hidden="true">{cap.III.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo III</b>Classes · Milagres · Magia · Mana · Atributos</span>
+      <span class="eyebrow" data-reveal><b>Capítulo III</b>{pags('III').map((p) => p.titulo).join(' · ')}</span>
       <h2 class="chap__title" data-split>{cap.III.nome}</h2>
-      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em cinco páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
+      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {pags('III').length === 7 ? 'sete' : pags('III').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
     </div>
   </section>
 
@@ -406,7 +406,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <div class="awaken__img" data-awaken-img><img src="/img/comecar/capa.jpg" alt="" loading="lazy" /></div>
     <div class="awaken__lids" aria-hidden="true"><span data-lid></span><span data-lid></span></div>
     <div class="wrap awaken__in">
-      <span class="eyebrow" data-reveal><b>黒</b>O Retorno começa no Discord</span>
+      <span class="eyebrow" data-reveal><b>黒</b>A Marca começa no Discord</span>
       <p class="awaken__title" data-split>Abra os <em>olhos</em>.</p>
       <div class="btns" data-reveal>
         <a class="btn btn--solid" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Entrar no servidor <Arrow /></a>

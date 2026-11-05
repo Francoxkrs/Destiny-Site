@@ -399,3 +399,10 @@ body:has(.hdr:not(.is-hidden)) .tabs { top: var(--hdr); }
 .patrona__epiteto { margin-top: 6px; color: var(--blood); font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; }
 .slot--rupestre.slot--filled::after, .patrona .slot--filled::after { opacity: 0.06; }
 .patrona .slot__tag { visibility: hidden; }
+
+/* Discos e técnicas de Diamond */
+.disc-line { margin-top: clamp(36px, 4.5vw, 64px); }
+.disc-line__head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.disc--instavel { border-color: var(--blood); }
+.disc__risk { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-2); }
+.tec__ideia { margin-top: 14px; opacity: 0.7; font-style: italic; }

@@ -22,7 +22,7 @@ const rarChip = { Comum: '', Rara: 'chip--gold', Sorteio: 'chip--violet' };
 const ordem = ['Realeza', 'Nobreza', 'Plebe'];
 const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.indexOf(b.classe));
 ---
-<Base title="Famílias" slug="familias" description="As três classes sociais e as 24 famílias de outras vidas que um Retornado pode carregar.">
+<Base title="Famílias" slug="familias" description="As três classes sociais e as 24 famílias de outras vidas que um Marcado pode carregar.">
   <PageHero
     slug="familias"
     title="Famílias"
@@ -66,10 +66,6 @@ const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.index
             <p class="card__text">{d}</p>
           </div>
         ))}
-        <div class="card" data-reveal>
-          <span class="card__num">Conversões</span>
-          <p class="card__text">“+1 up” virou +1 classificação ou nível; Perícia virou Conhecimento; Mana Sense virou Percepção de Mana; level 10 a 35 viraram do 8º ao 3º Estágio. Dinheiro de família e híbridos saíram.</p>
-        </div>
       </div>
     </div>
   </section>

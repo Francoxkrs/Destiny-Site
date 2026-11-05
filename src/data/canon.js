@@ -576,7 +576,7 @@ export const criacao = {
   ],
   escolha: [
     'O jogador escolhe um dos três modelos; os outros dois são descartados.',
-    'Escreve nome, aparência (com imagem), a vida passada e o renascimento em Diamond.',
+    'Escreve nome e aparência (com imagem; o bot tira o fundo se precisar). A vida passada e o renascimento vão depois para a aba Pessoal da ficha, onde a Staff também registra os Impactos de Eventos.',
     'O Conselho Mágico aprova, e a ficha é criada.',
     'O /criar-personagem só pode ser usado uma vez por conta; refazer exige liberação da Staff.',
   ],

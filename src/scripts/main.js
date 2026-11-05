@@ -163,14 +163,18 @@ function glossTips() {
   const termos = (searchData.termos || []).slice().sort((a, b) => b.t.length - a.t.length);
   if (!termos.length || !$('.page-hero')) return;
   const aqui = location.pathname.replace(/index\.html$/, '');
-  const usados = new Set();
-  const alvos = $$('main p.t-body, main p.t-small, main .gifts dd, main .tbl td, main .ticks li, main .kv dd, main .ladder p');
-  const skip = (n) => n.parentElement?.closest('a, button, h1, h2, h3, h4, .term, .tabs, .page-hero');
+  // Uma dica por termo em cada seção: quem chega numa seção pelo índice também vê a definição.
+  const porSecao = new Map();
+  const alvos = $$('main p.t-body, main p.t-lead, main p.t-small, main .card__text, main .gifts dd, main .tbl td, main .ticks li, main .kv dd, main .ladder p, main .perk p, main .no p, main .tl-item__gain, main .tl-item__req, main .corr > div > span, main .chap__text, main li');
+  const skip = (n) => n.parentElement?.closest('a, button, h1, h2, h3, h4, .term, .tabs, .page-hero, .sim, nav, .hdr, .footer, label, select, [data-split]');
   const regs = termos.map((t) => [t, new RegExp(`(^|[^\\p{L}])(${t.t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?)(?![\\p{L}])`, 'u')]);
   for (const el of alvos) {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
+    const sec = el.closest('section') || document.body;
+    if (!porSecao.has(sec)) porSecao.set(sec, new Set());
+    const usados = porSecao.get(sec);
     for (const node of nodes) {
       if (skip(node)) continue;
       for (const [t, re] of regs) {

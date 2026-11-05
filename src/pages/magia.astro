@@ -5,7 +5,7 @@ import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
-import { magias, grimorios, grauPorEstagio, tiposFeitico, funcoes, maestria, slugify } from '../data/canon.js';
+import { magias, grimorios, nivelFeitico, tiposFeitico, funcoes, maestria, slugify } from '../data/canon.js';
 
 const trio = [
   ['Magia', 'O atributo mágico do personagem: fogo, cristal, sombras. Vem do giro na criação.'],
@@ -13,7 +13,7 @@ const trio = [
   ['Feitiço', 'Cada técnica escrita no Grimório. Criada pelo jogador e aprovada pelo Conselho Mágico.'],
 ];
 ---
-<Base title="Magia" slug="magia" description="As magias por raridade, os cinco tipos de Grimório e as regras de feitiço: Grau, Tipo, Função e Maestria.">
+<Base title="Magia" slug="magia" description="As magias por raridade, os cinco tipos de Grimório e as regras de feitiço: Estágio, Tipo, Função e Maestria.">
   <PageHero
     slug="magia"
     title="Magia, <em>Grimório</em> e Feitiço"
@@ -76,24 +76,26 @@ const trio = [
 
   <section class="sec sec--line">
     <div class="wrap">
-      <SectionHead num="03" label="Feitiços" title="Escreva. Envie. <em>Domine.</em>" lead="O jogador escreve o feitiço e envia ao Conselho Mágico pelo bot. Todo feitiço tem Nome, Grau, Tipo, Função Mágica, Custo, Efeito e Duração." />
+      <SectionHead num="03" label="Feitiços" title="Escreva. Envie. <em>Domine.</em>" lead="O jogador escreve o feitiço e envia ao Conselho Mágico pelo bot. Todo feitiço tem Nome, Tipo, Função Mágica, Efeito e Duração. O nível e o custo vêm do Estágio em que ele é lançado." />
       <div class="grid" style="align-items:start">
         <div class="c-1-7">
           <article class="spell" data-reveal data-tilt>
             <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="t-label t-mana">Exemplo de feitiço</span><span class="t-label">Magia de Cristal</span></div>
             <h3 class="t-h2" style="margin-top:18px">Lança <em>Facetada</em></h3>
             <dl class="spell__grid">
-              <div><dt>Grau</dt><dd>II</dd></div>
+              <div><dt>Lançado no</dt><dd>7º Estágio</dd></div>
               <div><dt>Tipo</dt><dd>Externalizado</dd></div>
               <div><dt>Função</dt><dd>Ataque</dd></div>
-              <div><dt>Custo</dt><dd>25 de Mana</dd></div>
+              <div><dt>Custo</dt><dd>70 de Mana</dd></div>
             </dl>
             <p class="spell__fx"><b>Efeito:</b> uma lança de cristal disparada em linha reta. Usa a Força da magia com os Acréscimos do Poder Mágico. Na Afinidade certa, como dentro de uma mina, recebe +1 Acréscimo. <b>Duração:</b> instantânea.</p>
           </article>
         </div>
         <div class="c-8-12 stack" style="--s:1.2rem">
-          <h3 class="t-h3" data-reveal>Grau máximo por Estágio</h3>
-          <Table head={['Estágio', 'Grau máximo']} rows={grauPorEstagio} />
+          <h3 class="t-h3" data-reveal>O Estágio é o nível</h3>
+          <p class="t-body" data-reveal>Não existe Grau. O feitiço vale o Estágio em que é lançado: pode ser o seu ou um abaixo, pagando menos. Com +10 Acréscimos, ele vale como o Estágio seguinte.</p>
+          <Table head={['Estágio', 'Alcance', 'Custo']} rows={nivelFeitico.map((x) => [`<b>${x.n}</b>`, `${x.alcance} m`, `${x.custo}`])} numCols={[1, 2]} />
+          <div class="btns" data-reveal><a class="btn" href="/estagios/">Tudo sobre os Estágios</a></div>
         </div>
       </div>
 

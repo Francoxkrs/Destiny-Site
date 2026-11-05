@@ -226,7 +226,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
       <span class="chap__kanji" aria-hidden="true">{cap.III.kanji}</span>
       <span class="eyebrow" data-reveal><b>Capítulo III</b>{pags('III').map((p) => p.titulo).join(' · ')}</span>
       <h2 class="chap__title" data-split>{cap.III.nome}</h2>
-      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {pags('III').length === 7 ? 'sete' : pags('III').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
+      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {['zero','uma','duas','três','quatro','cinco','seis','sete','oito','nove','dez'][pags('III').length] ?? pags('III').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
     </div>
   </section>
 

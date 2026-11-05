@@ -258,10 +258,10 @@ export const tecnicas = [
 export const magias = [
   { raridade: 'Comum', vagas: 15, chance: 45, lista: ['Fogo', 'Água', 'Terra', 'Vento', 'Relâmpago', 'Plantas', 'Névoa', 'Asas'] },
   { raridade: 'Incomum', vagas: 10, chance: 27, lista: ['Correntes', 'Gelo', 'Óleo Negro', 'Fios', 'Espelhos', 'Fumaça', 'Cristal', 'Algodão', 'Ferro', 'Recombinação', 'Globo Ocular', 'Butoh', 'Gel'] },
-  { raridade: 'Rara', vagas: 7, chance: 15, lista: ['Som', 'Ilusão', 'Música', 'Pele', 'Roseiras', 'Mosquito', 'Ossos', 'Cabelo', 'Dados', 'Areia', 'Sombras', 'Mercúrio', 'Aço', 'Espacial Defensiva', 'Veneno'] },
-  { raridade: 'Épica', vagas: 5, chance: 9, lista: ['Espacial Ofensiva', 'Feral', 'Olhos', 'Legião', 'Memória', 'Balança', 'Vórtice', 'Comida', 'Sangue', 'Bússola', 'Luz', 'Cerejeira'] },
-  { raridade: 'Lendária', vagas: 3, chance: 4, lista: ['Modificação', 'Ar', 'Espadas', 'Selamento', 'Pintura', 'Imitação', 'Corte', 'Barreiras', 'Fungos', 'Cadáver', 'Catalisadora', 'Permeação', 'Corpo'] },
-  { raridade: 'Exclusiva', vagas: null, chance: null, lista: ['Tempo', 'Estrelas', 'Sol', 'Lua', 'Original', 'Transmutação', 'Árvore do Mundo', 'Fio Vermelho do Destino', 'Sonhos', 'Jogos', 'Almas', 'Anti-Maldição', 'Chaves', 'Gravidade', 'Escuridão', 'Transcrição Mágica', 'Forja'] },
+  { raridade: 'Rara', vagas: 7, chance: 15, lista: ['Som', 'Ilusão', 'Música', 'Pele', 'Roseiras', 'Mosquito', 'Ossos', 'Cabelo', 'Areia', 'Mercúrio', 'Aço', 'Veneno'] },
+  { raridade: 'Épica', vagas: 5, chance: 9, lista: ['Feral', 'Olhos', 'Legião', 'Memória', 'Balança', 'Vórtice', 'Sangue', 'Bússola', 'Cerejeira', 'Sombras', 'Dados'] },
+  { raridade: 'Lendária', vagas: 3, chance: 4, lista: ['Modificação', 'Espadas', 'Selamento', 'Pintura', 'Imitação', 'Corte', 'Barreiras', 'Fungos', 'Cadáver', 'Catalisadora', 'Permeação', 'Corpo', 'Espacial Defensiva'] },
+  { raridade: 'Exclusiva', vagas: null, chance: null, lista: ['Tempo', 'Estrelas', 'Sol', 'Lua', 'Original', 'Transmutação', 'Árvore do Mundo', 'Fio Vermelho do Destino', 'Sonhos', 'Jogos', 'Almas', 'Anti-Maldição', 'Chaves', 'Gravidade', 'Escuridão', 'Transcrição Mágica', 'Forja', 'Espacial Ofensiva', 'Comida', 'Luz', 'Ar'] },
 ];
 
 export const grimorios = [

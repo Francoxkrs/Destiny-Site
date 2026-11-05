@@ -51,7 +51,7 @@ const porPagina = Object.fromEntries(paginas.map((p) => [p.slug, p]));
 
   <section class="sec sec--line sec--raise" id="mapa">
     <div class="wrap">
-      <SectionHead num="02" label="Mapa dos sistemas" title="Seis capítulos, <em>vinte páginas</em>." lead="Cada página traz no topo um resumo de 30 segundos e, logo abaixo, as abas da página. Aqui está o resumo de todas." />
+      <SectionHead num="02" label="Mapa dos sistemas" title={`Seis capítulos, <em>${paginas.length} páginas</em>.`} lead="Cada página traz no topo um resumo de 30 segundos e, logo abaixo, as abas da página. Aqui está o resumo de todas." />
       <div class="atlas">
         {capitulos.map((c) => (
           <div class="atlas__chap" data-reveal>

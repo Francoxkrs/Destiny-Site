@@ -26,7 +26,7 @@ const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.index
   <PageHero
     slug="familias"
     title="Famílias"
-    lead="Toda alma lembra um nome de família. Ele vem de Clover, de Spades, de Heart, do Reino Subterrâneo ou da Floresta das Bruxas. O corpo é de Diamond."
+    lead="Toda alma lembra um nome de família. Ele vem de Clover, Spades, Heart, do próprio Diamond ou de terras mais distantes. O corpo é de Diamond."
     intro="As famílias do servidor continuam, refeitas como Linhagens da vida passada: cada uma com Herança, Magias de Linhagem e Marcos por Estágio."
     image="familias/capa"
     imageLabel="Brasões das famílias"
@@ -57,7 +57,7 @@ const lista = [...familias].sort((a, b) => ordem.indexOf(a.classe) - ordem.index
 
   <section class="sec sec--line sec--raise">
     <div class="wrap">
-      <SectionHead num="02" label="Como ler uma família" title="Cinco campos, <em>uma linhagem</em>." />
+      <SectionHead num="02" label="O que cada família traz" title="Os cinco campos <em>de cada família</em>." lead="Toda família da lista abaixo é descrita pelos mesmos cinco campos. Veja o que cada um quer dizer antes de escolher." />
       <div class="cols-3">
         {leitura.map(([t, d], i) => (
           <div class="card" data-reveal>

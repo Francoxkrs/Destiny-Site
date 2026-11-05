@@ -69,11 +69,10 @@ const req = Object.fromEntries(estagios.map((e) => [e.n, e.req]));
       <div class="timeline" data-timeline>
         <span class="timeline__fill"></span>
         {destravaEstagio.map((e) => {
-          const nv = nivelFeitico.find((x) => x.n === e.n);
           return (
             <div class="tl-item" data-reveal>
               <p class="tl-item__n">{e.n}</p>
-              <p class="tl-item__req"><small>Requisitos</small>{req[e.n]}<br /><small style="margin-top:10px">Feitiço</small>{nv.alcance} m · {nv.custo} de Mana</p>
+              <p class="tl-item__req"><small>Requisitos</small>{req[e.n]}</p>
               <div class="tl-item__gain">
                 <small>Destrava</small>
                 <dl class="kv">{e.itens.map(([a, b]) => <><dt class="t-mana">{a}</dt><dd>{b}</dd></>)}</dl>

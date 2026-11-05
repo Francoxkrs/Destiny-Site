@@ -21,24 +21,25 @@ export const capitulos = [
 export const paginas = [
   { slug: 'mundo', cap: 'I', num: '01', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos', essencial: ['Todo personagem renasce em Diamond, o reino que esgotou a própria terra.', 'A Coroa, o Lapidário e os Veios separam Realeza, Nobreza e Plebe; o Fosso é o mercado negro.', 'Clover, Spades e Heart são os reinos de onde as almas vieram.'] },
   { slug: 'familias', cap: 'II', num: '02', titulo: 'Famílias', resumo: 'Classes sociais e as 24 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
-  { slug: 'racas', cap: 'II', num: '03', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas e Elfos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
+  { slug: 'racas', cap: 'II', num: '03', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas, Elfos e Híbridos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
   { slug: 'classes', cap: 'III', num: '04', titulo: 'Classes de Mago', resumo: 'Oito estilos de combate', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma pede um Conhecimento e dá uma passiva; a Classe Avançada vem depois.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
   { slug: 'milagres', cap: 'III', num: '05', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras que mudam as regras do personagem.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
   { slug: 'magia', cap: 'III', num: '06', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
-  { slug: 'mana', cap: 'III', num: '07', titulo: 'Mana', resumo: 'Reserva, custo e Técnicas de Mana', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.'] },
+  { slug: 'mana', cap: 'III', num: '07', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
   { slug: 'atributos', cap: 'III', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
   { slug: 'ferimentos', cap: 'III', num: '09', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
-  { slug: 'progressao', cap: 'IV', num: '10', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
-  { slug: 'conhecimentos', cap: 'IV', num: '11', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
-  { slug: 'criaturas', cap: 'IV', num: '12', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
-  { slug: 'missoes', cap: 'IV', num: '13', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
-  { slug: 'generais', cap: 'IV', num: '14', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
-  { slug: 'profissoes', cap: 'V', num: '15', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
-  { slug: 'mineracao', cap: 'V', num: '16', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
-  { slug: 'itens', cap: 'V', num: '17', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
-  { slug: 'terras', cap: 'V', num: '18', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
-  { slug: 'economia', cap: 'V', num: '19', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
-  { slug: 'comecar', cap: 'VI', num: '20', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
+  { slug: 'discos', cap: 'III', num: '10', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Nenhum disco dá Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
+  { slug: 'progressao', cap: 'IV', num: '11', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
+  { slug: 'conhecimentos', cap: 'IV', num: '12', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
+  { slug: 'criaturas', cap: 'IV', num: '13', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
+  { slug: 'missoes', cap: 'IV', num: '14', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
+  { slug: 'generais', cap: 'IV', num: '15', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
+  { slug: 'profissoes', cap: 'V', num: '16', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
+  { slug: 'mineracao', cap: 'V', num: '17', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
+  { slug: 'itens', cap: 'V', num: '18', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
+  { slug: 'terras', cap: 'V', num: '19', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
+  { slug: 'economia', cap: 'V', num: '20', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
+  { slug: 'comecar', cap: 'VI', num: '21', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
 ];
 
 export const regioes = [
@@ -91,7 +92,7 @@ export const racas = [
   },
   {
     nome: 'Anões', atributos: ['Incomum', 'Incomum', 'Comum', 'I', 'II', '10%'], obtencao: 'Modelos (raro), sorteios e eventos',
-    texto: 'Quase extintos depois de séculos caçados pelos Humanos. Em Diamond, são capturados para os laboratórios; um Anão Retornado vive escondido. Forja, comida farta e verdade definem seu povo.',
+    texto: 'Quase extintos depois de séculos caçados pelos Humanos. Em Diamond, são capturados para os laboratórios; um Anão Marcado vive escondido. Forja, comida farta e verdade definem seu povo.',
     habilidades: [
       ['Discernimento Anão', 'Distingue o verdadeiro do falso; mentiras não funcionam contra ele.'],
       ['Visão Verdadeira', 'Enxerga através de ilusões enquanto tiver mais Mana atual que quem as mantém.'],
@@ -101,7 +102,7 @@ export const racas = [
   },
   {
     nome: 'Bruxas', atributos: ['Comum', 'Comum', 'Comum', 'II', 'I', '10%'], obtencao: 'Modelos (raro), sorteios e eventos',
-    texto: 'Criadas pela magia da Rainha das Bruxas e educadas nas artes obscuras. Uma Bruxa Retornada renasce longe da Floresta das Bruxas e, por isso, já nasce sob a Maldição da Rainha.',
+    texto: 'Criadas pela magia da Rainha das Bruxas e educadas nas artes obscuras. Uma Bruxa Marcada renasce longe da Floresta das Bruxas e, por isso, já nasce sob a Maldição da Rainha.',
     habilidades: [
       ['Aptidão Arcana', 'Na criação, o modelo Bruxa recebe 2 giros extras de Magia, só para ele.'],
       ['Pacto Familiar', 'Cria um familiar com um feitiço que não ocupa espaço no Grimório.'],
@@ -111,13 +112,23 @@ export const racas = [
   },
   {
     nome: 'Elfos', atributos: ['Sobre-Humana', 'Sobre-Humana', 'Sobre-Humana', 'III', 'V', '35%'], obtencao: 'Família Licht, Reencarnação Élfica, sorteios e eventos',
-    texto: 'A raça mais dotada de magia que já existiu, exterminada pelos Humanos. Foram os primeiros Retornados conhecidos. Em Diamond, são caçados como cobaias de valor inestimável.',
+    texto: 'A raça mais dotada de magia que já existiu, exterminada pelos Humanos. Foram os primeiros Marcados conhecidos. Em Diamond, são caçados como cobaias de valor inestimável.',
     habilidades: [
       ['Comunhão com a Mana', 'Regenera Mana em dobro e paga metade do custo de tudo.'],
       ['Aprendizado Natural', 'Aprende Técnicas de Mana sozinho, com metade dos treinos.'],
       ['Refinamento Superior', 'Manipula a magia com a precisão de um Estágio acima.'],
       ['Corpo Mágico', 'Acessa a Forma Mágica um Estágio antes.'],
       ['Conhecimento Proibido', 'Começa com Artes Obscuras e Artes Demoníacas, sem ocupar espaços.'],
+    ],
+  },
+  {
+    nome: 'Híbridos', atributos: ['Comum', 'Comum', 'Comum', 'Pela classe', 'Pela classe', 'Pela classe'], obtencao: 'Primeiro membro Pappitson, famílias de Bruxa que aceitam híbridas, sorteios e eventos',
+    texto: 'Filhos de Humano com Anão ou com Bruxa. Carregam o dom de um povo e a desconfiança dos dois. Em Diamond, onde Anões e Bruxas são cobaias, um Híbrido Marcado esconde metade de quem é.',
+    habilidades: [
+      ['Sangue Dividido', 'Escolhe uma habilidade da raça-mãe (Anão ou Bruxa), nunca as Limitações nem a Maldição da Rainha.'],
+      ['Adaptável', 'Na criação, o modelo Híbrido recebe 1 giro extra de Magia ou de Conhecimento, só para ele.'],
+      ['Entre Dois Povos', 'Famílias de sangue puro (Enoteca, Frankenstein, Alonargez) não aceitam Híbridos.'],
+      ['Despertar Anão', 'Um Híbrido de Anão pode despertar o Milagre Hibridismo (ver Milagres).'],
     ],
   },
 ];
@@ -130,30 +141,31 @@ export const classesSociais = [
 
 // classe: Realeza | Nobreza | Plebe ; raridade: Comum | Rara | Sorteio
 export const familias = [
-  { nome: 'Kira', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Família governante de Clover, juízes do trono.', magias: 'Balança; Luz só para o primeiro Retornado', heranca: ['Milagre Amado pela Mana', 'Conhecimento em Retórica', 'Zona de Mana um Estágio antes'], marco: '4º Estágio: Conhecimento em Arcanologia' },
+  { nome: 'Kira', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Família governante de Clover, juízes do trono.', magias: 'Balança; Luz só para o primeiro Marcado', heranca: ['Milagre Amado pela Mana', 'Conhecimento em Retórica', 'Zona de Mana um Estágio antes'], marco: '4º Estágio: Conhecimento em Arcanologia' },
   { nome: 'Vermillion', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Linhagem real de sangue quente.', magias: 'Fogo, Plantas, Cerejeira', heranca: ['Conhecimento em Combate', 'Força e Resistência +1 classificação'], marco: '5º Estágio: Milagre Mana Distinta (Mana Quente), se não tiver Milagre' },
   { nome: 'Silva', classe: 'Realeza', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Casa real ligada aos Elfos, obcecada por controle.', magias: 'Mercúrio, Névoa, Água', heranca: ['Percepção de Mana', 'Conhecimento em Magia', 'Forma Mágica um Estágio antes'], giro: '30% de Milagre Vaso Defeituoso', marco: '8º Estágio: o primeiro com Água recebe o feitiço Leviatã (Grau III)' },
-  { nome: 'Grinberryal', classe: 'Realeza', origem: 'Spades', raca: 'Humanos', raridade: 'Rara', vagas: 3, lema: 'Antiga família real de Spades, derrubada pela Tríade.', magias: 'Sol, Lua, Estrela (se não houver usuário)', heranca: ['Milagre Amado pela Mana', 'Mana +1 nível', 'Conhecimento em Magia'], marco: '6º Estágio: pode reivindicar a coroa de Spades em evento' },
-  { nome: 'Lolopechka', classe: 'Realeza', origem: 'Heart', raca: 'Humanos', raridade: 'Rara', lema: 'Reina em Heart, protegida pelo espírito da água.', magias: 'Água', heranca: ['Percepção de Mana', 'Matriz Rúnica sem requisito', 'Conhecimento em Magia'], marco: '5º Estágio: o primeiro com Água pode firmar pacto com Undine' },
+  { nome: 'Grinberryal', classe: 'Realeza', origem: 'Spades', raca: 'Humanos', raridade: 'Sorteio', vagas: 3, lema: 'Antiga família real de Spades, derrubada pela Tríade.', magias: 'Sol, Lua, Estrela (se não houver usuário)', heranca: ['Milagre Amado pela Mana', 'Mana +1 nível', 'Conhecimento em Magia'], marco: '6º Estágio: pode reivindicar a coroa de Spades em evento' },
+  { nome: 'Lolopechka', classe: 'Realeza', origem: 'Heart', raca: 'Humanos', raridade: 'Rara', lema: 'Reina em Heart, protegida pelo espírito da água.', magias: 'Água', heranca: ['Percepção de Mana', 'Matriz Rúnica sem requisito', 'Conhecimento em Magia'], marco: '7º Estágio: o primeiro com Água pode firmar pacto com Undine' },
   { nome: 'Zogratis', classe: 'Realeza', origem: 'Spades', raca: 'Humanos', raridade: 'Sorteio', vagas: 3, lema: 'Tomaram Spades e lideram a Tríade.', magias: 'Sangue, Ossos, Corpo', heranca: ['Grimório Demoníaco', 'Conhecimento em Artes Demoníacas', 'Força e Resistência +1 classificação', 'Traço Presença Impactante'], marco: '4º Estágio: pode disputar a liderança da Tríade' },
   { nome: 'Faust', classe: 'Nobreza', origem: 'Clover', raca: 'Humanos', raridade: 'Sorteio', lema: 'Estudaram demônios até serem destruídos por um.', magias: 'Sombras, Luz', heranca: ['Conhecimento em Artes Demoníacas', 'Conhecimento em Oratória', 'Poder Mágico +1 nível'], marco: '7º Estágio: o Grimório vira Demoníaco' },
   { nome: 'Libardirt', classe: 'Nobreza', origem: 'Diamond', raca: 'Humanos', raridade: 'Rara', lema: 'Cientistas reais de Diamond, mestres da costura de grimórios.', magias: 'Recombinação, Gel', heranca: ['Conhecimento Científico', 'Costura Grimórios na metade do tempo e do custo', 'Laboratório próprio (Câmara de Mana)'], giro: '50% de trocar a magia por Modificação', marco: '6º Estágio: Conhecimento em Ciências Aplicadas' },
-  { nome: 'Vangeance', classe: 'Nobreza', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Um atributo mágico incomum e um capitão lendário.', magias: 'Plantas, Cerejeira', heranca: ['Poder Mágico +1 nível'], marco: '4º Estágio: se for Elfo, Árvore do Mundo e Milagre Dupla Alma (1 vaga)' },
+  { nome: 'Vangeance', classe: 'Nobreza', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Um atributo mágico incomum e um capitão lendário.', magias: 'Plantas, Cerejeira', heranca: ['Poder Mágico +1 nível'], giro: 'Giro de Linhagem: Árvore do Mundo', marco: '4º Estágio: Milagre Dupla Alma (1 vaga), de qualquer raça' },
   { nome: 'Boismortier', classe: 'Nobreza', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Artistas de magia poderosa e desgastante.', magias: '—', heranca: ['Milagre Amado pela Mana', '+1 Acréscimo em todos os feitiços'], giro: '60% de Pintura; 15% de Reencarnação Élfica' },
   { nome: 'Voltia', classe: 'Nobreza', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Sentem a mana por instinto e vivem pela batalha.', magias: 'Relâmpago', heranca: ['Percepção de Mana', 'Conhecimento em Combate', 'Método de Mana e Forma Mágica com metade dos treinos'], marco: '7º Estágio: Fúria de Batalha' },
   { nome: 'Roselei', classe: 'Nobreza', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Marcados por uma maldição que atravessa gerações.', magias: 'Roseiras, Terra, Plantas', heranca: ['Corpo Amaldiçoado', 'Método de Mana e Forma Mágica um Estágio antes'], giro: '40% de Reencarnação Élfica' },
   { nome: 'Agrippa', classe: 'Plebe', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Pele pálida, olhos anelados e a Magia de Maldição.', magias: 'Veneno', heranca: ['Conhecimento em Maldição', 'Feitiços de Maldição +1 Acréscimo', 'Anulam a parte ruim do Corpo Amaldiçoado'], marco: 'Os 3 primeiros criam uma maldição própria' },
   { nome: 'Ideale', classe: 'Plebe', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Os primeiros plebeus a vestir um manto de cavaleiro.', magias: 'Fogo, Fumaça', heranca: ['Conhecimento em Armadilha', '+4 espaços só para Armadilha'], giro: '40% de Matriz Rúnica; 8% de Amado pela Mana' },
-  { nome: 'Lichita', classe: 'Plebe', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Uma mulher que se isolou para não sugar a mana dos outros.', magias: '—', heranca: ['Resistência +1 classificação'], giro: '15% Sem Magia; com magia, 33% de Doença de Mana', marco: '5º Estágio: o primeiro Sem Magia recebe o Demônio da Antimagia' },
+  { nome: 'Lichita', classe: 'Plebe', origem: 'Clover', raca: 'Humanos', raridade: 'Comum', lema: 'Uma mulher que se isolou para não sugar a mana dos outros.', magias: '—', heranca: ['Resistência +1 classificação'], giro: '15% Sem Magia; com magia, 33% de Doença de Mana', marco: '8º Estágio: o primeiro Sem Magia recebe o Demônio da Antimagia' },
   { nome: 'Sukehiro', classe: 'Plebe', origem: 'Terra do Sol', raca: 'Humanos', raridade: 'Sorteio', lema: 'Estrangeiros que lutam com lâmina e Ki.', magias: '—', heranca: ['Leitura de Ki', 'Conhecimento em Esgrima', 'Força +1 classificação', 'Katana de qualidade Incomum'], marco: '5º Estágio: os dois primeiros podem receber Escuridão' },
-  { nome: 'Swallowtail', classe: 'Plebe', origem: 'Spades', raca: 'Humanos', raridade: 'Rara', lema: 'Curam com qualquer magia.', magias: 'Corpo', heranca: ['Conhecimento Medicinal', 'Reversão: qualquer feitiço recebe Restauração', '+1 classificação num atributo físico'] },
+  { nome: 'Swallowtail', classe: 'Plebe', origem: 'Clover', raca: 'Humanos', raridade: 'Rara', lema: 'Seladores antigos de Clover. A última da linhagem passou séculos selada no corpo de uma ave.', magias: 'Selamento', heranca: ['Função Perdida Selamento, sem requisito', 'Selo Rúnico sem requisito de Estágio', 'Conhecimento em Magia'], marco: '5º Estágio: Forma Selada. Vira uma ave por até 1 cena: não lança feitiços, e ninguém sente a sua mana' },
+  { nome: 'Valerian', classe: 'Plebe', origem: 'Spades', raca: 'Humanos', raridade: 'Rara', lema: 'Curam com qualquer magia.', magias: 'Corpo', heranca: ['Conhecimento Medicinal', 'Reversão: qualquer feitiço recebe Restauração', '+1 classificação num atributo físico'] },
   { nome: 'Frankenstein', classe: 'Plebe', origem: 'Diamond', raca: 'Anões', raridade: 'Comum', lema: 'Anões escravizados nos laboratórios de Diamond.', magias: '—', heranca: ['Força e Resistência +1 classificação', 'Arma pesada de qualidade Épica', 'Não pode ser Mago Artífice'] },
   { nome: 'Pappitson', classe: 'Plebe', origem: 'Clover', raca: 'Anões', raridade: 'Comum', lema: 'Anões antigos escondidos entre plebeus.', magias: '—', heranca: ['Resistência +1 classificação', 'Estudos e Técnicas pela metade'], marco: '7º Estágio: Hibridismo e Magia de Comida' },
   { nome: 'Alonargez', classe: 'Plebe', origem: 'Reino Subterrâneo', raca: 'Anões', raridade: 'Rara', lema: 'A família real dos Anões, criadores da ciência.', magias: '—', heranca: ['Resistência +1 classificação', 'Traço Resistência a Malefícios', 'Conhecimento Científico', 'Poder Mágico +1 nível'], marco: '6º Estágio: Magia de Forja (3 primeiros)' },
-  { nome: 'Enoteca', classe: 'Plebe', origem: 'Floresta das Bruxas', raca: 'Bruxas', raridade: 'Comum', lema: 'A família real das Bruxas.', magias: 'Fios', heranca: ['Conhecimento em Maldição', 'Mana +1 nível'], giro: '30% de trocar a magia por Sangue', marco: '4º Estágio: Rainha das Bruxas; 3º: Fio Vermelho do Destino' },
+  { nome: 'Enoteca', classe: 'Plebe', origem: 'Floresta das Bruxas', raca: 'Bruxas', raridade: 'Comum', lema: 'A família real das Bruxas.', magias: 'Fios', heranca: ['Conhecimento em Maldição', 'Mana +1 nível'], giro: '30% de trocar a magia por Sangue', marco: '6º Estágio: Fio Vermelho do Destino; 4º: Rainha das Bruxas' },
   { nome: 'Trinity', classe: 'Plebe', origem: 'Floresta das Bruxas', raca: 'Bruxas', raridade: 'Rara', lema: 'Linhagem apagada, construtora das defesas da floresta.', magias: 'Barreiras', heranca: ['Milagre Amado pela Mana', 'Traço Presença Impactante', 'Conhecimento em Magia', '+3 espaços só para Criação'] },
-  { nome: 'Unsworth', classe: 'Plebe', origem: 'Clover', raca: 'Bruxas', raridade: 'Comum', lema: 'Bruxas que fugiram e fizeram nome entre os humanos.', magias: '—', heranca: ['Percepção de Mana', 'Uma varinha', 'Conhecimento em Magia no 7º Estágio'], marco: '5º Estágio: a primeira pode trocar a magia por Sonhos' },
-  { nome: 'Licht', classe: 'Plebe', origem: 'Elfos', raca: 'Elfos', raridade: 'Rara', lema: 'Almas élficas que voltam escondidas em corpos novos.', magias: 'Luz, Espadas', heranca: ['+3 feitiços iniciais', 'Poder Mágico +1 nível', 'Forma Mágica um Estágio antes'], giro: '45% de Terceiro Olho', marco: '6º Estágio: Conhecimento em Arcanologia' },
+  { nome: 'Unsworth', classe: 'Plebe', origem: 'Clover', raca: 'Bruxas', raridade: 'Comum', lema: 'Bruxas que fugiram e fizeram nome entre os humanos.', magias: 'Ilusão (qualquer Unsworth pode ter)', heranca: ['Percepção de Mana', 'Uma varinha', 'Conhecimento em Magia no 7º Estágio'], giro: 'Giro de Linhagem: Sonhos; se já houver usuário, vira Ilusão' },
+  { nome: 'Licht', classe: 'Plebe', origem: 'Elfos', raca: 'Elfos', raridade: 'Sorteio', lema: 'Almas élficas que voltam escondidas em corpos novos.', magias: 'Luz, Espadas', heranca: ['+3 feitiços iniciais', 'Poder Mágico +1 nível', 'Forma Mágica um Estágio antes'], giro: '45% de Terceiro Olho', marco: '6º Estágio: Conhecimento em Arcanologia' },
 ];
 
 export const classesMago = [
@@ -168,13 +180,18 @@ export const classesMago = [
 ];
 
 export const milagres = [
-  { nome: 'Mana Distinta', antes: 'Característica Mágica', texto: 'A mana tem uma natureza própria: densa, quente, cortante. Definida com o Conselho Mágico.', efeitos: ['Todos os feitiços carregam a propriedade.', 'Uma vez por cena, +1 Acréscimo num atributo coerente com ela.'] },
-  { nome: 'Anomalia Mágica', antes: 'Dominador', texto: 'Entende a magia por instinto e tem menos limites que os outros.', efeitos: ['Técnicas de Mana com metade dos treinos e alcance ampliado.', 'Feitiços custam 20% menos e começam com Maestria 2.', 'Lutas extremas contam como treinos de Técnica.'] },
+  { nome: 'Mana Distinta', texto: 'A mana tem uma natureza própria: densa, quente, cortante. Definida com o Conselho Mágico.', efeitos: ['Todos os feitiços carregam a propriedade.', 'Uma vez por cena, +1 Acréscimo num atributo coerente com ela.'] },
+  { nome: 'Anomalia Mágica', texto: 'Entende a magia por instinto e tem menos limites que os outros.', efeitos: ['Técnicas de Mana com metade dos treinos e alcance ampliado.', 'Feitiços custam 20% menos e começam com Maestria 2.', 'Lutas extremas contam como treinos de Técnica.'] },
   { nome: 'Dupla Alma', texto: 'Duas almas dividem o mesmo corpo, acorrentadas uma à outra.', efeitos: ['Alma Forte e Alma Fraca, cada uma com magia e grimório.', 'A troca custa o turno e troca feitiços e personalidade.', 'A Alma Forte pode se disfarçar da outra.'] },
   { nome: 'Insignificância', restricao: 'Só Plebe', texto: 'Nasceu quase sem mana num mundo onde a magia é tudo. No lugar da força, engenho.', efeitos: ['Mana um nível abaixo da classe (mínimo 50).', 'Matriz Rúnica sem requisito e sem limite de runas.', 'Percepção de Mana desde o início.', 'Nobres subestimam suas armadilhas.'] },
-  { nome: 'Vaso Defeituoso', texto: 'Correntes enferrujadas: falta controle e sobra potência.', efeitos: ['Cada nível de Mana vale o dobro.', 'Poder Mágico +1 nível.', 'Treinos de Controle rendem metade.'] },
-  { nome: 'Amado pela Mana', antes: 'Prodígio e Adorado pela Mana', texto: 'A mana reconhece o personagem e flui com mais naturalidade ao seu redor.', efeitos: ['Mana e Poder Mágico +1 nível.', 'Treinos mágicos e de Controle contam em dobro.', 'Pode receber um Grimório Lendário.'] },
+  { nome: 'Vaso Defeituoso', texto: 'Correntes enferrujadas: falta controle e sobra potência.', efeitos: ['Cada nível de Mana vale o dobro.', 'Poder Mágico +1 nível.', 'Começa com -10% de Controle (mínimo 0%) e nunca passa de 70%.', 'Treinos de Controle rendem metade.'] },
+  { nome: 'Amado pela Mana', texto: 'A mana reconhece o personagem e flui com mais naturalidade ao seu redor.', efeitos: ['Mana e Poder Mágico +1 nível.', 'Treinos mágicos e de Controle contam em dobro.', 'Pode receber um Grimório Lendário.'] },
   { nome: 'Tengentsu', texto: 'Técnica ocular do País do Sol que lê o Ki. O preço é a própria magia.', efeitos: ['Vê com precisão tudo ao redor no presente.', 'Lê intenções; nunca é pego desprevenido.', 'Renuncia à mana: sem feitiços nem Técnicas.'] },
+  { nome: 'Corpo Amaldiçoado', restricao: 'Roselei, Boost ou sorteio', texto: 'Uma bênção de nascença paga com uma perda do mesmo tamanho. O corpo é mais forte num ponto e amaldiçoado nesse mesmo ponto.', efeitos: ['+1 Acréscimo permanente num atributo à escolha, físico ou mágico.', 'O jogador escreve a maldição ligada a esse atributo, maior que a bênção, e o Conselho Mágico aprova.', 'A família Agrippa anula a parte ruim.'] },
+  { nome: 'Fúria de Batalha', restricao: 'Voltia (7º Estágio), Boost ou sorteio', texto: 'O corpo pede luta. A adrenalina cresce quando o combate fica sério e explode quando a morte chega perto.', efeitos: ['Em combate: +1 Acréscimo em Força, Velocidade e Poder Mágico.', 'Imune a Presença Impactante.', 'Com Ferimento III ou pior, entra em Fúria: +1 classificação em todos os atributos por 4 turnos. Depois desmaia.'] },
+  { nome: 'Doença de Mana', restricao: 'Lichita (giro)', texto: 'Uma doença antiga dos Veios. O corpo suga a mana de quem está perto, sem querer, e não escolhe entre amigo e inimigo.', efeitos: ['No próprio turno, drena 20 de Mana de cada pessoa a até 1/3 do alcance da magia. Fora de combate, bem menos.', 'Drena 2 Acréscimos de Resistência por turno de quem estiver a até 1/4 do alcance.', 'Os próprios Ferimentos agravam um grau mais rápido.'] },
+  { nome: 'Reencarnação Élfica', restricao: 'Giro de Linhagem, Boost, sorteios e eventos', texto: 'Uma alma élfica dorme dentro do Marcado, esperando a hora de voltar.', efeitos: ['Enquanto o elfo dorme: +1 Acréscimo em Mana, Poder Mágico e Controle.', 'Quando a Reencarnação acontece em evento: +1 nível em todos os atributos mágicos, mas o elfo controla o corpo até a alma dele sair.', 'Depois, o personagem pode virar Elfo (ver Raças).'] },
+  { nome: 'Hibridismo', restricao: 'Pappitson (7º Estágio) ou sorteio', texto: 'O sangue anão antigo acorda com o ódio. O Marcado se conecta ao seu anão interior e vira outra coisa por alguns turnos.', efeitos: ['Ativado por uma emoção negativa forte e plausível, causada por outro ser.', 'Troca a magia por uma segunda, Lendária ou menor e inversa à original (Água vira Fogo, Fogo vira Plantas), por 5 turnos.', '+1 classificação em todos os atributos durante esses 5 turnos.'] },
   { nome: 'Absorção e Emissão', restricao: 'Só em Diamond', texto: 'Um corpo refeito em cirurgia para engolir magia alheia e devolvê-la.', efeitos: ['Absorve feitiços que atingem o corpo e guarda a Mana.', 'Emite a energia como ataque do mesmo Grau.', 'Perde a própria magia; excesso causa Ferimento II.'] },
 ];
 
@@ -190,7 +207,7 @@ export const tracos = [
   ['Presença Impactante', 'Uma vez por cena, -1 Acréscimo em oponentes por 3 turnos'],
   ['Determinação Total', 'Imune a Presença Impactante; Estudos 10% mais rápidos'],
   ['Resistência a Malefícios', '+1 de Resistência contra veneno, maldição e queimadura'],
-  ['Alma Indomável', '+0,5% extra em cada treino de Controle; ao despertar, abre o Feitiço de Alma'],
+  ['Alma Indomável', '+0,5% extra em cada treino de Controle; ao despertar, abre o Feitiço de Alma, numa das Vias ou num desenhado pelo jogador'],
   ['Ligação Natural', 'Entende criaturas; Domação com uma cena a menos, +1 no limite de vinculadas e Assimilação 2 turnos mais longa'],
 ];
 
@@ -241,10 +258,10 @@ export const tecnicas = [
 export const magias = [
   { raridade: 'Comum', vagas: 15, chance: 45, lista: ['Fogo', 'Água', 'Terra', 'Vento', 'Relâmpago', 'Plantas', 'Névoa', 'Asas'] },
   { raridade: 'Incomum', vagas: 10, chance: 27, lista: ['Correntes', 'Gelo', 'Óleo Negro', 'Fios', 'Espelhos', 'Fumaça', 'Cristal', 'Algodão', 'Ferro', 'Recombinação', 'Globo Ocular', 'Butoh', 'Gel'] },
-  { raridade: 'Rara', vagas: 7, chance: 15, lista: ['Som', 'Ilusão', 'Música', 'Pele', 'Roseiras', 'Mosquito', 'Ossos', 'Cabelo', 'Dados', 'Areia', 'Sombras', 'Mercúrio', 'Aço', 'Espacial Defensiva', 'Veneno'] },
-  { raridade: 'Épica', vagas: 5, chance: 9, lista: ['Espacial Ofensiva', 'Feral', 'Olhos', 'Legião', 'Memória', 'Balança', 'Vórtice', 'Comida', 'Sangue', 'Bússola', 'Luz', 'Cerejeira'] },
-  { raridade: 'Lendária', vagas: 3, chance: 4, lista: ['Modificação', 'Ar', 'Espadas', 'Selamento', 'Pintura', 'Imitação', 'Corte', 'Barreiras', 'Fungos', 'Cadáver', 'Catalisadora', 'Permeação', 'Corpo'] },
-  { raridade: 'Exclusiva', vagas: null, chance: null, lista: ['Tempo', 'Estrelas', 'Sol', 'Lua', 'Original', 'Transmutação', 'Árvore do Mundo', 'Fio Vermelho do Destino', 'Sonhos', 'Jogos', 'Almas', 'Anti-Maldição', 'Chaves', 'Gravidade', 'Escuridão', 'Transcrição Mágica', 'Forja'] },
+  { raridade: 'Rara', vagas: 7, chance: 15, lista: ['Som', 'Ilusão', 'Música', 'Pele', 'Roseiras', 'Mosquito', 'Ossos', 'Cabelo', 'Areia', 'Mercúrio', 'Aço', 'Veneno'] },
+  { raridade: 'Épica', vagas: 5, chance: 9, lista: ['Feral', 'Olhos', 'Legião', 'Memória', 'Balança', 'Vórtice', 'Sangue', 'Bússola', 'Cerejeira', 'Sombras', 'Dados'] },
+  { raridade: 'Lendária', vagas: 3, chance: 4, lista: ['Modificação', 'Espadas', 'Selamento', 'Pintura', 'Imitação', 'Corte', 'Barreiras', 'Fungos', 'Cadáver', 'Catalisadora', 'Permeação', 'Corpo', 'Espacial Defensiva'] },
+  { raridade: 'Exclusiva', vagas: null, chance: null, lista: ['Tempo', 'Estrelas', 'Sol', 'Lua', 'Original', 'Transmutação', 'Árvore do Mundo', 'Fio Vermelho do Destino', 'Sonhos', 'Jogos', 'Almas', 'Anti-Maldição', 'Chaves', 'Gravidade', 'Escuridão', 'Transcrição Mágica', 'Forja', 'Espacial Ofensiva', 'Comida', 'Luz', 'Ar'] },
 ];
 
 export const grimorios = [
@@ -338,7 +355,7 @@ export const ranks = [
 
 export const segundaVida = {
   titulo: 'A Segunda Vida',
-  texto: 'Ninguém sabe por que certas almas voltam, nem por que todas voltam em Diamond. Os estudiosos do Lapidário chamam o fenômeno de Retorno e os renascidos de Retornados. Um Retornado lembra fragmentos da vida anterior: um nome de família, uma magia, um juramento. O resto ele precisa descobrir.',
+  texto: 'Ninguém sabe por que certas almas voltam, nem por que todas voltam em Diamond. Toda alma que volta traz no corpo uma Marca, um sinal que a mana de Diamond reconhece, e por isso os renascidos são chamados de Marcados. Um Marcado lembra fragmentos da vida anterior: um nome de família, uma magia, um juramento. O resto ele precisa descobrir.',
 };
 
 export const primeirosPassos = [
@@ -421,7 +438,7 @@ export const bibliotecas = [
 ];
 
 export const generais = {
-  texto: 'A força militar de elite de Diamond nasce de experimentos. Crianças e jovens passam por procedimentos, treinos e condições extremas; muitos não sobrevivem, e os que sobrevivem são educados para obedecer, combater e eliminar. Os Retornados que se apresentam ao Exame da Forja passam por uma versão abreviada desse processo.',
+  texto: 'A força militar de elite de Diamond nasce de experimentos. Crianças e jovens passam por procedimentos, treinos e condições extremas; muitos não sobrevivem, e os que sobrevivem são educados para obedecer, combater e eliminar. Os Marcados que se apresentam ao Exame da Forja passam por uma versão abreviada desse processo.',
   cultura: 'Força, obediência e opressão. A posição na hierarquia depende de quem a ocupa e pode ser tomada em desafio. Uma ordem direta do Rei não pode ser recusada por ninguém.',
   exame: 'Seleção anual na Coroa. Quem passa entra como Recruta Brilhante. As regras de cada edição são publicadas pelo bot.',
   patentes: [
@@ -493,7 +510,7 @@ export const criacao = {
 
 export const sincronia = 'Um vínculo entre dois ou três personagens que já passaram juntos por duas situações de vida ou morte (uma delas em evento) e por duas lutas entre si com motivo real. Desperta numa situação de risco de vida. Enquanto ativa, os envolvidos recuperam 50% da Mana uma vez, recebem +1 Acréscimo em Força e Velocidade, coordenam ações sem falar e podem criar feitiços de união.';
 
-export const exclusivasAntigas = 'Prodígio e Adorado pela Mana viraram o Milagre Amado pela Mana; Dupla Alma, Tengentsu e Absorção e Emissão são Milagres; Berserk virou a Fúria de Batalha dos Voltia; Corpo Amaldiçoado ficou com os Roselei; Doença de Mana ficou com os Lichita; Reencarnação Élfica virou Giro de Linhagem; Hibridismo virou o Marco dos Pappitson no 7º Estágio.';
+export const exclusivasAntigas = 'Prodígio e Adorado pela Mana viraram o Milagre Amado pela Mana; Dupla Alma, Tengentsu e Absorção e Emissão são Milagres; Berserk virou o Milagre Fúria de Batalha (Voltia); Corpo Amaldiçoado (Roselei), Doença de Mana (Lichita), Reencarnação Élfica (Giro de Linhagem) e Hibridismo (Pappitson) continuam como Milagres.';
 
 // Utilitário: transforma um nome em caminho de arquivo (para os espaços de imagem).
 // ——— Criaturas (proposta para o Silas revisar) ———
@@ -503,18 +520,35 @@ export const criaturas = {
     ['Bestas Comuns', 'Animais sem mana: corvos, cabras de planalto, cães de mina. Domáveis desde o 9º Estágio.', 'F a E'],
     ['Bestas Mágicas', 'Animais que carregam mana e uma Habilidade Natural ligada a ela. Mais raras em Diamond, comuns perto da Fronteira.', 'D a A'],
     ['Quimeras', 'Criaturas montadas nos laboratórios do Lapidário a partir de várias outras. Instáveis e cobiçadas; muitas escapam para o Fosso.', 'C a A'],
-    ['Espíritos e Lendas', 'Seres de mana pura ou bestas antigas. Só aparecem em eventos e nunca são domados à força.', 'S'],
+    ['Espíritos e Lendas', 'Seres de mana pura ou bestas antigas. Só aparecem em eventos e nunca são domados à força.', 'B a S'],
   ],
   bestiario: [
-    { nome: 'Corvo-de-Cinza', rank: 'F', tipo: 'Besta Comum', onde: 'Fronteira Cinzenta', fisico: 'Comum', natural: 'Mensageiro: leva bilhetes até 5 km e volta sozinho.' },
-    { nome: 'Cão-de-Mina', rank: 'F', tipo: 'Besta Comum', onde: 'Os Veios', fisico: 'Comum', natural: 'Faro de Gás: sente gás e desabamento antes de acontecer.' },
-    { nome: 'Cabra-de-Planalto', rank: 'E', tipo: 'Besta Comum', onde: 'Planaltos áridos', fisico: 'Incomum', natural: 'Montaria de encosta: escala paredes de pedra com o cavaleiro.' },
-    { nome: 'Lobo-da-Fronteira', rank: 'D', tipo: 'Besta Mágica', onde: 'Fronteira Cinzenta', fisico: 'Incomum (+4 em Velocidade)', natural: 'Matilha: +1 Acréscimo para cada aliado lutando ao lado.' },
-    { nome: 'Serpente-de-Cristal', rank: 'C', tipo: 'Besta Mágica', onde: 'Jazidas profundas', fisico: 'Sobre-Humana', natural: 'Escamas de Cristal: +1 de Resistência contra feitiços.' },
-    { nome: 'Quimera do Lapidário', rank: 'B', tipo: 'Quimera', onde: 'O Lapidário e o Fosso', fisico: 'Extrema', natural: 'Enxerto: tem duas Habilidades Naturais, mas perde o controle com Ferimento III.' },
-    { nome: 'Grifo-Cinzento', rank: 'A', tipo: 'Besta Mágica', onde: 'Picos da Fronteira', fisico: 'Colossal', natural: 'Voo de Guerra: carrega dois cavaleiros e mergulha com +1 classificação de Força.' },
-    { nome: 'Verme de Cristal Negro', rank: 'S', tipo: 'Lenda', onde: 'Onde a mana morreu', fisico: 'Titânica', natural: 'Devora mana: feitiços a 20 m custam o dobro.' },
+    { nome: 'Arauto-de-Fuligem', cientifico: 'Corvus cinerarius', img: 'arauto-de-fuligem', rank: 'F', tipo: 'Besta Comum', onde: 'Fronteira Cinzenta', fisico: 'Comum', natural: 'Mensageiro: leva bilhetes até 5 km e volta sozinho. As penas soltam fuligem, e o rastro dele no céu é como os Veios avisam que vem gente.' },
+    { nome: 'Farejador-de-Grisu', cientifico: 'Canis grisuphilus', img: 'farejador-de-grisu', rank: 'F', tipo: 'Besta Comum', onde: 'Os Veios', fisico: 'Comum', natural: 'Faro de Grisu: sente gás de mina e desabamento antes de acontecer. Todo poço dos Veios tem um, e nenhum mineiro desce sem ele.' },
+    { nome: 'Chifre-Espiral', cientifico: 'Capra helicoceros', img: 'chifre-espiral', rank: 'E', tipo: 'Besta Comum', onde: 'Planaltos áridos', fisico: 'Incomum', natural: 'Montaria de Encosta: escala paredes de pedra com o cavaleiro. Os chifres crescem um anel por seca que a cabra sobrevive.' },
+    { nome: 'Lobo Olho-de-Brasa', cientifico: 'Lupus limitaneus', img: 'lobo-olho-de-brasa', rank: 'D', tipo: 'Besta Mágica', onde: 'Fronteira Cinzenta', fisico: 'Incomum (+4 em Velocidade)', natural: 'Matilha: +1 Acréscimo para cada aliado lutando ao lado. Os olhos acendem quando ele sente mana, e é assim que a matilha escolhe a presa.' },
+    { nome: 'Alva-da-Névoa', cientifico: 'Crystallophis nebularis', img: 'alva-da-nevoa', rank: 'C', tipo: 'Besta Mágica', onde: 'Jazidas profundas', fisico: 'Sobre-Humana', natural: 'Escamas de Cristal: +1 de Resistência contra feitiços. Exala uma névoa de pó de cristal que esconde quem estiver a até 10 m dela.' },
+    { nome: 'Monólito-Andante', cientifico: 'Lithopodus muscosus', img: 'monolito-andante', rank: 'C', tipo: 'Besta Mágica', onde: 'Planaltos mortos', fisico: 'Sobre-Humana (+4 em Resistência)', natural: 'Último Musgo: carrega nas costas um dos últimos musgos vivos de Diamond. Uma Terra onde ele descansa por uma semana sobe um grau de Vigor.' },
+    { nome: 'Rubrossigilo', cientifico: 'Ignifer stigmatus', img: 'rubrossigilo', rank: 'B', tipo: 'Besta Mágica', onde: 'Forjas abandonadas do Lapidário', fisico: 'Extrema', natural: 'Sigilos Ardentes: cada golpe acende uma marca no alvo; na terceira marca, o alvo sofre um Ferimento I extra de queimadura.' },
+    { nome: 'Manticorno de Enxerto', cientifico: 'Chimaera lapidaria', img: 'manticorno-de-enxerto', rank: 'B', tipo: 'Quimera', onde: 'O Lapidário e o Fosso', fisico: 'Extrema', natural: 'Enxerto: juba de leão, chifres de carneiro e cauda de escorpião costurados por um cientista. Tem duas Habilidades Naturais, mas perde o controle com Ferimento III.' },
+    { nome: 'Vigia-dos-Girassóis', cientifico: 'Helianthus vigilans', img: 'vigia-dos-girassois', rank: 'B', tipo: 'Espírito', onde: 'Estufas de Mana abandonadas', fisico: 'Incomum', natural: 'Mil Olhos: vê tudo o que os girassóis dela veem a até 200 m. Ninguém a pega de surpresa, e quem ataca escondido perde o bônus.' },
+    { nome: 'Ossuário Errante', cientifico: 'Umbra ossilegens', img: 'ossuario-errante', rank: 'A', tipo: 'Espírito', onde: 'As valas do Fosso', fisico: 'Colossal', natural: 'Coleta os Mortos: cada pessoa ou criatura que morre a até 30 m dele vira mais um braço; +1 Acréscimo de Força por morte na cena (máx. +5).' },
+    { nome: 'Devorador-de-Veios', cientifico: 'Vermis manivorax', img: 'devorador-de-veios', rank: 'S', tipo: 'Lenda', onde: 'Onde a mana morreu', fisico: 'Titânica', natural: 'Devora Mana: feitiços a até 20 m custam o dobro. Dizem que foi ele, e não a mineração, que secou Diamond.' },
   ],
+  rupestre: 'Ninguém em Diamond desenhou estas criaturas. Os registros vêm das paredes das cavernas abaixo dos Veios, pintados com ocre e carvão por alguém que viu tudo isto muito antes do reino existir.',
+  patrocinadoras: {
+    texto: 'Antes de Diamond secar, três coisas já moravam embaixo dele. Não têm Rank, não aparecem nas paredes das cavernas e ninguém as doma. São as Patrocinadoras: escolhem um Marcado, bancam a segunda vida dele e um dia cobram.',
+    lista: [
+      { nome: 'Gan', img: 'gan', epiteto: 'A Que Empresta', dominio: 'Dívida e fortuna', aparencia: 'Uma boca dourada sem rosto, cercada de moedas que giram como luas pequenas.', patrocinio: 'Todo pagamento que o escolhido recebe vem com +10% de Yuls.', preco: 'Gan cobra o que empresta: se o escolhido ficar com Yuls negativos, perde um item à escolha do narrador.' },
+      { nome: 'Org', img: 'org', epiteto: 'A Que Cresce', dominio: 'Carne, criaturas e o que ainda está vivo', aparencia: 'Uma massa verde de raízes e olhos que se move por baixo da terra morta.', patrocinio: 'As criaturas aceitam o escolhido: a Domação pede uma cena a menos (mínimo 1), e Ferimentos II fecham com 12 h de descanso em vez de 24 h.', preco: 'O corpo do escolhido começa a florescer: no 6º Estágio ganha uma Sequela estética (musgo, folhas, olhos a mais) que não sai mais.' },
+      { nome: 'Preg', img: 'preg', epiteto: 'A Que Rasga', dominio: 'Caos, guerra e o céu vermelho', aparencia: 'Um rosto verde em cacos, um olho azul que não pisca e um sorriso de vidro quebrado, recortado contra um céu vermelho.', patrocinio: 'Uma vez por cena, ao sofrer um Ferimento III, o escolhido ganha +1 Acréscimo em Força e Velocidade até o fim da cena.', preco: 'Preg odeia tédio: um ciclo inteiro sem lutar custa 10% da Mana máxima até a próxima luta.' },
+    ],
+    regras: [
+      ['Quem escolhe', 'A Patrocinadora escolhe; o jogador não pede. A escolha acontece em evento da Staff ou como prêmio especial.'],
+      ['Uma por vida', 'Um personagem tem no máximo uma Patrocinadora, e ela não troca.'],
+      ['Romper', 'O jogador pode romper o patrocínio a qualquer momento. Perde o Patrocínio na hora e carrega o Preço por mais 1 mês real.'],
+    ],
+  },
   domacao: [
     ['Encontro', 'A criatura aparece numa missão, num evento ou numa cena de caça com narrador. Fora disso, não existe criatura para domar.'],
     ['Aproximação', 'Dois caminhos. Confiança: cenas de aproximação (alimentar, curar, proteger), sem ferir a criatura. Subjugação: vencer o confronto sem matar, deixando-a em Ferimento III. Criatura subjugada começa Arisca.'],
@@ -613,7 +647,7 @@ export const feridas = {
     ['Cirurgia Arcana', 'Incomum · só no Lapidário', 'Trata IV, corrige Sequelas, implanta próteses'],
     ['Ressurreição', 'Perdido', 'Volta da morte, só em evento'],
   ],
-  extras: 'A família Swallowtail cura com qualquer magia, e o Milagre Absorção e Emissão causa Ferimento II quando passa do limite. Os dois se encaixam sem mudança. Na ficha do bot, a trilha aparece como uma barra de 7 casas.',
+  extras: 'A família Valerian cura com qualquer magia, e o Milagre Absorção e Emissão causa Ferimento II quando passa do limite. Os dois se encaixam sem mudança. Na ficha do bot, a trilha aparece como uma barra de 7 casas.',
 };
 
 export const feiticoAlma = {
@@ -628,6 +662,7 @@ export const feiticoAlma = {
     { nome: 'Vínculo', inspiracao: 'A corrente de alma', efeito: 'Prende o lançador e um alvo numa regra: a Mana dos dois fica igual à do menor, ou nenhum dos dois lança feitiços, ou nenhum foge. Dura até um cair.', preco: 'A regra vale para o lançador também; quebrar a corrente antes do fim dá Ferimento III.' },
     { nome: 'Fusão', inspiracao: 'Virar a própria mana', efeito: 'O corpo vira a própria magia por 3 turnos: golpes físicos o atravessam, +1 classificação no atributo da magia e Grau máximo +1.', preco: '100 de Mana por turno; ao terminar, Exaustão Mágica e um Ferimento II.' },
     { nome: 'Ruptura', inspiracao: 'A regra quebrada', efeito: 'Quebra uma regra da própria magia uma vez por cena: o fogo que congela, a corrente que corta mana.', preco: 'Custa o dobro do Grau, e o feitiço seguinte sai com -1 Acréscimo.' },
+    { nome: 'Própria', inspiracao: 'A sua alma, as suas regras', efeito: 'O jogador desenha o próprio Feitiço de Alma, fora das três Vias: o que ele faz, o que inspira e o que custa. Precisa caber na magia do personagem e ter um preço do tamanho do poder.', preco: 'Definido com o Conselho Mágico, nunca menor que o das outras Vias: Mana alta por turno, Ferimento, Exaustão ou uma regra que vale contra o próprio lançador.' }
   ],
   diamond: 'O Vínculo favorece quem tem pouca mana. Em Diamond, onde o reino tem Mana Baixa e a Plebe nasce com Mana I, ele dá ao fraco uma arma contra o nobre; com o Milagre Insignificância, pode ser a assinatura de um personagem inteiro. A Fusão é o contrário: só quem tem reserva grande aguenta.',
 };
@@ -766,7 +801,7 @@ export const terras = {
     ['Imposto territorial', '2% do valor da propriedade por semana, pago ao Tesouro.'],
     ['Atraso', '2 semanas sem pagar tiram uma construção; 4 semanas, a Coroa toma a terra.'],
     ['Proteção', 'O Veio Negro pode cobrar proteção nos Veios. Recusar abre uma missão de defesa.'],
-    ['Herança', 'Uma terra pode ser vendida, arrendada ou deixada de herança por Contrato. Quando o personagem morre, ela vai para o próximo Retornado do mesmo jogador, com 50% de imposto.'],
+    ['Herança', 'Uma terra pode ser vendida, arrendada ou deixada de herança por Contrato. Quando o personagem morre, ela vai para o próximo Marcado do mesmo jogador, com 50% de imposto.'],
   ],
 };
 
@@ -827,6 +862,8 @@ export const economia = {
     ['Pó de Cristal', 'Incomum', 'Refino, Achados', '150'],
     ['Erva rara', 'Rara', 'Estufa de Mana', '120'],
     ['Parte Mágica de Criatura', 'Rara', 'Caça de criaturas mágicas', '300'],
+    ['Disco Bruto (em branco)', 'Incomum', 'Veio Negro, no Fosso', '150'],
+    ['Disco Lapidado (em branco)', 'Rara', 'Oficinas do Lapidário', '400'],
     ['Ferro Estelar', 'Rara', 'Veios Virgens, meteoritos', '400'],
     ['Obsidiana Viva', 'Épica', 'Minas Profundas', '1.200'],
     ['Cristal Branco', 'Rara', 'Achados, missões C e B', '3.000'],
@@ -881,15 +918,101 @@ export const glossario = [
   ['Qualidade', 'Comum, Incomum, Rara, Épica ou Obra-Prima.', 'itens#qualidade'],
   ['Recursos', 'Materiais da economia: minério, cristal, comida, ervas.', 'economia#recursos'],
   ['Reserva', 'Quantas Jornadas uma jazida aguenta antes de descer um grau.', 'mineracao#jazidas'],
-  ['Retornado', 'Alma de outro reino que renasce em Diamond.', 'mundo'],
+  ['Marcado', 'Alma de outro reino que renasce em Diamond com uma Marca no corpo. Todo personagem é um Marcado.', 'mundo'],
   ['Sequela', 'Marca permanente de quem sobrevive a um Ferimento IV sem cirurgia.', 'ferimentos#agravamento'],
   ['Sincronia', 'Vínculo entre dois ou três personagens forjado em perigo.', 'milagres'],
   ['Técnica de Mana', 'Uso da mana fora do Grimório, como Percepção ou Zona de Mana.', 'mana#tecnicas'],
+  ['Disco', 'Runa gravada em cristal e engastada no corpo; faz uma coisa só, sem gastar Mana.', 'discos'],
+  ['Encaixe', 'Quantos Discos o corpo aguenta: 2, mais 1 no 6º e no 3º Estágio.', 'discos#regras'],
+  ['Rejeição', 'O peso de um Disco no corpo; passar do limite causa Cristalização.', 'discos#regras'],
+  ['Instabilidade', 'Marcas de uso dos Discos fortes; no limite, o efeito colateral acontece.', 'discos#regras'],
+  ['Respiração de Mana', 'Técnica de Diamond que tira mana do pó de cristal do ar.', 'mana#diamond'],
+  ['Técnica Rúnica', 'Técnica que leva a Matriz Rúnica mais longe: runas condicionais, inscritas, em cadeia.', 'mana#runas'],
   ['Traço', 'Talento menor: até 3, nenhum com mais de 1 Acréscimo.', 'milagres'],
   ['Trilha de Ferimentos', 'A barra de vida: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'ferimentos#trilha'],
   ['Vigor', 'O quanto uma terra produz: Morta, Exausta, Fraca ou Viva.', 'terras#vigor'],
   ['Yul', 'A moeda de todos os reinos.', 'economia#moedas'],
 ];
+
+/* ==========================================================================
+   Sistemas exclusivos de Diamond (2026-11-05): Discos de Engaste, Técnicas
+   de Mana de Diamond e Técnicas Rúnicas. Aprovados pelo Silas no documento.
+   ========================================================================== */
+
+export const discos = {
+  texto: 'O Lapidário aprendeu a cortar Cristais de Mana em discos finos e gravar neles uma runa. Um disco engastado no corpo (nuca, antebraço, peito, olho) faz uma coisa só, sempre, sem gastar a Mana do dono. Os Generais Brilhantes saem da Forja cheios deles, a Nobreza compra discos lapidados e a Plebe dos Veios se vira com discos brutos do Veio Negro.',
+  regras: [
+    ['Encaixes', 'Todo corpo aguenta 2 discos. +1 Encaixe no 6º Estágio e +1 no 3º.'],
+    ['Rejeição', 'Cada disco tem Rejeição de 1 a 3. O corpo aguenta Rejeição 5, +1 por classificação de Resistência acima de Comum.'],
+    ['Cristalização', 'Passar do limite de Rejeição deixa uma Sequela permanente: a pele em volta do disco vira cristal e o personagem perde 5% de Controle por ponto acima.'],
+    ['Instabilidade', 'Os discos mais fortes ganham 1 marca a cada uso. Quando as marcas chegam ao limite do disco, o efeito colateral acontece na hora. As marcas somem no começo de cada ciclo. É um contador, não sorte: o jogador sempre sabe quanto falta.'],
+    ['Sobrecarga', '1 vez por cena, o disco rende o dobro por 1 turno. Custa 1 Ferimento I na hora e conta 2 marcas de Instabilidade.'],
+    ['Engaste e Desengaste', 'Só com Cirurgia Arcana ou Conhecimento Científico, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
+    ['Sem Acréscimos', 'Nenhum disco dá Acréscimo. Eles dão funções: sentidos, memória, mana guardada, truques.'],
+  ],
+  lapidacao: [
+    ['Bruto', 'Veio Negro, no Fosso', '+1', '150 Yuls'],
+    ['Lapidado', 'Oficinas do Lapidário', 'Normal', '400 Yuls'],
+    ['Facetado', 'Libardirt e contratos da Coroa', 'Normal, efeito +50%', '1.200 Yuls + Pó de Cristal'],
+    ['Brilhante', 'Só a Forja e eventos', '-1', 'Não está à venda'],
+  ],
+  linhas: [
+    ['Sentidos', 'O que o corpo não percebe sozinho.'],
+    ['Mente', 'Memória, línguas mortas e conversa à distância.'],
+    ['Transporte', 'Para quem cruza o reino seco.'],
+    ['Mana', 'Mana guardada, feitiços prontos e gravados.'],
+    ['Corpo', 'Aguentar o que mataria um corpo comum.'],
+    ['Ilegal', 'Apreendidos pela Guarda da Coroa. Ser pego com um dá multa ou missão punitiva.'],
+  ],
+  lista: [
+    { nome: 'Lente de Mana', linha: 'Sentidos', onde: 'Olho', rejeicao: 1, efeito: 'Vê o fluxo de mana a até 30 m e nota feitiços sendo preparados.' },
+    { nome: 'Olho Térmico', linha: 'Sentidos', onde: 'Olho', rejeicao: 1, efeito: 'Enxerga calor através de fumaça, poeira e escuridão.' },
+    { nome: 'Sentinela', linha: 'Sentidos', onde: 'Nuca', rejeicao: 1, efeito: 'Acorda o dono quando algo com mana chega a 20 m; ninguém o pega dormindo.' },
+    { nome: 'Disco de Pulso', linha: 'Sentidos', onde: 'Ouvido', rejeicao: 1, efeito: 'Ouve batimentos a até 5 m: percebe medo, pressa e nervosismo. Não detecta mentira.' },
+    { nome: 'Leitor de Runas', linha: 'Sentidos', onde: 'Olho', rejeicao: 1, efeito: 'Lê qualquer runa, escrita antiga e as pinturas das cavernas; vê quantos turnos faltam para uma runa armada disparar.' },
+    { nome: 'Disco de Memória', linha: 'Mente', onde: 'Nuca', rejeicao: 2, efeito: 'Guarda 1 Conhecimento Comum tirado de uma Cápsula de Conhecimento.' },
+    { nome: 'Cartógrafo', linha: 'Mente', onde: 'Nuca', rejeicao: 1, efeito: 'Grava toda rota percorrida; o dono nunca se perde e desenha mapas exatos.' },
+    { nome: 'Registrador', linha: 'Mente', onde: 'Olho', rejeicao: 2, efeito: 'Grava 1 cena com imagem e som; vale como prova em Contratos e julgamentos.' },
+    { nome: 'Âncora', linha: 'Mente', onde: 'Nuca', rejeicao: 2, efeito: '1 vez por cena, ignora uma ilusão, um sono ou um controle mental.' },
+    { nome: 'Par Ressonante', linha: 'Mente', onde: 'Ouvido', rejeicao: 1, efeito: 'Vendido em pares: os dois portadores falam pela mente a até 1 km.' },
+    { nome: 'Estribo', linha: 'Transporte', onde: 'Perna', rejeicao: 2, efeito: 'Liga o portador a uma montaria, carroça ou barco: o veículo anda o dobro e não cansa, e viagens entre regiões de Diamond levam metade do tempo.' },
+    { nome: 'Bateria de Mana', linha: 'Mana', onde: 'Peito', rejeicao: 3, efeito: 'Guarda até 100 de Mana para usar depois; recarrega fora de combate.', instavel: '3 descargas no ciclo: explode. Ferimento III no peito, a Mana guardada se perde e o disco quebra.' },
+    { nome: 'Conduíte', linha: 'Mana', onde: 'Antebraço', rejeicao: 2, efeito: '1 feitiço escolhido custa 15% menos Mana.' },
+    { nome: 'Gatilho', linha: 'Mana', onde: 'Antebraço', rejeicao: 2, efeito: 'Guarda 1 feitiço próprio já pronto e solta como reação, sem gastar o turno.', instavel: '3 marcas: o feitiço guardado dispara sozinho, no turno que o narrador escolher.' },
+    { nome: 'Disco de Gravação', linha: 'Mana', onde: 'Antebraço', rejeicao: 3, efeito: 'Grava 1 feitiço Grau I ou II de outra pessoa (com permissão dela); usa 1 vez por cena.', instavel: '2 marcas: o feitiço sai descontrolado e acerta o alvo mais próximo, aliado ou não.' },
+    { nome: 'Selo', linha: 'Mana', onde: 'Mão', rejeicao: 1, efeito: 'Marca uma porta, um baú ou um grimório: só o dono abre sem arrombar.' },
+    { nome: 'Filtro', linha: 'Corpo', onde: 'Peito', rejeicao: 1, efeito: 'Imune a gás de mina, poeira tóxica e venenos comuns.' },
+    { nome: 'Hemostático', linha: 'Corpo', onde: 'Peito', rejeicao: 2, efeito: 'Ferimentos III não sangram por 1 cena: o Agravamento para.' },
+    { nome: 'Coração de Reserva', linha: 'Corpo', onde: 'Peito', rejeicao: 2, efeito: 'Ao chegar no Ferimento IV, fica de pé por mais 2 turnos antes de cair.', instavel: '1 uso: depois disso o disco racha e precisa ser trocado.' },
+    { nome: 'Disco Fantasma', linha: 'Ilegal', onde: 'Nuca', rejeicao: 2, efeito: 'Esconde a mana do dono de quem sente mana.' },
+    { nome: 'Mímico', linha: 'Ilegal', onde: 'Rosto', rejeicao: 3, efeito: 'Cópia total de alguém que o portador tocou: rosto, corpo, voz, cheiro e assinatura de mana, por 1 cena. Só não copia a magia nem as memórias.', instavel: '2 marcas: o portador se perde na cópia e, por 1 cena, acredita ser a pessoa copiada.' },
+    { nome: 'Chave-Mestra', linha: 'Ilegal', onde: 'Mão', rejeicao: 2, efeito: 'Abre Selos e fechaduras comuns em 1 turno.' },
+    { nome: 'Disco Berserk', linha: 'Ilegal', onde: 'Nuca', rejeicao: 3, efeito: 'Sobrecarga sem custo de Ferimento, mas o dono não distingue aliado de inimigo naquele turno.', instavel: '2 marcas: apaga e acorda com Ferimento II, sem lembrar a cena.' },
+  ],
+};
+
+export const tecnicasDiamond = {
+  texto: 'O reino secou e a mana no ar ficou rala. Quem vive aqui aprendeu a tirar mana de onde quase não tem. Seguem as regras das outras Técnicas de Mana (Treinos de Técnica; Elfos e Anomalia Mágica pela metade). Estrangeiros não as aprendem.',
+  lista: [
+    { nome: 'Respiração de Mana', estagio: '9º', controle: '10%', quem: 'Qualquer Marcado', texto: 'Respira o pó de cristal do ar e recupera 3% de Mana por turno sem lançar feitiço (6% numa Zona de Forte Mana). Fora de Diamond, onde a mana é densa, fica Embriagado de Mana: -5% de Controle até se acostumar (3 cenas). Com uma Bateria de Mana engastada, o que passar do máximo vai para a bateria.', ideia: 'As Respirações de Demon Slayer' },
+    { nome: 'Corpo Seco', estagio: '9º', controle: '10%', quem: 'Só Plebe, ou quem viveu 1 mês real nos Veios', texto: 'O corpo aprende a gastar quase nada: aguenta 3 dias sem comida e água sem ficar Desnutrido, e a parte de comida do custo de vida cai pela metade.', ideia: 'A disciplina da água dos Fremen, em Duna' },
+    { nome: 'Eco de Veio', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Encosta a mão na pedra e sente o que se move a até 50 m pela vibração da mana no chão. Na Mineração, revela o grau de uma jazida sem gastar Jornada.', ideia: 'O sentido sísmico da Toph, em Avatar, e o En de Hunter x Hunter' },
+    { nome: 'Passo Cintilante', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Solta mana pelas solas e reaparece a até 10 m, como reação. No máximo 2 vezes por cena e nunca em turnos seguidos. Custa 20 de Mana e dobra no segundo uso da cena (40).', ideia: 'O Shunpo de Bleach e o Soru de One Piece' },
+    { nome: 'Couraça de Pó', estagio: '5º', controle: '40%', quem: 'Qualquer Marcado', texto: 'Junta o pó de cristal do ar numa casca na pele por 3 turnos: o primeiro Ferimento I de cada turno é anulado. 20 de Mana por turno; não funciona molhado.', ideia: 'O Ken de Hunter x Hunter e o Hierro de Bleach' },
+  ],
+};
+
+export const runas = {
+  texto: 'Um disco é uma runa gravada em cristal. Diamond leva a Matriz Rúnica mais longe que qualquer reino: os runistas do Lapidário gravam runas em pedra, em metal (Cobre e Fio Rúnico) e no próprio corpo. Tudo aqui parte da Matriz Rúnica (6º Estágio, Controle 30%, até 5 runas preparadas). Quem tem o Milagre Insignificância aprende estas técnicas sem o requisito de Estágio.',
+  lista: [
+    { nome: 'Leitura Rúnica', estagio: '8º', controle: '15%', texto: 'Lê runas alheias: sabe o que cada uma faz e quando dispara. Com 1 turno de toque, desarma uma runa de Grau igual ou menor que o seu máximo. Não exige a Matriz.' },
+    { nome: 'Runa Condicional', estagio: '6º', controle: '30%', texto: 'A runa dispara sozinha quando uma condição declarada acontece ("quando alguém abrir esta porta", "quando eu cair"). Fica armada até o fim da cena.' },
+    { nome: 'Inscrição', estagio: '5º', controle: '40%', texto: 'Grava a runa numa parede, arma ou objeto, e ela dura 1 semana real. Serve para armadilhas, proteção de Terras e armas com feitiço. Custa 1 Fio Rúnico por runa.' },
+    { nome: 'Runa em Cadeia', estagio: '5º', controle: '40%', texto: 'Liga até 3 runas preparadas: quando uma dispara, as outras disparam juntas no mesmo turno.' },
+    { nome: 'Selo Rúnico', estagio: '4º', controle: '50%', texto: 'Grava uma runa de selo num grimório, num feitiço ativo ou numa criatura: o alvo fica selado por 3 turnos, ou até alguém desarmar a runa. Custa 2 runas da Matriz.' },
+    { nome: 'Voto de Cristal', estagio: '4º', controle: '50%', texto: 'Grava no próprio corpo uma runa de restrição declarada em cena (ex.: "só uso um feitiço nesta luta"). Enquanto cumprir, um feitiço escolhido dobra de alcance ou custa metade da Mana. Quebrar o voto racha a runa: Ferimento II na hora.', ideia: 'Os Votos Vinculantes de Jujutsu Kaisen e as Restrições do Nen' },
+  ],
+};
 
 // Ordem de leitura para quem acabou de chegar.
 export const comecePorAqui = [

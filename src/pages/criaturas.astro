@@ -9,9 +9,9 @@ import PageNav from '../components/PageNav.astro';
 import { criaturas, slugify } from '../data/canon.js';
 
 const c = criaturas;
-const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas']];
+const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas']];
 ---
-<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
+<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, as Patrocinadoras, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
   <PageHero
     slug="criaturas"
     title="As <em>Criaturas</em>"
@@ -40,11 +40,12 @@ const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilac
         {c.bestiario.map((b) => (
           <article class="beast" data-reveal>
             <div class="beast__media">
-              <ImageSlot src={`criaturas/${slugify(b.nome)}`} label={b.nome} ratio="4 / 3" />
+              <ImageSlot src={`criaturas/${b.img ?? slugify(b.nome)}`} label={b.nome} ratio="4 / 3" class="slot--rupestre" />
               <span class="beast__rank">{b.rank}</span>
             </div>
             <div class="beast__body">
               <h3 class="t-h3">{b.nome}</h3>
+              <p class="beast__sci"><i>{b.cientifico}</i></p>
               <dl class="kv" style="margin-top:14px">
                 <dt>Tipo</dt><dd>{b.tipo}</dd>
                 <dt>Onde</dt><dd>{b.onde}</dd>
@@ -55,13 +56,42 @@ const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilac
           </article>
         ))}
       </div>
-      <p class="t-small" style="margin-top:16px" data-reveal>O bestiário cresce com os eventos. Os narradores podem criar criaturas novas seguindo estes Ranks.</p>
+      <p class="t-small" style="margin-top:16px" data-reveal>{c.rupestre} O bestiário cresce com os eventos; os narradores podem criar criaturas novas seguindo estes Ranks.</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line patronas" id="patrocinadoras">
+    <div class="wrap">
+      <SectionHead num="02" label="Patrocinadoras" title="Três coisas que <em>não estão</em> na parede." lead={c.patrocinadoras.texto} />
+      <div class="cols-3">
+        {c.patrocinadoras.lista.map((p) => (
+          <article class="patrona" data-reveal>
+            <div class="patrona__media">
+              <ImageSlot src={`criaturas/${p.img}`} label={p.nome} ratio="1 / 1" />
+              <span class="patrona__tag">Patrocinadora</span>
+            </div>
+            <div class="patrona__body">
+              <h3 class="patrona__nome">{p.nome}</h3>
+              <p class="patrona__epiteto">{p.epiteto}</p>
+              <p class="t-small" style="margin-top:12px">{p.aparencia}</p>
+              <dl class="kv" style="margin-top:16px">
+                <dt>Domínio</dt><dd>{p.dominio}</dd>
+                <dt>Patrocínio</dt><dd>{p.patrocinio}</dd>
+                <dt>Preço</dt><dd>{p.preco}</dd>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+      <dl class="gifts" style="margin-top:clamp(40px,5vw,72px)">
+        {c.patrocinadoras.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
     </div>
   </section>
 
   <section class="sec sec--line sec--raise" id="domacao">
     <div class="wrap">
-      <SectionHead num="02" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
+      <SectionHead num="03" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
       <ol class="flow">
         {c.domacao.map(([t, d], i) => (
           <li data-reveal>
@@ -95,10 +125,10 @@ const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilac
 
   <section class="sec sec--line" id="assimilacao">
     <div class="wrap">
-      <SectionHead num="03" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
+      <SectionHead num="04" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5">
-          <ImageSlot src="criaturas/assimilacao" label="Um cavaleiro com asas de grifo" ratio="4 / 5" />
+          <ImageSlot src="criaturas/assimilacao" label="Um cavaleiro com o pelo e os olhos do Lobo Olho-de-Brasa" ratio="4 / 5" />
         </div>
         <div class="c-6-12 cols-2">
           {c.assimilacao.graus.map((g) => (
@@ -123,7 +153,7 @@ const abas = [['bestiario', 'Bestiário'], ['domacao', 'Domação'], ['assimilac
 
   <section class="sec sec--line chap--paper" id="familiar">
     <div class="wrap">
-      <SectionHead num="04" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
+      <SectionHead num="05" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5 stack" style="--s:1.2rem">
           <ImageSlot src="criaturas/familiar" label="Uma Bruxa e o seu familiar" ratio="4 / 5" />

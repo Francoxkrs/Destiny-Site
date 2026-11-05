@@ -98,10 +98,15 @@ E['sukehiro'] = (f'<path d="M30,-40 C14,-18 -2,0 -16,14" fill="none" stroke="{BO
                  f'<ellipse cx="-18" cy="16" rx="11" ry="4" transform="rotate(45 -18 16)" fill="{BONE}"/>'
                  f'<path d="M-22,22 L-40,40" stroke="{RED}" stroke-width="8" stroke-linecap="round"/>'
                  f'<path d="M-28,28 l4,-4 M-34,34 l4,-4" stroke="{INK}" stroke-width="2"/>')
-E['swallowtail'] = (f'<path fill="{BONE}" d="M0,-4 C-10,-30 -40,-40 -42,-22 C-44,-8 -24,-2 0,-4 Z M0,-4 C10,-30 40,-40 42,-22 C44,-8 24,-2 0,-4 Z"/>'
-                    f'<path fill="{BONE}" d="M0,0 C-20,2 -34,14 -26,26 L-30,42 L-20,30 C-12,26 -4,14 0,0 Z M0,0 C20,2 34,14 26,26 L30,42 L20,30 C12,26 4,14 0,0 Z"/>'
-                    f'<path d="M0,-12 V22" stroke="{RED}" stroke-width="5" stroke-linecap="round"/><path d="M0,-12 L-6,-24 M0,-12 L6,-24" {SR}/>'
-                    f'<circle cx="-30" cy="-20" r="4" fill="{INK}"/><circle cx="30" cy="-20" r="4" fill="{INK}"/>')
+# Swallowtail: a família da Nero. Uma ave presa num círculo de selo.
+E['swallowtail'] = (f'<circle r="42" fill="none" stroke="{RED}" stroke-width="3" stroke-dasharray="6 5"/>'
+                    f'<path fill="{BONE}" d="M0,-4 C-10,-20 -30,-26 -42,-16 C-30,-14 -22,-6 -16,4 C-10,2 -5,2 0,6 C5,2 10,2 16,4 C22,-6 30,-14 42,-16 C30,-26 10,-20 0,-4 Z"/>'
+                    f'<path fill="{BONE}" d="M-5,4 L0,30 L5,4 Z M-9,26 L0,38 L9,26 L0,31 Z"/>'
+                    f'<circle cx="0" cy="-10" r="6" fill="{BONE}"/><path d="M0,-10 L9,-7 L0,-5 Z" fill="{RED}"/>')
+# Valerian: a linhagem de Spades que cura com qualquer magia. Cruz de cura e flores de valeriana.
+E['valerian'] = (f'<path d="M-9,-34 H9 V-9 H34 V9 H9 V34 H-9 V9 H-34 V-9 H-9 Z" fill="{BONE}"/>'
+                 f'<path d="M-4,-24 H4 V-4 H24 V4 H4 V24 H-4 V4 H-24 V-4 H-4 Z" fill="{RED}"/>'
+                 + ''.join(f'<circle cx="{x}" cy="{y}" r="4.5" fill="{BONE}"/>' for x, y in ((-30,-30),(-38,-22),(-22,-38),(30,30),(38,22),(22,38))))
 def stitches():
     out = f'<path d="M-34,-34 L34,34 M34,-34 L-34,34" {S}/>'
     for t in (-22, -10, 10, 22):

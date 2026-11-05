@@ -8,7 +8,7 @@ import Table from '../components/Table.astro';
 import PageNav from '../components/PageNav.astro';
 import { milagres, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } from '../data/canon.js';
 ---
-<Base title="Milagres e Traços" slug="milagres" description="Os oito Milagres, os treze Traços, o Feitiço de Alma e a Sincronia: as marcas mais fortes e os talentos pequenos de cada alma.">
+<Base title="Milagres e Traços" slug="milagres" description="Os quinze Milagres, os treze Traços, o Feitiço de Alma e a Sincronia: as marcas mais fortes e os talentos pequenos de cada alma.">
   <PageHero
     slug="milagres"
     title="Milagres <em>e Traços</em>"
@@ -22,7 +22,7 @@ import { milagres, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } 
 
   <section class="sec" id="milagres">
     <div class="wrap">
-      <SectionHead num="01" label="Os oito Milagres" title="Um por alma. <em>Nunca dois.</em>" lead="No 1º Estágio, o Despertar deixa escolher um Milagre a quem ainda não tem. Alguns custam caro: Tengentsu e Absorção e Emissão tiram a própria magia." />
+      <SectionHead num="01" label="Os quinze Milagres" title="Um por alma. <em>Nunca dois.</em>" lead="No 1º Estágio, o Despertar deixa escolher um Milagre a quem ainda não tem. Alguns custam caro: Tengentsu, Corpo Vazio e Absorção e Emissão tiram a própria magia." />
       <div class="miracles">
         {milagres.map((m, i) => (
           <article class="miracle" data-reveal>
@@ -30,7 +30,7 @@ import { milagres, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } 
             <div class="miracle__body">
               <div class="miracle__title">
                 <h3 class="t-h3">{m.nome}</h3>
-                <span class="t-label">0{i + 1}</span>
+                <span class="t-label">{String(i + 1).padStart(2, '0')}</span>
               </div>
               {(m.antes || m.restricao) && (
                 <div class="chips">

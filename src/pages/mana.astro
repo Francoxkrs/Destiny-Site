@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
-import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, tecnicasDiamond as td, runas, slugify } from '../data/canon.js';
+import { manaRegras, nivelFeitico, tecnicas, tecnicasDiamond as td, runas, slugify } from '../data/canon.js';
 ---
 <Base title="Mana" slug="mana" description="Reserva, custo, regeneração, esgotamento e afinidade de Mana, as Técnicas de Mana, as técnicas próprias de Diamond e as Técnicas Rúnicas.">
   <PageHero
@@ -27,7 +27,7 @@ import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, t
             <p class="card__text">{r.texto}</p>
             {r.nome === 'Custo' && (
               <dl class="kv" style="margin-top:18px">
-                {custoGrau.map(([g, c]) => <><dt>Grau {g}</dt><dd>{c} de Mana</dd></>)}
+                {nivelFeitico.map((x) => <><dt>{x.n} Estágio</dt><dd>{x.custo} de Mana</dd></>)}
               </dl>
             )}
           </article>
@@ -40,26 +40,11 @@ import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, t
   </section>
 
   <section class="sec sec--line sec--raise" id="custo">
-    <div class="wrap">
-      <SectionHead num="02" label="Calculadora" title="Quanto custa <em>o seu feitiço</em>?" lead="Os descontos se somam até 50%. A Instabilidade do Mago do Caos aumenta o custo em 10% depois dos descontos." />
-      <div class="sim" data-sim="custo" data-graus={JSON.stringify(custoGrau)} data-faixas={JSON.stringify(controleFaixas)} data-niveis={JSON.stringify(manaNiveis)} data-reveal>
-        <div class="sim__grid">
-          <div class="sim__side">
-            <div class="field"><label for="c-grau">Grau do feitiço</label><select class="select" id="c-grau" name="grau">{custoGrau.map(([g, c], i) => <option value={i} selected={i === 2}>Grau {g} · {c} de Mana</option>)}</select></div>
-            <div class="field"><label for="c-ctrl">Controle Mágico <output data-out>0%</output></label><input type="range" id="c-ctrl" name="ctrl" min="0" max="100" step="1" value="25" /></div>
-            <div class="field"><label for="c-mae">Maestria do feitiço</label><select class="select" id="c-mae" name="mae"><option value="0">0 · recém-criado</option><option value="1">1 · -10%</option><option value="2">2 · +1 Acréscimo</option><option value="3">3 · sem encantamento, -20% no total</option></select></div>
-          </div>
-          <div class="sim__side">
-            <div class="field"><label for="c-mana">Sua reserva</label><select class="select" id="c-mana" name="mana">{manaNiveis.map((m, i) => <option value={i} selected={i === 1}>Mana {romanos[i]} · {m.toLocaleString('pt-BR')}</option>)}</select></div>
-            <div class="field">
-              <span class="lbl">Modificadores</span>
-              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="arcano" /> Fluxo Refinado (Mago Arcano, externalizado)</label>
-              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="caos" /> Instabilidade (Mago do Caos)</label>
-              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="elfo" /> Comunhão com a Mana (Elfo)</label>
-            </div>
-          </div>
-        </div>
-        <div class="sim__out" aria-live="polite"><p class="sim__result" data-result></p><p class="sim__why" data-why></p></div>
+    <div class="wrap grid">
+      <div class="c-1-5"><span class="eyebrow" data-reveal><b>02</b>Calculadora</span></div>
+      <div class="c-6-12 stack" style="--s:1rem">
+        <p class="t-lead" data-reveal>O custo depende do Estágio em que o feitiço é lançado. Os descontos se somam até 50%, e a Mana Indomável do Mago do Caos aumenta o custo em 10% depois dos descontos.</p>
+        <div class="btns" data-reveal><a class="btn" href="/estagios/#calculadora">Abrir a calculadora de feitiço</a></div>
       </div>
     </div>
   </section>
@@ -95,7 +80,6 @@ import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, t
               <h3 class="t-h3 card__title">{t.nome}</h3>
               <p class="t-small" style="margin-top:6px"><b>Quem aprende:</b> {t.quem}</p>
               <p class="card__text">{t.texto}</p>
-              <p class="t-small tec__ideia">Ideia: {t.ideia}</p>
             </div>
           </article>
         ))}
@@ -112,7 +96,6 @@ import { manaRegras, custoGrau, controleFaixas, manaNiveis, romanos, tecnicas, t
             <div class="chips"><span class="chip chip--mana">{t.estagio} Estágio</span><span class="chip">Controle {t.controle}</span></div>
             <h3 class="t-h3 card__title">{t.nome}</h3>
             <p class="card__text">{t.texto}</p>
-            {t.ideia && <p class="t-small tec__ideia">Ideia: {t.ideia}</p>}
           </article>
         ))}
       </div>

@@ -194,7 +194,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
       <span class="chap__kanji" aria-hidden="true">{cap.II.kanji}</span>
       <span class="eyebrow" data-reveal><b>Capítulo II</b>{pags('II').map((p) => p.titulo).join(' · ')}</span>
       <h2 class="chap__title" data-split>{cap.II.nome}</h2>
-      <p class="chap__text" data-reveal>Antes de Diamond, você teve um nome. Vinte e quatro famílias de cinco cantos do mundo. A sua define atributos, dons, magias possíveis e a classe social em que você renasce.</p>
+      <p class="chap__text" data-reveal>Antes de Diamond, você teve um nome. Vinte e cinco famílias de cinco cantos do mundo. A sua define atributos, dons, magias possíveis e a classe social em que você renasce.</p>
     </div>
   </section>
 
@@ -214,7 +214,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
       ))}
     </div>
     <div class="wrap btns origins__cta" data-reveal>
-      <a class="btn btn--ink" href="/familias/">As 24 famílias <Arrow /></a>
+      <a class="btn btn--ink" href="/familias/">As 25 famílias <Arrow /></a>
       <a class="btn btn--ink" href="/racas/">As cinco raças <Arrow /></a>
     </div>
   </section>
@@ -226,7 +226,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
       <span class="chap__kanji" aria-hidden="true">{cap.III.kanji}</span>
       <span class="eyebrow" data-reveal><b>Capítulo III</b>{pags('III').map((p) => p.titulo).join(' · ')}</span>
       <h2 class="chap__title" data-split>{cap.III.nome}</h2>
-      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {pags('III').length === 7 ? 'sete' : pags('III').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
+      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {['zero','uma','duas','três','quatro','cinco','seis','sete','oito','nove','dez'][pags('III').length] ?? pags('III').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
     </div>
   </section>
 

@@ -61,7 +61,7 @@ const maxMana = manaNiveis[manaNiveis.length - 1];
       <div class="grid">
         <div class="c-1-4 stack" style="--s:1rem">
           <h3 class="t-h3" data-reveal>Poder Mágico <span class="t-mana">I–VI</span></h3>
-          <p class="t-body" data-reveal>Amplifica o atributo que a magia usa enquanto ela está ativa. O nível é o número de Acréscimos: Poder Mágico III dá +3.</p>
+          <p class="t-body" data-reveal>Amplifica o atributo que a magia usa enquanto ela está ativa. O nível é o número de Acréscimos: Poder Mágico III dá +3. Se os Acréscimos de um feitiço chegam a 10, ele vale como um feitiço do Estágio seguinte.</p>
           <p class="t-body" data-reveal>Feitiços externalizados recebem 100% desses Acréscimos; Reforço Corporal recebe 50%, arredondado para baixo.</p>
         </div>
         <div class="c-5-12">
@@ -88,11 +88,11 @@ const maxMana = manaNiveis[manaNiveis.length - 1];
         <div class="c-1-6 stack" style="--s:1.2rem">
           <p class="t-body" data-reveal>Vêm de magias, Conhecimentos, Classes, Famílias, Milagres, Traços, equipamentos e poções, sempre ligados ao atributo correspondente.</p>
           <ul class="ticks" data-reveal>
-            <li>A menor unidade é <b>0,1</b> Acréscimo e a maior que uma aplicação pode dar é <b>1</b>.</li>
+            <li>A menor unidade é <b>0,1</b> Acréscimo. <b>Classes, Traços e Conhecimentos</b> nunca dão mais de <b>1</b> por aplicação.</li>
             <li>Fontes diferentes se acumulam até o limite de <b>10 por atributo</b>.</li>
             <li><b>10 Acréscimos</b> sobem uma classificação completa enquanto mantidos: Força Comum + 10 age como Força Incomum.</li>
             <li>O que passar de 10 não gera nada.</li>
-            <li>Exceção: o <b>Poder Mágico</b> dá de +1 (nível I) a +6 (nível VI) numa única aplicação.</li>
+            <li>Exceções, que podem dar mais de 1 numa aplicação: o <b>Poder Mágico</b> (+1 no nível I até +6 no VI), <b>Itens Mágicos</b>, <b>Milagres</b>, <b>Assimilação</b>, <b>Criaturas</b> e <b>Patrocinadoras</b>. Cada um diz quanto dá.</li>
           </ul>
         </div>
         <div class="c-7-12">

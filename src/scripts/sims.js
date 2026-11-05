@@ -97,39 +97,54 @@ function acrescimos(root) {
   run();
 }
 
-/* ------------------------------------------------------------ custo de Mana */
-function custo(root) {
-  const graus = readJSON(root, 'graus') || [];
+/* ------------------------------------------------------------ calculadora do feitiço (o Estágio é o nível) */
+function feitico(root) {
+  const niv = readJSON(root, 'niveis') || [];
+  const acima = readJSON(root, 'acima') || {};
   const faixas = readJSON(root, 'faixas') || [];
-  const niveis = readJSON(root, 'niveis') || [];
-  const grau = $('[name=grau]', root), ctrl = $('[name=ctrl]', root), mae = $('[name=mae]', root), mana = $('[name=mana]', root);
+  const reservas = readJSON(root, 'reservas') || [];
+  const est = $('[name=est]', root), como = $('[name=como]', root), acr = $('[name=acr]', root), ctrl = $('[name=ctrl]', root), mae = $('[name=mae]', root), mana = $('[name=mana]', root);
   const arc = $('[name=arcano]', root), caos = $('[name=caos]', root), elfo = $('[name=elfo]', root);
-  const out = $('[data-result]', root), why = $('[data-why]', root);
+  const out = $('[data-result]', root), why = $('[data-why]', root), tab = $('[data-tab]', root);
   const descontoCtrl = (c) => {
     const lim = [10, 25, 35, 45, 55, 65, 75, 85, 95, 100];
     const i = lim.findIndex((l) => c <= l);
     return faixas[i === -1 ? faixas.length - 1 : i][1];
   };
+  const syncComo = () => {
+    const e = +est.value;
+    [...como.options].forEach((o) => { o.disabled = +o.value > e; });
+    if (+como.value > e) como.value = String(e);
+  };
   const run = () => {
-    paintRange(ctrl);
-    const c = +ctrl.value;
-    $('[data-out]', root).textContent = `${c}%`;
-    const base = graus[+grau.value][1];
+    syncComo();
+    paintRange(ctrl); paintRange(acr);
+    const c = +ctrl.value, k = +como.value;
+    $('[data-out=ctrl]', root).textContent = `${c}%`;
+    let a = +acr.value;
+    const m = +mae.value;
+    if (m >= 2) a += 1;
+    if (caos.checked) a += 1;
+    a = Math.min(a, 10);
+    $('[data-out=acr]', root).textContent = `+${+acr.value}`;
+    const base = niv[k];
+    const sobe = a >= 10;
+    const ef = sobe ? (niv[k + 1] || { n: acima.n, alcance: '—', destroi: acima.destroi, temp: 'acima de qualquer Estágio', cura: '—' }) : base;
     const partes = [];
     let d = descontoCtrl(c); partes.push(`Controle ${d}%`);
-    const m = +mae.value;
     if (m >= 1) { d += 10; partes.push('Maestria 10%'); }
-    if (m >= 3) { d += 10; partes.push('Maestria III +10%'); }
+    if (m >= 3) { d += 10; partes.push('Maestria 3 +10%'); }
     if (arc.checked) { d += 10; partes.push('Fluxo Refinado 10%'); }
     if (elfo.checked) { d += 50; partes.push('Comunhão com a Mana 50%'); }
     const capped = Math.min(d, 50);
-    let v = base * (1 - capped / 100);
+    let v = base.custo * (1 - capped / 100);
     if (caos.checked) v *= 1.1;
     v = Math.max(1, Math.round(v));
-    const reserva = niveis[+mana.value];
+    const reserva = reservas[+mana.value];
     const vezes = Math.floor(reserva / v);
-    out.innerHTML = `${v} de Mana <em>por feitiço</em>`;
-    why.textContent = `Grau ${graus[+grau.value][0]} custa ${base}. Descontos: ${partes.join(' + ')} = ${d}%${d > 50 ? ', limitado a 50%' : ''}${caos.checked ? '; Instabilidade soma 10% ao custo' : ''}. Com ${reserva} de Mana, dá para lançar ${vezes} vez${vezes === 1 ? '' : 'es'} antes da Exaustão Mágica.`;
+    out.innerHTML = `${ef.destroi} <em>a até ${ef.alcance} m</em>`;
+    tab.innerHTML = `<dt>Vale como</dt><dd>${ef.n}${ef.n === acima.n ? '' : ' Estágio'}${sobe ? ' (subiu com +10)' : ''}</dd><dt>Temperatura</dt><dd>${ef.temp}</dd><dt>Cura</dt><dd>${ef.cura}</dd><dt>Custo</dt><dd>${v} de Mana</dd>`;
+    why.textContent = `Lançado como ${base.n} Estágio, custa ${base.custo}. Descontos: ${partes.join(' + ')} = ${d}%${d > 50 ? ', limitado a 50%' : ''}${caos.checked ? '; a Mana Indomável soma 10% ao custo e +1 Acréscimo' : ''}. ${a} Acréscimo${a === 1 ? '' : 's'} no feitiço${sobe ? ', o bastante para valer como o Estágio seguinte' : `; faltam ${10 - a} para valer como o Estágio seguinte`}. Com ${reserva.toLocaleString('pt-BR')} de Mana, dá para lançar ${vezes} vez${vezes === 1 ? '' : 'es'}.`;
   };
   $$('select, input', root).forEach((el) => el.addEventListener('input', run));
   run();
@@ -220,6 +235,6 @@ function criacao(root) {
 export function initSims() {
   $$('[data-sim="confronto"]').forEach(confronto);
   $$('[data-sim="acrescimos"]').forEach(acrescimos);
-  $$('[data-sim="custo"]').forEach(custo);
+  $$('[data-sim="feitico"]').forEach(feitico);
   $$('[data-sim="criacao"]').forEach(criacao);
 }

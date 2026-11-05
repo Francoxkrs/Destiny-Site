@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { estagios, nivelFeitico, nivelAcima, nivelRegras, destravaEstagio, controleFaixas, manaNiveis, romanos } from '../data/canon.js';
+
+const abas = [['nivel', 'O nível do feitiço'], ['calculadora', 'Calculadora'], ['destrava', 'O que cada Estágio destrava']];
+const linhas = nivelFeitico.map((x) => [`<b>${x.n}</b>`, `${x.alcance} m`, x.destroi, x.temp, x.cura, `${x.custo}`]);
+const req = Object.fromEntries(estagios.map((e) => [e.n, e.req]));
+---
+<Base title="Estágios" slug="estagios" description="O Estágio é o nível do feitiço: alcance, destruição, temperatura, cura e custo de cada Estágio, a calculadora de feitiço e tudo o que cada Estágio destrava.">
+  <PageHero
+    slug="estagios"
+    title="Os <em>Estágios</em>"
+    lead="Do 9º ao 1º, cada Estágio muda o que os seus feitiços fazem. Subir de Estágio é sentir a magia crescer."
+    intro="O Estágio é o nível do feitiço. Não existe Grau: tudo o que você lança sobe junto com você, e o custo sobe junto."
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="nivel">
+    <div class="wrap">
+      <SectionHead num="01" label="O nível do feitiço" title="O que um feitiço <em>faz em cada Estágio</em>." lead="Alcance é até onde a magia chega depois de sair. A coluna de destruição usa o mesmo estilo das classificações de Força, e vale também para defesa." />
+      <Table head={['Estágio', 'Alcance', 'O que destrói', 'Temperatura', 'Cura', 'Custo']} rows={linhas} numCols={[1, 5]} />
+      <p class="t-small" style="margin-top:14px" data-reveal><b>{nivelAcima.n}:</b> {nivelAcima.destroi.toLowerCase()}. {nivelAcima.texto}</p>
+      <dl class="gifts" style="margin-top:clamp(32px,4vw,56px)">
+        {nivelRegras.map(([n, t]) => <div data-reveal><dt>{n}</dt><dd>{t}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="calculadora">
+    <div class="wrap">
+      <SectionHead num="02" label="Calculadora" title="O que o seu feitiço <em>faz e custa</em>." lead="Escolha o seu Estágio, em qual Estágio vai lançar e quantos Acréscimos o feitiço tem. Com 10, ele vale como o do Estágio seguinte." />
+      <div class="sim" data-sim="feitico" data-niveis={JSON.stringify(nivelFeitico)} data-acima={JSON.stringify(nivelAcima)} data-faixas={JSON.stringify(controleFaixas)} data-reservas={JSON.stringify(manaNiveis)} data-reveal>
+        <div class="sim__grid">
+          <div class="sim__side">
+            <div class="field"><label for="f-est">Seu Estágio</label><select class="select" id="f-est" name="est">{nivelFeitico.map((x, i) => <option value={i} selected={i === 2}>{x.n} Estágio</option>)}</select></div>
+            <div class="field"><label for="f-como">Lançar como</label><select class="select" id="f-como" name="como">{nivelFeitico.map((x, i) => <option value={i} selected={i === 2}>{x.n} Estágio · {x.custo} de Mana</option>)}</select></div>
+            <div class="field"><label for="f-acr">Acréscimos no feitiço <output data-out="acr">+0</output></label><input type="range" id="f-acr" name="acr" min="0" max="10" step="1" value="3" /></div>
+            <div class="field"><label for="f-ctrl">Controle Mágico <output data-out="ctrl">0%</output></label><input type="range" id="f-ctrl" name="ctrl" min="0" max="100" step="1" value="25" /></div>
+          </div>
+          <div class="sim__side">
+            <div class="field"><label for="f-mae">Maestria do feitiço</label><select class="select" id="f-mae" name="mae"><option value="0">0 · recém-criado</option><option value="1">1 · -10%</option><option value="2">2 · +1 Acréscimo</option><option value="3">3 · sem encantamento, -20% no total</option></select></div>
+            <div class="field"><label for="f-mana">Sua reserva</label><select class="select" id="f-mana" name="mana">{manaNiveis.map((m, i) => <option value={i} selected={i === 2}>Mana {romanos[i]} · {m.toLocaleString('pt-BR')}</option>)}</select></div>
+            <div class="field">
+              <span class="lbl">Modificadores</span>
+              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="arcano" /> Fluxo Refinado (Mago Arcano, externalizado)</label>
+              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="caos" /> Mana Indomável (Mago do Caos)</label>
+              <label class="chip" style="cursor:pointer;justify-content:flex-start;gap:10px"><input type="checkbox" name="elfo" /> Comunhão com a Mana (Elfo)</label>
+            </div>
+          </div>
+        </div>
+        <div class="sim__out" aria-live="polite">
+          <p class="sim__result" data-result></p>
+          <dl class="kv" data-tab style="margin-top:14px"></dl>
+          <p class="sim__why" data-why></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="destrava">
+    <div class="wrap">
+      <SectionHead num="03" label="O que cada Estágio destrava" title="Tudo num lugar, <em>do 9º ao 1º</em>." lead="Os requisitos de cada Estágio estão em Progressão. Aqui está o que muda quando você chega nele, juntando todas as páginas." />
+      <div class="timeline" data-timeline>
+        <span class="timeline__fill"></span>
+        {destravaEstagio.map((e) => {
+          const nv = nivelFeitico.find((x) => x.n === e.n);
+          return (
+            <div class="tl-item" data-reveal>
+              <p class="tl-item__n">{e.n}</p>
+              <p class="tl-item__req"><small>Requisitos</small>{req[e.n]}<br /><small style="margin-top:10px">Feitiço</small>{nv.alcance} m · {nv.custo} de Mana</p>
+              <div class="tl-item__gain">
+                <small>Destrava</small>
+                <dl class="kv">{e.itens.map(([a, b]) => <><dt class="t-mana">{a}</dt><dd>{b}</dd></>)}</dl>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p class="t-lead" data-reveal>Acima do 1º existem três Estágios que só se alcançam em eventos: <em class="t-mana">Zero, Arcano e Santo</em>. As famílias também têm Marcos em alguns Estágios: veja cada uma em <a href="/familias/">Famílias</a>.</p>
+      <div class="btns" style="margin-top:32px" data-reveal>
+        <a class="btn" href="/progressao/#estagios">Requisitos de cada Estágio</a>
+        <a class="btn" href="/classes/#trilha">Trilhas das Classes</a>
+      </div>
+    </div>
+  </section>
+
+  <NextPage slug="estagios" />
+</Base>

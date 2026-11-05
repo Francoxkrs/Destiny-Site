@@ -76,16 +76,11 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
               <p class="t-small" style="margin-top:12px">{p.aparencia}</p>
               <dl class="kv" style="margin-top:16px">
                 <dt>Domínio</dt><dd>{p.dominio}</dd>
-                <dt>Patrocínio</dt><dd>{p.patrocinio}</dd>
-                <dt>Preço</dt><dd>{p.preco}</dd>
               </dl>
             </div>
           </article>
         ))}
       </div>
-      <dl class="gifts" style="margin-top:clamp(40px,5vw,72px)">
-        {c.patrocinadoras.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
-      </dl>
     </div>
   </section>
 

@@ -7,16 +7,16 @@ import NextPage from '../components/NextPage.astro';
 import { racas, slugify } from '../data/canon.js';
 
 const rotulos = ['Força', 'Resistência', 'Velocidade', 'Poder Mágico', 'Mana', 'Controle'];
-const chances = [['85%', 'Humanos'], ['08%', 'Anões'], ['07%', 'Bruxas'], ['—', 'Elfos, só por linhagem']];
+const chances = [['85%', 'Humanos'], ['08%', 'Anões'], ['07%', 'Bruxas'], ['—', 'Elfos, só por linhagem'], ['—', 'Híbridos, por família']];
 ---
-<Base title="Raças" slug="racas" description="Humanos, Anões, Bruxas e Elfos: atributos iniciais, dons e como cada raça aparece na criação.">
+<Base title="Raças" slug="racas" description="Humanos, Anões, Bruxas, Elfos e Híbridos: atributos iniciais, dons e como cada raça aparece na criação.">
   <PageHero
     slug="racas"
     title="As <em>Raças</em>"
     lead="A raça vem pronta no modelo do /criar-personagem. Ela define os atributos de partida e dons que nenhum treino ensina."
     intro="Para Humanos, a classe social da família define os atributos mágicos iniciais. As outras raças trazem os próprios valores e usam a classe só para dinheiro e região de nascimento."
     image="racas/capa"
-    imageLabel="As quatro raças lado a lado"
+    imageLabel="As cinco raças lado a lado"
   />
 
   <section class="sec--tight">
@@ -32,7 +32,7 @@ const chances = [['85%', 'Humanos'], ['08%', 'Anões'], ['07%', 'Bruxas'], ['—
 
   <section class="sec sec--line" style="padding-bottom:0">
     <div class="wrap">
-      <SectionHead num="01" label="As quatro raças" title="Quem a alma <em>era</em>, e quem ela <em>é</em>." />
+      <SectionHead num="01" label="As cinco raças" title="Quem a alma <em>era</em>, e quem ela <em>é</em>." />
       <div>
         {racas.map((r, i) => (
           <article class="race">

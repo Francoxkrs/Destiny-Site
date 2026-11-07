@@ -29,19 +29,18 @@ export const paginas = [
   { slug: 'atributos', cap: 'III', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
   { slug: 'ferimentos', cap: 'III', num: '09', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
   { slug: 'discos', cap: 'III', num: '10', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Nenhum disco dá Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
-  { slug: 'artes-sombrias', cap: 'III', num: '11', titulo: 'Artes Sombrias', resumo: 'Mana Negativa, Corrupção, Artes Obscuras e Demônios', essencial: ['A Mana Negativa vem do Submundo e não regenera sozinha.', 'Toda Arte Sombria marca Corrupção, de 0 a 10.', 'Artes Obscuras dão Feitiços Obscuros; Artes Demoníacas dão pactos com Demônios.'] },
-  { slug: 'progressao', cap: 'IV', num: '12', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
-  { slug: 'estagios', cap: 'IV', num: '13', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
-  { slug: 'conhecimentos', cap: 'IV', num: '14', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
-  { slug: 'criaturas', cap: 'IV', num: '15', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
-  { slug: 'missoes', cap: 'IV', num: '16', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
-  { slug: 'generais', cap: 'IV', num: '17', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
-  { slug: 'profissoes', cap: 'V', num: '18', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
-  { slug: 'mineracao', cap: 'V', num: '19', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
-  { slug: 'itens', cap: 'V', num: '20', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
-  { slug: 'terras', cap: 'V', num: '21', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
-  { slug: 'economia', cap: 'V', num: '22', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
-  { slug: 'comecar', cap: 'VI', num: '23', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
+  { slug: 'progressao', cap: 'IV', num: '11', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
+  { slug: 'estagios', cap: 'IV', num: '12', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
+  { slug: 'conhecimentos', cap: 'IV', num: '13', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
+  { slug: 'criaturas', cap: 'IV', num: '14', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
+  { slug: 'missoes', cap: 'IV', num: '15', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
+  { slug: 'generais', cap: 'IV', num: '16', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
+  { slug: 'profissoes', cap: 'V', num: '17', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
+  { slug: 'mineracao', cap: 'V', num: '18', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
+  { slug: 'itens', cap: 'V', num: '19', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
+  { slug: 'terras', cap: 'V', num: '20', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
+  { slug: 'economia', cap: 'V', num: '21', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
+  { slug: 'comecar', cap: 'VI', num: '22', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
 ];
 
 export const regioes = [
@@ -988,8 +987,6 @@ export const glossario = [
   ['Ferimento', 'Dano de I (Leve) a IV (Crítico), marcado na Trilha.', 'ferimentos'],
   ['Ápice', 'O último nó de um ramo da trilha de Classe; um por personagem, no 3º Estágio.', 'classes#trilha'],
   ['Alcance', 'Até onde a magia chega depois de sair. Cresce a cada Estágio.', 'estagios'],
-  ['Corrupção', 'Contador de 0 a 10 que as Artes Sombrias marcam.', 'artes-sombrias#corrupcao'],
-  ['Mana Negativa', 'A mana do Submundo, usada pelas Artes Sombrias. Não regenera sozinha.', 'artes-sombrias'],
   ['Ponto de Trilha', 'Ponto para abrir um nó da trilha de Classe: 4 no total.', 'classes#trilha'],
   ['Grimório', 'O livro que guarda os feitiços.', 'magia'],
   ['Jazida', 'Mina com grau e Reserva; rende Recursos por Jornada.', 'mineracao#jazidas'],
@@ -1112,61 +1109,3 @@ export const comecePorAqui = [
 
 export const slugify = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-// Artes Sombrias: Mana Negativa, Corrupção, Artes Obscuras e Demoníacas (proposta de 2026-11-05).
-export const artesSombrias = {
-  texto: 'Abaixo de todo reino corre o Submundo, e dele vem uma mana ao contrário: a Mana Negativa. Ela não nasce no corpo, não regenera com descanso e não obedece ao Grimório como a mana comum. Quem sabe usá-la faz o que a magia comum não faz, e paga com o próprio corpo.',
-  negativa: [
-    ['O que é', 'A energia do Submundo, oposta à mana comum. Onde ela passa, a mana comum enfraquece: feitiços comuns lançados dentro de uma área de Mana Negativa perdem 1 Acréscimo.'],
-    ['Reserva', 'Ninguém nasce com ela. A Mana Negativa fica guardada fora do corpo: no Grimório Demoníaco (até 500), num Demônio pactuado ou num Cristal Negro.'],
-    ['Recarga', 'Não regenera sozinha. Um Cristal Negro consumido devolve 100. Um ritual de 1 cena num lugar onde a mana morreu (as valas do Fosso, minas mortas) devolve 50. Um Demônio pactuado empresta o resto.'],
-    ['Sem reserva', 'Quem não tem Mana Negativa guardada pode converter a própria mana: paga o dobro do custo em Mana comum e marca 1 de Corrupção a mais.'],
-    ['Em Diamond', 'Os Cristais Negros se formam onde a mana morreu, e por isso guardam Mana Negativa. O Lapidário estuda isso em segredo, o Veio Negro vende, e a Coroa prende quem é pego usando.'],
-  ],
-  corrupcao: {
-    texto: 'Toda Arte Sombria marca Corrupção, um contador de 0 a 10 na ficha. Não é sorte: o jogador sempre sabe quanto falta.',
-    regras: [
-      ['Marcar', 'Feitiço de Artes Obscuras: +1. Feitiço Demoníaco ou empréstimo de Demônio: +2. Possessão: +3.'],
-      ['Baixar', '-1 a cada ciclo inteiro sem usar Arte Sombria. Um ritual de Anti-Maldição tira 2 de uma vez.'],
-    ],
-    faixas: [
-      ['0 a 2', 'Limpo', 'Nenhum efeito.'],
-      ['3 a 5', 'Marcado pelo Submundo', 'Um sinal físico que não esconde: veias negras, olhos sem brilho, sombra que atrasa. Quem tem Percepção de Mana nota na hora.'],
-      ['6 a 8', 'Voz do Submundo', '-10% de Controle. Uma vez por cena, o narrador sussurra uma vontade que não é do personagem; recusar custa Ferimento I.'],
-      ['9', 'À beira', 'Feitiços comuns custam o dobro. O personagem não recebe cura por feitiço.'],
-      ['10', 'Tomado', 'Por 1 cena, o Submundo ou o Demônio controla o corpo, com narrador. Depois, a Corrupção volta para 6 e fica uma Sequela.'],
-    ],
-  },
-  obscuras: {
-    texto: 'O Conhecimento Incomum Artes Obscuras abre os Feitiços Obscuros: rituais, maldições e vodu feitos com Mana Negativa. Bruxas e Elfos já nascem com ele. Os Feitiços Obscuros são escritos e aprovados como qualquer feitiço, mas não ocupam espaço no Grimório e seguem a tabela de Estágios.',
-    regras: [
-      ['Domínio Obscuro', '+1 Acréscimo no atributo ligado ao Feitiço Obscuro.'],
-      ['Custo', 'O custo do Estágio, pago em Mana Negativa, e +1 de Corrupção.'],
-      ['Limite', 'Até 3 Feitiços Obscuros, +1 no 6º Estágio e +1 no 3º.'],
-    ],
-    tecnicas: [
-      { nome: 'Boneco de Vodu', estagio: '9º', texto: 'Com um fio de cabelo ou sangue do alvo, liga um boneco a ele por 1 cena. O que se faz no boneco chega ao alvo como um golpe do seu Estágio, a qualquer distância.' },
-      { nome: 'Olhar do Submundo', estagio: '8º', texto: 'Vê através de sombras e ouve o que os mortos de um lugar viram por último. Serve para investigar, não para lutar.' },
-      { nome: 'Marionete', estagio: '7º', texto: 'Levanta um cadáver por 3 turnos. Ele luta com as classificações que tinha em vida, uma abaixo em cada atributo.' },
-      { nome: 'Maldição de Sangue', estagio: '6º', texto: 'Marca um alvo tocado: até o fim da cena, cada feitiço que ele lança custa 20% a mais e marca Ferimento I nele mesmo.' },
-      { nome: 'Selo Negro', estagio: '4º', texto: 'Espalha Mana Negativa numa área de 10 m por 1 turno: nenhum feitiço comum funciona dentro dela, nem os seus.' },
-    ],
-  },
-  demoniacas: {
-    texto: 'O Conhecimento Perdido Artes Demoníacas inclui as Artes Obscuras e vai além: pactos com Demônios. Demônios não morrem; só podem ser selados, inclusive dentro de um Grimório.',
-    pacto: [
-      ['Sussurro', 'O Demônio fala com o personagem e empresta até 100 de Mana Negativa por cena. Pede pequenas coisas em troca.'],
-      ['Pacto', 'O Demônio vive no Grimório Demoníaco e libera os 4 espaços de Feitiços Demoníacos, que são mais fortes: valem como o feitiço de um Estágio acima.'],
-      ['Possessão', 'Uma vez por cena, o Demônio veste o corpo por 3 turnos: +1 classificação em todos os atributos e os Feitiços Demoníacos sem custo. Marca +3 de Corrupção.'],
-      ['Contrato', 'O Demônio cobra um preço narrado, escolhido com o Conselho Mágico: um nome, uma memória, um membro, uma vida. Quebrar o contrato leva a Corrupção a 10 na hora.'],
-    ],
-  },
-  grimorio: 'O Grimório Demoníaco é um Lendário corrompido pelo desespero. Além dos espaços normais, tem 4 espaços só para Feitiços Demoníacos e guarda até 500 de Mana Negativa: é isso que "Mana guardada: 500 negativa" quer dizer na página Magia. Ele não traz um Demônio junto; o Demônio chega depois, por ritual, invocação ou evento.',
-  quem: [
-    ['Bruxas', 'Nascem com Artes Obscuras.'],
-    ['Elfos', 'Nascem com Artes Obscuras e Artes Demoníacas.'],
-    ['Faust', 'Artes Demoníacas de herança; no 7º Estágio o Grimório vira Demoníaco.'],
-    ['Zogratis', 'Grimório Demoníaco e Artes Demoníacas de herança.'],
-    ['Lichita', 'O primeiro Sem Magia recebe o Demônio da Antimagia no 8º Estágio.'],
-    ['Swallowtail', 'O Selamento prende Demônios e pode tirar um de um Grimório.'],
-  ],
-};

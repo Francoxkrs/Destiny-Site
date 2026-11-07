@@ -34,6 +34,7 @@ Algumas imagens aparecem em mais de um lugar com recortes diferentes (por exempl
 | `public/img/racas/anoes.jpg` | 4/5 | Raças (4/5) |
 | `public/img/racas/bruxas.jpg` | 4/5 | Raças (4/5) |
 | `public/img/racas/elfos.jpg` | 4/5 | Raças (4/5) |
+| `public/img/racas/hibridos.jpg` | 4/5 | Raças (4/5) |
 
 ## Famílias
 
@@ -157,6 +158,7 @@ Algumas imagens aparecem em mais de um lugar com recortes diferentes (por exempl
 | `public/img/generais/tropas-de-abate.jpg` | 4/3 | Carreiras (4/3) |
 | `public/img/generais/tropas-de-conquista.jpg` | 4/3 | Carreiras (4/3) |
 | `public/img/generais/veio-negro.jpg` | 4/5 | Carreiras (4/5) |
+| `public/img/generais/veio-negro-2.jpg` | 1/1 | Carreiras (1/1) |
 
 ## Criaturas
 

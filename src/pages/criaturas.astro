@@ -11,6 +11,8 @@ import { criaturas, aparicoes, slugify } from '../data/canon.js';
 const c = criaturas;
 const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas'], ['aparicoes', 'Aparições']];
 // Fichas completas: um .md por criatura em src/data/criaturas (só a parte que os jogadores podem ler).
+import { reliquias } from '../data/reliquias.js';
+const reliquiaDe = (nome) => reliquias.find((r) => r.criatura === nome);
 const fichas = import.meta.glob('../data/criaturas/*.md', { eager: true });
 const fichaDe = (slug) => slug && fichas[`../data/criaturas/${slug}.md`]?.Content;
 // Rank S nunca passou pelo filtro rupestre: ninguém pintou essas criaturas.
@@ -60,6 +62,7 @@ const pintada = (b) => !b.rank.includes('S');
                 <dt>Físico</dt><dd>{b.fisico}</dd>
               </dl>
               <p class="t-small beast__nat">{b.natural}</p>
+              {reliquiaDe(b.nome) && <p class="t-small beast__reliq">Relíquia: <a href={`/itens/#reliquia-${slugify(reliquiaDe(b.nome).nome)}`}>{reliquiaDe(b.nome).nome}</a></p>}
               {Ficha && <button type="button" class="beast__open" data-ficha-open={b.ficha}>{b.secreto ? 'Ler o que se sabe' : 'Ler a ficha completa'}</button>}
             </div>
             {Ficha && (

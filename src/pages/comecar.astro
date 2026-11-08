@@ -6,7 +6,7 @@ import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
 import Arrow from '../components/Arrow.astro';
-import { site, segundaVida, primeirosPassos, criacao, magias, conhecimentos } from '../data/canon.js';
+import { site, segundaVida, primeirosPassos, criacao, magias, conhecimentos, apoio } from '../data/canon.js';
 
 const soEvento = (d) => /sorteios e eventos\)?$/i.test(d) || /Só sorteios/i.test(d);
 const pools = {
@@ -161,6 +161,36 @@ const discordExterno = site.discord !== '#';
           <dl class="kv">
             {criacao.ficha.map(([t, d]) => <><dt>{t}</dt><dd style="text-align:left">{d}</dd></>)}
           </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="apoio">
+    <div class="wrap">
+      <SectionHead num="06" label="Boost e VIP" title="Quem apoia <em>ganha a bolsa</em>." lead={apoio.texto} />
+      <div class="packs">
+        {apoio.pacotes.map((p) => (
+          <article class:list={['pack', p.vip && 'pack--vip']} data-reveal>
+            <span class="pack__price">{p.preco}</span>
+            <h3 class="t-h3">{p.nome}</h3>
+            <ul class="ticks">{p.itens.map((i) => <li>{i}</li>)}</ul>
+            <p class="t-small pack__nota">{p.nota}</p>
+          </article>
+        ))}
+      </div>
+      <div class="grid" style="margin-top:clamp(40px,5vw,72px);align-items:start;row-gap:40px">
+        <div class="c-1-6 stack" style="--s:1.2rem">
+          <span class="eyebrow" data-reveal><b>A</b>O que vem na bolsa</span>
+          <dl class="gifts" style="margin-top:0">
+            {apoio.itens.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+          </dl>
+        </div>
+        <div class="c-7-12 stack" style="--s:1.2rem">
+          <span class="eyebrow" data-reveal><b>B</b>Tetos por personagem</span>
+          <Table head={['Recompensa', 'Teto']} rows={apoio.tetos} />
+          <span class="eyebrow" data-reveal style="margin-top:24px"><b>C</b>Recompensas grátis</span>
+          <Table head={['Como', 'O que ganha']} rows={apoio.gratuitas} />
         </div>
       </div>
     </div>

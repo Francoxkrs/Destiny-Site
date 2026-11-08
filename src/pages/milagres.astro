@@ -6,14 +6,14 @@ import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
 import PageNav from '../components/PageNav.astro';
-import { milagres, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } from '../data/canon.js';
+import { milagres, milagresRegras, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } from '../data/canon.js';
 ---
 <Base title="Milagres e Traços" slug="milagres" description="Os quinze Milagres, os treze Traços, o Feitiço de Alma e a Sincronia: as marcas mais fortes e os talentos pequenos de cada alma.">
   <PageHero
     slug="milagres"
     title="Milagres <em>e Traços</em>"
     lead="Milagres são bênçãos raras da própria mana, as marcas mais fortes que uma alma pode carregar. Traços são talentos pequenos que somam."
-    intro="Cada personagem tem no máximo um Milagre e até três Traços. Milagres vêm de sorteios, eventos, algumas famílias e do Despertar no 1º Estágio."
+    intro="Cada personagem tem no máximo dois Milagres (um da linhagem e um do Despertar ou de sorteio) e até três Traços. Cada Milagre existe em no máximo três Marcados ao mesmo tempo."
     image="milagres/capa"
     imageLabel="Uma alma tocada pela mana"
   />
@@ -22,7 +22,10 @@ import { milagres, tracos, sincronia, exclusivasAntigas, feiticoAlma, slugify } 
 
   <section class="sec" id="milagres">
     <div class="wrap">
-      <SectionHead num="01" label="Os quinze Milagres" title="Um por alma. <em>Nunca dois.</em>" lead="No 1º Estágio, o Despertar deixa escolher um Milagre a quem ainda não tem. Alguns custam caro: Tengentsu, Corpo Vazio e Absorção e Emissão tiram a própria magia." />
+      <SectionHead num="01" label="Os quinze Milagres" title="Dois por alma. <em>Três por Milagre.</em>" lead="Um vem da linhagem; o outro, do Despertar no 1º Estágio, de sorteios ou de eventos. Alguns custam caro: Tengentsu, Corpo Vazio e Absorção e Emissão tiram a própria magia." />
+      <dl class="gifts" style="margin:0 0 clamp(40px,5vw,72px)">
+        {milagresRegras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
       <div class="miracles">
         {milagres.map((m, i) => (
           <article class="miracle" data-reveal>

@@ -6,10 +6,10 @@ import ImageSlot from '../components/ImageSlot.astro';
 import Table from '../components/Table.astro';
 import NextPage from '../components/NextPage.astro';
 import PageNav from '../components/PageNav.astro';
-import { criaturas, slugify } from '../data/canon.js';
+import { criaturas, aparicoes, slugify } from '../data/canon.js';
 
 const c = criaturas;
-const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['entidades', 'Entidades'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas']];
+const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['entidades', 'Entidades'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas'], ['aparicoes', 'Aparições']];
 // Fichas completas: um .md por criatura em src/data/criaturas (só a parte que os jogadores podem ler).
 const fichas = import.meta.glob('../data/criaturas/*.md', { eager: true });
 const fichaDe = (slug) => slug && fichas[`../data/criaturas/${slug}.md`]?.Content;
@@ -233,6 +233,23 @@ const pintada = (b) => !b.rank.includes('S');
         ))}
       </div>
       <div class="btns" style="margin-top:32px" data-reveal><a class="btn" href="/racas/">Ver as Bruxas em Raças</a></div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="aparicoes">
+    <div class="wrap">
+      <SectionHead num="07" label="Aparições" title="Às vezes, <em>elas vêm</em>." lead={aparicoes.texto} />
+      <div class="grid" style="align-items:start;row-gap:32px">
+        <div class="c-1-6">
+          <dl class="gifts" style="margin-top:0">
+            {aparicoes.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+          </dl>
+        </div>
+        <div class="c-7-12 stack" style="--s:1rem">
+          <Table head={['Rank', 'Chance', 'Yuls (grupo)', 'Material (cada)']} rows={aparicoes.ranks} numCols={[1, 2]} />
+          <p class="t-small" data-reveal>{aparicoes.material} <a class="t-mana" href="/mapa/">Ver os lugares com Perigo no mapa</a>.</p>
+        </div>
+      </div>
     </div>
   </section>
 

@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { zonasMana, lugaresRegras, lugares, viagem, slugify } from '../data/canon.js';
+
+const nomeMana = Object.fromEntries(zonasMana.map((z) => [z.grau, z.nome]));
+const total = lugares.reduce((n, r) => n + r.lugares.length, 0);
+const dentro = lugares.reduce((n, r) => n + r.lugares.reduce((m, l) => m + (l.dentro?.length ?? 0), 0), 0);
+
+// Linhas da placa de um lugar, na ordem em que aparecem no Discord.
+const placa = (l) => [
+  l.quem && ['Só entra', l.quem],
+  l.oficios && ['Jornada de', l.oficios.join(', ')],
+  l.jazida && ['Jazida', l.jazida],
+  l.estudo && ['Estuda-se', l.estudo],
+  l.terras && ['Terras', l.terras],
+  l.mercado && ['Mercado', 'Preços da região'],
+  l.eventos && ['Evento', l.eventos],
+].filter(Boolean);
+
+const titulo = (n) => { const m = n.match(/^(A|O|Os) (.+)$/); return m ? `${m[1]} <em>${m[2]}</em>.` : n.replace(/ (\S+)$/, ' <em>$1</em>.'); };
+
+const modosCurtos = ['A pé', 'Montaria', 'Trilho', 'Vassoura', 'Voo', 'Portal'];
+
+const abas = [['zonas', 'Zonas de mana'], ['placas', 'As placas'], ...lugares.map((r) => [slugify(r.nome), r.nome]), ['viagem', 'Viagem']];
+---
+<Base title="Mapa de Diamond" slug="mapa" description="Os 31 lugares de RP de Diamond, o grau de mana de cada um, onde há perigo, minas, mercado e terras, e quanto tempo se leva entre as regiões.">
+  <PageHero
+    slug="mapa"
+    title="Mapa de <em>Diamond</em>"
+    lead="Cinco regiões, trinta e um lugares. Cada um com a sua mana, os seus perigos e o que se pode fazer ali."
+    intro={`O mapa abaixo é o mesmo que o bot monta no Discord: ${total} canais e fóruns, com mais ${dentro} lugares dentro dos fóruns.`}
+    image="mapa/capa"
+    imageLabel="Mapa de Diamond com as cinco regiões"
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="zonas">
+    <div class="wrap">
+      <SectionHead num="01" label="Zonas de mana" title="Onde a mana <em>respira</em>, e onde morreu." lead="Diamond secou de forma desigual. O grau de mana do lugar muda o Treino de Controle, a Concentração em combate e a Respiração de Mana." />
+      <div class="zones">
+        {zonasMana.map((z, i) => (
+          <article class:list={['zone', `zone--${z.grau}`]} style={`--i:${3 - i}`} data-reveal>
+            <span class="zone__bar"><i></i></span>
+            <h3 class="t-h3">{z.nome}</h3>
+            <dl class="kv">
+              <dt>Treino de Controle</dt><dd>{z.controle}</dd>
+              <dt>Concentração</dt><dd>{z.concentracao}</dd>
+            </dl>
+            <p class="t-small">{z.efeito}</p>
+            <p class="t-label zone__onde">{z.onde}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line chap--paper" id="placas">
+    <div class="wrap grid" style="align-items:start;row-gap:32px">
+      <div class="c-1-5 stack" style="--s:1.2rem">
+        <span class="eyebrow" data-reveal><b>02</b>As placas</span>
+        <h2 class="t-h2" data-split>Cada lugar diz <em>o que vale</em>.</h2>
+        <p class="t-body" data-reveal>A Staff cria tudo de uma vez com o /regioes. Só quem tem ficha aprovada vê as regiões.</p>
+      </div>
+      <dl class="gifts c-6-12" style="margin-top:0">
+        {lugaresRegras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  {lugares.map((r, ri) => (
+    <section class:list={['sec', 'sec--line', ri % 2 === 1 && 'sec--raise']} id={slugify(r.nome)}>
+      <div class="wrap">
+        <SectionHead num={String(ri + 3).padStart(2, '0')} label={`${r.nome} · ${r.kanji}`} title={titulo(r.nome)} lead={`${r.resumo} Quem vive aqui: ${r.quem}.`} />
+        <div class="chips region-tags" data-reveal>
+          <span class="chip chip--mana">{nomeMana[r.mana]} na região</span>
+          {r.mercado ? <span class="chip">Mercado: {r.mercado}</span> : <span class="chip">Sem mercado da Coroa</span>}
+        </div>
+        <div class="places">
+          {r.lugares.map((l) => (
+            <article class:list={['place', l.dentro && 'place--forum']} data-reveal>
+              <div class="place__body">
+                <div class="chips">
+                  {l.dentro && <span class="chip chip--gold">Fórum · {l.dentro.length} lugares</span>}
+                  {l.mana && <span class="chip chip--mana">{nomeMana[l.mana]}</span>}
+                  {l.perigo && <span class="chip chip--blood">Perigo {l.perigo}</span>}
+                </div>
+                <h3 class="t-h3">{l.nome}</h3>
+                <p class="t-small">{l.texto}</p>
+                {placa(l).length > 0 && (
+                  <dl class="kv">{placa(l).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
+                )}
+                {l.dentro && (
+                  <ul class="place__in">
+                    {l.dentro.map((d) => (
+                      <li>
+                        <div class="place__in-h">
+                          <b>{d.nome}</b>
+                          {d.mana && <span class="chip chip--mana">{nomeMana[d.mana]}</span>}
+                          {d.perigo && <span class="chip chip--blood">Perigo {d.perigo}</span>}
+                        </div>
+                        <p class="t-small">{d.texto}</p>
+                        {placa(d).length > 0 && <p class="place__meta">{placa(d).map(([k, v]) => `${k}: ${v}`).join(' · ')}</p>}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="sec sec--line" id="viagem">
+    <div class="wrap">
+      <SectionHead num={String(lugares.length + 3).padStart(2, '0')} label="Viagem" title="De uma região <em>a outra</em>." lead={viagem.texto} />
+      <div style="margin-bottom:clamp(32px,4vw,56px)"><ImageSlot src="mapa/estrada" label="O Trilho de Cristal saindo de Valcristal" ratio="21 / 9" /></div>
+      <h3 class="t-h3 sub-h">As estradas</h3>
+      <Table head={['Estrada', 'Liga', 'Distância', 'Nota']} rows={viagem.estradas} />
+      <h3 class="t-h3 sub-h">Como ir</h3>
+      <Table head={['Jeito', 'Por trecho', 'Custo', 'Quem pode']} rows={viagem.modos} numCols={[1]} />
+      <h3 class="t-h3 sub-h">Quanto leva (minutos reais)</h3>
+      <Table head={['Viagem', 'A pé', 'Montaria', 'Trilho', 'Vassoura', 'Voo', 'Portal']} rows={viagem.tempos.map(([v, ...m]) => [v, ...m.map((x, i) => `<span class="t-label">${modosCurtos[i]}</span> ${x === '—' ? '—' : x + ' min'}`)])} numCols={[1, 2, 3, 4, 5, 6]} />
+      <dl class="gifts" style="margin-top:clamp(32px,4vw,56px)">
+        {viagem.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <NextPage slug="mapa" />
+</Base>

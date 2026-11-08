@@ -8,7 +8,7 @@ import Table from '../components/Table.astro';
 import NextPage from '../components/NextPage.astro';
 import { itens as it, slugify, carga } from '../data/canon.js';
 
-const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 'Encantamentos'], ['desgaste', 'Desgaste e compra'], ['carga', 'Carga e equipamento']];
+const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 'Encantamentos'], ['avancado', 'Criatura, Cristal e Ressonância'], ['desgaste', 'Desgaste e compra'], ['carga', 'Carga e equipamento']];
 ---
 <Base title="Itens Mágicos" slug="itens" description="Qualidade, materiais, tipos de item, encantamentos com Pó de Cristal e desgaste: o sistema de itens mágicos ligado aos Recursos.">
   <PageHero
@@ -66,10 +66,46 @@ const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 
     </div>
   </section>
 
+  <section class="sec sec--line sec--raise" id="avancado">
+    <div class="wrap">
+      <SectionHead num="04" label="Criatura, Cristal e Ressonância" title="O item que <em>cresce com você</em>." lead={it.avancado.texto} />
+      <dl class="gifts">
+        {it.avancado.camadas.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}
+      </dl>
+
+      <h3 class="t-h3 sub-h" style="margin-top:clamp(40px,5vw,72px)">Ressonância</h3>
+      <div class="enchants">
+        {it.avancado.ressonancia.map(([n, m, d]) => (
+          <article class="card" data-reveal>
+            <span class="chip chip--blood">{m}</span>
+            <h3 class="t-h3" style="margin-top:14px">{n}</h3>
+            <p class="t-small" style="margin-top:8px">{d}</p>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px" data-reveal>Um item em Ressonância por Marcado. Trocar de item zera o progresso do anterior.</p>
+
+      <div class="grid" style="align-items:start;row-gap:32px;margin-top:clamp(40px,5vw,72px)">
+        <div class="c-1-6 stack" style="--s:1rem">
+          <h3 class="t-h3 sub-h">Cristais no engaste</h3>
+          <Table head={['Cristal', 'Efeito']} rows={it.avancado.engastes} />
+        </div>
+        <div class="c-7-12 stack" style="--s:1rem">
+          <h3 class="t-h3 sub-h">Rank da criatura e qualidade</h3>
+          <Table head={['Rank da Parte', 'Item até']} rows={it.avancado.partes} />
+        </div>
+      </div>
+
+      <h3 class="t-h3 sub-h" style="margin-top:clamp(40px,5vw,72px)">Traços de Criatura</h3>
+      <Table head={['Criatura', 'Traço que dá ao item']} rows={it.avancado.tracos} />
+      <p class="t-small" style="margin-top:16px" data-reveal>{it.avancado.bot}</p>
+    </div>
+  </section>
+
   <section class="sec sec--line chap--paper" id="desgaste">
     <div class="wrap grid" style="align-items:start;row-gap:32px">
       <div class="c-1-6 stack" style="--s:1.2rem">
-        <span class="eyebrow" data-reveal><b>04</b>Desgaste e compra</span>
+        <span class="eyebrow" data-reveal><b>05</b>Desgaste e compra</span>
         <h2 class="t-h2" data-split>Nada dura <em>para sempre</em>.</h2>
         <p class="t-body" data-reveal>{it.compra}</p>
         <div class="btns" data-reveal><a class="btn" href="/economia/#mercado">Preços no Mercado</a></div>
@@ -82,7 +118,7 @@ const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 
 
   <section class="sec sec--line" id="carga">
     <div class="wrap">
-      <SectionHead num="05" label="Carga e equipamento" title="O que cabe <em>nas costas</em>." lead={carga.texto} />
+      <SectionHead num="06" label="Carga e equipamento" title="O que cabe <em>nas costas</em>." lead={carga.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5 stack" style="--s:1rem">
           <Table head={['Força', 'Espaços']} rows={carga.forca} numCols={[1]} />

@@ -29,7 +29,7 @@ export const paginas = [
   { slug: 'mana', cap: 'III', num: '08', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
   { slug: 'atributos', cap: 'III', num: '09', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
   { slug: 'ferimentos', cap: 'III', num: '10', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
-  { slug: 'discos', cap: 'III', num: '11', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Nenhum disco dá Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
+  { slug: 'discos', cap: 'III', num: '11', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Só os Discos Autorais do Mago Artífice dão Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
   { slug: 'progressao', cap: 'IV', num: '12', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
   { slug: 'estagios', cap: 'IV', num: '13', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
   { slug: 'conhecimentos', cap: 'IV', num: '14', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
@@ -810,10 +810,10 @@ export const classesMago = [
     R('Arsenal', ['Arma Vinculada', 'A arma escolhida volta à mão com um gesto e nunca é tirada dele.'], ['Corte de Mana', 'O golpe da arma solta uma onda de mana que chega à metade do alcance do seu Estágio.'], ['Mestre de Armas', 'Usa qualquer arma como se tivesse o Conhecimento dela e ataca duas vezes por turno com arma.']),
     R('Fúria', ['Avanço', '+1 Acréscimo de Velocidade no turno em que avança contra um alvo.'], ['Sangue Quente', 'Com qualquer Ferimento, +1 Acréscimo de Força. Com Ferimento III, também +1 de Velocidade.'], ['Inquebrável', 'Uma vez por cena, ignora todos os efeitos de Ferimento por 3 turnos; eles pesam quando a fúria acaba. Com o Milagre Fúria de Batalha, uma vez por arco ignora também um Ferimento IV, o fatal, e sai da cena vivo, com Ferimento III.']),
   ]),
-  C('Mago das Sombras', 'Infiltração, espionagem e assassinato', 'Conhecimento em Oratória', ['Passo Silencioso', 'Só é percebido por quem tem Controle maior que o seu.'], [
-    R('Infiltração', ['Disfarce de Mana', 'Quem sente a sua mana acha que ela está um nível abaixo.'], ['Sombra Viva', 'Atravessa de uma sombra a outra, até o alcance do seu Estágio.'], ['Ninguém', 'Uma vez por cena, some por 1 turno até para quem tem Controle maior.']),
-    R('Assassinato', ['Ponto Fraco', 'Depois de observar o alvo por 1 turno, o ataque ignora 1 Acréscimo de Resistência.'], ['Golpe Silencioso', 'O alvo atingido não consegue falar nem gritar no turno seguinte.'], ['Lâmina Oculta', 'O primeiro ataque contra um alvo desprevenido tem +1 Acréscimo e não permite reação.'], true),
-    R('Espionagem', ['Ouvido Atento', 'Ouve conversas até o alcance do seu Estágio.'], ['Rastro', 'Marca quem tocou e sabe a direção dessa pessoa por um dia.'], ['Rede de Sombras', 'Mantém até 3 marcas e sabe o lugar exato de cada uma.']),
+  C('Mago das Sombras', 'Espionagem, infiltração e assassinato', 'Conhecimento em Oratória ou Armadilha', ['Passo Silencioso', 'Só é percebido por quem tem Controle maior que o seu; enquanto ninguém na cena o percebeu, +1 Acréscimo de Velocidade. Rotas do Submundo: viagem a pé leva metade do tempo. Contratos Ocultos: vê no quadro de missões os contratos de espionagem e assassinato, que pagam 50% a mais.'], [
+    R('Infiltração', ['Mil Rostos', 'Copia rosto, voz e jeito de alguém que observou por uma cena, e quem sente a sua mana acha que ela está um nível abaixo. Ganha uma Identidade Falsa: nome, família e Classe Social de fachada, que é o que os outros veem na /ficha.'], ['Passe Livre', 'Entra em qualquer região e lugar fechado (a Coroa, as academias do Lapidário, as Tocas) sem convite, Riqueza ou patente. 1 vez por cena, se sair da vista de todos por 1 turno, volta a ser imperceptível.'], ['Ninguém', '2 vezes por cena, apaga a própria mana e some por 1 turno até para quem tem Controle maior, e pode levar 1 aliado junto. O ataque seguinte conta como contra alvo desprevenido. Fora da luta não pode ser rastreado: Rastro, Registrador, Sentinela e marcas não pegam ele.']),
+    R('Assassinato', ['Ponto Fraco', 'Depois de observar o alvo por 1 turno, o ataque ignora 1 Acréscimo de Resistência.'], ['Veneno de Mana', 'Prepara 2 doses por Jornada sem ser Boticário. 1 vez por cena, a lâmina envenenada faz o alvo gastar 20% a mais de Mana e perder 1 Acréscimo de Velocidade por 2 turnos.'], ['Lâmina Oculta', 'O primeiro ataque contra um alvo desprevenido tem +1 Acréscimo, não permite reação e causa um Ferimento um grau acima. Ao derrubar alguém, volta a ser imperceptível.'], true),
+    R('Rede', ['Rastro', 'Ouve conversas até o alcance do seu Estágio e segue o rastro de quem tocou por um dia. Pode seguir uma criatura que fugiu há menos de 2 h e reabrir a cena. Vê o quadro de missões do dia seguinte 1 h antes dos outros.'], ['Mercado Negro', 'Compra e vende pelo preço do Fosso em qualquer região, sem Taxa de Cristal nem Dízimo, vende itens proibidos e compra Discos Ilegais e Brutos com 30% de desconto. Pode fazer a Jornada de Informante, que paga salário de Oficial sem Profissão.'], ['Rede de Informantes', 'Mantém até 5 marcas (informantes) que dizem onde cada pessoa está e avisam no privado quando ela viaja, e para onde. Aviso 15 min antes de cada criatura aparecer, com o canal. 1 vez por ciclo, pede à Staff um segredo de um NPC ou de uma missão.']),
   ]),
   C('Mago Balístico', 'Projéteis e longo alcance', 'Conhecimento em Arquearia', ['Trajetória', 'Projéteis com alcance dobrado e +1 Acréscimo de Velocidade.'], [
     R('Precisão', ['Mira', 'Parado por 1 turno, o próximo disparo tem +1 Acréscimo de Velocidade.'], ['Ricochete', 'O projétil muda de direção uma vez e passa por cobertura.'], ['Artilheiro Arcano', 'O disparo carregado tem +1 Acréscimo de Força e alcance triplicado.'], true),
@@ -835,10 +835,10 @@ export const classesMago = [
     R('Horda', ['Enxame', 'Cria até 10 conjurados pequenos, sem Acréscimo, que contam como 1 no limite.'], ['Sacrifício', 'Desfaz um conjurado para recuperar metade da Mana dele, ou para fazê-lo explodir com a força do seu Estágio.'], ['Mestre Invocador', 'Os conjurados duram 3 turnos depois de o Grimório fechar, e a horda age antes de todos na cena.'], true),
     R('Possessão', ['Vestir', 'Um conjurado envolve o seu corpo como armadura e passa a você os Acréscimos de Resistência dele.'], ['Fusão', 'Une dois conjurados num só, maior, que soma os Acréscimos dos dois.'], ['Quimera', 'Por 3 turnos, você se funde com um conjurado e ganha o corpo, os sentidos e os Acréscimos dele.']),
   ]),
-  C('Mago Artífice', 'Itens mágicos, mecanismos e ciência', 'Produção ou Científico', ['Oficina', 'Produções 20% mais rápidas; grava um feitiço num objeto.'], [
-    R('Inventor', ['Bolsa de Truques', 'Leva 3 engenhocas prontas (fumaça, gancho, clarão) que se usam sem gastar o feitiço do turno.'], ['Prótese', 'Constrói um membro ou uma ferramenta acoplada ao corpo: substitui um membro perdido ou dá +1 Acréscimo num atributo físico.'], ['Engenheiro Arcano', 'Recebe Engenharia sem ocupar espaço e veste uma Armadura Arcana com até 3 feitiços gravados, um por peça.'], true),
-    R('Gatilho', ['Gravação Dupla', 'Grava dois feitiços no mesmo objeto.'], ['Runa de Gatilho', 'O feitiço gravado dispara sozinho quando acontece a condição que você escolheu.'], ['Campo Minado', 'Antes da cena, espalha até 5 gatilhos pelo terreno, que só você enxerga.']),
-    R('Mercado', ['Assinatura', 'Itens feitos por você valem 50% mais no Mercado.'], ['Encomenda', 'Uma vez por ciclo, aceita um contrato de item da Staff que paga em Yuls ou Cristais.'], ['Obra-Prima', 'Uma vez por arco, cria um Item Mágico uma raridade acima, com o seu nome gravado.']),
+  C('Mago Artífice', 'Forja, engenharia, Discos e itens mágicos', 'Produção ou Científico', ['Oficina Ambulante', 'Itens que ele equipa contam como uma qualidade acima para o bônus (até Épica). Forja, encanta e engasta sem Profissão, e essas Jornadas levam 20% menos (soma com a Oficina). Reparo de Campo: 1 vez por cena, conserta na hora um item rachado, dele ou de um aliado ao lado.'], [
+    R('Forja', ['Mão de Mestre', 'Forja itens uma qualidade acima do que o grau da Profissão permite (sem Profissão conta como Aprendiz). Todo item que forja gasta metade do material e sai com 1 encantamento sem gastar Pó de Cristal.'], ['Têmpera de Batalha', '2 vezes por cena, reforja no meio da luta a arma ou a armadura dele ou de um aliado: +1 Acréscimo naquele item até o fim da cena (Item Mágico, passa o teto), e o item ganha o Traço de uma Parte de Criatura que ele carregue.'], ['Arma-Assinatura', 'Forja a arma da vida dele: nasce no Despertar da Ressonância, tem duas formas (golpe e disparo, troca sem gastar ação), +1 Acréscimo nas duas, e o Despertar dela dura a cena toda. 1 vez por mês forja uma Obra-Prima sem ser Mestre, e 1 vez na vida transforma uma Obra-Prima dele numa Relíquia.'], true),
+    R('Engenharia', ['Bancada de Discos', '+1 Encaixe de Disco, e cada disco nele tem 1 de Rejeição a menos. Engasta discos em qualquer um sem Cirurgia Arcana e lapida discos até Facetado numa Jornada. Leva 3 engenhocas por cena (fumaça, gancho, clarão), usadas sem gastar a ação.'], ['Disco Autoral', 'Inventa discos que não estão na lista, 1 por Estágio, escritos com a Staff. Só os discos dele podem dar Acréscimo (até +1 cada, num atributo físico) e marcam metade da Instabilidade. Pode vender ou engastar esses discos em outros jogadores.'], ['Arsenal Vivo', 'Veste uma Armadura Arcana com 3 feitiços gravados (um por peça, cada um solto 1 vez por cena sem gastar ação), +1 Acréscimo de Resistência e 3 encaixes de disco próprios que não contam Rejeição. Lapida discos Brilhantes. 1 vez por cena, Sobrecarga Total: por 3 turnos todos os discos dele têm efeito dobrado e não marcam Instabilidade.']),
+    R('Núcleo', ['Runa de Gatilho', 'Grava até 2 feitiços em objetos, e cada um dispara sozinho numa condição que ele escolhe. Paga o custo do feitiço ao gravar; o disparo sai de graça. A Mana fica presa na runa até ela disparar ou até o fim do dia.'], ['Forja Ressonante', 'Abre o Despertar de itens de outros jogadores e tira Cristais engastados sem perder. Cada serviço conta como Jornada e paga salário de Mestre, além do que ele cobrar.'], ['Autômato de Forja', 'Constrói um golem que luta ao lado dele, com a arma e a armadura que ele forjar e 2 encaixes de disco. A cada item que desmonta no golem, ele aprende 1 Traço ou encantamento desse item (até 5). Destruído, volta em 1 Jornada. Não conta no limite de conjurados.']),
   ]),
 ];
 
@@ -1454,6 +1454,31 @@ export const mineracao = {
   escolha: 'O Cristal Branco tem dois destinos que competem: subir de Estágio ou virar o núcleo de um item Épico. Cada um que sai da mina obriga uma escolha.',
 };
 
+/** Traço que cada Parte de Criatura dá ao item (o mesmo do bot, canon/diamond.ts). */
+export const TRACOS_CRIATURA = [
+  ['Arauto-de-Fuligem', 'Fuligem: 1 vez por cena, solta uma nuvem preta que tapa a visão por 1 turno.'],
+  ['Farejador-de-Grisu', 'Faro: avisa o dono de gás, desabamento ou emboscada 1 turno antes.'],
+  ['Chifre-Espiral', 'Encosta: o dono não escorrega nem cai de paredes e telhados enquanto usa o item.'],
+  ['Lobo Olho-de-Brasa', 'Brasa: o golpe queima; o Ferimento sobe um grau contra quem não resiste a fogo.'],
+  ['Alva-da-Névoa', 'Escama de Cristal: +0,5 de Resistência contra feitiços.'],
+  ['Monólito-Andante', 'Peso de Pedra: ignora o primeiro empurrão ou derrubada da cena.'],
+  ['Vigia do Roçado', 'Olhos do Campo: o dono não é pego desprevenido a até 10 m.'],
+  ['Rubrossigilo', 'Sigilo Ardente: na terceira vez que acerta o mesmo alvo na cena, causa um Ferimento I extra de queimadura.'],
+  ['Manticorno de Enxerto', 'Enxerto: o item ganha uma segunda função (ferrão, chifre ou garra) que se usa sem trocar de arma.'],
+  ['Sentinela de Musgo', 'Posto: parado por 1 turno, o próximo golpe ou disparo chega ao dobro do alcance.'],
+  ['O Derrame', 'Matiz: 1 vez por cena, o dono troca o elemento do golpe ou do feitiço que passa pelo item.'],
+  ['Malware', 'Assimilação: 1 vez por cena, copia por 1 turno o encantamento de um item inimigo que encostou.'],
+  ['O Painel', 'Rupestre: o item guarda 1 cena vista e mostra a imagem dela a quem tocar.'],
+  ['O Rei de Amarelo', 'Máscara Pálida: 1 vez por cena, quem olha o dono nos olhos perde a próxima reação.'],
+  ['Ossuário Errante', 'Coleta: +0,5 Acréscimo de Força por alvo derrubado na cena (até +1).'],
+  ['Dragão Negro', 'Breu: no escuro, o item rende +0,5 Acréscimo a mais.'],
+  ['O Eclipsado', 'Sol Negro: 1 vez por arco, o golpe apaga toda a luz da cena por 1 turno.'],
+  ['A Coroa de Mãos', 'Dívida: quem o dono acerta paga em Mana o preço do próximo feitiço dele.'],
+  ['Saena', 'Contrato: 1 vez por arco, empresta ao dono um feitiço que ele nunca aprendeu, por um preço escrito com a Staff.'],
+  ['Qadosh', 'Éden: 1 vez por arco, transforma uma coisa em outra que não deveria ser (cobre em ouro, água em vinho).'],
+  ['Devorador-de-Veios', 'Fome: feitiços inimigos a até 5 m do item custam 20% a mais.'],
+];
+
 export const itens = {
   texto: 'Todo item tem três partes: o material define a qualidade máxima, o artesão define a qualidade que consegue fazer, e os encantamentos gravam mana no objeto. Cada item rastreia de volta a uma mina, uma caçada ou uma estufa.',
   qualidades: [
@@ -1481,12 +1506,41 @@ export const itens = {
     ['Resguardo', '+0,5 de Resistência contra magia', '2 Pó de Cristal'],
     ['Vital', 'Uma vez por cena, cura um Ferimento I do dono', '2 Pó de Cristal + Erva rara'],
   ],
-  quemEncanta: 'Encantar é gravar um efeito com Pó de Cristal. Quem encanta é um Engenheiro ou um Mago Artífice, cuja passiva Oficina já grava um feitiço num objeto.',
+  quemEncanta: 'Encantar é gravar um efeito com Pó de Cristal. Quem encanta é um Engenheiro ou um Mago Artífice, que forja, encanta e engasta sem precisar de Profissão.',
   desgaste: [
     ['Rachar', 'Um item usado contra algo duas classificações acima dele racha e perde o bônus até ser consertado.'],
-    ['Conserto', '1 Jornada de um Ferreiro e 20% do material original.'],
+    ['Conserto', '1 Jornada de um Ferreiro e 20% do material original. O Mago Artífice conserta na hora, 1 vez por cena, com o Reparo de Campo.'],
+    ['Sobrecarga', 'Força o item além do limite: +1 Acréscimo naquele uso, e ele racha no fim da cena.'],
     ['Histórico', 'Itens Raros ou melhores têm nome e histórico no bot: quem fez e de que mina veio o material. Um item roubado pode ser rastreado.'],
   ],
+  avancado: {
+    texto: 'Além do material e do artesão, um item pode carregar a criatura de onde veio, cristais engastados e a história de quem o usa. São cinco camadas que se somam à qualidade.',
+    camadas: [
+      ['Essência de Criatura', 'Cada criatura vencida deixa uma Parte. O item forjado com ela herda o Traço da espécie, e o Rank da criatura limita a qualidade que o item pode ter.'],
+      ['Engastes de Cristal', 'Itens Raros têm 1 engaste, Épicos 2 e Obras-Primas 3. Um Lapidador ou um Mago Artífice engasta numa Jornada. Só o Artífice tira um Cristal sem quebrar.'],
+      ['Ressonância', 'Cada Marcado escolhe um item Raro ou melhor para crescer com ele. As missões concluídas com o item equipado sobem a Ressonância em três níveis.'],
+      ['Sobrecarga', '+1 Acréscimo naquele uso; o item racha no fim da cena e precisa de conserto.'],
+      ['Relíquias', 'Itens únicos, com uma propriedade que nenhum outro tem e um preço ou maldição. Saem de eventos, de missões S e da Arma-Assinatura do Mago Artífice, 1 vez na vida.'],
+    ],
+    engastes: [
+      ['Cristal Branco', '+0,5 Acréscimo no atributo do item'],
+      ['Cristal Negro', '+1 Acréscimo no atributo do item; o dono ganha 1 de Corrupção por cena em que usa o item'],
+      ['Cristal Dourado', 'Uma propriedade única, escrita com a Staff (só de evento)'],
+    ],
+    ressonancia: [
+      ['Vínculo', '3 missões', 'O item toma a cor e o elemento da magia do dono.'],
+      ['Nome', '8 missões', 'O dono batiza o item e escolhe 1 propriedade de uma lista, com a Staff.'],
+      ['Despertar', '15 missões', '1 vez por cena, por 3 turnos, o item libera uma forma nova com +1 Acréscimo e uma habilidade escrita com a Staff. Um Mago Artífice com Forja Ressonante abre o Despertar.'],
+    ],
+    partes: [
+      ['F e E', 'até Incomum'],
+      ['D e C', 'até Rara'],
+      ['B', 'até Épica'],
+      ['A e S', 'até Obra-Prima'],
+    ],
+    tracos: TRACOS_CRIATURA,
+    bot: 'No bot: /equipamento vincular, nomear, despertar, sobrecarga e partes; /profissao jornada para forjar com Parte, engastar e abrir o Despertar.',
+  },
   compra: 'Comuns e Incomuns estão nas lojas de NPC; Raros, só com artesãos jogadores ou na Coroa; Épicos e Obras-Primas, só por Contrato de Encomenda. O Fosso vende de tudo, inclusive itens proibidos, por ×1,5 do preço de Mercado.',
 };
 
@@ -1678,14 +1732,14 @@ export const discos = {
     ['Cristalização', 'Passar do limite de Rejeição deixa uma Sequela permanente: a pele em volta do disco vira cristal e o personagem perde 5% de Controle por ponto acima.'],
     ['Instabilidade', 'Os discos mais fortes ganham 1 marca a cada uso. Quando as marcas chegam ao limite do disco, o efeito colateral acontece na hora. As marcas somem no começo de cada ciclo. É um contador, não sorte: o jogador sempre sabe quanto falta.'],
     ['Sobrecarga', '1 vez por cena, o disco rende o dobro por 1 turno. Custa 1 Ferimento I na hora e conta 2 marcas de Instabilidade.'],
-    ['Engaste e Desengaste', 'Só com Cirurgia Arcana ou Conhecimento Científico, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
-    ['Sem Acréscimos', 'Nenhum disco dá Acréscimo. Eles dão funções: sentidos, memória, mana guardada, truques.'],
+    ['Engaste e Desengaste', 'Só com Cirurgia Arcana, Conhecimento Científico ou a Bancada de Discos do Mago Artífice, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
+    ['Sem Acréscimos', 'Nenhum disco da lista dá Acréscimo. Eles dão funções: sentidos, memória, mana guardada, truques. A exceção são os Discos Autorais do Mago Artífice (até +1, num atributo físico).'],
   ],
   lapidacao: [
     ['Bruto', 'Veio Negro, no Fosso', '+1', '150 Yuls'],
     ['Lapidado', 'Oficinas do Lapidário', 'Normal', '400 Yuls'],
     ['Facetado', 'Libardirt e contratos da Coroa', 'Normal, efeito +50%', '1.200 Yuls + Pó de Cristal'],
-    ['Brilhante', 'Só a Forja e eventos', '-1', 'Não está à venda'],
+    ['Brilhante', 'A Forja, eventos e o Arsenal Vivo do Mago Artífice', '-1', 'Não está à venda; o Artífice com Arsenal Vivo lapida por 1.200 Yuls e 2 Pós de Cristal'],
   ],
   linhas: [
     ['Sentidos', 'O que o corpo não percebe sozinho.'],

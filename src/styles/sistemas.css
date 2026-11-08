@@ -194,6 +194,43 @@ a.term { cursor: pointer; }
 .footer__idx a { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mana); }
 .footer__idx svg { width: 16px; height: 16px; }
 
+/* ---------- Mapa de Diamond ---------- */
+.zones { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+@media (min-width: 800px) { .zones { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.zone { background: var(--ink-2); padding: clamp(18px, 2vw, 26px); display: grid; gap: 12px; align-content: start; min-width: 0; }
+.zone__bar { display: block; height: 6px; background: var(--line); }
+.zone__bar i { display: block; height: 100%; width: calc(var(--i) * 33.4%); min-width: 4px; background: var(--mana); opacity: calc(0.4 + var(--i) * 0.2); }
+.zone--morta .zone__bar i { background: var(--blood); width: 100%; opacity: 0.25; }
+.zone .kv > dd { font-size: 0.9rem; }
+.zone__onde { color: var(--mute); line-height: 1.6; }
+.region-tags { margin: 0 0 clamp(20px, 2.4vw, 32px); }
+.places { display: grid; gap: clamp(12px, 1.6vw, 22px); align-items: start; }
+@media (min-width: 700px) { .places { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .places { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.place { border: 1px solid var(--line); background: var(--ink); min-width: 0; }
+.place--forum { border-top: 3px solid rgba(214, 180, 106, 0.55); }
+.place__body { padding: clamp(16px, 1.8vw, 22px); display: grid; gap: 12px; }
+.place .chips { gap: 6px; }
+.place .chips:empty { display: none; }
+.place .kv > dd { font-size: 0.86rem; }
+.place__in { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.place__in li { padding: 12px 0; border-bottom: 1px dashed var(--line); display: grid; gap: 6px; }
+.place__in-h { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.place__in-h b { font-weight: 600; color: var(--bone); margin-right: 4px; }
+.place__meta { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--mute); line-height: 1.6; }
+.sub-h { margin: clamp(32px, 4vw, 52px) 0 16px; }
+.sub-h:first-of-type { margin-top: 0; }
+
+/* ---------- Boost e VIP ---------- */
+.packs { display: grid; gap: clamp(12px, 1.6vw, 22px); align-items: start; }
+@media (min-width: 700px) { .packs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .packs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.pack { border: 1px solid var(--line); border-top: 3px solid var(--mana); background: var(--ink); padding: clamp(18px, 2vw, 24px); display: grid; gap: 12px; min-width: 0; }
+.pack--vip { border-top-color: var(--gold); }
+.pack__price { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); }
+.pack ul.ticks { margin-top: 0; }
+.pack__nota { padding-top: 12px; border-top: 1px dashed var(--line); }
+
 /* ---------- celular: nada pode passar da largura da tela ---------- */
 /* Itens de grade, por padrão, nunca ficam mais estreitos que o conteúdo (min-width: auto).
    Uma etiqueta longa ou um campo bastava para alargar a página e o celular "ampliava" a tela (ex.: Raças).

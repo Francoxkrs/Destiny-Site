@@ -9,14 +9,14 @@ import PageNav from '../components/PageNav.astro';
 import { criaturas, aparicoes, slugify } from '../data/canon.js';
 
 const c = criaturas;
-const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['entidades', 'Entidades'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas'], ['aparicoes', 'Aparições']];
+const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas'], ['aparicoes', 'Aparições']];
 // Fichas completas: um .md por criatura em src/data/criaturas (só a parte que os jogadores podem ler).
 const fichas = import.meta.glob('../data/criaturas/*.md', { eager: true });
 const fichaDe = (slug) => slug && fichas[`../data/criaturas/${slug}.md`]?.Content;
 // Rank S nunca passou pelo filtro rupestre: ninguém pintou essas criaturas.
 const pintada = (b) => !b.rank.includes('S');
 ---
-<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, as Patrocinadoras, as Entidades, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
+<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, as Patrocinadoras, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
   <PageHero
     slug="criaturas"
     title="As <em>Criaturas</em>"
@@ -110,8 +110,6 @@ const pintada = (b) => !b.rank.includes('S');
               <p class="t-small" style="margin-top:12px">{p.aparencia}</p>
               <dl class="kv" style="margin-top:16px">
                 <dt>Domínio</dt><dd>{p.dominio}</dd>
-                <dt>Patrocínio</dt><dd>{p.patrocinio}</dd>
-                <dt>Preço</dt><dd>{p.preco}</dd>
               </dl>
             </div>
           </article>
@@ -123,34 +121,9 @@ const pintada = (b) => !b.rank.includes('S');
     </div>
   </section>
 
-  <section class="sec sec--line entidades" id="entidades">
-    <div class="wrap">
-      <SectionHead num="03" label="Entidades" title="Não se caça. <em>Se pede.</em>" lead={c.entidades.texto} />
-      <div class="ents">
-        {c.entidades.lista.map((e) => (
-          <article class="ent" data-reveal>
-            <div class="ent__media">
-              <ImageSlot src={`criaturas/${e.img}`} label={e.nome} ratio="4 / 5" />
-              <span class="patrona__tag">{e.natureza}</span>
-            </div>
-            <div class="ent__body">
-              <h3 class="patrona__nome">{e.nome}</h3>
-              <p class="patrona__epiteto">{e.titulo} · {e.alcunha}</p>
-              <p class="ent__lore">{e.lore}</p>
-              <dl class="kv" style="margin-top:18px">
-                <dt>Como funciona</dt><dd>{e.funciona}</dd>
-              </dl>
-            </div>
-          </article>
-        ))}
-      </div>
-      <p class="t-small" style="margin-top:16px" data-reveal>{c.entidades.aviso}</p>
-    </div>
-  </section>
-
   <section class="sec sec--line sec--raise" id="domacao">
     <div class="wrap">
-      <SectionHead num="04" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
+      <SectionHead num="03" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
       <ol class="flow">
         {c.domacao.map(([t, d], i) => (
           <li data-reveal>
@@ -184,7 +157,7 @@ const pintada = (b) => !b.rank.includes('S');
 
   <section class="sec sec--line" id="assimilacao">
     <div class="wrap">
-      <SectionHead num="05" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
+      <SectionHead num="04" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5">
           <ImageSlot src="criaturas/assimilacao" label="Um cavaleiro com o pelo e os olhos do Lobo Olho-de-Brasa" ratio="4 / 5" />
@@ -212,7 +185,7 @@ const pintada = (b) => !b.rank.includes('S');
 
   <section class="sec sec--line chap--paper" id="familiar">
     <div class="wrap">
-      <SectionHead num="06" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
+      <SectionHead num="05" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5 stack" style="--s:1.2rem">
           <ImageSlot src="criaturas/familiar" label="Uma Bruxa e o seu familiar" ratio="4 / 5" />
@@ -238,7 +211,7 @@ const pintada = (b) => !b.rank.includes('S');
 
   <section class="sec sec--line" id="aparicoes">
     <div class="wrap">
-      <SectionHead num="07" label="Aparições" title="Às vezes, <em>elas vêm</em>." lead={aparicoes.texto} />
+      <SectionHead num="06" label="Aparições" title="Às vezes, <em>elas vêm</em>." lead={aparicoes.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-6">
           <dl class="gifts" style="margin-top:0">

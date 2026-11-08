@@ -9,9 +9,14 @@ import PageNav from '../components/PageNav.astro';
 import { criaturas, slugify } from '../data/canon.js';
 
 const c = criaturas;
-const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas']];
+const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'], ['entidades', 'Entidades'], ['domacao', 'Domação'], ['assimilacao', 'Assimilação'], ['familiar', 'Familiar das Bruxas']];
+// Fichas completas: um .md por criatura em src/data/criaturas (só a parte que os jogadores podem ler).
+const fichas = import.meta.glob('../data/criaturas/*.md', { eager: true });
+const fichaDe = (slug) => slug && fichas[`../data/criaturas/${slug}.md`]?.Content;
+// Rank S nunca passou pelo filtro rupestre: ninguém pintou essas criaturas.
+const pintada = (b) => !b.rank.includes('S');
 ---
-<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, as Patrocinadoras, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
+<Base title="Criaturas" slug="criaturas" description="Bestiário de Diamond, as Patrocinadoras, as Entidades, como domar uma criatura, a Assimilação e o Familiar das Bruxas.">
   <PageHero
     slug="criaturas"
     title="As <em>Criaturas</em>"
@@ -25,8 +30,8 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
 
   <section class="sec" id="bestiario">
     <div class="wrap">
-      <SectionHead num="01" label="Bestiário" title="Quatro tipos, <em>um Rank</em> cada." lead="O Rank de uma criatura é o mesmo das missões: diz o perigo dela e o Estágio que o personagem precisa para tentar domá-la." />
-      <div class="cols-4">
+      <SectionHead num="01" label="Bestiário" title="Cinco tipos, <em>um Rank</em> cada." lead="O Rank de uma criatura é o mesmo das missões: diz o perigo dela e o Estágio que o personagem precisa para tentar domá-la." />
+      <div class="cols-4 tipos5">
         {c.tipos.map(([n, d, r]) => (
           <article class="card" data-reveal>
             <span class="chip chip--blood">Rank {r}</span>
@@ -37,11 +42,14 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
       </div>
 
       <div class="beasts">
-        {c.bestiario.map((b) => (
-          <article class="beast" data-reveal>
+        {c.bestiario.map((b) => {
+          const Ficha = fichaDe(b.ficha);
+          return (
+          <article class:list={['beast', b.secreto && 'beast--secreto']} data-reveal>
             <div class="beast__media">
-              <ImageSlot src={`criaturas/${b.img ?? slugify(b.nome)}`} label={b.nome} ratio="4 / 3" class="slot--rupestre" />
-              <span class="beast__rank">{b.rank}</span>
+              <ImageSlot src={`criaturas/${b.img ?? slugify(b.nome)}`} label={b.nome} ratio="4 / 3" class={pintada(b) ? 'slot--rupestre' : 'slot--lenda'} />
+              <span class:list={['beast__rank', b.rank.length > 1 && 'beast__rank--wide']}>{b.rank}</span>
+              {b.secreto && <span class="beast__secreto">Registro incompleto</span>}
             </div>
             <div class="beast__body">
               <h3 class="t-h3">{b.nome}</h3>
@@ -52,9 +60,35 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
                 <dt>Físico</dt><dd>{b.fisico}</dd>
               </dl>
               <p class="t-small beast__nat">{b.natural}</p>
+              {Ficha && <button type="button" class="beast__open" data-ficha-open={b.ficha}>{b.secreto ? 'Ler o que se sabe' : 'Ler a ficha completa'}</button>}
             </div>
+            {Ficha && (
+              <dialog class="ficha" id={`ficha-${b.ficha}`} data-lenis-prevent aria-label={`Ficha: ${b.nome}`}>
+                <div class="ficha__in">
+                  <header class="ficha__head">
+                    <span class:list={['beast__rank', 'ficha__rank', b.rank.length > 1 && 'beast__rank--wide']}>{b.rank}</span>
+                    <div>
+                      <p class="ficha__eyebrow">{b.tipo} · Rank {b.rank}{b.secreto ? ' · Registro incompleto' : ''}</p>
+                      <h2 class="ficha__nome">{b.nome}</h2>
+                      <p class="beast__sci"><i>{b.cientifico}</i></p>
+                    </div>
+                    <button type="button" class="ficha__close" data-ficha-close aria-label="Fechar">×</button>
+                  </header>
+                  {b.galeria && (
+                    <div class="ficha__galeria">
+                      {b.galeria.map(([img, nome]) => (
+                        <figure><ImageSlot src={`criaturas/${img}`} label={nome} ratio="4 / 3" class="slot--rupestre" parallax={false} /><figcaption>{nome}</figcaption></figure>
+                      ))}
+                    </div>
+                  )}
+                  <div class="ficha__texto"><Ficha /></div>
+                  {b.secreto && <p class="ficha__fim">O resto desta ficha não está escrito em lugar nenhum. Quem quiser saber como ele luta vai ter que descobrir em jogo.</p>}
+                </div>
+              </dialog>
+            )}
           </article>
-        ))}
+          );
+        })}
       </div>
       <p class="t-small" style="margin-top:16px" data-reveal>{c.rupestre} O bestiário cresce com os eventos; os narradores podem criar criaturas novas seguindo estes Ranks.</p>
     </div>
@@ -89,9 +123,34 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
     </div>
   </section>
 
+  <section class="sec sec--line entidades" id="entidades">
+    <div class="wrap">
+      <SectionHead num="03" label="Entidades" title="Não se caça. <em>Se pede.</em>" lead={c.entidades.texto} />
+      <div class="ents">
+        {c.entidades.lista.map((e) => (
+          <article class="ent" data-reveal>
+            <div class="ent__media">
+              <ImageSlot src={`criaturas/${e.img}`} label={e.nome} ratio="4 / 5" />
+              <span class="patrona__tag">{e.natureza}</span>
+            </div>
+            <div class="ent__body">
+              <h3 class="patrona__nome">{e.nome}</h3>
+              <p class="patrona__epiteto">{e.titulo} · {e.alcunha}</p>
+              <p class="ent__lore">{e.lore}</p>
+              <dl class="kv" style="margin-top:18px">
+                <dt>Como funciona</dt><dd>{e.funciona}</dd>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="t-small" style="margin-top:16px" data-reveal>{c.entidades.aviso}</p>
+    </div>
+  </section>
+
   <section class="sec sec--line sec--raise" id="domacao">
     <div class="wrap">
-      <SectionHead num="03" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
+      <SectionHead num="04" label="Domação" title="Ninguém compra <em>lealdade</em>." lead="Domar não depende de sorte. Depende de cenas escritas, do Estágio e da mana que o personagem aceita gastar." />
       <ol class="flow">
         {c.domacao.map(([t, d], i) => (
           <li data-reveal>
@@ -125,7 +184,7 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
 
   <section class="sec sec--line" id="assimilacao">
     <div class="wrap">
-      <SectionHead num="04" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
+      <SectionHead num="05" label="Assimilação" title="Dois corpos, <em>uma mana</em>." lead={c.assimilacao.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5">
           <ImageSlot src="criaturas/assimilacao" label="Um cavaleiro com o pelo e os olhos do Lobo Olho-de-Brasa" ratio="4 / 5" />
@@ -153,7 +212,7 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
 
   <section class="sec sec--line chap--paper" id="familiar">
     <div class="wrap">
-      <SectionHead num="05" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
+      <SectionHead num="06" label="Familiar das Bruxas" title="A Bruxa não doma. <em>Ela pactua.</em>" lead={c.familiar.texto} />
       <div class="grid" style="align-items:start;row-gap:32px">
         <div class="c-1-5 stack" style="--s:1.2rem">
           <ImageSlot src="criaturas/familiar" label="Uma Bruxa e o seu familiar" ratio="4 / 5" />
@@ -178,4 +237,22 @@ const abas = [['bestiario', 'Bestiário'], ['patrocinadoras', 'Patrocinadoras'],
   </section>
 
   <NextPage slug="criaturas" />
+
+  <script>
+    // Fichas completas do bestiário: abre o <dialog> e para a rolagem suave enquanto ele está aberto.
+    document.querySelectorAll('[data-ficha-open]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const d = document.getElementById(`ficha-${b.dataset.fichaOpen}`);
+        if (!d) return;
+        d.showModal();
+        window.__lenis?.stop();
+        document.documentElement.classList.add('ficha-aberta');
+      });
+    });
+    document.querySelectorAll('dialog.ficha').forEach((d) => {
+      d.addEventListener('close', () => { window.__lenis?.start(); document.documentElement.classList.remove('ficha-aberta'); });
+      d.addEventListener('click', (ev) => { if (ev.target === d) d.close(); });
+      d.querySelector('[data-ficha-close]')?.addEventListener('click', () => d.close());
+    });
+  </script>
 </Base>

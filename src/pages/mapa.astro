@@ -15,6 +15,7 @@ const dentro = lugares.reduce((n, r) => n + r.lugares.reduce((m, l) => m + (l.de
 // Linhas da placa de um lugar, na ordem em que aparecem no Discord.
 const placa = (l) => [
   l.quem && ['Só entra', l.quem],
+  l.controle && ['Controle', l.controle],
   l.oficios && ['Jornada de', l.oficios.join(', ')],
   l.jazida && ['Jazida', l.jazida],
   l.estudo && ['Estuda-se', l.estudo],

@@ -68,7 +68,7 @@ export const eventosDiamond = [
 
 // Grau de mana de cada lugar. Treino de Controle = % por treino.
 export const zonasMana = [
-  { grau: 'forte', nome: 'Forte Mana', controle: '+2%', concentracao: 'Em dobro', efeito: 'Concentração em dobro, Treino de Controle rende +2% e o Método de Mana funciona.', onde: 'As Câmaras de Mana do Lapidário e a Fenda de Clover, na Fronteira.' },
+  { grau: 'forte', nome: 'Forte Mana', controle: '+3% nas Câmaras; +2% na Fenda', concentracao: 'Em dobro', efeito: 'Concentração em dobro, Treino de Controle rende +3% nas Câmaras de Mana e +2% na Fenda de Clover, e o Método de Mana funciona.', onde: 'As Câmaras de Mana do Lapidário e a Fenda de Clover, na Fronteira.' },
   { grau: 'comum', nome: 'Mana Comum', controle: '+1%', concentracao: 'Normal', efeito: 'Nenhum efeito. É a mana da maior parte do reino.', onde: 'A Coroa, o Lapidário, os Veios e a Fronteira, fora das exceções.' },
   { grau: 'rala', nome: 'Mana Rala', controle: '+1%', concentracao: 'Normal', efeito: 'A Respiração de Mana recupera só 3%, mesmo com pó de cristal no ar.', onde: 'Todo o Fosso e a Boca das Profundas, nos Veios.' },
   { grau: 'morta', nome: 'Mana Morta', controle: 'Não funciona', concentracao: 'Não recupera', efeito: 'A Concentração não recupera nada, o Treino de Controle não funciona e a Respiração de Mana falha.', onde: 'As Valas do Fosso e os Planaltos Mortos da Fronteira.' },
@@ -231,6 +231,7 @@ export const lugares = [
         nome: "Câmaras de mana",
         texto: "As zonas de Forte Mana do reino. Disputadas, vigiadas e caras.",
         mana: "forte",
+        controle: "+3% por Treino de Controle, em todas as Câmaras",
         dentro: [
           {
             nome: "Câmara Pública",
@@ -998,7 +999,7 @@ export const destravaEstagio = [
 export const treinos = [
   { tipo: 'Físico', sobe: 'Força, Resistência ou Velocidade', duracao: '2 horas', limite: '2 por ciclo', acao: '500 caracteres' },
   { tipo: 'Mágico', sobe: 'Mana ou Poder Mágico', duracao: '1 hora', limite: '2 por ciclo', acao: '400 caracteres' },
-  { tipo: 'Controle', sobe: '+1% (+2% em Forte Mana; não funciona em Mana Morta)', duracao: '1 hora', limite: '1 por ciclo', acao: '600 caracteres' },
+  { tipo: 'Controle', sobe: '+1% (+2% em Forte Mana, +3% nas Câmaras de Mana; não funciona em Mana Morta)', duracao: '1 hora', limite: '1 por ciclo', acao: '600 caracteres' },
   { tipo: 'Técnica', sobe: 'Uma Técnica de Mana', duracao: '1 hora', limite: '1 por ciclo', acao: '800 caracteres' },
 ];
 
@@ -1709,7 +1710,7 @@ export const glossario = [
   ['Trilha de Ferimentos', 'A barra de vida: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'ferimentos#trilha'],
   ['Vigor', 'O quanto uma terra produz: Morta, Exausta, Fraca ou Viva.', 'terras#vigor'],
   ['Yul', 'A moeda de todos os reinos.', 'economia#moedas'],
-  ['Forte Mana', 'Lugar onde a mana é densa: Concentração em dobro e Treino de Controle +2%.', 'mapa#zonas'],
+  ['Forte Mana', 'Lugar onde a mana é densa: Concentração em dobro e Treino de Controle +2% (+3% nas Câmaras de Mana).', 'mapa#zonas'],
   ['Mana Rala', 'Lugar de mana fraca, como o Fosso: a Respiração de Mana rende pouco.', 'mapa#zonas'],
   ['Mana Morta', 'Lugar onde a mana morreu: sem Concentração e sem Treino de Controle.', 'mapa#zonas'],
   ['Placa', 'A mensagem fixada de cada lugar de RP: quem entra, mana, perigo, ofícios e terras.', 'mapa#placas'],

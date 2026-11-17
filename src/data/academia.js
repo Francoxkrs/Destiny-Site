@@ -26,11 +26,10 @@ export const licoes = [
     blocos: [
       ['Três atributos físicos', `Força (o que você destrói), Resistência (o que você aguenta) e Velocidade (quem age primeiro). Cada um tem uma classificação, de ${classificacoes[0].nome} a ${classificacoes.at(-1).nome}.`],
       ['Acréscimos', 'Bônus pequenos em cima da classificação, vindos de magia, Poder Mágico, classe e itens. Dez Acréscimos valem uma classificação inteira.'],
-      ['O confronto', 'Força contra Resistência, Velocidade contra Velocidade. A classificação decide primeiro; se empatar, valem os Acréscimos; se empatar de novo, as circunstâncias e a qualidade da cena escrita.'],
+      ['O confronto', 'Força contra Resistência decide se o golpe passa; Velocidade contra Velocidade decide quem age antes. Ganha o maior. Se empatar, decidem os bônus e a cena bem escrita.'],
     ],
-    exemplo: `Força ${classificacoes[3].nome} contra Resistência ${classificacoes[2].nome} +3: a classificação decide primeiro, e Extrema é maior. O golpe passa, os Acréscimos nem entram na conta.`,
-    simulador: true,
-    pergunta: { q: `Força ${classificacoes[2].nome} +4 contra Resistência ${classificacoes[2].nome} +1. Quem vence?`, opcoes: ['O ataque', 'A defesa', 'Empate'], certa: 0, porque: 'As classificações empatam, então valem os Acréscimos: 4 contra 1.' },
+    exemplo: 'Lúx bate num golem de pedra. A Força dele é maior que a Resistência do golem, então o golpe racha a pedra. Não tem dado: quem escreve a cena já sabe o resultado e escreve bem o caminho até ele.',
+    pergunta: { q: 'Numa luta, quem age primeiro?', opcoes: ['Quem tem mais Força', 'Quem tem mais Velocidade', 'Quem postou primeiro'], certa: 1, porque: 'Velocidade contra Velocidade decide quem age antes. Força contra Resistência decide se o golpe passa.' },
     links: [['atributos', 'Atributos'], ['ferimentos', 'Ferimentos']],
   },
   {

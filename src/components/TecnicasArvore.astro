@@ -1,0 +1,142 @@
+---
+/**
+ * Árvore das Técnicas de Mana: um tronco que sobe do 9º ao 2º Estágio.
+ * O tronco enche de mana até o Estágio do Marcado; cada técnica fica na altura do Estágio que pede.
+ * Só mostra e explica (o bot é quem registra os treinos).
+ */
+import { tecnicasArvore as T, grupos, regrasTecnicas } from '../data/tecnicas-arvore.js';
+
+interface Props { ficha: any; real: boolean; ativo: boolean }
+const { ficha: f, real, ativo } = Astro.props;
+
+const Y = (s: number) => 6 + ((s - 2) / 7) * 80; // 2º no alto, 9º embaixo
+const sabe = new Set<string>(f.tecnicas ?? []);
+const motivo = (t: typeof T[number]) => {
+  const falta: string[] = [];
+  if (f.estagio > t.estagio) falta.push(`${t.estagio}º Estágio`);
+  if (f.controle < t.controle) falta.push(`Controle ${t.controle}%`);
+  if (t.requer && !sabe.has(t.requer)) falta.push(t.requer);
+  if (t.social && !t.social.includes(f.classeSocial)) falta.push('Ser da Plebe (ou 1 mês real nos Veios)');
+  if (t.elo) falta.push('Criatura em Vínculo Elo');
+  return falta;
+};
+const st = (t: typeof T[number]) => (sabe.has(t.nome) ? 'tem' : motivo(t).length ? 'bloqueado' : 'livre');
+const motivoF = (t: typeof T[number]) => (sabe.has(t.nome) ? [] : motivo(t));
+const pos = Object.fromEntries(T.map((t) => [t.nome, { x: t.x, y: Y(t.estagio) }]));
+const curva = (a: { x: number; y: number }, b: { x: number; y: number }) => `M${a.x} ${a.y} C${a.x} ${(a.y + b.y) / 2} ${b.x} ${(a.y + b.y) / 2} ${b.x} ${b.y}`;
+const arestas: { d: string; cheia: boolean; de: string; para: string }[] = [];
+for (const t of T) {
+  if (t.requer) arestas.push({ d: curva(pos[t.requer], pos[t.nome]), cheia: true, de: t.requer, para: t.nome });
+  for (const v of t.vem) {
+    if (v === t.requer) continue;
+    if (t.grupo === 'fluxo' && T.find((x) => x.nome === v)?.grupo === 'fluxo') continue; // o tronco já liga
+    arestas.push({ d: curva(pos[v], pos[t.nome]), cheia: false, de: v, para: t.nome });
+  }
+}
+const estagios = [9, 8, 7, 6, 5, 4, 3, 2];
+const seuY = Y(Math.max(2, Math.min(9, f.estagio)));
+const total = T.length;
+const feitas = T.filter((t) => sabe.has(t.nome)).length;
+const livres = T.filter((t) => st(t) === 'livre').length;
+const rotGrupo = [{ g: grupos[3], x: 8 }, { g: grupos[1], x: 31 }, { g: grupos[0], x: 50 }, { g: grupos[2], x: 75 }];
+const primeira = T.find((t) => st(t) === 'livre') ?? T[0];
+const dados = { tecnicas: T.map((t) => ({ ...t, st: st(t), falta: motivoF(t) })), grupos, real };
+---
+<div class="tr-corpo wrap tc" data-tc hidden={!ativo}>
+  <aside class="tr-dos" aria-label="Suas Técnicas">
+    <div class="tr-dos__cartaz">
+      <p class="tr-dos__selo" aria-hidden="true">{real ? '本人' : '見本'}</p>
+      <p class="t-label">{real ? 'Suas Técnicas de Mana' : 'Técnicas de exemplo'}</p>
+      <p class="tr-dos__nome">{f.nome}<small>{f.estagio}º Estágio · Controle {f.controle}%</small></p>
+      <div class="tr-dos__pt">
+        <b>{feitas}</b>
+        <span>de {total} técnicas dominadas<small>{livres ? `${livres} ${livres === 1 ? 'pronta' : 'prontas'} para treinar agora` : 'Suba de Estágio ou de Controle para abrir mais'}</small></span>
+      </div>
+      {!real && <p class="tr-dos__aviso">Lúx no 6º Estágio, de exemplo. <a href="/api/auth/login?volta=/arvores/?arvore=tecnicas">Entre com o Discord</a> para ver as suas.</p>}
+    </div>
+
+    <div class="tr-det tc-det" data-tc-det aria-live="polite">
+      <p class="tr-det__tag" data-tc-tag></p>
+      <h2 class="tr-det__nome" data-tc-nome>{primeira.nome}</h2>
+      <p class="tr-det__ramo" data-tc-grupo></p>
+      <p class="tr-det__txt" data-tc-txt>{primeira.texto}</p>
+      <ul class="tc-req" data-tc-req></ul>
+      <p class="tr-det__st" data-tc-st></p>
+    </div>
+
+    <details class="tr-regras">
+      <summary>Como se aprende uma técnica</summary>
+      <ul>{regrasTecnicas.map((r) => <li>{r}</li>)}</ul>
+    </details>
+  </aside>
+
+  <section class="tr-palco tc-palco" aria-label="Árvore das Técnicas de Mana" data-lenis-prevent>
+    <div class="tc-arv">
+      <span class="tc-arv__k" aria-hidden="true">技</span>
+      <div class="tc-campo">
+        <svg class="tc-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {estagios.map((s) => <line class="tc-linha" x1="0" x2="100" y1={Y(s)} y2={Y(s)} />)}
+          <line class="tc-tronco" x1="50" x2="50" y1={Y(9) + 6} y2={Y(2)} />
+          <line class="tc-tronco tc-tronco--mana" x1="50" x2="50" y1={Y(9) + 6} y2={seuY} pathLength="1" />
+          {arestas.map((a) => <path d={a.d} class:list={['tc-galho', a.cheia && 'is-cheia']} data-de={a.de} data-para={a.para} />)}
+          <line class="tc-voce" x1="0" x2="100" y1={seuY} y2={seuY} />
+        </svg>
+        {estagios.map((s) => <span class:list={['tc-est', s === f.estagio && 'is-seu']} style={`top:${Y(s)}%`}><b>{s}º</b>{s === f.estagio && <small>você</small>}</span>)}
+        {rotGrupo.map(({ g, x }) => <span class="tc-grupo" style={`left:${x}%`} data-grupo={g.id}><i aria-hidden="true">{g.k}</i>{g.nome}</span>)}
+        {T.map((t) => (
+          <button type="button" class:list={['tc-no', `tc-no--${t.grupo}`, t.raiz && 'tc-no--raiz', t.apice && 'tc-no--apice', t.nome === primeira.nome && 'is-sel']} style={`left:${t.x}%;top:${Y(t.estagio)}%;--d:${9 - t.estagio}`} data-tc-no={t.id} data-st={st(t)} aria-label={`${t.nome}, ${t.estagio}º Estágio, Controle ${t.controle}%`}>
+            <span class="tc-no__d"><span class="tc-no__k">{t.k}</span></span>
+            <span class="tc-no__nome">{t.nome}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+    <ul class="tc-leg" aria-label="Legenda">
+      <li data-st="tem"><i aria-hidden="true"></i>Dominada</li>
+      <li data-st="livre"><i aria-hidden="true"></i>Pronta para treinar</li>
+      <li data-st="bloqueado"><i aria-hidden="true"></i>Ainda trancada</li>
+      <li class="is-linha"><i aria-hidden="true"></i>Precisa da anterior</li>
+      <li class="is-tracejada"><i aria-hidden="true"></i>Caminho natural</li>
+    </ul>
+  </section>
+  <script is:inline type="application/json" id="tc-dados" set:html={JSON.stringify(dados)}></script>
+</div>
+
+<script>
+  type Tec = { id: string; nome: string; k: string; grupo: string; estagio: number; controle: number; texto: string; quem: string | null; requer: string | null; elo: boolean; treinos: string; st: string; falta: string[] };
+  const box = document.querySelector<HTMLElement>('[data-tc]');
+  if (box) {
+    const D = JSON.parse(document.getElementById('tc-dados')!.textContent!) as { tecnicas: Tec[]; grupos: { id: string; nome: string; texto: string }[]; real: boolean };
+    const q = (s: string) => box.querySelector<HTMLElement>(s)!;
+    const mostra = (id: string) => {
+      const t = D.tecnicas.find((x) => x.id === id);
+      if (!t) return;
+      const g = D.grupos.find((x) => x.id === t.grupo)!;
+      box.querySelectorAll<HTMLElement>('[data-tc-no]').forEach((el) => el.classList.toggle('is-sel', el.dataset.tcNo === id));
+      box.querySelectorAll<SVGPathElement>('.tc-galho').forEach((p) => p.classList.toggle('is-luz', p.dataset.para === t.nome || p.dataset.de === t.nome));
+      q('[data-tc-tag]').textContent = `${t.estagio}º Estágio · Controle ${t.controle}%`;
+      q('[data-tc-nome]').textContent = t.nome;
+      q('[data-tc-grupo]').textContent = `${g.nome} · ${t.treinos}`;
+      q('[data-tc-txt]').textContent = t.texto;
+      const req = q('[data-tc-req]');
+      req.innerHTML = '';
+      const linha = (txt: string, ok: boolean) => { const li = document.createElement('li'); li.className = ok ? 'is-ok' : ''; li.textContent = txt; req.append(li); };
+      linha(`${t.estagio}º Estágio`, !t.falta.includes(`${t.estagio}º Estágio`));
+      linha(`Controle ${t.controle}%`, !t.falta.includes(`Controle ${t.controle}%`));
+      if (t.requer) linha(`Dominar ${t.requer}`, !t.falta.includes(t.requer));
+      if (t.elo) linha('Criatura em Vínculo Elo (o bot confere)', t.st === 'tem');
+      if (t.quem) linha(t.quem, !t.falta.some((x) => x.startsWith('Ser da Plebe')));
+      const s = q('[data-tc-st]');
+      s.dataset.st = t.st;
+      s.textContent = t.st === 'tem' ? 'Você já domina esta técnica.' : t.st === 'livre' ? (D.real ? 'Pronta: comece os Treinos de Técnica no Discord.' : 'Pronta para treinar no Estágio deste exemplo.') : `Falta: ${t.falta.join(', ')}.`;
+    };
+    box.addEventListener('click', (e) => { const el = (e.target as Element).closest<HTMLElement>('[data-tc-no]'); if (el) mostra(el.dataset.tcNo!); });
+    box.addEventListener('pointerover', (e) => { if ((e as PointerEvent).pointerType !== 'mouse') return; const el = (e.target as Element).closest<HTMLElement>('[data-tc-no]'); if (el) mostra(el.dataset.tcNo!); });
+    box.addEventListener('focusin', (e) => { const el = (e.target as Element).closest<HTMLElement>('[data-tc-no]'); if (el) mostra(el.dataset.tcNo!); });
+    // no celular a árvore rola de lado: centra no tronco quando aparece
+    const pal = box.querySelector<HTMLElement>('.tc-palco');
+    let centrou = false;
+    if (pal) new ResizeObserver(() => { if (centrou || !pal.clientWidth) return; if (pal.scrollWidth > pal.clientWidth) pal.scrollLeft = (pal.scrollWidth - pal.clientWidth) / 2; centrou = true; }).observe(pal);
+    mostra(box.querySelector<HTMLElement>('.tc-no.is-sel')?.dataset.tcNo ?? D.tecnicas[0].id);
+  }
+</script>

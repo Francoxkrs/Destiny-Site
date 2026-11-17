@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import GuiaSecoes from '../components/GuiaSecoes.astro';
 import { licoes } from '../data/academia.js';
-import { classificacoes, paginas, site } from '../data/canon.js';
+import { paginas, site } from '../data/canon.js';
 import '../styles/academia.css';
 const titulo = Object.fromEntries(paginas.map((p) => [p.slug, p.titulo]));
 const romano = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
@@ -48,27 +48,6 @@ const romano = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
               ))}
             </ol>
             <aside class="ac-ex" data-reveal><p class="t-label">Na prática</p><p>{l.exemplo}</p></aside>
-
-            {l.simulador && (
-              <div class="ac-sim" data-sim>
-                <p class="t-label">Teste um golpe</p>
-                <div class="ac-sim__g">
-                  <fieldset>
-                    <legend>Ataque · Força</legend>
-                    <select data-a-cls aria-label="Classificação do ataque">{classificacoes.map((c, j) => <option value={j} selected={j === 3}>{c.nome}</option>)}</select>
-                    <label>+ <input type="number" min="0" max="20" value="0" data-a-acr aria-label="Acréscimos do ataque" /> Acréscimos</label>
-                  </fieldset>
-                  <span class="ac-sim__vs" aria-hidden="true">×</span>
-                  <fieldset>
-                    <legend>Defesa · Resistência</legend>
-                    <select data-d-cls aria-label="Classificação da defesa">{classificacoes.map((c, j) => <option value={j} selected={j === 2}>{c.nome}</option>)}</select>
-                    <label>+ <input type="number" min="0" max="20" value="3" data-d-acr aria-label="Acréscimos da defesa" /> Acréscimos</label>
-                  </fieldset>
-                </div>
-                <p class="ac-sim__r" data-sim-r aria-live="polite"></p>
-                <script is:inline type="application/json" data-cls set:html={JSON.stringify(classificacoes.map((c) => c.nome))}></script>
-              </div>
-            )}
 
             <div class="ac-q" data-q={l.id} data-certa={l.pergunta.certa}>
               <p class="ac-q__h"><span aria-hidden="true">問</span>{l.pergunta.q}</p>
@@ -158,26 +137,6 @@ const romano = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
         }
       });
     });
-
-    // simulador de confronto: classificação primeiro, depois Acréscimos (10 Acréscimos = 1 classificação)
-    const sim = raiz.querySelector<HTMLElement>('[data-sim]');
-    if (sim) {
-      const nomes = JSON.parse(sim.querySelector('[data-cls]')!.textContent!) as string[];
-      const v = (s: string) => Number(sim.querySelector<HTMLInputElement | HTMLSelectElement>(s)!.value) || 0;
-      const roda = () => {
-        const aA = Math.max(0, v('[data-a-acr]')), dA = Math.max(0, v('[data-d-acr]'));
-        const a = Math.min(7, v('[data-a-cls]') + Math.floor(aA / 10)), d = Math.min(7, v('[data-d-cls]') + Math.floor(dA / 10));
-        const ar = aA % 10, dr = dA % 10;
-        const out = sim.querySelector<HTMLElement>('[data-sim-r]')!;
-        let txt: string, st: string;
-        if (a !== d) { st = a > d ? 'a' : 'd'; txt = `Passo 1, classificação: ${nomes[a]} contra ${nomes[d]}. ${a > d ? 'O golpe passa.' : 'A defesa segura.'}`; }
-        else if (ar !== dr) { st = ar > dr ? 'a' : 'd'; txt = `Classificações iguais (${nomes[a]}). Passo 2, Acréscimos: ${ar} contra ${dr}. ${ar > dr ? 'O golpe passa.' : 'A defesa segura.'}`; }
-        else { st = 'e'; txt = 'Tudo igual. Passo 3: circunstâncias e a qualidade da escrita decidem; se nada decidir, os efeitos se anulam.'; }
-        out.textContent = txt; out.dataset.st = st;
-      };
-      sim.addEventListener('input', roda);
-      roda();
-    }
 
     // sumário acompanha a lição na tela
     const links = new Map([...raiz.querySelectorAll<HTMLElement>('[data-sum]')].map((a) => [a.dataset.sum!, a]));

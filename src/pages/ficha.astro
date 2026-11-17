@@ -58,111 +58,151 @@ const ferTxt = fer.pior ? `${['', 'I Leve', 'II Moderado', 'III Grave', 'IV Crí
 const cristaisTotal = f.moedas.cristais.branco + f.moedas.cristais.negro + f.moedas.cristais.dourado;
 const vagas = (n, max) => `${n} de ${max}`;
 const descr = (a) => `${classificacoes[a.indice]?.nome}: ${a.nome === 'Velocidade' ? `${classificacoes[a.indice]?.vel} km/h` : a.nome === 'Força' ? `quebra ${classificacoes[a.indice]?.forca.toLowerCase()}` : `aguenta ${classificacoes[a.indice]?.resistencia.toLowerCase()}`}.`;
+// ---------- página dupla
+const merito = Math.max(f.moedas.antimeritos, f.moedas.meritos);
+const fis = (n) => f.fisicos.find((a) => a.nome === n) ?? { nome: n, indice: 0, teto: 0, acrescimos: 0, treino: { feitos: 0, precisa: null } };
+// radar de 6 eixos: corpo na metade de cima, mana na de baixo (Força no topo, sentido horário)
+const cls = (a) => classificacoes[a.indice] ?? classificacoes[0];
+const eixos = [
+  { n: 'Força', a: fis('Força'), g: 'corpo' }, { n: 'Velocidade', a: fis('Velocidade'), g: 'corpo' }, { n: 'Controle', g: 'mana' },
+  { n: 'Reserva', g: 'mana' }, { n: 'Poder', g: 'mana' }, { n: 'Resistência', a: fis('Resistência'), g: 'corpo' },
+].map((e) => e.a ? { ...e, longo: e.n, v: (e.a.indice + 1) / 8, r: cls(e.a).nome,
+    d: e.n === 'Força' ? `Quebra ${cls(e.a).forca.toLowerCase()}.` : e.n === 'Velocidade' ? `Corre a ${cls(e.a).vel} km/h.` : `Aguenta ${cls(e.a).resistencia.toLowerCase()}.` }
+  : e.n === 'Controle' ? { ...e, longo: 'Controle', v: Math.max(0.05, f.controle / 100), r: `${f.controle}%`, d: 'Precisão com a mana: mais Controle, feitiço mais barato.' }
+  : e.n === 'Reserva' ? { ...e, longo: 'Reserva Mágica', v: f.reserva / 10, r: `${romanos[f.reserva - 1]} de X`, d: `${fmt.format(f.mana.max)} de Mana no tanque.` }
+  : { ...e, longo: 'Poder Mágico', v: f.poder / 6, r: `${romanos[f.poder - 1]} de VI`, d: 'A força de cada feitiço que você lança.' });
+const lista = [...eixos.filter((e) => e.g === 'corpo').sort((x, y) => ['Força', 'Resistência', 'Velocidade'].indexOf(x.n) - ['Força', 'Resistência', 'Velocidade'].indexOf(y.n)),
+  ...eixos.filter((e) => e.g === 'mana').sort((x, y) => ['Poder', 'Reserva', 'Controle'].indexOf(x.n) - ['Poder', 'Reserva', 'Controle'].indexOf(y.n))];
+const RC = 150, RR = 108;
+const VB = { x: -24, y: 10, w: 348, h: 280 };
+const P = (i, k) => { const a = ((-90 + i * 60) * Math.PI) / 180; return [+(RC + Math.cos(a) * RR * k).toFixed(1), +(RC + Math.sin(a) * RR * k).toFixed(1)]; };
+const poli = (k) => eixos.map((_, i) => P(i, k).join(',')).join(' ');
+const forma = eixos.map((e, i) => P(i, e.v).join(',')).join(' ');
+// linhas de velocidade do mangá, sempre as mesmas (semente fixa)
+let semente = 11;
+const rnd = () => (semente = (semente * 16807) % 2147483647) / 2147483647;
+const linhas = Array.from({ length: 84 }, (_, i) => {
+  const a = (i / 84) * Math.PI * 2 + rnd() * 0.04, da = 0.004 + rnd() * 0.011, r0 = 30 + rnd() * 24, R = 150, cx = 52, cy = 44;
+  const p = (ang, r) => `${(cx + Math.cos(ang) * r).toFixed(1)},${(cy + Math.sin(ang) * r).toFixed(1)}`;
+  return `${p(a, r0)} ${p(a - da, R)} ${p(a + da, R)}`;
+});
 ---
-<Base title="Ficha" slug="ficha" aba="ficha" description="A ficha do seu Marcado, a mesma do bot: Estágio, atributos, Grimório e história.">
+<Base title="Ficha" slug="ficha" aba="ficha" description="A ficha do seu Marcado como uma página dupla de mangá: poder, perfil, Grimório, Ascensão e história.">
   <div class="fx" style={`--c:${cor}`} data-fx>
     <Aviso estado={exemplo ? estado : null} aviso={aviso} logado={Boolean(sessao)} />
 
-    <!-- O CARTÃO: a mesma composição do /ficha do bot -->
-    <article class="fx-card" aria-label={`Ficha de ${f.nome}`} data-card>
-      <header class="fx-top">
-        <div>
-          <p class="fx-marca">Black Destiny</p>
-          <p class="fx-n">{f.numero ? <>Ficha nº {String(f.numero).padStart(4, '0')}<i>·</i>Marcado</> : 'Prévia · aguardando o Conselho Mágico'}</p>
-        </div>
-        <div class="fx-rota">
-          <p class="fx-rota__s" aria-hidden="true"><span>{naipe}</span><svg viewBox="0 0 40 14"><path d="M0 7h34M28 1l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg><b>◆</b></p>
-          <p class="fx-n">De {f.origem ?? 'outra terra'} para Diamond</p>
-        </div>
-      </header>
-
-      <div class="fx-corpo">
-        <div class="fx-fundo" aria-hidden="true">
-          <span class="fx-fundo__k">運<br />命</span>
-          {brasao && <img class="fx-fundo__b" src={brasao} alt="" />}
-        </div>
-
-        <!-- identidade -->
-        <section class="fx-id" aria-label="Identidade">
-          <p class="fx-est"><b>{f.estagio}º Estágio</b><span>{prox ? `${f.pe} / ${prox.pe} PE` : `${f.pe} PE`}</span></p>
-          <h1 class="fx-nome" data-nome>{f.nome}</h1>
+    <!-- A PÁGINA DUPLA: à esquerda a estreia do personagem no mangá, à direita o arquivo do Conselho -->
+    <article class="fx-ed" aria-label={`Ficha de ${f.nome}`} data-card>
+      <div class="fx-pg fx-pg--splash" data-fig>
+        <svg class="fx-vel" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">{linhas.map((p) => <polygon points={p} />)}</svg>
+        <svg class="fx-enso" viewBox="0 0 200 200" aria-hidden="true">
+          <defs><filter id="fx-pincel" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" /><feDisplacementMap in="SourceGraphic" scale="9" /></filter></defs>
+          <path d="M100 18a82 82 0 1 1-61 27" pathLength="1" filter="url(#fx-pincel)" />
+        </svg>
+        <span class="fx-kbig" aria-hidden="true">運命</span>
+        <p class="fx-narra"><b aria-hidden="true">{naipe}</b>Morreu em {f.origem ?? 'outra terra'}.<br />Acordou em Diamond.</p>
+        <p class="fx-hanko"><b>{f.estagio}º</b><small>Estágio</small></p>
+        {img ? <img class="fx-pers" src={img} alt={`Imagem de ${f.nome}`} data-pers /> : <span class="fx-sem">Sem imagem</span>}
+        <div class="fx-nomebox">
+          <p class="fx-nomebox__k">{f.classeMago}<i>·</i>{f.racasHibrido ? 'Híbrido' : f.raca}</p>
+          <h1 class="fx-nome">{f.nome}</h1>
           {f.sobrenome && <p class="fx-sob">{f.sobrenome}</p>}
-          <span class="fx-regua" aria-hidden="true"></span>
-          {f.epiteto && <p class="fx-ep">{f.epiteto}</p>}
-          <dl class="fx-dl">
-            <div><dt>Raça</dt><dd>{f.racasHibrido ? `Híbrido · ${f.racasHibrido.join(' e ')}` : f.raca}</dd></div>
-            <div><dt>Vida passada</dt><dd><i class="fx-naipe" aria-hidden="true">{naipe}</i>{f.familia} · {f.origem}</dd></div>
-            <div><dt>Classe social</dt><dd>{f.classeSocial} · {f.regiao}</dd></div>
-            <div><dt>Classe de mago</dt><dd>{f.classeMago}</dd></div>
-            <div><dt>{f.milagres.length > 1 ? 'Milagres' : 'Milagre'}</dt><dd class:list={[f.milagres.length && 'is-c']}>{f.milagres.length ? f.milagres.join(' · ') : 'Nenhum'}</dd></div>
-            <div><dt>Patente</dt><dd>{f.patente ?? 'Sem patente'}</dd></div>
-            <div><dt>Profissão</dt><dd>{f.profissao ?? 'Nenhuma'}</dd></div>
-          </dl>
-          <div class="fx-mana" tabindex="0" data-dica={`Mana atual sobre a máxima. Feitiços gastam; descanso devolve.`}>
-            <p><span>Mana</span><b><span data-conta={f.mana.atual}>{fmt.format(f.mana.atual)}</span> / {fmt.format(f.mana.max)}</b></p>
-            <span class="fx-mana__bar" style={`--p:${pct(f.mana.atual, f.mana.max)}%`}>{Array.from({ length: 10 }, () => <i></i>)}</span>
-          </div>
-        </section>
-
-        <!-- personagem sobre o sol -->
-        <figure class="fx-fig" data-fig>
-          <span class="fx-sol" aria-hidden="true" data-sol></span>
-          {img ? <img class="fx-pers" src={img} alt={`Imagem de ${f.nome}`} data-pers /> : <span class="fx-sem">Sem imagem</span>}
-          <figcaption class="fx-fer" tabindex="0" data-dica="Trilha de Ferimentos: 3 casas de Grau I, 2 de II, 1 de III e 1 de IV. Encheu, piora.">
-            <p><span>Ferimentos</span><b class:list={[fer.pior >= 3 && 'is-mal']}>{ferTxt}</b></p>
-            <ol>{fer.casas.map((c, i) => <li class:list={[c.ocupada && 'is-on', c.fome && 'is-fome', i > 0 && fer.casas[i - 1].grau !== c.grau && 'is-grupo']} style={`--g:${c.grau}`}>{ROM[c.grau]}</li>)}</ol>
-          </figcaption>
-        </figure>
-
-        <!-- janela de status -->
-        <section class="fx-st" aria-label="Status">
-          <h2 class="fx-st__t"><i aria-hidden="true"></i>Status<i aria-hidden="true"></i></h2>
-          {f.fisicos.map((a, n) => (
-            <div class="fx-at" tabindex="0" data-dica={descr(a)}>
-              <p class="fx-at__h"><b>{a.nome}</b><span class="fx-c">{classificacoes[a.indice]?.nome}{a.acrescimos > 0 && <small>+{a.acrescimos}</small>}</span></p>
-              <span class="fx-seg" style={`--n:${n}`}>
-                {classificacoes.map((_, i) => <i class:list={[i <= a.indice && 'is-on', i > a.teto && 'is-trava']} style={i === a.indice + 1 && a.treino.precisa ? `--t:${pct(a.treino.feitos, a.treino.precisa)}%` : ''}></i>)}
-              </span>
-              <p class="fx-at__s"><span>Classe {a.indice + 1} de 8</span><span>{a.treino.precisa ? `${a.treino.feitos}/${a.treino.precisa} treinos` : a.indice >= 7 ? 'No topo' : 'No teto do Estágio'}</span></p>
-            </div>
-          ))}
-          <span class="fx-div" aria-hidden="true"></span>
-          <div class="fx-at" tabindex="0" data-dica="Poder Mágico: a força dos feitiços. Cada nível subido vale 2 PE.">
-            <p class="fx-at__h"><b>Poder Mágico</b><span class="fx-nv"><b>{romanos[f.poder - 1]}</b> / VI</span></p>
-            <span class="fx-pips" style="--n:3">{Array.from({ length: 6 }, (_, i) => <i class:list={[i < f.poder && 'is-on']}></i>)}</span>
-          </div>
-          <div class="fx-at" tabindex="0" data-dica="Reserva Mágica: o tamanho do seu tanque de Mana. Cada nível vale 1 PE.">
-            <p class="fx-at__h"><b>Reserva Mágica</b><span class="fx-nv"><b>{romanos[f.reserva - 1]}</b> / X</span></p>
-            <span class="fx-pips" style="--n:4">{Array.from({ length: 10 }, (_, i) => <i class:list={[i < f.reserva && 'is-on']}></i>)}</span>
-          </div>
-          <div class="fx-at" tabindex="0" data-dica="Controle: precisão com a mana. Cada 10% vale 1 PE, e alguns Estágios pedem um mínimo.">
-            <p class="fx-at__h"><b>Controle</b><span class="fx-nv"><b><span data-conta={f.controle}>{f.controle}</span>%</b> / 100%</span></p>
-            <span class="fx-ctrl" style={`--p:${f.controle}%`}></span>
-          </div>
-          <span class="fx-div" aria-hidden="true"></span>
-          <p class="fx-mg__h"><span>Magia</span><span class="fx-c">Grimório {f.grimorio}</span></p>
-          <p class="fx-mg"><b>{f.magia.replace(/^Magia de /, '')}</b><span>{f.feiticosTotal ? `${f.feiticos.length} / ${f.feiticosTotal}` : f.feiticos.length} feitiços</span></p>
-        </section>
+          {f.epiteto && <p class="fx-ep">“{f.epiteto}”</p>}
+        </div>
+        <p class="fx-folio">{f.numero ? `— ${f.numero * 2} —` : '— prévia —'}</p>
       </div>
 
-      <!-- faixa de baixo -->
-      <footer class="fx-faixa">
-        <div><p class="fx-l is-c">Conhecimentos <span>{vagas(f.conhecimentos.length, 6)}</span></p><p class="fx-v">{f.conhecimentos.join(' · ') || 'Nenhum'}</p></div>
-        <div><p class="fx-l is-c">Traços <span>{vagas(f.tracos.length, 3)}</span></p><p class="fx-v">{f.tracos.join(' · ') || 'Nenhum'}</p></div>
-        <div><p class="fx-l">Técnicas</p><p class="fx-v">{f.tecnicas.join(' · ') || 'Nenhuma ainda'}</p></div>
-        <div class="fx-car">
-          <p class="fx-l">Carreira {f.riqueza && <span class:list={['fx-rq', f.riqueza === 'Miserável' && 'is-c']}>{f.riqueza}</span>}</p>
-          <p class="fx-moedas">
-            <span><i class="fx-ic fx-ic--est" aria-hidden="true"></i><b data-conta={f.moedas.antimeritos > f.moedas.meritos ? f.moedas.antimeritos : f.moedas.meritos}>{f.moedas.antimeritos > f.moedas.meritos ? f.moedas.antimeritos : f.moedas.meritos}</b> {f.moedas.antimeritos > f.moedas.meritos ? 'Antiméritos' : 'Méritos'}</span>
-            <span><i class="fx-ic fx-ic--yul" aria-hidden="true"></i><b class="is-ouro" data-conta={f.moedas.yuls}>{fmt.format(f.moedas.yuls)}</b> Yuls</span>
-            <span><i class="fx-ic fx-ic--gema" aria-hidden="true"></i><b class="is-ciano">{cristaisTotal}</b> Cristais</span>
-          </p>
-          {f.treinosLivres && <p class="fx-l fx-tr">Treinos · Fís {f.treinosLivres.fisico.join('/')} · Mág {f.treinosLivres.magico.join('/')} · Ctrl {f.treinosLivres.controle.join('/')} · Téc {f.treinosLivres.tecnica.join('/')}</p>}
+      <div class="fx-pg fx-pg--db">
+        <header class="fx-db__hd">
+          <div>
+            <p class="fx-db__k">Black Destiny · Arquivo do Conselho Mágico</p>
+            <p class="fx-db__t">{f.numero ? <>Ficha nº <b>{String(f.numero).padStart(4, '0')}</b></> : 'Ficha de prévia'}</p>
+          </div>
+          <span class="fx-selo" title={f.numero ? 'Aprovada pelo Conselho Mágico' : 'Ainda não aprovada'}>{f.numero ? '承認' : '見本'}</span>
+        </header>
+
+        <div class="fx-db__g">
+          <section class="fx-db__poder" aria-labelledby="fx-poder-t">
+            <h2 class="fx-db__h" id="fx-poder-t"><span aria-hidden="true">力</span>Poder</h2>
+            <div class="fx-radar">
+              <svg viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`} aria-hidden="true">
+                <g class="fx-radar__grade">
+                  {[0.25, 0.5, 0.75, 1].map((k) => <polygon points={poli(k)} />)}
+                  {eixos.map((_, i) => <line x1={RC} y1={RC} x2={P(i, 1)[0]} y2={P(i, 1)[1]} />)}
+                </g>
+                <line class="fx-radar__meio" x1={RC - RR - 18} y1={RC} x2={RC + RR + 18} y2={RC} />
+                <g class="fx-radar__forma"><polygon points={forma} />{eixos.map((e, i) => <circle cx={P(i, e.v)[0]} cy={P(i, e.v)[1]} r="4.5" />)}</g>
+              </svg>
+              <span class="fx-radar__lado is-corpo" aria-hidden="true">Corpo</span>
+              <span class="fx-radar__lado is-mana" aria-hidden="true">Mana</span>
+              <ul class="fx-radar__rot">
+                {eixos.map((e, i) => {
+                  const [x, y] = P(i, 1.2);
+                  return <li style={`left:${((x - VB.x) / VB.w) * 100}%;top:${((y - VB.y) / VB.h) * 100}%;--i:${i}`}><small>{e.n}</small></li>;
+                })}
+              </ul>
+            </div>
+            <dl class="fx-db__val">
+              {lista.map((e, i) => (
+                <div class:list={[i === 3 && 'is-mana']} style={`--i:${i}`}>
+                  <dt>{e.longo}</dt>
+                  <dd><b>{e.r}</b><span>{e.d}</span></dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section class="fx-db__perfil" aria-label="Perfil">
+            <h2 class="fx-db__h"><span aria-hidden="true">籍</span>Perfil</h2>
+            <dl>
+              <div><dt>Raça</dt><dd>{f.racasHibrido ? `Híbrido de ${f.racasHibrido.join(' e ')}` : f.raca}</dd></div>
+              <div><dt>Família</dt><dd>{brasao && <img src={brasao} alt="" />}{f.familia}</dd></div>
+              <div><dt>Vida passada</dt><dd>{naipe} {f.origem ?? 'Outra terra'}</dd></div>
+              <div><dt>Classe social</dt><dd>{f.classeSocial} · {f.regiao}</dd></div>
+              <div><dt>Classe de mago</dt><dd>{f.classeMago}</dd></div>
+              <div><dt>{f.milagres.length > 1 ? 'Milagres' : 'Milagre'}</dt><dd>{f.milagres.length ? f.milagres.join(' · ') : 'Nenhum ainda'}</dd></div>
+              <div><dt>Patente</dt><dd>{f.patente ?? 'Sem patente'}</dd></div>
+              <div><dt>Profissão</dt><dd>{f.profissao ?? 'Nenhuma ainda'}</dd></div>
+            </dl>
+          </section>
+
+          <section class="fx-db__magia" aria-label="Magia">
+            <p class="fx-db__h"><span aria-hidden="true">魔</span>Magia{f.magiaRaridade && <em>{f.magiaRaridade}</em>}</p>
+            <p class="fx-db__mg">{f.magia.replace(/^Magia de /, '')}</p>
+            <p class="fx-db__sub">Grimório {f.grimorio} · {f.feiticosTotal ? `${f.feiticos.length} de ${f.feiticosTotal} páginas escritas` : `${f.feiticos.length} feitiços`}</p>
+          </section>
+
+          <section class="fx-db__vida" aria-label="Mana e Ferimentos">
+            <div class="fx-mana" tabindex="0" data-dica="Mana que sobra agora. Feitiços gastam, descanso devolve.">
+              <p><span>Mana</span><b><span data-conta={f.mana.atual}>{fmt.format(f.mana.atual)}</span> / {fmt.format(f.mana.max)}</b></p>
+              <span class="fx-pincel" style={`--p:${pct(f.mana.atual, f.mana.max)}%`}></span>
+            </div>
+            <div class="fx-fer" tabindex="0" data-dica="Ferimentos: três leves, dois moderados, um grave e um crítico. Quando um grau enche, o próximo vem.">
+              <p><span>Ferimentos</span><b class:list={[fer.pior >= 3 && 'is-mal']}>{ferTxt}</b></p>
+              <ol>{fer.casas.map((c, i) => <li class:list={[c.ocupada && 'is-on', i > 0 && fer.casas[i - 1].grau !== c.grau && 'is-grupo']}>{ROM[c.grau]}</li>)}</ol>
+            </div>
+          </section>
         </div>
-      </footer>
-      <p class="fx-rod"><span>{f.numero ? 'Aprovada pelo Conselho Mágico' : 'Ainda não aprovada'}</span><span>/ficha · Black Destiny</span></p>
+
+        <div class="fx-db__saber">
+          {[['Conhecimentos', f.conhecimentos, 6, '/conhecimentos/'], ['Traços', f.tracos, 3, '/milagres/'], ['Técnicas', f.tecnicas, null, '/arvores/?arvore=tecnicas']].map(([t, l, max, href]) => (
+            <div>
+              <p class="fx-db__h"><a href={href}>{t}</a>{max && <small>{l.length} de {max}</small>}</p>
+              <p class="fx-chips">{l.length ? l.map((x, j) => <span style={`--i:${j}`}>{x}</span>) : <span class="is-vazio">Nenhum ainda</span>}</p>
+            </div>
+          ))}
+        </div>
+
+        <footer class="fx-db__pe">
+          <p class="fx-moedas">
+            <span><i class="fx-ic fx-ic--est" aria-hidden="true"></i><b data-conta={merito}>{merito}</b> {f.moedas.antimeritos > f.moedas.meritos ? 'Antiméritos' : 'Méritos'}</span>
+            <span><i class="fx-ic fx-ic--yul" aria-hidden="true"></i><b data-conta={f.moedas.yuls}>{fmt.format(f.moedas.yuls)}</b> Yuls</span>
+            <span><i class="fx-ic fx-ic--gema" aria-hidden="true"></i><b>{cristaisTotal}</b> Cristais</span>
+          </p>
+          <p class="fx-folio">{f.numero ? `— ${f.numero * 2 + 1} —` : '— prévia —'}</p>
+        </footer>
+      </div>
     </article>
-    <p class="fx-dica-nota">Passe o mouse (ou toque) em qualquer número da ficha para ver o que ele significa.</p>
 
     <!-- ASCENSÃO: a próxima meta -->
     <section class="fx-asc" aria-labelledby="fx-asc-t">

@@ -2,10 +2,29 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import { altar, pedra, raridades, garantia, inscricao, fontes } from '../data/altar.js';
+import { magias, familias, conhecimentos } from '../data/canon.js';
+import { arvores } from '../data/arvores.js';
 
 const fmt = new Intl.NumberFormat('pt-BR');
 const pct = (n) => `${String(n).replace('.', ',')}%`;
-const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, raridades, garantia };
+// Pedra do Destino na prévia: cada giro sorteia com as chances do Cânone (as mesmas do bot).
+// rar diz a cor da carta: raro (Comum/Incomum), epico (Rara/Épica), lendario (Lendária/Lendário).
+const RAR = { Comum: 'raro', Incomum: 'raro', Classe: 'raro', Rara: 'epico', 'Épica': 'epico', 'Lendária': 'lendario', 'Lendário': 'lendario' };
+const grupo = (peso, rot, lista) => ({ peso, rot, rar: RAR[rot], lista });
+const famC = familias.filter((f) => f.raridade === 'Comum').map((f) => f.nome);
+const famR = familias.filter((f) => f.raridade === 'Rara').map((f) => f.nome);
+const giroMagia = magias.filter((m) => m.chance).map((m) => grupo(m.chance, m.raridade, m.lista.map((x) => `Magia de ${x}`)));
+const pools = {
+  'Cápsula de Conhecimento': [grupo(80, 'Comum', conhecimentos.comuns.map((c) => c[0])), grupo(20, 'Incomum', conhecimentos.incomuns.map((c) => c[0]))],
+  'Reroll de Família': [grupo(6 * famC.length, 'Comum', famC), grupo(famR.length, 'Rara', famR)],
+  'Reroll de Classe de Mago': [grupo(1, 'Classe', arvores.map((a) => a.nome))],
+  'Giro de Magia': giroMagia,
+  'Reroll de Raça': [grupo(85, 'Comum', ['Humano']), grupo(8, 'Rara', ['Anão']), grupo(7, 'Rara', ['Bruxa'])],
+  'Giro de Magia sem Comum': giroMagia.filter((g) => g.rot !== 'Comum'),
+  'Giro de Grimório': [grupo(92, 'Comum', ['Grimório Comum']), grupo(8, 'Lendário', ['Grimório Lendário'])],
+};
+const giros = pedra.giros.map((g, i) => ({ ...g, i, pool: pools[g.nome] ?? null }));
+const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, raridades, garantia, giros };
 ---
 <Base title="Altar dos Vestígios" slug="altar" aba="altar" description="O Altar dos Vestígios: o gacha da temporada do Black Destiny, com chances e garantia sempre à vista, e a Pedra do Destino.">
   <div class="al" data-altar>
@@ -23,6 +42,11 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
               <span class="eyebrow"><b>{b.kanji}</b>{b.id === 'pedra' ? 'Giros de sempre' : altar.temporada}</span>
               <h1 class="al-info__t">{b.id === 'pedra' ? <>Pedra do <em>Destino</em></> : <>Altar dos <em>Vestígios</em></>}</h1>
               <p class="al-info__p">{b.texto}</p>
+              <dl class="al-trato">
+                <div><dt>Gasta</dt><dd>{b.id === 'pedra' ? '1 a 15 Inscrições por giro' : '1 Inscrição por invocação'}</dd></div>
+                <div><dt>Sai</dt><dd>{b.id === 'pedra' ? 'Um giro da /bolsa: Cápsula, Magia, Grimório...' : 'Visual da temporada: capa, moldura, título'}</dd></div>
+                <div><dt>Vai para</dt><dd>{b.id === 'pedra' ? 'Sua bolsa no bot, para usar quando quiser' : 'Sua ficha. Não muda nenhum número'}</dd></div>
+              </dl>
               {b.id === 'vestigios' ? (
                 <>
                   <div class="al-dest">
@@ -42,9 +66,19 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
                   </div>
                 </>
               ) : (
-                <ul class="al-pedra">
-                  {pedra.giros.map((g) => <li><span>{g.nome}</span><b>{g.custo} <small>{g.custo === 1 ? 'Inscrição' : 'Inscrições'}</small></b></li>)}
-                </ul>
+                <fieldset class="al-pedra" data-pedra>
+                  <legend class="t-label">Escolha o giro</legend>
+                  <div class="al-pedra__g">
+                    {giros.map((g) => (
+                      <label class:list={['al-pedra__o', !g.pool && 'is-bot']}>
+                        <input type="radio" name="giro" value={g.i} checked={g.i === 0} />
+                        <span>{g.nome}</span>
+                        <b>{g.custo}<i class="al-insc" aria-hidden="true"></i></b>
+                      </label>
+                    ))}
+                  </div>
+                  <p class="al-pedra__ch" data-pedra-ch>Chances: {giros[0].chances}. Até {giros[0].limite} por personagem e temporada.</p>
+                </fieldset>
               )}
             </div>
           </div>
@@ -53,8 +87,8 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
 
       <!-- troca de banner, no alto (como os ícones de banner dos gachas) -->
       <div class="al-troca" role="tablist" aria-label="Banners">
-        <button role="tab" aria-selected="true" data-troca="vestigios"><img src={altar.destaque.img} alt="" /><span>Altar dos Vestígios<small>Temporada</small></span></button>
-        <button role="tab" aria-selected="false" data-troca="pedra"><img src="/img/grimorios/lendario.jpg" alt="" /><span>Pedra do Destino<small>Sempre aberta</small></span></button>
+        <button role="tab" aria-selected="true" data-troca="vestigios"><img src={altar.destaque.img} alt="" /><span>Altar dos Vestígios<small>Visual da temporada</small></span></button>
+        <button role="tab" aria-selected="false" data-troca="pedra"><img src="/img/grimorios/lendario.jpg" alt="" /><span>Pedra do Destino<small>Giros da ficha</small></span></button>
       </div>
 
       <div class="al-saldo" aria-label="Seu saldo">
@@ -74,9 +108,18 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
           <button class="al-btn al-btn--10" type="button" data-girar="10"><span class="al-btn__t">Invocar ×10</span><span class="al-btn__c"><i class="al-insc" aria-hidden="true"></i>10 · {fmt.format(inscricao.cp10)} CP</span></button>
         </div>
         <div class="al-btns" data-btns="pedra" hidden>
-          <a class="al-btn al-btn--10" href="/comecar/"><span class="al-btn__t">Girar pelo bot</span><span class="al-btn__c">/bolsa, com as vagas de sempre</span></a>
+          <button class="al-btn al-btn--10" type="button" data-girar-pedra><span class="al-btn__t">Girar a Pedra</span><span class="al-btn__c"><i class="al-insc" aria-hidden="true"></i><span data-pedra-custo>1 Inscrição · {giros[0].nome}</span></span></button>
         </div>
       </div>
+    </section>
+
+    <!-- COMO FUNCIONA: três passos -->
+    <section class="al-passos wrap" aria-label="Como funciona">
+      <ol>
+        <li><span>1</span><b>Junte Inscrições</b><small>Jogando (missões, RP, eventos) ou comprando com Cristais Prismáticos: {fmt.format(inscricao.cp)} CP cada.</small><a href="#ganhar">Como ganhar</a></li>
+        <li><span>2</span><b>Escolha onde gastar</b><small>No Altar sai visual da temporada. Na Pedra saem os giros da ficha, como Cápsula de Conhecimento, Magia e Grimório.</small></li>
+        <li><span>3</span><b>Invoque</b><small>O resultado aparece aqui e vai para a sua ficha ou para a sua bolsa no bot.</small><a href="#chances">Ver as chances</a></li>
+      </ol>
     </section>
 
     <!-- CHANCES -->
@@ -135,6 +178,8 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
     <div class="inv__meteoro" data-meteoro aria-hidden="true"><i></i></div>
     <span class="inv__k" data-inv-k aria-hidden="true">運</span>
     <div class="inv__flash" data-flash aria-hidden="true"></div>
+    <div class="inv__um" data-inv-um></div>
+    <p class="inv__toque" data-inv-toque hidden>Toque para continuar <span data-inv-conta></span></p>
     <div class="inv__palco" data-inv-palco></div>
     <div class="inv__fim" data-inv-fim hidden>
       <p class="t-label" data-inv-resumo></p>

@@ -388,8 +388,8 @@
 .tr-arv::before { left: 10px; top: 10px; border-right: 0; border-bottom: 0; }
 .tr-arv::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; }
 .tr-arv__bg { position: absolute; inset: 0; z-index: -2; }
-.tr-arv__bg img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 30%; filter: grayscale(1) contrast(1.3) brightness(0.24); }
-.tr-arv__bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--cc) 14%, transparent), rgba(10, 10, 11, 0.55) 38%, rgba(10, 10, 11, 0.92) 72%), var(--tone); background-size: auto, 5px 5px; }
+.tr-arv__bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(0.3) contrast(1.15) brightness(0.45) saturate(1.1); }
+.tr-arv__bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--cc) 14%, transparent), rgba(10, 10, 11, 0.5) 34%, rgba(10, 10, 11, 0.85) 75%), var(--tone); background-size: auto, 5px 5px; }
 .tr-arv__k { position: absolute; z-index: -1; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--f-kanji); font-weight: 800; font-size: min(46vh, 30rem); line-height: 1; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--cc) 22%, transparent); pointer-events: none; }
 .tr-arv.is-in .tr-no { animation: noIn 0.7s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
 .tr-arv.is-in .tr-linhas line { animation: tinta 1.2s var(--ease-ink) both; }
@@ -946,3 +946,59 @@
 .tc-leg li[data-st='livre'] i { border-color: var(--bone); }
 .tc-leg li.is-linha i, .tc-leg li.is-tracejada i { rotate: none; width: 26px; height: 0; border: 0; border-top: 2px solid rgba(241, 235, 223, 0.55); }
 .tc-leg li.is-tracejada i { border-top-style: dashed; }
+
+/* ===================================================================
+   Altar v2: o que cada banner gasta e entrega, Pedra com escolha de giro,
+   três passos, e a revelação carta a carta
+   =================================================================== */
+.al-trato { display: grid; max-width: 520px; border-top: 1px solid var(--line-2); }
+.al-trato div { display: grid; grid-template-columns: 84px 1fr; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.al-trato dt { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mana); }
+.al-trato dd { font-size: 0.95rem; color: var(--bone); }
+[data-banner='vestigios'] .al-info__p { display: none; }
+.al-pedra { max-width: 560px; border: 0; border-top: 0; padding: 0; margin: 0; min-width: 0; }
+.al-pedra legend { margin-bottom: 8px; }
+.al-pedra__g { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.al-pedra__o { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; background: rgba(10, 10, 11, 0.65); border: 1px solid var(--line-2); cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: border-color 0.25s, background 0.25s; }
+.al-pedra__o input { position: absolute; opacity: 0; pointer-events: none; }
+.al-pedra__o b { display: inline-flex; align-items: center; gap: 5px; font-family: var(--f-mono); font-weight: 500; font-size: 12px; color: var(--bone-2); }
+.al-pedra__o:has(input:checked) { border-color: var(--mana); background: rgba(255, 59, 46, 0.16); }
+.al-pedra__o:has(input:focus-visible) { outline: 2px solid var(--bone); outline-offset: 2px; }
+.al-pedra__o.is-bot span::after { content: ' · só no bot'; font-weight: 400; color: var(--mute); font-size: 0.8rem; }
+@media (hover: hover) { .al-pedra__o:hover { border-color: var(--bone); } }
+.al-pedra__ch { margin-top: 10px; font-size: 0.86rem; color: var(--bone-2); min-height: 2.8em; }
+.al-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+@media (max-width: 600px) { .al-pedra__g { grid-template-columns: 1fr; } .al-trato div { grid-template-columns: 70px 1fr; } }
+
+.al-passos { padding-top: clamp(40px, 5vw, 70px); }
+.al-passos ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; counter-reset: none; }
+.al-passos li { position: relative; display: grid; gap: 6px; align-content: start; padding: 22px 22px 22px 74px; background: var(--ink-2); border: 1px solid var(--line-2); clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%); }
+.al-passos li > span { position: absolute; left: 20px; top: 14px; font-family: var(--f-display); font-weight: 900; font-size: 3rem; line-height: 1; color: var(--mana); }
+.al-passos b { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1; }
+.al-passos small { color: var(--bone-2); font-size: 0.92rem; line-height: 1.45; }
+.al-passos a { justify-self: start; margin-top: 4px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1px solid var(--mana); }
+@media (max-width: 860px) { .al-passos ol { grid-template-columns: 1fr; } }
+
+.inv__um { grid-area: 2 / 1; position: relative; z-index: 2; display: grid; place-items: center; width: min(360px, 72vw); }
+.inv__um .inv-card { width: 100%; }
+.inv__palco { grid-area: 2 / 1; }
+.inv__palco:empty { display: none; }
+.inv__toque { position: absolute; z-index: 3; left: 50%; bottom: 22px; translate: -50% 0; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-2); animation: invPisca 1.6s ease-in-out infinite; white-space: nowrap; }
+.inv__toque span { margin-left: 10px; color: var(--rc); }
+@keyframes invPisca { 50% { opacity: 0.35; } }
+.inv-card__d i { display: inline-block; font-style: normal; margin-right: 2px; }
+.inv-card--g .inv-card__d { font-size: 16px; }
+.inv { cursor: pointer; }
+.inv__fim, .inv__fim * { cursor: auto; }
+@media (prefers-reduced-motion: reduce) { .inv__toque { animation: none; } }
+.al-banner .al-info__p { display: none; }
+.al-banner .al-info { gap: 14px; }
+.al-banner__in { padding-top: calc(var(--hdr) + 70px); padding-bottom: 190px; }
+@media (min-width: 1000px) { .al-pedra__g { grid-template-columns: repeat(3, minmax(0, 1fr)); } .al-pedra { max-width: 760px; } [data-banner='pedra'] .al-info { max-width: 760px; } .al-pedra__o { font-size: 0.84rem; padding: 8px 10px; } }
+@media (max-width: 899px) {
+  .al-palco { grid-template-rows: 1fr auto; min-height: 0; }
+  .al-banner { grid-area: 1 / 1; min-height: 0; }
+  .al-banner__in { padding-bottom: 28px; }
+  .al-pe { position: relative; grid-row: 2; bottom: auto; padding-bottom: 28px; }
+}
+@media (max-width: 600px) { .al-banner__in { padding-top: calc(var(--hdr) + 130px); } }

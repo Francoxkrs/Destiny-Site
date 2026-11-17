@@ -116,17 +116,26 @@ function carta(p, grande = false) {
   el.className = `inv-card${grande ? ' inv-card--g' : ''}`;
   el.dataset.r = p.rar;
   const arte = p.img ? `<img alt="" src="${p.img}">` : `<span class="inv-card__glifo" aria-hidden="true">${p.k ?? '◆'}</span>`;
-  el.innerHTML = `<div class="inv-card__img${p.img ? '' : ' inv-card__img--k'}">${arte}</div><div class="inv-card__txt"><p class="inv-card__d" aria-label="${nomeR[p.rar]}">${'◆'.repeat(R[p.rar].estrelas)}</p><p class="inv-card__n"></p><p class="inv-card__t"></p></div>${p.rar === 'lendario' ? '<span class="inv-card__k" aria-hidden="true">運</span>' : ''}`;
+  const est = Array.from({ length: R[p.rar].estrelas }, () => '<i>◆</i>').join('');
+  el.innerHTML = `<div class="inv-card__img${p.img ? '' : ' inv-card__img--k'}">${arte}</div><div class="inv-card__txt"><p class="inv-card__d">${est}</p><p class="inv-card__n"></p><p class="inv-card__t"></p></div>${p.rar === 'lendario' ? '<span class="inv-card__k" aria-hidden="true">運</span>' : ''}`;
+  el.querySelector('.inv-card__d').setAttribute('aria-label', p.rotulo ?? nomeR[p.rar]);
   el.querySelector('.inv-card__n').textContent = p.nome;
-  el.querySelector('.inv-card__t').textContent = `${nomeR[p.rar]} · ${p.tipo}`;
+  el.querySelector('.inv-card__t').textContent = `${p.rotulo ?? nomeR[p.rar]} · ${p.tipo}`;
   return el;
 }
 
 /* ---------------------------------------------------------------- a invocação */
+// Sequência (como nos gachas): o rastro cai e diz a cor do melhor resultado; depois cada carta
+// aparece sozinha, grande, e um toque passa para a próxima; no fim, todas juntas.
 let tl = null;
-let ultima = 1;
+let ultima = () => {};
+let vez = 0; // cada invocação nova cancela a anterior
+let pular = null; // resolve a espera atual
+let pulouTudo = false;
 const palco = $('[data-inv-palco]');
+const um = $('[data-inv-um]');
 const fim = $('[data-inv-fim]');
+const toque = $('[data-inv-toque]');
 
 function abrir() {
   inv.hidden = false;
@@ -135,61 +144,118 @@ function abrir() {
   ceuInicia();
 }
 function fechar() {
+  vez += 1;
   tl?.kill();
+  if (pular) pular();
   rodando = false;
-  gsap.to(inv, { opacity: 0, duration: reduce ? 0 : 0.35, onComplete: () => { inv.hidden = true; gsap.set(inv, { opacity: 1 }); palco.innerHTML = ''; fim.hidden = true; } });
+  gsap.to(inv, { opacity: 0, duration: reduce ? 0 : 0.35, onComplete: () => { inv.hidden = true; gsap.set(inv, { opacity: 1 }); palco.innerHTML = ''; um.innerHTML = ''; fim.hidden = true; toque.hidden = true; } });
   document.documentElement.classList.remove('inv-aberto');
   window.__lenis?.start();
   pintaGarantia();
 }
 
-function invocar(qtd) {
-  ultima = qtd;
-  const res = Array.from({ length: qtd }, sortear);
-  st.hist.unshift(...res.slice().reverse().map((p) => ({ nome: p.nome, rar: p.rar, em: Date.now() })));
-  salvar();
-  const melhor = res.reduce((m, p) => (ORDEM[p.rar] > ORDEM[m] ? p.rar : m), 'raro');
+// espera um toque ou o tempo passar (o que vier antes)
+function espera(ms) {
+  return new Promise((ok) => {
+    let ligado = false;
+    const t = setTimeout(feito, ms);
+    const t2 = setTimeout(() => { ligado = true; inv.addEventListener('click', clique); }, 150);
+    function feito() { clearTimeout(t); clearTimeout(t2); if (ligado) inv.removeEventListener('click', clique); pular = null; ok(); }
+    function clique(e) { if (e.target.closest('button, a')) return; feito(); }
+    pular = feito;
+  });
+}
+
+function rastro(melhor) {
   const cor = R[melhor].cor;
-
-  palco.innerHTML = '';
-  fim.hidden = true;
-  palco.className = `inv__palco${qtd === 1 ? ' is-um' : ''}`;
-  const cartas = res.map((p) => carta(p, qtd === 1));
-  cartas.forEach((c) => palco.append(c));
-  $('[data-inv-resumo]').textContent = resumo(res);
-
-  abrir();
-  inv.style.setProperty('--rc', cor);
-  rajada(cor);
   const met = $('[data-meteoro]');
   const k = $('[data-inv-k]');
   const flash = $('[data-flash]');
+  rajada(cor);
   gsap.set([linhas, k, flash], { opacity: 0 });
-  gsap.set(cartas, { opacity: 0 });
-  gsap.set(met, { opacity: 0 });
-
-  if (reduce) { gsap.set(cartas, { opacity: 1 }); fim.hidden = false; return; }
-
-  // Lendário: o rastro nasce violeta e vira vermelho no meio do caminho (o "susto" dos gachas).
+  // Lendário: o rastro nasce violeta e vira vermelho no meio do caminho (o susto dos gachas).
   const corIni = melhor === 'lendario' ? R.epico.cor : cor;
-  tl = gsap.timeline({ onComplete: () => { fim.hidden = false; gsap.from(fim, { opacity: 0, y: 16, duration: 0.5 }); } });
-  tl.set(met, { '--mc': corIni, opacity: 1, x: innerWidth * 0.42, y: -innerHeight * 0.55, rotate: 0, scale: 0.6 })
-    .to(met, { x: 0, y: 0, scale: 1, duration: 1.5, ease: 'power2.in' }, 0.25);
-  if (melhor === 'lendario') tl.to(met, { '--mc': cor, duration: 0.25 }, 1.05);
-  tl.to(flash, { opacity: 1, duration: 0.08 }, 1.72)
-    .set(met, { opacity: 0 }, 1.8)
-    .to(flash, { opacity: 0, duration: 0.7, ease: 'power2.out' }, 1.82)
-    .fromTo(linhas, { opacity: 0, scale: 1.4 }, { opacity: melhor === 'raro' ? 0.35 : 0.9, scale: 1, duration: 0.5, ease: 'expo.out' }, 1.75);
-  if (melhor !== 'raro') tl.fromTo(k, { opacity: 0, scale: 2.6 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, 1.8).to(k, { opacity: 0, duration: 0.5 }, 2.6);
-  tl.to(linhas, { opacity: 0.12, duration: 0.8 }, 2.4);
-
-  // cartas: entram como quadros de mangá, uma a uma
-  const base = melhor === 'raro' ? 2.1 : 2.8;
-  cartas.forEach((c, i) => {
-    const t = base + i * (qtd === 1 ? 0 : 0.16);
-    tl.fromTo(c, { opacity: 1, clipPath: 'inset(0 0 100% 0)', y: 30 }, { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 0.6, ease: 'expo.out' }, t);
-    if (c.dataset.r === 'lendario') tl.fromTo(c, { '--glow': 0 }, { '--glow': 1, duration: 0.6, yoyo: true, repeat: 1 }, t + 0.3);
+  tl = gsap.timeline();
+  tl.set(met, { '--mc': corIni, opacity: 1, x: innerWidth * 0.42, y: -innerHeight * 0.55, scale: 0.6 })
+    .to(met, { x: 0, y: 0, scale: 1, duration: 1.4, ease: 'power2.in' }, 0.2);
+  if (melhor === 'lendario') tl.to(met, { '--mc': cor, duration: 0.25 }, 1.0);
+  tl.to(flash, { opacity: 1, duration: 0.08 }, 1.6)
+    .set(met, { opacity: 0 }, 1.68)
+    .to(flash, { opacity: 0, duration: 0.7, ease: 'power2.out' }, 1.7)
+    .fromTo(linhas, { opacity: 0, scale: 1.4 }, { opacity: melhor === 'raro' ? 0.35 : 0.9, scale: 1, duration: 0.5, ease: 'expo.out' }, 1.62);
+  if (melhor !== 'raro') tl.fromTo(k, { opacity: 0, scale: 2.6 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, 1.66).to(k, { opacity: 0, duration: 0.5 }, 2.4);
+  tl.to(linhas, { opacity: 0.12, duration: 0.8 }, 2.3);
+  return new Promise((ok) => {
+    const acaba = () => { pular = null; ok(); };
+    tl.eventCallback('onComplete', acaba);
+    pular = () => { tl.progress(1); acaba(); };
   });
+}
+
+// uma carta sozinha no centro: silhueta branca, estrelas uma a uma, nome
+async function revelaUma(p, i, total, minha) {
+  um.innerHTML = '';
+  const c = carta(p, true);
+  um.append(c);
+  inv.style.setProperty('--rc', R[p.rar].cor);
+  $('[data-inv-conta]').textContent = total > 1 ? `${i + 1} / ${total}` : '';
+  toque.hidden = false;
+  const est = c.querySelectorAll('.inv-card__d i');
+  const txt = c.querySelectorAll('.inv-card__n, .inv-card__t');
+  const t = gsap.timeline();
+  t.fromTo(c, { opacity: 0, scale: 1.25, filter: 'brightness(6) blur(8px)' }, { opacity: 1, scale: 1, filter: 'brightness(1) blur(0px)', duration: p.rar === 'raro' ? 0.45 : 0.8, ease: 'expo.out' })
+    .fromTo(est, { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.25, stagger: 0.09, ease: 'back.out(2)' }, '-=0.2')
+    .fromTo(txt, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, stagger: 0.08 }, '-=0.15');
+  if (p.rar === 'lendario') t.fromTo(c, { '--glow': 0 }, { '--glow': 1, duration: 0.5, yoyo: true, repeat: 3 }, 0.4).fromTo($('[data-flash]'), { opacity: 0.8 }, { opacity: 0, duration: 0.6 }, 0);
+  if (p.rar !== 'raro') t.fromTo(linhas, { opacity: 0.9, scale: 1.2 }, { opacity: 0.25, scale: 1, duration: 0.8 }, 0);
+  await espera(p.rar === 'lendario' ? 3400 : p.rar === 'epico' ? 2000 : 1100);
+  t.progress(1);
+  if (minha !== vez || pulouTudo) return;
+  if (i < total - 1) await gsap.to(c, { opacity: 0, x: -60, duration: 0.18 });
+}
+
+async function sequencia(res, titulo) {
+  const minha = ++vez;
+  pulouTudo = false;
+  palco.innerHTML = '';
+  um.innerHTML = '';
+  fim.hidden = true;
+  toque.hidden = true;
+  $('[data-inv-resumo]').textContent = titulo;
+  const melhor = res.reduce((m, p) => (ORDEM[p.rar] > ORDEM[m] ? p.rar : m), 'raro');
+  abrir();
+  inv.style.setProperty('--rc', R[melhor].cor);
+  gsap.set($('[data-meteoro]'), { opacity: 0 });
+
+  if (!reduce) {
+    await rastro(melhor);
+    for (let i = 0; i < res.length; i++) {
+      if (minha !== vez || pulouTudo) break;
+      await revelaUma(res[i], i, res.length, minha);
+    }
+  }
+  if (minha !== vez) return;
+  toque.hidden = true;
+  // fim: com 1 resultado a carta grande fica; com 10, a fileira inteira
+  if (res.length === 1) {
+    if (!um.children.length) um.append(carta(res[0], true));
+    gsap.set(um.children, { opacity: 1, x: 0, scale: 1, filter: 'none' });
+  } else {
+    um.innerHTML = '';
+    const cartas = res.map((p) => carta(p));
+    cartas.forEach((c) => palco.append(c));
+    if (!reduce) gsap.fromTo(cartas, { opacity: 0, y: 40, rotate: -4 }, { opacity: 1, y: 0, rotate: 0, duration: 0.5, stagger: 0.05, ease: 'expo.out' });
+  }
+  fim.hidden = false;
+  if (!reduce) gsap.from(fim, { opacity: 0, y: 16, duration: 0.5, delay: 0.3 });
+}
+
+function invocar(qtd) {
+  ultima = () => invocar(qtd);
+  const res = Array.from({ length: qtd }, sortear);
+  st.hist.unshift(...res.slice().reverse().map((p) => ({ nome: p.nome, rar: p.rar, em: Date.now() })));
+  salvar();
+  sequencia(res, resumo(res));
 }
 
 function resumo(res) {
@@ -199,10 +265,35 @@ function resumo(res) {
   return `${partes.join(' · ')} · faltam ${G.lendario - st.pity} para a garantia`;
 }
 
+/* ---------------------------------------------------------------- Pedra do Destino (prévia) */
+const giros = D.giros;
+let giroSel = giros[0];
+const pesa = (l) => { const t = l.reduce((s, x) => s + x.peso, 0); let r = Math.random() * t; for (const x of l) { r -= x.peso; if (r <= 0) return x; } return l[l.length - 1]; };
+function escolheGiro(i) {
+  giroSel = giros[i];
+  $('[data-pedra-ch]').textContent = giroSel.pool
+    ? `Chances: ${giroSel.chances}. Até ${giroSel.limite} por personagem e temporada.`
+    : `Chances: ${giroSel.chances}. Este depende da sua família, então só gira no bot.`;
+  $('[data-pedra-custo]').textContent = `${giroSel.custo} ${giroSel.custo === 1 ? 'Inscrição' : 'Inscrições'} · ${giroSel.nome}`;
+  $('[data-girar-pedra]').disabled = !giroSel.pool;
+}
+$$('[data-pedra] input').forEach((r) => r.addEventListener('change', () => escolheGiro(Number(r.value))));
+function girarPedra() {
+  const g = giroSel;
+  if (!g.pool) return;
+  ultima = girarPedra;
+  const grupo = pesa(g.pool);
+  const nome = grupo.lista[Math.floor(Math.random() * grupo.lista.length)];
+  sequencia([{ nome, tipo: g.nome, rar: grupo.rar, rotulo: grupo.rot, k: '石' }], `Pedra do Destino · prévia · ${grupo.rot}`);
+}
+$('[data-girar-pedra]')?.addEventListener('click', girarPedra);
+// /altar/#pedra abre direto na Pedra do Destino (links de Conhecimentos e Cristais)
+if (location.hash === '#pedra') $('[data-troca="pedra"]')?.click();
+
 $$('[data-girar]').forEach((b) => b.addEventListener('click', () => invocar(Number(b.dataset.girar))));
-$('[data-inv-pular]').addEventListener('click', () => { if (tl && tl.progress() < 1) tl.progress(1); else fechar(); });
+$('[data-inv-pular]').addEventListener('click', () => { if (!fim.hidden) { fechar(); return; } pulouTudo = true; if (pular) pular(); });
 $('[data-inv-fechar]').addEventListener('click', fechar);
-$('[data-inv-denovo]').addEventListener('click', () => { tl?.kill(); invocar(ultima); });
+$('[data-inv-denovo]').addEventListener('click', () => { tl?.kill(); ultima(); });
 addEventListener('keydown', (e) => { if (!inv.hidden && e.key === 'Escape') fechar(); });
 addEventListener('resize', () => { if (!inv.hidden) ceuInicia(); });
 

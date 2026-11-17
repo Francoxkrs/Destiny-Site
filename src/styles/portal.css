@@ -1002,3 +1002,6 @@
   .al-pe { position: relative; grid-row: 2; bottom: auto; padding-bottom: 28px; }
 }
 @media (max-width: 600px) { .al-banner__in { padding-top: calc(var(--hdr) + 130px); } }
+/* arte própria dos pacotes (série D2 Grimório, escolhida pelo Silas em 17/11) */
+.cp-pac__arte img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+@media (hover: hover) { .cp-pac:hover .cp-pac__arte img { transform: scale(1.05); } }

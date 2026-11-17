@@ -75,7 +75,7 @@ const metas = [
         {pacotes.map((p) => (
           <li class:list={['cp-pac', p.destaque && 'cp-pac--dest']}>
             {p.destaque && <span class="cp-pac__tag">{p.destaque}</span>}
-            <div class="cp-pac__arte"><Cristal tamanho={p.n} id={`p${p.n}`} /></div>
+            <div class="cp-pac__arte"><img src={`/img/cristais/pacote-${p.n}.webp`} alt={`Arte do pacote ${p.nome}`} width="800" height="800" loading="lazy" decoding="async" /></div>
             <p class="cp-pac__vol t-label">Nº {String(p.n).padStart(2, '0')}</p>
             <h3 class="cp-pac__nome">{p.nome}</h3>
             <p class="cp-pac__cp"><b>{fmt.format(p.cp)}</b> CP</p>

@@ -1,22 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
 import GuiaSecoes from '../components/GuiaSecoes.astro';
+import Arrow from '../components/Arrow.astro';
 import { paginas, comecePorAqui } from '../data/canon.js';
 const por = Object.fromEntries(paginas.map((p) => [p.slug, p]));
 ---
 <Base title="Guia" slug="guia" description="Todos os sistemas do Black Destiny organizados por assunto: mundo, personagem, magia, progressão, aventura e sustento.">
-  <header class="gd-hero">
-    <p class="px-label" style="color:var(--gold);margin-bottom:12px">Guia do Marcado</p>
-    <h1>Todos os sistemas, <em>por assunto</em>.</h1>
-    <p>{paginas.length} páginas em sete seções. Cada uma abre com um resumo de 30 segundos; a busca (Ctrl K) acha regras e termos pelo nome.</p>
-  </header>
-  <div class="gd-body">
-    <div>
-      <p class="px-label" style="margin-bottom:12px">Ordem de leitura para quem chegou agora</p>
-      <div class="gd-start">
-        {comecePorAqui.map(([s, t], i) => <a href={`/${s}/`}><span>0{i + 1}</span><b>{por[s].titulo}</b><small>{t}</small></a>)}
-      </div>
+  <section class="gd-hero">
+    <div class="wrap">
+      <span class="gd-hero__k" aria-hidden="true">書</span>
+      <span class="eyebrow"><b>書</b>Guia do Marcado</span>
+      <h1 class="gd-hero__t" data-split>Todos os sistemas, <em>por assunto</em>.</h1>
+      <p class="t-lead" data-reveal>{paginas.length} páginas em sete seções. Cada uma abre com o essencial em 30 segundos; a busca (Ctrl K) acha regras e termos pelo nome.</p>
     </div>
-    <GuiaSecoes />
-  </div>
+  </section>
+  <section class="sec sec--tight">
+    <div class="wrap">
+      <span class="eyebrow" data-reveal><b>Novo aqui?</b>Ordem de leitura</span>
+      <ol class="start" style="margin-top:24px">
+        {comecePorAqui.map(([s, t], i) => (
+          <li data-reveal><a href={`/${s}/`}><span class="start__n">0{i + 1}</span><b>{por[s].titulo}</b><span class="t-small">{t}</span><Arrow class="start__a" /></a></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+  <section class="sec sec--tight">
+    <div class="wrap"><GuiaSecoes /></div>
+  </section>
 </Base>

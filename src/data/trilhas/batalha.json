@@ -1,0 +1,551 @@
+{
+ "versao": 2,
+ "classe": "Mago de Batalha",
+ "slug": "batalha",
+ "papel": "Linha de frente, armas e corpo reforçado",
+ "raiz": {
+  "id": "batalha.raiz",
+  "nome": "Corpo de Guerra",
+  "texto": "Reforço Corporal recebe 100% dos Acréscimos do Poder Mágico."
+ },
+ "ramos": [
+  {
+   "id": "bastiao",
+   "nome": "Bastião",
+   "tema": "Segurar a linha: atrair golpes e proteger quem está atrás.",
+   "estrela": "batalha.bastiao.mago-de-vanguarda"
+  },
+  {
+   "id": "arsenal",
+   "nome": "Arsenal",
+   "tema": "Domínio de armas: a arma como extensão da magia."
+  },
+  {
+   "id": "furia",
+   "nome": "Fúria",
+   "tema": "Lutar ferido: ficar mais perigoso quanto mais apanha."
+  }
+ ],
+ "nos": [
+  {
+   "id": "batalha.bastiao.provocar",
+   "nome": "Provocar",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Para atacar outra pessoa na cena, o inimigo precisa ter Controle maior que o seu.",
+   "legado": "Bastião/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "batalha.bastiao.postura-firme",
+   "nome": "Postura Firme",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Não é derrubado nem empurrado por quem está no seu Estágio ou abaixo.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "batalha.bastiao.muralha-viva",
+   "nome": "Muralha Viva",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "batalha.bastiao.provocar"
+    ]
+   ],
+   "tipo": "reacao",
+   "texto": "Toma no lugar de um aliado ao lado o golpe que ia nele, e o golpe perde 1 Acréscimo.",
+   "legado": "Bastião/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "batalha.bastiao.escolta",
+   "nome": "Escolta",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "batalha.bastiao.postura-firme"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Em missões de escolta e de defesa, a recompensa do grupo sobe 20%. Viajando em grupo, os aliados não podem ser emboscados sem que você perceba.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "batalha.bastiao.pele-de-ferro",
+   "nome": "Pele de Ferro",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "batalha.bastiao.muralha-viva"
+    ],
+    [
+     "batalha.bastiao.escolta"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O primeiro Ferimento I de cada cena é anulado.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "batalha.bastiao.linha-inquebravel",
+   "nome": "Linha Inquebrável",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "batalha.bastiao.pele-de-ferro"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Por 3 turnos, aliados ao seu lado ganham +1 Acréscimo de Resistência.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "batalha.bastiao.mago-de-vanguarda",
+   "nome": "Mago de Vanguarda",
+   "ramo": [
+    "bastiao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "batalha.bastiao.linha-inquebravel",
+     "batalha.bastiao.muralha-viva",
+     "batalha.bastiao.escolta"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "+1 Acréscimo permanente de Resistência. Enquanto ele está de pé, aliados atrás dele não podem ser alvo de projéteis.",
+   "estrela": true,
+   "legado": "Bastião/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "batalha.arsenal.arma-vinculada",
+   "nome": "Arma Vinculada",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "A arma escolhida volta à mão com um gesto e nunca é tirada dele.",
+   "legado": "Arsenal/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "batalha.arsenal.guarda",
+   "nome": "Guarda",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "reacao",
+   "usos": "1 vez por turno",
+   "texto": "Apara com a arma um golpe corpo a corpo: ele perde 1 Acréscimo.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "batalha.arsenal.corte-de-mana",
+   "nome": "Corte de Mana",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "batalha.arsenal.arma-vinculada"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "O golpe da arma solta uma onda de mana que chega à metade do alcance do seu Estágio.",
+   "legado": "Arsenal/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "batalha.arsenal.olho-de-ferreiro",
+   "nome": "Olho de Ferreiro",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "batalha.arsenal.guarda"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Sabe a qualidade, os encantamentos e o desgaste de qualquer arma ou armadura que segura. Conserta as próprias armas sem Profissão, numa Jornada.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "batalha.arsenal.arma-encantada",
+   "nome": "Arma Encantada",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "batalha.arsenal.corte-de-mana"
+    ],
+    [
+     "batalha.arsenal.olho-de-ferreiro"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O Despertar da arma vinculada dura 1 turno a mais, e ela conta como Item Mágico para atravessar barreiras.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "batalha.arsenal.contragolpe",
+   "nome": "Contragolpe",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "batalha.arsenal.arma-encantada"
+    ]
+   ],
+   "tipo": "reacao",
+   "usos": "1 vez por cena",
+   "texto": "Depois de aparar com Guarda ou sofrer um golpe corpo a corpo, ataca de volta com a arma.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "batalha.arsenal.mestre-de-armas",
+   "nome": "Mestre de Armas",
+   "ramo": [
+    "arsenal"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "batalha.arsenal.contragolpe",
+     "batalha.arsenal.corte-de-mana",
+     "batalha.arsenal.olho-de-ferreiro"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Usa qualquer arma como se tivesse o Conhecimento dela e ataca duas vezes por turno com arma; o segundo ataque sai com 1 Acréscimo a menos.",
+   "legado": "Arsenal/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "batalha.furia.avanco",
+   "nome": "Avanço",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "+1 Acréscimo de Velocidade no turno em que avança contra um alvo.",
+   "legado": "Fúria/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "batalha.furia.grito-de-guerra",
+   "nome": "Grito de Guerra",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Inimigos com Controle menor que o seu perdem a reação no próximo turno.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "batalha.furia.sangue-quente",
+   "nome": "Sangue Quente",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "batalha.furia.avanco"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Com qualquer Ferimento, +1 Acréscimo de Força. Com Ferimento III, também +1 de Velocidade.",
+   "legado": "Fúria/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "batalha.furia.cacador-de-feras",
+   "nome": "Caçador de Feras",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "batalha.furia.grito-de-guerra"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Contra criaturas, causa um Ferimento um grau acima no primeiro acerto da cena. Em caçadas, leva 1 Parte de Criatura a mais.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "batalha.furia.impeto",
+   "nome": "Ímpeto",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "batalha.furia.sangue-quente"
+    ],
+    [
+     "batalha.furia.cacador-de-feras"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Ao derrubar um alvo, ganha um movimento extra no mesmo turno.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "batalha.furia.recuperacao-bruta",
+   "nome": "Recuperação Bruta",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "batalha.furia.impeto"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Fora da luta, os seus Ferimentos I e II curam na metade do tempo.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "batalha.furia.inquebravel",
+   "nome": "Inquebrável",
+   "ramo": [
+    "furia"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "batalha.furia.recuperacao-bruta",
+     "batalha.furia.sangue-quente",
+     "batalha.furia.cacador-de-feras"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma vez por cena, ignora todos os efeitos de Ferimento por 3 turnos; eles pesam quando a fúria acaba. Com o Milagre Fúria de Batalha, uma vez por arco ignora também um Ferimento IV, o fatal, e sai da cena vivo, com Ferimento III.",
+   "legado": "Fúria/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "batalha.elo.escudo-e-lamina",
+   "nome": "Escudo e Lâmina",
+   "ramo": [
+    "bastiao",
+    "arsenal"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "batalha.bastiao.pele-de-ferro",
+     "batalha.arsenal.arma-encantada"
+    ]
+   ],
+   "tipo": "reacao",
+   "texto": "Quando a Muralha Viva toma um golpe por um aliado, você contra-ataca com a arma na mesma reação.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "batalha.elo.golpe-selvagem",
+   "nome": "Golpe Selvagem",
+   "ramo": [
+    "arsenal",
+    "furia"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "batalha.arsenal.arma-encantada",
+     "batalha.furia.impeto"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Com qualquer Ferimento, o Corte de Mana chega ao alcance inteiro do seu Estágio.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "batalha.elo.ultima-muralha",
+   "nome": "Última Muralha",
+   "ramo": [
+    "bastiao",
+    "furia"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "batalha.bastiao.pele-de-ferro",
+     "batalha.furia.impeto"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Com Ferimento III, por 2 turnos nenhum aliado ao seu lado pode ser alvo; todos os golpes vêm para você.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

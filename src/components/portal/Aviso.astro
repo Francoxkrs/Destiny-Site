@@ -14,6 +14,6 @@ const t = textos[estado];
   <div class="fc-aviso" role="status">
     <span class="fc-aviso__tag">{t[0]}</span>
     <p>{t[1]}</p>
-    {!logado && <a class="px-btn px-btn--sm px-btn--ember" href={`/api/auth/login?volta=${encodeURIComponent(volta)}`} data-login><Icon name="discord" size={16} />Entrar com Discord</a>}
+    {!logado && <a class="btn btn--solid tr-sm" href={`/api/auth/login?volta=${encodeURIComponent(volta)}`} data-login><Icon name="discord" size={16} />Entrar com Discord</a>}
   </div>
 )}

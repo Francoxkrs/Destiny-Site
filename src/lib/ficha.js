@@ -16,7 +16,7 @@
  *   mana: { atual: number, max: number }, reserva: number, poder: number,
  *   fisicos: FisicoWeb[],
  *   moedas: { yuls: number, meritos: number, antimeritos: number, cristais: { branco: number, negro: number, dourado: number } },
- *   trilha: { pontos: number, gastos: number, livres: number, nos: string[] },
+ *   trilha: { versao?: 2, pontos: number, gastos: number, livres: number, nos: string[] },  // versao 2 = o bot já usa as árvores v2 (ids "classe.ramo.no")
  *   conhecimentos: string[], tracos: string[], tecnicas: string[],
  *   feiticos: { nome: string, tipo?: string, estagio?: number, imagem?: string | null }[],
  *   historia: { vidaPassada?: string, renascimento?: string, personalidade?: string },
@@ -41,7 +41,7 @@ export const fichaExemplo = {
     { nome: 'Velocidade', indice: 2, teto: 3, acrescimos: 0, treino: { feitos: 1, precisa: 3 } },
   ],
   moedas: { yuls: 7340, meritos: 18, antimeritos: 0, cristais: { branco: 3, negro: 0, dourado: 0 } },
-  trilha: { pontos: 2, gastos: 1, livres: 1, nos: ['Fúria/0'] },
+  trilha: { versao: 2, pontos: 6, gastos: 4, livres: 2, nos: ['batalha.furia.avanco', 'batalha.furia.sangue-quente', 'batalha.arsenal.arma-vinculada', 'batalha.furia.grito-de-guerra'] },
   conhecimentos: ['Artes Demoníacas', 'Combate', 'Esgrima', 'Etiqueta da Coroa'],
   tracos: ['Presença Impactante', 'Sangue Frio'],
   tecnicas: ['Percepção de Mana', 'Pele de Mana', 'Respiração de Mana'],

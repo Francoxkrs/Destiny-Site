@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import { patches } from '../data/patches.js';
+
+// Markdown do Discord que o /patch usa: **negrito** e `comando`.
+const md = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>');
+const [atual, ...antigos] = patches;
+const total = (p) => p.secoes.reduce((s, x) => s + x.itens.length, 0);
+const dia = (p) => p.data.slice(0, 5);
+---
+<Base title="Patch Notes" slug="patch" aba="patch" description="Patch notes do Black Destiny: tudo o que mudou no bot do servidor, patch por patch.">
+  <div class="pt">
+    <header class="pt-hd wrap">
+      <span class="eyebrow"><b>記</b>Registro de Diamond</span>
+      <h1 class="pt-hd__t">Patch <em>Notes</em></h1>
+      <p class="t-body">O mesmo texto que o bot posta no Discord, guardado aqui para consulta. {patches.length} patches até agora.</p>
+    </header>
+
+    <div class="pt-corpo wrap">
+      <nav class="pt-vols" aria-label="Patches">
+        {patches.map((p, i) => (
+          <a href={`#v${p.versao}`} class="pt-vol" aria-current={i === 0 ? 'true' : undefined}>
+            <span class="pt-vol__n">Vol. {String(patches.length - i).padStart(2, '0')}</span>
+            <b>{p.data}</b>
+            <small>{total(p)} mudanças{i === 0 ? ' · atual' : ''}</small>
+          </a>
+        ))}
+      </nav>
+
+      <div class="pt-lista">
+        {patches.map((p, i) => (
+          <article class:list={['pt-p', i === 0 && 'pt-p--atual']} id={`v${p.versao}`}>
+            <header class="pt-p__hd">
+              <span class="pt-p__dia" aria-hidden="true">{dia(p)}</span>
+              <div>
+                <p class="t-label">{i === 0 ? 'Patch atual' : 'Patch anterior'} · {p.data}</p>
+                <h2 class="pt-p__t">{p.titulo}</h2>
+                <p class="pt-p__frase">“{p.frase}”</p>
+              </div>
+            </header>
+            <p class="pt-p__res" set:html={md(p.resumo)} />
+            {p.secoes.map((s) => (
+              <section class="pt-sec">
+                {s.nome && <h3 class="pt-sec__t"><span aria-hidden="true">◆</span>{s.nome}</h3>}
+                <ul class="pt-itens">
+                  {s.itens.map((it) => <li><b set:html={md(it.titulo)} /><span set:html={md(it.texto)} /></li>)}
+                </ul>
+              </section>
+            ))}
+            <p class="pt-p__rod" set:html={md(p.rodape)} />
+            <p class="pt-p__fecho">{p.fecho}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</Base>

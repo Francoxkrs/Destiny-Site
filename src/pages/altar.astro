@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import { altar, pedra, raridades, garantia, inscricao, fontes } from '../data/altar.js';
+
+const fmt = new Intl.NumberFormat('pt-BR');
+const pct = (n) => `${String(n).replace('.', ',')}%`;
+const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, raridades, garantia };
+---
+<Base title="Altar dos Vestígios" slug="altar" aba="altar" description="O Altar dos Vestígios: o gacha da temporada do Black Destiny, com chances e garantia sempre à vista, e a Pedra do Destino.">
+  <div class="al" data-altar>
+    <!-- PALCO: o banner da temporada, de tela cheia -->
+    <section class="al-palco" aria-label="Banner">
+      {[altar, pedra].map((b, i) => (
+        <div class="al-banner" data-banner={b.id} hidden={i > 0}>
+          <div class="al-banner__arte" aria-hidden="true">
+            <img src={b.id === 'pedra' ? '/img/grimorios/lendario.jpg' : altar.destaque.img} alt="" fetchpriority={i ? undefined : 'high'} />
+            <svg class="al-banner__corte" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="58,0 100,0 100,100 34,100" /></svg>
+          </div>
+          <span class="al-banner__k" aria-hidden="true">{b.kanji}</span>
+          <div class="wrap al-banner__in">
+            <div class="al-info">
+              <span class="eyebrow"><b>{b.kanji}</b>{b.id === 'pedra' ? 'Giros de sempre' : altar.temporada}</span>
+              <h1 class="al-info__t">{b.id === 'pedra' ? <>Pedra do <em>Destino</em></> : <>Altar dos <em>Vestígios</em></>}</h1>
+              <p class="al-info__p">{b.texto}</p>
+              {b.id === 'vestigios' ? (
+                <>
+                  <div class="al-dest">
+                    <span class="al-dest__r" aria-label="Lendário">◆◆◆◆◆</span>
+                    <p class="al-dest__n">{altar.destaque.nome}</p>
+                    <p class="al-dest__t">{altar.destaque.tipo} · Vestígio em destaque{altar.proposta && <span class="al-tag">Proposta</span>}</p>
+                  </div>
+                  <div class="al-gar" data-garantia>
+                    <div class="al-gar__l">
+                      <span class="t-label">Garantia do Lendário</span>
+                      <b><span data-faltam>{garantia.lendario}</span> <small>giros</small></b>
+                    </div>
+                    <div class="al-gar__bar" aria-hidden="true">
+                      {Array.from({ length: garantia.lendario }, (_, k) => <i class:list={[k + 1 >= garantia.sobeDe && 'is-sobe']}></i>)}
+                    </div>
+                    <p class="al-gar__nota">A chance sobe a partir do {garantia.sobeDe}º giro. No {garantia.lendario}º, é certo. Épico ou melhor: pelo menos 1 a cada {garantia.epico} (<span data-faltam-epico>{garantia.epico}</span> para o próximo).</p>
+                  </div>
+                </>
+              ) : (
+                <ul class="al-pedra">
+                  {pedra.giros.map((g) => <li><span>{g.nome}</span><b>{g.custo} <small>{g.custo === 1 ? 'Inscrição' : 'Inscrições'}</small></b></li>)}
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <!-- troca de banner, no alto (como os ícones de banner dos gachas) -->
+      <div class="al-troca" role="tablist" aria-label="Banners">
+        <button role="tab" aria-selected="true" data-troca="vestigios"><img src={altar.destaque.img} alt="" /><span>Altar dos Vestígios<small>Temporada</small></span></button>
+        <button role="tab" aria-selected="false" data-troca="pedra"><img src="/img/grimorios/lendario.jpg" alt="" /><span>Pedra do Destino<small>Sempre aberta</small></span></button>
+      </div>
+
+      <div class="al-saldo" aria-label="Seu saldo">
+        <span class="al-saldo__i"><i class="al-insc" aria-hidden="true"></i><b data-insc>—</b><small>Inscrições</small></span>
+        <a class="al-saldo__i" href="/cristais/"><i class="hcp__gem" aria-hidden="true"></i><b data-cp>—</b><small>CP</small></a>
+      </div>
+
+      <div class="al-pe wrap">
+        <div class="al-links">
+          <a href="#chances">Chances</a>
+          <a href="#ganhar">Como ganhar Inscrições</a>
+          <button type="button" data-historico>Histórico da prévia</button>
+        </div>
+        <p class="al-previa"><b>Prévia</b>Os giros aqui ainda não gastam nem entregam nada: o Altar abre com a versão 2 do bot.</p>
+        <div class="al-btns" data-btns="vestigios">
+          <button class="al-btn" type="button" data-girar="1"><span class="al-btn__t">Invocar ×1</span><span class="al-btn__c"><i class="al-insc" aria-hidden="true"></i>1 · {fmt.format(inscricao.cp)} CP</span></button>
+          <button class="al-btn al-btn--10" type="button" data-girar="10"><span class="al-btn__t">Invocar ×10</span><span class="al-btn__c"><i class="al-insc" aria-hidden="true"></i>10 · {fmt.format(inscricao.cp10)} CP</span></button>
+        </div>
+        <div class="al-btns" data-btns="pedra" hidden>
+          <a class="al-btn al-btn--10" href="/comecar/"><span class="al-btn__t">Girar pelo bot</span><span class="al-btn__c">/bolsa, com as vagas de sempre</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHANCES -->
+    <section class="al-sec wrap" id="chances">
+      <div class="al-sec__h">
+        <span class="eyebrow"><b>率</b>Chances publicadas</span>
+        <h2 class="t-h2">Nada <em>escondido</em>.</h2>
+        <p class="t-body">As chances e a contagem da garantia ficam à vista antes de cada giro, aqui e no bot.</p>
+      </div>
+      <div class="al-rar">
+        {Object.entries(raridades).map(([k, r]) => (
+          <article class="al-rar__c" data-r={k}>
+            <p class="al-rar__d" aria-hidden="true">{'◆'.repeat(r.estrelas)}</p>
+            <h3>{r.nome}</h3>
+            <p class="al-rar__p">{pct(r.chance)}</p>
+            <p class="al-rar__g">{k === 'lendario' ? `Sobe ${garantia.passo} pontos por giro a partir do ${garantia.sobeDe}º; certo no ${garantia.lendario}º.` : k === 'epico' ? `No mínimo 1 a cada ${garantia.epico} giros.` : 'O resto.'}</p>
+            <p class="al-rar__s">{altar.oQueSai[k]}</p>
+          </article>
+        ))}
+      </div>
+      <ul class="al-regras">{altar.regras.map((r) => <li>{r}</li>)}</ul>
+
+      <div class="al-sec__h" style="margin-top:clamp(56px,8vw,110px)">
+        <span class="eyebrow"><b>石</b>Pedra do Destino</span>
+        <h2 class="t-h2">Os giros de sempre, <em>com Inscrições</em>.</h2>
+        <p class="t-body">{pedra.texto}</p>
+      </div>
+      <div class="al-tab" role="region" aria-label="Giros da Pedra do Destino" tabindex="0">
+        <table>
+          <thead><tr><th>Giro</th><th>Inscrições</th><th>Chances (já no bot)</th><th>Por personagem e temporada</th></tr></thead>
+          <tbody>{pedra.giros.map((g) => <tr><td>{g.nome}</td><td class="n">{g.custo}</td><td>{g.chances}</td><td class="n">{g.limite}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COMO GANHAR -->
+    <section class="al-sec al-sec--papel" id="ganhar">
+      <div class="wrap">
+        <div class="al-sec__h">
+          <span class="eyebrow"><b>札</b>Inscrições</span>
+          <h2 class="t-h2">Jogando, <em>todo mundo gira</em>.</h2>
+          <p class="t-body">As mesmas Inscrições para quem paga e para quem não paga. Um jogador ativo junta perto de 25 por mês. Também dá para comprar: {fmt.format(inscricao.cp)} CP cada, ou 10 por {fmt.format(inscricao.cp10)} CP.</p>
+        </div>
+        <ol class="al-fontes">
+          {fontes.map(([o, q, l]) => <li><b>+{q}</b><span>{o}</span><small>{l}</small></li>)}
+        </ol>
+        <div class="btns" style="margin-top:32px"><a class="btn btn--ink" href="/cristais/">Cristais Prismáticos <Arrow /></a><a class="btn btn--ink" href="/eventos/">Eventos valendo agora <Arrow /></a></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- INVOCAÇÃO: a sequência de tela cheia -->
+  <div class="inv" data-inv hidden aria-live="polite">
+    <canvas class="inv__ceu" data-ceu aria-hidden="true"></canvas>
+    <svg class="inv__linhas" data-inv-linhas viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <div class="inv__meteoro" data-meteoro aria-hidden="true"><i></i></div>
+    <span class="inv__k" data-inv-k aria-hidden="true">運</span>
+    <div class="inv__flash" data-flash aria-hidden="true"></div>
+    <div class="inv__palco" data-inv-palco></div>
+    <div class="inv__fim" data-inv-fim hidden>
+      <p class="t-label" data-inv-resumo></p>
+      <div class="btns">
+        <button class="btn btn--solid" type="button" data-inv-denovo>Invocar de novo</button>
+        <button class="btn" type="button" data-inv-fechar>Fechar</button>
+      </div>
+    </div>
+    <button class="inv__pular" type="button" data-inv-pular>Pular ›</button>
+  </div>
+
+  <dialog class="al-hist" data-hist>
+    <form method="dialog"><button class="al-hist__x" aria-label="Fechar">×</button></form>
+    <h2>Histórico da prévia</h2>
+    <p class="t-small">Só neste navegador. Não vale como giro de verdade.</p>
+    <ol data-hist-lista></ol>
+  </dialog>
+
+  <script is:inline type="application/json" id="al-dados" set:html={JSON.stringify(dados)}></script>
+</Base>
+
+<script>
+  import '../scripts/altar.js';
+</script>

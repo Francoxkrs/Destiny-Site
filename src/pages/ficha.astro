@@ -6,7 +6,7 @@ import Aviso from '../components/portal/Aviso.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { carregarFicha, imagemUrl } from '../lib/ficha.js';
 import { classificacoes, romanos, slugify } from '../data/canon.js';
-import { arvorePorClasse } from '../data/arvores.js';
+import { arvorePorClasse, migrarIds } from '../data/arvores.js';
 import fs from 'node:fs';
 import path from 'node:path';
 export const prerender = false;
@@ -20,6 +20,7 @@ const img = imagemUrl(f.imagem);
 const cor = /^#[0-9a-f]{6}$/i.test(f.cor ?? '') ? f.cor : '#ff3b2e';
 const brasao = fs.existsSync(path.join(process.cwd(), 'public/img/brasoes', `${slugify(f.familia)}.svg`)) ? `/img/brasoes/${slugify(f.familia)}.svg` : null;
 const arvore = arvorePorClasse(f.classeMago);
+const trilhaNos = arvore ? migrarIds(arvore, f.trilha.nos).map((id) => arvore.nos.find((n) => n.id === id)?.nome ?? id) : f.trilha.nos;
 
 // Estágios descem do 9º ao 1º.
 const trilhaEstagios = [9, 8, 7, 6, 5, 4, 3, 2, 1];
@@ -36,19 +37,21 @@ const juntar = (l) => (l.length < 2 ? l.join('') : `${l.slice(0, -1).join(', ')}
 const pronto = prox && faltas.length === 0;
 const pct = (a, b) => Math.max(0, Math.min(100, b ? (a / b) * 100 : 0));
 ---
-<Base title="Ficha" slug="ficha" modo="app" aba="ficha" description="A ficha do seu Marcado, a mesma do bot: Estágio, atributos, Grimório e história.">
+<Base title="Ficha" slug="ficha" aba="ficha" description="A ficha do seu Marcado, a mesma do bot: Estágio, atributos, Grimório e história.">
   <div class="fc" style={`--c:${cor}`}>
+    <span class="fc-k" aria-hidden="true">魂</span>
     <Aviso estado={estado === 'ok' ? null : estado} aviso={aviso} logado={Boolean(sessao)} />
 
     <div class="fc-grid">
       <!-- retrato -->
       <aside class="fc-id">
-        <div class="fc-retrato px-frame">
+        <div class="fc-retrato">
           <div class="fc-retrato__sol" aria-hidden="true"></div>
           {img ? <img src={img} alt={`Imagem de ${f.nome}`} width="600" height="800" /> : (
             <div class="fc-retrato__vazio"><Gem /><p>A imagem do seu personagem no bot aparece aqui.</p></div>
           )}
           <span class="fc-retrato__n px-num">Nº {String(f.numero ?? 0).padStart(3, '0')}</span>
+          <span class="fc-retrato__est" aria-hidden="true">{f.estagio}<small>º</small></span>
         </div>
         <div class="fc-nome">
           <h1>{f.nome}</h1>
@@ -150,7 +153,7 @@ const pct = (a, b) => Math.max(0, Math.min(100, b ? (a / b) * 100 : 0));
                   <b class="px-num">{f.trilha.livres}</b>
                   <span>{f.trilha.livres === 1 ? 'Ponto de Trilha livre' : 'Pontos de Trilha livres'}<small>{f.trilha.gastos} de {f.trilha.pontos} gastos</small></span>
                 </div>
-                <p class="fc-trilhacard__nos">{f.trilha.nos.length ? f.trilha.nos.map((id) => arvore?.nos.find((n) => n.id === id)?.nome ?? id).join(' · ') : 'Nenhum nó ainda.'}</p>
+                <p class="fc-trilhacard__nos">{trilhaNos.length ? trilhaNos.join(' · ') : 'Nenhuma habilidade ainda.'}</p>
                 <span class="fc-trilhacard__go">Abrir a árvore<Icon name="seta" size={16} /></span>
               </a>
             </div>

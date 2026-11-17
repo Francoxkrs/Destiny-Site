@@ -1,0 +1,125 @@
+{
+  "versao": 2,
+  "resumo": "Árvore de cada Classe de Mago: Raiz grátis, 3 ramos de 7 nós e 3 Elos entre ramos. 24 habilidades por trilha. Pontos de Trilha (PT) vêm dos Estágios.",
+  "graus": [
+    {
+      "grau": 1,
+      "nome": "Grau I",
+      "custo": 1,
+      "estagioMin": 9,
+      "porRamo": 2
+    },
+    {
+      "grau": 2,
+      "nome": "Grau II",
+      "custo": 1,
+      "estagioMin": 7,
+      "porRamo": 2
+    },
+    {
+      "grau": 3,
+      "nome": "Grau III",
+      "custo": 2,
+      "estagioMin": 5,
+      "porRamo": 1
+    },
+    {
+      "grau": 4,
+      "nome": "Grau IV",
+      "custo": 2,
+      "estagioMin": 4,
+      "porRamo": 1
+    },
+    {
+      "grau": 5,
+      "nome": "Ápice",
+      "custo": 3,
+      "estagioMin": 3,
+      "porRamo": 1
+    }
+  ],
+  "elo": {
+    "nome": "Elo",
+    "custo": 2,
+    "estagioMin": 3,
+    "requer": "o Grau III dos dois ramos que ele liga"
+  },
+  "pontosPorEstagio": [
+    {
+      "estagio": 9,
+      "ganha": 2,
+      "total": 2,
+      "nota": "criação"
+    },
+    {
+      "estagio": 8,
+      "ganha": 1,
+      "total": 3
+    },
+    {
+      "estagio": 7,
+      "ganha": 2,
+      "total": 5,
+      "nota": "já dava Ponto de Trilha: +1 extra"
+    },
+    {
+      "estagio": 6,
+      "ganha": 1,
+      "total": 6
+    },
+    {
+      "estagio": 5,
+      "ganha": 2,
+      "total": 8,
+      "nota": "já dava Ponto de Trilha: +1 extra"
+    },
+    {
+      "estagio": 4,
+      "ganha": 1,
+      "total": 9
+    },
+    {
+      "estagio": 3,
+      "ganha": 2,
+      "total": 11,
+      "nota": "já dava Ponto de Trilha: +1 extra"
+    },
+    {
+      "estagio": 2,
+      "ganha": 1,
+      "total": 12
+    },
+    {
+      "estagio": 1,
+      "ganha": 1,
+      "total": 13
+    }
+  ],
+  "pontosDeFeito": {
+    "max": 2,
+    "regra": "A Staff dá até 2 PT na vida do personagem por feitos de RP (chefe de arco, Relíquia, evento). Não se compram."
+  },
+  "custos": {
+    "ramoCompleto": 11,
+    "arvoreCompleta": 39,
+    "maximoPossivel": 15
+  },
+  "tetoDeAcrescimos": "Nenhum nó dá mais de +1 Acréscimo por aplicação, e tudo o que vem da trilha soma no máximo +2 Acréscimos no mesmo teste, golpe ou feitiço.",
+  "redefinir": {
+    "lancamentoV2": "Todo mundo recebe os PT do seu Estágio e monta a árvore de novo, de graça.",
+    "depois": "Redefinir só com Cristal Prismático (preço definido na loja de Prismáticos)."
+  },
+  "tipos": {
+    "passiva": "Sempre ativa.",
+    "ativa": "Usa na ação, com limite de usos.",
+    "reacao": "Usa fora do seu turno, gastando a reação.",
+    "mundo": "Vale fora da luta: missões, economia, profissões, viagem."
+  },
+  "regraDeDesenho": [
+    "Cada ramo tem 2 entradas no Grau I e 2 nós no Grau II, um preso a cada entrada; o Grau III abre com qualquer um dos dois Grau II.",
+    "O Ápice pede o Grau IV e os dois nós de Grau II do ramo: quem chega lá pagou o ramo inteiro (11 PT).",
+    "Cada ramo tem pelo menos 1 nó do tipo mundo, para a trilha valer fora do combate.",
+    "Os nós antigos continuam: Nó I vira a primeira entrada do Grau I, Nó II vira o Grau II dela, e o Ápice continua Ápice."
+  ],
+  "excecoes": "Artífice e Sombras ficam como estão, de propósito (decisão do Silas, 2026-11-17)."
+}

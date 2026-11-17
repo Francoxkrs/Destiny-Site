@@ -1,13 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
-import Glifo from '../components/portal/Glifo.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { carregarFicha } from '../lib/ficha.js';
-import { arvores, arvorePorClasse } from '../data/arvores.js';
-import { pontosDeTrilha, proximoPonto } from '../lib/arvore-regras.js';
-import fs from 'node:fs';
-import path from 'node:path';
+import { arvores, arvorePorClasse, migrarIds, graus, regras } from '../data/arvores.js';
+import { pontosDeTrilha, proximoPonto, gastos } from '../lib/arvore-regras.js';
 export const prerender = false;
 
 const sessao = lerSessao(Astro.cookies);
@@ -19,109 +15,173 @@ const minha = arvorePorClasse(f.classeMago) ?? arvores[0];
 const pedida = arvores.find((a) => a.id === Astro.url.searchParams.get('classe'));
 const ativa = pedida ?? minha;
 const pontos = f.trilha.pontos ?? pontosDeTrilha(f.estagio);
-const temImg = (id) => fs.existsSync(path.join(process.cwd(), 'public/img/classes', `${id}.jpg`));
-const NOME_NO = ['Raiz', 'Nó I', 'Nó II', 'Ápice'];
+const tem = migrarIds(minha, f.trilha.nos);
+const livres = Math.max(0, pontos - gastos(minha, tem));
+const prox = proximoPonto(f.estagio);
+// O site só grava quando o bot já usa as árvores v2 (ids novos), senão os dois brigariam pelo mesmo campo.
+const podeGravar = real && f.trilha.versao === 2;
 
-// Geometria: raiz na linha 0; colunas centradas. Posições em % do palco.
+const ROMANO = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'Ápice' };
+const TIPO = { passiva: 'Passiva', ativa: 'Ativa', reacao: 'Reação', mundo: 'Mundo' };
+const curto = (nome) => nome.replace('Mago ', '').replace(/^(de|do|das) /, '');
+
+// Geometria radial ("Selo da Classe"): a Raiz no centro, cada ramo sai numa direção (cima, baixo à direita,
+// baixo à esquerda) e cada Grau é um anel mais longe do centro. Os Elos ficam no vão entre os dois ramos que ligam.
+// Coordenadas de -100 a 100; viram % do palco quadrado.
+const RAIO = { 1: 31, 2: 45, 3: 59, 4: 73, 5: 87 };
+const ANG = [-90, 30, 150];
+const LADO = 11;
 const geo = (a) => {
-  const linhas = Math.max(...a.nos.map((n) => n.linha));
-  const x = (c) => ((c + 0.5) / a.colunas) * 100;
-  const y = (l) => 12 + (l / linhas) * 76;
-  const pos = Object.fromEntries(a.nos.map((n) => [n.id, { x: x(n.coluna), y: y(n.linha) }]));
-  pos.raiz = { x: 50, y: y(0) };
-  const arestas = a.nos.flatMap((n) => (n.requer.length ? n.requer : ['raiz']).map((r) => [r, n.id]));
-  const ramos = [...new Set(a.nos.map((n) => n.ramo))].map((r, i) => ({ nome: r, x: x(i), y: y(1) - 9.5 }));
-  return { pos, arestas, ramos };
+  const rad = (g) => (g * Math.PI) / 180;
+  const ang = Object.fromEntries(a.ramos.map((r, i) => [r.id, ANG[i] ?? 0]));
+  const pt = (u, v) => ({ x: 50 + u / 2, y: 50 + v / 2, u, v });
+  const pos = { raiz: pt(0, 0) };
+  for (const r of a.ramos) {
+    const nos = a.nos.filter((n) => !n.elo && n.ramo[0] === r.id);
+    const meio = Math.min(...nos.map((n) => n.pos[0])) + 0.5;
+    const t = rad(ang[r.id]);
+    const dir = [Math.cos(t), Math.sin(t)];
+    const perp = [-Math.sin(t), Math.cos(t)];
+    for (const n of nos) {
+      const lat = (n.pos[0] - meio) * 2 * LADO * (ang[r.id] === -90 ? 1 : -1);
+      const R = RAIO[n.grau];
+      pos[n.id] = pt(dir[0] * R + perp[0] * lat, dir[1] * R + perp[1] * lat);
+    }
+  }
+  for (const n of a.nos.filter((x) => x.elo)) {
+    const [p, q] = n.ramo.map((r) => ang[r]);
+    let d = ((q - p + 540) % 360) - 180;
+    const m = rad(p + d / 2);
+    pos[n.id] = pt(Math.cos(m) * 76, Math.sin(m) * 76);
+  }
+  const arestas = [];
+  for (const n of a.nos) {
+    const de = n.requer.length ? [...new Set(n.requer.flat())] : ['raiz'];
+    // Ápice: liga só ao Grau IV (os outros requisitos ficam no texto) para o desenho não virar novelo.
+    const usar = n.grau === 5 && !n.elo ? de.filter((r) => a.nos.find((m) => m.id === r)?.grau === 4) : de;
+    for (const r of usar) arestas.push([r, n.id, n.requer.length > 1]);
+  }
+  const ramos = a.ramos.map((r) => { const t = rad(ang[r.id]); return { ...r, ...pt(Math.cos(t) * 19.5, Math.sin(t) * 19.5) }; });
+  const aneis = [1, 2, 3, 4, 5].map((g) => ({ g, r: RAIO[g] / 2 }));
+  return { pos, arestas, ramos, aneis };
 };
 
 const dados = {
-  estagio: f.estagio, pontos, tem: f.trilha.nos, minha: minha.id, real, logado: Boolean(sessao),
-  arvores: arvores.map((a) => ({ id: a.id, nome: a.nome, raiz: a.raiz, nos: a.nos })),
+  estagio: f.estagio, pontos, tem, minha: minha.id, real, podeGravar, logado: Boolean(sessao),
+  arvores: arvores.map((a) => ({ id: a.id, nome: a.nome, papel: a.papel, raiz: a.raiz, ramos: a.ramos, nos: a.nos })),
 };
 ---
-<Base title="Árvores" slug="arvores" modo="app" aba="arvores" description="As árvores de habilidade das Classes de Mago: veja os nós, planeje a sua trilha e gaste seus Pontos de Trilha.">
-  <div class="av" data-arvores>
-    <!-- dossiê -->
-    <aside class="av-dos" aria-label="Dossiê do Marcado">
-      <div class="av-dos__h">
-        <p class="px-label">{real ? 'Dossiê do Marcado' : 'Dossiê de exemplo'}</p>
-        <b>{f.nome} {f.sobrenome?.split(' ')[0] ?? ''}</b>
+<Base title="Árvores de Trilha" slug="arvores" aba="arvores" description="As árvores de trilha das oito Classes de Mago: 24 habilidades cada, planeje a sua e gaste os seus Pontos de Trilha.">
+  <div class="tr" data-arvores style={`--cc:${ativa.cor}`}>
+    <header class="tr-hd wrap">
+      <div class="tr-hd__l">
+        <span class="eyebrow"><b>樹</b>Árvore de Trilha</span>
+        <h1 class="tr-hd__t" data-titulo>{ativa.nome}</h1>
+        <p class="tr-hd__p" data-papel>{ativa.papel}</p>
       </div>
-      <dl class="av-dos__cells">
-        <div><dt>Classe</dt><dd>{f.classeMago}</dd></div>
-        <div><dt>Estágio</dt><dd>{f.estagio}º</dd></div>
-        <div><dt>Pontos livres</dt><dd><b data-livres>{Math.max(0, pontos - f.trilha.nos.length)}</b> <small>de {pontos}</small></dd></div>
-        <div><dt>Próximo ponto</dt><dd>{proximoPonto(f.estagio) ? `${proximoPonto(f.estagio)}º Estágio` : 'Todos ganhos'}</dd></div>
-      </dl>
-      {!real && (
-        <p class="av-dos__aviso">Exemplo com um Mago de Batalha no 6º Estágio. <a href="/api/auth/login?volta=/arvores/">Entre com o Discord</a> para ver e gastar os seus pontos.</p>
-      )}
-
-      <div class="av-det" data-detalhe aria-live="polite">
-        <p class="av-det__tag" data-det-tag>Raiz · Passiva</p>
-        <h2 data-det-nome>{ativa.raiz.nome}</h2>
-        <p class="av-det__ramo" data-det-ramo>{ativa.nome}</p>
-        <p class="av-det__txt" data-det-txt>{ativa.raiz.texto}</p>
-        <p class="av-det__st" data-det-st data-st="tem">Todo mago da classe tem desde a criação.</p>
-        <div class="av-det__acao" data-det-acao></div>
+      <div class="tr-hd__r">
+        <button class="btn tr-planejar" type="button" data-planejar aria-pressed="false"><span class="tr-planejar__k" aria-hidden="true">策</span>Planejar árvore</button>
       </div>
+    </header>
 
-      <div class="av-plano" data-plano hidden>
-        <p class="px-label">Plano</p>
-        <ol data-plano-lista></ol>
-        <p class="av-plano__resumo" data-plano-resumo></p>
-        <div class="av-plano__btns">
-          <button class="px-btn px-btn--ember px-btn--sm" type="button" data-plano-ok>Gastar pontos</button>
-          <button class="px-btn px-btn--sm" type="button" data-plano-limpa>Limpar</button>
-        </div>
-        <p class="av-plano__msg" data-plano-msg role="status"></p>
-      </div>
-      {arvores[0].provisoria && <p class="av-dos__nota">Árvores provisórias: são as trilhas atuais. As árvores novas, com mais habilidades, entram aqui quando forem fechadas.</p>}
-    </aside>
-
-    <!-- palco -->
-    <section class="av-palco" aria-label="Árvore">
-      {arvores.map((a) => {
-        const { pos, arestas, ramos } = geo(a);
-        return (
-          <div class="av-arv" data-arvore={a.id} hidden={a.id !== ativa.id} style={`--cc:${a.cor}`}>
-            <div class="av-arv__bg" aria-hidden="true">{temImg(a.id) && <img src={`/img/classes/${a.id}.jpg`} alt="" loading={a.id === ativa.id ? 'eager' : 'lazy'} />}</div>
-            <div class="av-arv__top">
-              <h1 class="av-titulo"><span>{a.nome}</span></h1>
-              <button class="px-btn px-btn--sm av-planejar" type="button" data-planejar aria-pressed="false"><Icon name="plano" size={16} />Planejar árvore</button>
-            </div>
-            <div class="av-arv__campo px-frame">
-              <svg class="av-linhas" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                {arestas.map(([de, para]) => <line x1={pos[de].x} y1={pos[de].y} x2={pos[para].x} y2={pos[para].y} data-de={de} data-para={para} />)}
-              </svg>
-              {ramos.map((r) => <span class="av-ramo" style={`left:${r.x}%;top:${r.y}%`}>{r.nome}</span>)}
-              <button class="av-no av-no--raiz" type="button" style={`left:${pos.raiz.x}%;top:${pos.raiz.y}%`} data-no="raiz" data-st="tem" aria-label={`${a.raiz.nome}, Raiz`}>
-                <span class="av-no__gema"><Glifo classe={a.id} size={30} /></span>
-                <span class="av-no__nome">{a.raiz.nome}</span>
-              </button>
-              {a.nos.map((n) => (
-                <button class:list={['av-no', n.apice && 'av-no--apice']} type="button" style={`left:${pos[n.id].x}%;top:${pos[n.id].y}%`} data-no={n.id} data-st="bloqueado" aria-label={`${n.nome}, ${NOME_NO[n.linha]} de ${n.ramo}`}>
-                  <span class="av-no__gema">
-                    <svg class="av-no__ic av-no__ic--trava" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10.5h12v10H6zM8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" /></svg>
-                    <svg class="av-no__ic av-no__ic--ok" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>
-                    {n.estrela && <span class="av-no__tier" title="Antiga Classe Avançada">★</span>}
-                  </span>
-                  <span class="av-no__nome">{n.nome}</span>
-                </button>
-              ))}
-            </div>
+    <div class="tr-corpo wrap">
+      <!-- dossiê: cartaz de papel -->
+      <aside class="tr-dos" aria-label="Dossiê do Marcado">
+        <div class="tr-dos__cartaz">
+          <p class="tr-dos__selo" aria-hidden="true">{real ? '本人' : '見本'}</p>
+          <p class="t-label">{real ? 'Dossiê do Marcado' : 'Dossiê de exemplo'}</p>
+          <p class="tr-dos__nome">{f.nome}<small>{f.sobrenome}</small></p>
+          <dl class="tr-dos__dl">
+            <div><dt>Classe</dt><dd>{f.classeMago}</dd></div>
+            <div><dt>Estágio</dt><dd>{f.estagio}º</dd></div>
+            <div><dt>Próximo ponto</dt><dd>{prox ? `${prox.estagio}º Estágio (+${prox.ganha})` : 'Todos ganhos'}</dd></div>
+          </dl>
+          <div class="tr-dos__pt">
+            <b data-livres>{livres}</b>
+            <span>{livres === 1 ? 'Ponto de Trilha livre' : 'Pontos de Trilha livres'}<small>de {pontos} ganhos</small></span>
           </div>
-        );
-      })}
-    </section>
+          {!real && <p class="tr-dos__aviso">Mago de Batalha no 6º Estágio, de exemplo. <a href="/api/auth/login?volta=/arvores/">Entre com o Discord</a> para ver os seus pontos.</p>}
+        </div>
 
-    <!-- abas -->
-    <nav class="av-abas" aria-label="Classes de Mago">
-      {arvores.map((a) => (
-        <a href={`/arvores/?classe=${a.id}`} class="av-aba" data-aba={a.id} aria-current={a.id === ativa.id ? 'page' : undefined} style={`--cc:${a.cor}`}>
-          <span class="av-aba__m"><Glifo classe={a.id} size={26} /></span>
-          <span class="av-aba__n">{a.nome.replace('Mago ', '').replace(/^(de|do|das) /, '')}</span>
-          {a.id === minha.id && <span class="av-aba__sua">{real ? 'Sua' : 'Exemplo'}</span>}
+        <div class="tr-det" data-detalhe aria-live="polite">
+          <p class="tr-det__tag" data-det-tag>Raiz · Passiva</p>
+          <h2 class="tr-det__nome" data-det-nome>{ativa.raiz.nome}</h2>
+          <p class="tr-det__ramo" data-det-ramo>{ativa.nome}</p>
+          <p class="tr-det__txt" data-det-txt>{ativa.raiz.texto}</p>
+          <p class="tr-det__st" data-det-st data-st="tem">Todo mago da classe tem desde a criação.</p>
+          <div class="tr-det__acao" data-det-acao></div>
+        </div>
+
+        <div class="tr-plano" data-plano hidden>
+          <p class="t-label">Plano</p>
+          <ol data-plano-lista></ol>
+          <p class="tr-plano__resumo" data-plano-resumo></p>
+          <div class="tr-plano__btns">
+            <button class="btn btn--solid tr-sm" type="button" data-plano-ok>Gastar pontos</button>
+            <button class="btn tr-sm" type="button" data-plano-limpa>Limpar</button>
+          </div>
+          <p class="tr-plano__msg" data-plano-msg role="status"></p>
+        </div>
+
+        <details class="tr-regras">
+          <summary>Como a árvore funciona</summary>
+          <ul>
+            <li>A Raiz é grátis. Cada ramo abre com duas entradas de Grau I.</li>
+            {regras.graus.map((g) => <li><b>{g.nome}</b>: {g.custo} {g.custo === 1 ? 'ponto' : 'pontos'}, a partir do {g.estagioMin}º Estágio.</li>)}
+            <li><b>Elo</b>: {regras.elo.custo} pontos no {regras.elo.estagioMin}º Estágio; pede {regras.elo.requer}.</li>
+            <li>{regras.tetoDeAcrescimos}</li>
+            <li>{regras.redefinir.lancamentoV2} Depois disso, redefinir custa Cristais Prismáticos.</li>
+          </ul>
+        </details>
+      </aside>
+
+      <!-- palco -->
+      <section class="tr-palco" aria-label="Árvore" data-lenis-prevent>
+        {arvores.map((a) => {
+          const { pos, arestas, ramos, aneis } = geo(a);
+          return (
+            <div class="tr-arv" data-arvore={a.id} hidden={a.id !== ativa.id} style={`--cc:${a.cor}`}>
+              <div class="tr-arv__bg" aria-hidden="true"><img src={a.img} alt="" loading={a.id === ativa.id ? 'eager' : 'lazy'} /></div>
+              <span class="tr-arv__k" aria-hidden="true">{a.kanji}</span>
+              <div class="tr-campo">
+                <svg class="tr-linhas" viewBox="0 0 100 100" aria-hidden="true">
+                  <g class="tr-aneis">
+                    {aneis.map((n) => <circle cx="50" cy="50" r={n.r} class={n.g === 5 ? 'is-apice' : undefined} />)}
+                    <circle cx="50" cy="50" r="48.5" class="tr-runa" />
+                    <circle cx="50" cy="50" r="9.5" class="tr-runa tr-runa--in" />
+                  </g>
+                  {arestas.map(([de, para, alt]) => <line x1={pos[de].x} y1={pos[de].y} x2={pos[para].x} y2={pos[para].y} data-de={de} data-para={para} class={alt ? 'is-alt' : undefined} />)}
+                </svg>
+                {ramos.map((r) => <span class="tr-ramo" style={`left:${r.x}%;top:${r.y}%`}>{r.nome}</span>)}
+                <button class="tr-no tr-no--raiz" type="button" style={`left:${pos.raiz.x}%;top:${pos.raiz.y}%`} data-no="raiz" data-st="tem" aria-label={`${a.raiz.nome}, Raiz`}>
+                  <span class="tr-no__d"><span class="tr-no__k">{a.kanji}</span></span>
+                  <span class="tr-no__nome">{a.raiz.nome}</span>
+                </button>
+                {a.nos.map((n) => (
+                  <button class:list={['tr-no', `tr-no--g${n.grau}`, n.elo && 'tr-no--elo', n.estrela && 'tr-no--estrela', pos[n.id].y < 40 && 'tr-no--cima']} type="button" style={`left:${pos[n.id].x}%;top:${pos[n.id].y}%`} data-no={n.id} data-st="bloqueado" data-tipo={n.tipo} aria-label={`${n.nome}, ${n.elo ? 'Elo' : `${ROMANO[n.grau]}`}, ${TIPO[n.tipo]}`}>
+                    <span class="tr-no__d"><span class="tr-no__ic" aria-hidden="true"></span>{n.estrela && <span class="tr-no__estrela" title="Antiga Classe Avançada">★</span>}</span>
+                    <span class="tr-no__nome">{n.nome}</span>
+                  </button>
+                ))}
+                <div class="tr-dica" data-dica hidden aria-hidden="true"><p class="tr-dica__tag"></p><b class="tr-dica__n"></b><p class="tr-dica__t"></p><p class="tr-dica__s"></p></div>
+              </div>
+            </div>
+          );
+        })}
+        <ul class="tr-legenda" aria-label="Tipos de habilidade">
+          {Object.entries(TIPO).map(([k, v]) => <li data-tipo={k}><i aria-hidden="true"></i>{v}<small>{regras.tipos[k]}</small></li>)}
+        </ul>
+      </section>
+    </div>
+
+    <!-- abas: lombadas de volume -->
+    <nav class="tr-abas wrap" aria-label="Classes de Mago">
+      {arvores.map((a, i) => (
+        <a href={`/arvores/?classe=${a.id}`} class="tr-aba" data-aba={a.id} aria-current={a.id === ativa.id ? 'page' : undefined} style={`--cc:${a.cor}`}>
+          <span class="tr-aba__n">{String(i + 1).padStart(2, '0')}</span>
+          <span class="tr-aba__k" aria-hidden="true">{a.kanji}</span>
+          <span class="tr-aba__t">{curto(a.nome)}</span>
+          {a.id === minha.id && <span class="tr-aba__sua">{real ? 'Sua' : 'Exemplo'}</span>}
         </a>
       ))}
     </nav>
@@ -130,14 +190,16 @@ const dados = {
 </Base>
 
 <script>
-  import { bloqueio, estados } from '../lib/arvore-regras.js';
+  import { bloqueio, estados, gastos } from '../lib/arvore-regras.js';
 
-  type No = { id: string; nome: string; texto: string; ramo: string; linha: number; requer: string[]; estagioMin: number | null; apice: boolean; estrela: boolean };
-  type Arv = { id: string; nome: string; raiz: { nome: string; texto: string }; nos: No[] };
-  const D = JSON.parse(document.getElementById('av-dados')!.textContent!) as { estagio: number; pontos: number; tem: string[]; minha: string; real: boolean; logado: boolean; arvores: Arv[] };
+  type No = { id: string; nome: string; texto: string; ramo: string[]; grau: number; elo?: boolean; custo: number; estagioMin: number; requer: string[][]; tipo: string; usos?: string; estrela?: boolean };
+  type Arv = { id: string; nome: string; papel: string; raiz: { nome: string; texto: string }; ramos: { id: string; nome: string }[]; nos: No[] };
+  const D = JSON.parse(document.getElementById('av-dados')!.textContent!) as { estagio: number; pontos: number; tem: string[]; minha: string; real: boolean; podeGravar: boolean; logado: boolean; arvores: Arv[] };
   const raiz = document.querySelector<HTMLElement>('[data-arvores]')!;
   const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = raiz) => r.querySelector<T>(s)!;
-  const NOME_NO = ['Raiz', 'Nó I', 'Nó II', 'Ápice'];
+  const ROMANO: Record<number, string> = { 1: 'Grau I', 2: 'Grau II', 3: 'Grau III', 4: 'Grau IV', 5: 'Ápice' };
+  const TIPO: Record<string, string> = { passiva: 'Passiva', ativa: 'Ativa', reacao: 'Reação', mundo: 'Mundo' };
+  const LOGIN = '/api/auth/login?volta=/arvores/';
 
   let ativa = (raiz.querySelector('[data-arvore]:not([hidden])') as HTMLElement).dataset.arvore!;
   let tem = [...D.tem];
@@ -148,24 +210,25 @@ const dados = {
   const arv = () => D.arvores.find((a) => a.id === ativa)!;
   const temNa = (a: Arv) => (a.id === D.minha ? tem : []);
   const palco = () => $(`[data-arvore="${ativa}"]`);
+  const pts = (n: number) => `${n} ${n === 1 ? 'ponto' : 'pontos'}`;
 
   function pinta() {
     const a = arv();
     const base = temNa(a);
-    const st = estados(a, D.estagio, [...base, ...plano], D.pontos);
-    palco().querySelectorAll<HTMLElement>('.av-no[data-no]').forEach((el) => {
+    const st = estados(a, D.pontos, D.estagio, [...base, ...plano]);
+    palco().querySelectorAll<HTMLElement>('.tr-no[data-no]').forEach((el) => {
       const id = el.dataset.no!;
+      el.classList.toggle('is-sel', id === sel);
       if (id === 'raiz') return;
       el.dataset.st = base.includes(id) ? 'tem' : plano.includes(id) ? 'plano' : st[id];
-      el.classList.toggle('is-sel', id === sel);
     });
-    palco().querySelector('.av-no--raiz')!.classList.toggle('is-sel', sel === 'raiz');
     palco().querySelectorAll<SVGLineElement>('line').forEach((l) => {
-      const para = l.dataset.para!;
-      l.dataset.st = base.includes(para) ? 'tem' : plano.includes(para) ? 'plano' : '';
+      const de = l.dataset.de!, para = l.dataset.para!;
+      const ok = (x: string) => x === 'raiz' || base.includes(x) || plano.includes(x);
+      l.dataset.st = base.includes(para) && ok(de) ? 'tem' : plano.includes(para) && ok(de) ? 'plano' : '';
     });
-    const livres = Math.max(0, D.pontos - tem.length);
-    $('[data-livres]').textContent = String(livres);
+    const mine = D.arvores.find((x) => x.id === D.minha)!;
+    $('[data-livres]').textContent = String(Math.max(0, D.pontos - gastos(mine, tem)));
     detalhe();
     planoUI();
   }
@@ -178,27 +241,41 @@ const dados = {
       $('[data-det-tag]').textContent = tag; $('[data-det-nome]').textContent = nome; $('[data-det-ramo]').textContent = ramo;
       $('[data-det-txt]').textContent = txt; const s = $('[data-det-st]'); s.dataset.st = st; s.textContent = stTxt;
     };
-    if (sel === 'raiz') { set('Raiz · Passiva', a.raiz.nome, a.nome, a.raiz.texto, 'tem', 'Todo mago da classe tem desde a criação.'); return; }
+    if (sel === 'raiz') { set('Raiz · Passiva · grátis', a.raiz.nome, a.nome, a.raiz.texto, 'tem', 'Todo mago da classe tem desde a criação.'); return; }
     const n = a.nos.find((x) => x.id === sel)!;
     const base = temNa(a);
-    const tag = `${NOME_NO[n.linha]}${n.estrela ? ' ★' : ''}${n.estagioMin ? ` · ${n.estagioMin}º Estágio` : ''}`;
-    if (base.includes(n.id)) return set(tag, n.nome, n.ramo, n.texto, 'tem', 'Você tem este nó.');
+    const ramo = n.ramo.map((r) => a.ramos.find((x) => x.id === r)?.nome ?? r).join(' + ');
+    const tag = `${n.elo ? 'Elo' : ROMANO[n.grau]}${n.estrela ? ' ★' : ''} · ${TIPO[n.tipo]} · ${pts(n.custo)} · ${n.estagioMin}º Estágio`;
+    const txt = n.usos ? `${n.texto} (${n.usos})` : n.texto;
+    if (base.includes(n.id)) return set(tag, n.nome, ramo, txt, 'tem', 'Você tem esta habilidade.');
     if (plano.includes(n.id)) {
-      set(tag, n.nome, n.ramo, n.texto, 'plano', 'No seu plano.');
-      const b = botao('Tirar do plano', () => { plano = plano.slice(0, plano.indexOf(n.id)); pinta(); });
-      acao.append(b); return;
+      set(tag, n.nome, ramo, txt, 'plano', 'No seu plano.');
+      acao.append(botao('Tirar do plano', () => { plano = plano.slice(0, plano.indexOf(n.id)); pinta(); }));
+      return;
     }
-    const motivo = bloqueio(a, D.estagio, [...base, ...plano], n.id, D.pontos);
+    const motivo = bloqueio(a, D.pontos, D.estagio, [...base, ...plano], n.id);
     const propria = a.id === D.minha;
-    if (motivo) return set(tag, n.nome, n.ramo, n.texto, 'bloqueado', propria ? motivo : `${motivo} (contando o seu Estágio)`);
-    set(tag, n.nome, n.ramo, n.texto, 'livre', propria ? 'Disponível agora.' : 'Disponível para o seu Estágio, mas esta não é a sua classe.');
+    if (motivo) return set(tag, n.nome, ramo, txt, 'bloqueado', propria ? motivo : `${motivo} (contando o seu Estágio)`);
+    set(tag, n.nome, ramo, txt, 'livre', propria ? 'Disponível agora.' : 'Disponível para o seu Estágio, mas esta não é a sua classe.');
     if (planejando) acao.append(botao('Pôr no plano', () => { plano.push(n.id); pinta(); }, true));
-    else if (propria) acao.append(botao(D.real ? 'Gastar 1 ponto' : 'Entrar para gastar', () => D.real ? gastar([n.id]) : (location.href = '/api/auth/login?volta=/arvores/'), true));
+    else if (propria) acao.append(botao(acaoTexto([n.id]), () => acaoGastar([n.id]), true));
+  }
+
+  const acaoTexto = (nos: string[]) => {
+    if (!D.logado) return 'Entrar para gastar';
+    if (!D.podeGravar) return 'Gastar pelo bot';
+    const c = nos.reduce((s, id) => s + (arv().nos.find((n) => n.id === id)?.custo ?? 0), 0);
+    return `Gastar ${pts(c)}`;
+  };
+  function acaoGastar(nos: string[]) {
+    if (!D.logado) { location.href = LOGIN; return; }
+    if (!D.podeGravar) { aviso('A árvore nova abre no bot junto com a versão 2. Até lá, monte o plano aqui e use /trilha no Discord.'); return; }
+    gastar(nos);
   }
 
   function botao(txt: string, fn: () => void, forte = false) {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = `px-btn px-btn--sm${forte ? ' px-btn--ember' : ''}`; b.textContent = txt; b.addEventListener('click', fn);
+    b.type = 'button'; b.className = `btn tr-sm${forte ? ' btn--solid' : ''}`; b.textContent = txt; b.addEventListener('click', fn);
     return b;
   }
 
@@ -208,50 +285,99 @@ const dados = {
     if (!planejando) return;
     const a = arv();
     const ol = $('[data-plano-lista]');
-    ol.innerHTML = plano.length ? plano.map((id) => `<li>${a.nos.find((n) => n.id === id)?.nome ?? id}</li>`).join('') : '<li class="is-vazio">Toque nos nós disponíveis para montar o plano.</li>';
-    const livres = Math.max(0, D.pontos - temNa(a).length);
-    $('[data-plano-resumo]').textContent = `${plano.length} de ${livres} ${livres === 1 ? 'ponto livre' : 'pontos livres'}`;
+    ol.innerHTML = '';
+    if (!plano.length) { const li = document.createElement('li'); li.className = 'is-vazio'; li.textContent = 'Toque nas habilidades disponíveis para montar o plano.'; ol.append(li); }
+    plano.forEach((id) => { const n = a.nos.find((x) => x.id === id)!; const li = document.createElement('li'); li.textContent = `${n.nome} · ${pts(n.custo)}`; ol.append(li); });
+    const livres = Math.max(0, D.pontos - gastos(a, temNa(a)));
+    const custo = gastos(a, plano);
+    $('[data-plano-resumo]').textContent = `${pts(custo)} de ${livres} livres`;
     const ok = $<HTMLButtonElement>('[data-plano-ok]');
-    const podeGastar = a.id === D.minha && plano.length > 0;
     ok.hidden = a.id !== D.minha;
-    ok.disabled = !podeGastar;
-    ok.textContent = D.real ? `Gastar ${plano.length || ''} ${plano.length === 1 ? 'ponto' : 'pontos'}`.replace('  ', ' ') : 'Entrar para gastar';
+    ok.disabled = !plano.length;
+    ok.textContent = acaoTexto(plano);
   }
 
   async function gastar(nos: string[]) {
-    const msg = $('[data-plano-msg]');
-    msg.textContent = 'Gravando na sua ficha...';
+    aviso('Gravando na sua ficha...', 'plano');
     try {
       const r = await fetch('/api/arvore', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ nos }) });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok) { msg.textContent = j.erro ?? 'Não deu para gravar agora.'; if (!planejando) alerta(j.erro); return; }
-      tem = j.nos; plano = []; msg.textContent = 'Gravado. O bot já vê os nós novos.';
+      if (!r.ok) { aviso(j.erro ?? 'Não deu para gravar agora.'); return; }
+      tem = j.nos; plano = [];
       pinta();
-    } catch { msg.textContent = 'Sem conexão. Tente de novo.'; }
+      aviso('Gravado. O bot já vê as habilidades novas.', 'tem');
+    } catch { aviso('Sem conexão. Tente de novo.'); }
   }
-  function alerta(t?: string) { const s = $('[data-det-st]'); s.dataset.st = 'bloqueado'; s.textContent = t ?? 'Não deu para gravar agora.'; }
+  function aviso(t: string, st = 'bloqueado') {
+    const s = $('[data-det-st]'); s.dataset.st = st; s.textContent = t;
+    if (planejando) $('[data-plano-msg]').textContent = t;
+  }
 
-  // seleção de nós
   raiz.addEventListener('click', (e) => {
-    const el = (e.target as Element).closest<HTMLElement>('.av-no[data-no]');
-    if (el) { sel = el.dataset.no!; if (planejando && el.dataset.st === 'livre') { plano.push(sel); } pinta(); return; }
+    const el = (e.target as Element).closest<HTMLElement>('.tr-no[data-no]');
+    if (el) { sel = el.dataset.no!; if (planejando && el.dataset.st === 'livre' && !plano.includes(sel)) plano.push(sel); pinta(); dica(el); return; }
+    dica(null);
     const pl = (e.target as Element).closest('[data-planejar]');
-    if (pl) { planejando = !planejando; plano = []; raiz.querySelectorAll('[data-planejar]').forEach((b) => b.setAttribute('aria-pressed', String(planejando))); raiz.classList.toggle('is-planejando', planejando); pinta(); }
+    if (pl) { planejando = !planejando; plano = []; pl.setAttribute('aria-pressed', String(planejando)); raiz.classList.toggle('is-planejando', planejando); pinta(); }
   });
   $('[data-plano-limpa]').addEventListener('click', () => { plano = []; pinta(); });
-  $('[data-plano-ok]').addEventListener('click', () => (D.real ? gastar(plano) : (location.href = '/api/auth/login?volta=/arvores/')));
+  $('[data-plano-ok]').addEventListener('click', () => acaoGastar(plano));
 
-  // abas sem recarregar
+  // troca de classe sem recarregar (a transição de página não entra aqui)
   raiz.querySelectorAll<HTMLAnchorElement>('[data-aba]').forEach((ab) => ab.addEventListener('click', (e) => {
     e.preventDefault();
+    e.stopPropagation();
     ativa = ab.dataset.aba!; sel = 'raiz'; plano = [];
+    const a = arv();
     raiz.querySelectorAll<HTMLElement>('[data-arvore]').forEach((p) => (p.hidden = p.dataset.arvore !== ativa));
-    raiz.querySelectorAll('[data-aba]').forEach((x) => x.toggleAttribute('aria-current', x === ab));
+    raiz.querySelectorAll('[data-aba]').forEach((x) => x.removeAttribute('aria-current'));
     ab.setAttribute('aria-current', 'page');
-    palco().querySelector<HTMLImageElement>('img')?.setAttribute('loading', 'eager');
+    raiz.style.setProperty('--cc', ab.style.getPropertyValue('--cc'));
+    $('[data-titulo]').textContent = a.nome;
+    $('[data-papel]').textContent = a.papel;
+    const p = document.querySelector<HTMLElement>(`[data-arvore="${ativa}"]`);
+    p?.querySelector('img')?.setAttribute('loading', 'eager');
+    p?.classList.remove('is-in'); void p?.offsetWidth; p?.classList.add('is-in');
     try { history.replaceState(null, '', ab.href); } catch { /* sem histórico */ }
     pinta();
-  }));
+  }, true));
 
+  // dica ao passar o mouse: o nome e o que falta, sem precisar clicar
+  function dica(el: HTMLElement | null) {
+    const box = palco().querySelector<HTMLElement>('[data-dica]');
+    if (!box) return;
+    if (!el) { box.hidden = true; return; }
+    const a = arv();
+    const id = el.dataset.no!;
+    const q = (s: string) => box.querySelector<HTMLElement>(s)!;
+    let st = el.dataset.st ?? 'tem';
+    let stTxt = '';
+    if (id === 'raiz') {
+      q('.tr-dica__tag').textContent = 'Raiz · grátis'; q('.tr-dica__n').textContent = a.raiz.nome; q('.tr-dica__t').textContent = a.raiz.texto; stTxt = 'Todo mago da classe tem.';
+    } else {
+      const n = a.nos.find((x) => x.id === id)!;
+      q('.tr-dica__tag').textContent = `${n.elo ? 'Elo' : ROMANO[n.grau]} · ${TIPO[n.tipo]} · ${pts(n.custo)}`;
+      q('.tr-dica__n').textContent = n.nome;
+      q('.tr-dica__t').textContent = n.texto;
+      const base = temNa(a);
+      stTxt = st === 'tem' ? 'Você tem.' : st === 'plano' ? 'No seu plano.' : st === 'livre' ? (planejando ? 'Toque ou clique para pôr no plano.' : 'Disponível agora.') : (bloqueio(a, D.pontos, D.estagio, [...base, ...plano], id) ?? 'Bloqueada.');
+    }
+    const s = q('.tr-dica__s'); s.dataset.st = st; s.textContent = stTxt;
+    const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
+    box.style.left = x > 55 ? '' : `calc(${x}% + 34px)`;
+    box.style.right = x > 55 ? `calc(${100 - x}% + 34px)` : '';
+    box.style.top = y > 60 ? '' : `calc(${y}% - 20px)`;
+    box.style.bottom = y > 60 ? `calc(${100 - y}% - 20px)` : '';
+    box.hidden = false;
+  }
+  raiz.addEventListener('pointerover', (e) => { if ((e as PointerEvent).pointerType !== 'mouse') return; dica((e.target as Element).closest<HTMLElement>('.tr-no[data-no]')); });
+  raiz.addEventListener('pointerout', (e) => { const to = (e as PointerEvent).relatedTarget as Element | null; if (!to?.closest('.tr-no[data-no]')) dica(null); });
+  raiz.addEventListener('focusin', (e) => { const el = (e.target as Element).closest<HTMLElement>('.tr-no[data-no]'); if (el && el.matches(':focus-visible')) dica(el); });
+  raiz.addEventListener('focusout', (e) => { if (!(e as FocusEvent).relatedTarget) return; dica(null); });
+
+  palco().classList.add('is-in');
+  // no celular a árvore rola de lado: começa centrada na Raiz
+  const pal = document.querySelector<HTMLElement>('.tr-palco');
+  if (pal && pal.scrollWidth > pal.clientWidth) pal.scrollLeft = (pal.scrollWidth - pal.clientWidth) / 2;
   pinta();
 </script>

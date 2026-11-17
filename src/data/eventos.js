@@ -1,0 +1,93 @@
+// Eventos do servidor mostrados em /eventos/.
+// estado: 'ativo' (tem prazo e está valendo), 'sempre' (faz parte do mundo) ou 'breve' (anunciado, ainda sem data).
+// Datas em texto, do jeito que a Staff anuncia. Nada aqui inventa prêmio: cada recompensa vem do bot ou de anúncio do Silas.
+export const eventos = [
+  {
+    id: 'temporada-1',
+    estado: 'ativo',
+    tipo: 'Temporada',
+    nome: 'Passe da Temporada I',
+    kanji: '季',
+    img: '/img/grimorios/demoniaco.jpg',
+    quando: 'Começou em 15/11/2026',
+    resumo: '30 níveis de recompensas, na trilha Grátis e na Premium. O XP vem jogando, não pagando.',
+    texto: 'Cada post de RP com 500 caracteres ou mais, call com outros jogadores, missão, treino, criatura vencida e evento dá XP. O teto é 120 XP por dia, para que quem joga um pouco todo dia ande junto com quem joga muito num dia só.',
+    passos: ['Use `/passe ver` para ver o seu nível e o que falta.', 'Jogue: posts de RP, missões, treinos e criaturas dão XP.', 'Resgate cada nível no próprio `/passe ver`.'],
+    premios: [
+      { nome: 'Armadura do Miasma', nota: 'Nível 30, à escolha', raro: 'lendario' },
+      { nome: 'Sorteio de Grimório', nota: 'Nível 30, à escolha', raro: 'lendario' },
+      { nome: 'Títulos, molduras e fundos', nota: 'Aba Visual da /ficha', raro: 'epico' },
+      { nome: 'Capa da Temporada', nota: 'Visual da ficha', raro: 'epico' },
+    ],
+    comandos: ['/passe ver', '/passe ranking', '/passe mural'],
+  },
+  {
+    id: 'aparicoes',
+    estado: 'sempre',
+    tipo: 'Mundo',
+    nome: 'Aparições de Criaturas',
+    kanji: '獣',
+    img: '/img/criaturas/dragao-negro.jpg',
+    quando: 'Quatro vezes por dia',
+    resumo: 'Criaturas surgem nos chats de RP dos lugares com Perigo. Quem chega primeiro decide a cena.',
+    texto: 'O bot solta criaturas nos lugares de Diamond que têm Perigo, quatro vezes por dia. Algumas só saem em certas horas: o Dragão Negro só aparece à noite. Criatura vencida dá Partes para a forja, XP do Passe e Ressonância nos itens.',
+    passos: ['Fique nos chats de RP das regiões com Perigo.', 'Quando a criatura surgir, entre na cena e lute pela ficha.', 'Recolha as Partes e leve para a forja.'],
+    premios: [
+      { nome: 'Partes de Criatura', nota: 'Material de forja', raro: 'raro' },
+      { nome: 'XP do Passe', nota: 'Conta no limite diário', raro: 'raro' },
+      { nome: 'Relíquias de Criatura', nota: 'Das criaturas mais fortes', raro: 'epico' },
+    ],
+    link: { href: '/criaturas/', texto: 'Ver o Bestiário' },
+  },
+  {
+    id: 'convites',
+    estado: 'ativo',
+    tipo: 'Abertura',
+    nome: 'Relicário dos Convites',
+    kanji: '招',
+    img: '/img/mundo/eventos.jpg',
+    quando: 'Até a abertura do servidor',
+    resumo: 'Traga gente para Diamond e troque os convites por recompensas na lojinha do Relicário.',
+    texto: 'Vale o convite de quem entra pelo seu link, tem conta com 7 dias ou mais e continua no servidor. A lojinha troca convites por giros, rerolls e escolhas. O item mais alto é a Magia Custom, única, para uma só pessoa.',
+    passos: ['Pegue o seu link e convide.', 'Veja o seu saldo com `/convites ver`.', 'Troque na lojinha com `/convites loja`.'],
+    premios: [
+      { nome: 'Magia Custom', nota: '50 convites, uma só no servidor', raro: 'lendario' },
+      { nome: 'Giros e rerolls', nota: 'Vão para a /bolsa', raro: 'raro' },
+    ],
+    comandos: ['/convites loja', '/convites ver', '/convites ranking'],
+  },
+  {
+    id: 'altar',
+    estado: 'breve',
+    tipo: 'Temporada',
+    nome: 'Altar dos Vestígios',
+    kanji: '運',
+    img: '/img/grimorios/lendario.jpg',
+    quando: 'Abre com a versão 2',
+    resumo: 'O gacha da temporada: capas de grimório animadas, molduras e auras que só se ganham girando.',
+    texto: 'Cada temporada traz um Vestígio em destaque. Os giros usam Inscrições, que se ganham jogando ou se compram com Cristais Prismáticos. A garantia do Lendário passa de uma temporada para a outra.',
+    passos: ['Junte Inscrições jogando: missões, RP da semana, criaturas e eventos.', 'Gire no Altar, aqui no site ou pelo bot.', 'Repetidos viram Fragmentos de Vestígio.'],
+    premios: [
+      { nome: 'Vestígio Lendário', nota: '1,2%, garantido no 60º giro', raro: 'lendario' },
+      { nome: 'Vestígio Épico', nota: '8%, um a cada 10 giros', raro: 'epico' },
+    ],
+    link: { href: '/altar/', texto: 'Abrir o Altar' },
+  },
+  {
+    id: 'cacadas',
+    estado: 'breve',
+    tipo: 'Missões',
+    nome: 'Caçadas e Recompensas',
+    kanji: '狩',
+    img: '/img/missoes/capa.jpg',
+    quando: 'Em preparação',
+    resumo: 'Missões de caça e cabeças a prêmio para quem não é General nem do Veio Negro.',
+    texto: 'Quem não serve ao Rei nem ao Veio também vai ter trabalho: caçadas a criaturas e recompensas por alvos, com prêmio em Yuls. As regras saem com a próxima atualização do bot.',
+    passos: [],
+    premios: [],
+    link: { href: '/missoes/', texto: 'Ver as Missões de hoje' },
+  },
+];
+
+export const estadoNome = { ativo: 'Em andamento', sempre: 'Sempre ativo', breve: 'Em breve' };
+export const estadoKanji = { ativo: '開催', sempre: '常設', breve: '近日' };

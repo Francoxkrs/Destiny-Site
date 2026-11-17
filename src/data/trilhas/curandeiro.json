@@ -1,0 +1,554 @@
+{
+ "versao": 2,
+ "classe": "Mago Curandeiro",
+ "slug": "curandeiro",
+ "papel": "Cura e suporte",
+ "raiz": {
+  "id": "curandeiro.raiz",
+  "nome": "Mãos Restauradoras",
+  "texto": "Restauração custa 20% menos e cura 1 turno mais rápido."
+ },
+ "ramos": [
+  {
+   "id": "restauracao",
+   "nome": "Restauração",
+   "tema": "Curar Ferimentos, no campo e fora dele.",
+   "estrela": "curandeiro.restauracao.sacerdote-da-mana"
+  },
+  {
+   "id": "protecao",
+   "nome": "Proteção",
+   "tema": "Impedir que o golpe chegue."
+  },
+  {
+   "id": "corrupcao",
+   "nome": "Corrupção",
+   "tema": "O lado de quem sabe onde o corpo quebra."
+  }
+ ],
+ "nos": [
+  {
+   "id": "curandeiro.restauracao.triagem",
+   "nome": "Triagem",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Vê a Trilha de Ferimentos de quem toca e estabiliza sem kit.",
+   "legado": "Restauração/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "curandeiro.restauracao.folego",
+   "nome": "Fôlego",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Um aliado tocado recupera 10% de Mana.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "curandeiro.restauracao.cura-profunda",
+   "nome": "Cura Profunda",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "curandeiro.restauracao.triagem"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Trata Ferimento II no campo, em combate.",
+   "legado": "Restauração/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "curandeiro.restauracao.enfermaria",
+   "nome": "Enfermaria",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "curandeiro.restauracao.folego"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Fora da luta, cura Ferimentos de outros jogadores como Jornada e recebe salário de Oficial, além do que cobrar. Faz remédios sem ser Boticário.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "curandeiro.restauracao.cura-em-area",
+   "nome": "Cura em Área",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "curandeiro.restauracao.cura-profunda"
+    ],
+    [
+     "curandeiro.restauracao.enfermaria"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "A Restauração atinge todos os aliados num raio de 5 m.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "curandeiro.restauracao.regeneracao",
+   "nome": "Regeneração",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "curandeiro.restauracao.cura-em-area"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Aliados que você curou nesta cena recuperam 1 casa de Ferimento I no fim de cada turno.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "curandeiro.restauracao.sacerdote-da-mana",
+   "nome": "Sacerdote da Mana",
+   "ramo": [
+    "restauracao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "curandeiro.restauracao.regeneracao",
+     "curandeiro.restauracao.cura-profunda",
+     "curandeiro.restauracao.enfermaria"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Trata Ferimentos III e transfere até 20% da Mana por turno a um aliado.",
+   "estrela": true,
+   "legado": "Restauração/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.barreira",
+   "nome": "Barreira",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Um escudo num aliado anula 1 Acréscimo do próximo golpe nele.",
+   "legado": "Proteção/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.vinculo",
+   "nome": "Vínculo",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Sabe a distância e o estado de até 3 aliados marcados, a qualquer distância.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.bencao",
+   "nome": "Bênção",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "curandeiro.protecao.barreira"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Um aliado ganha +1 Acréscimo de Resistência por 2 turnos.",
+   "legado": "Proteção/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.purificar",
+   "nome": "Purificar",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "curandeiro.protecao.vinculo"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Tira venenos, maldições e Desnutrição de quem toca. Em missões de praga ou veneno, conta como a solução.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.domo",
+   "nome": "Domo",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "curandeiro.protecao.bencao"
+    ],
+    [
+     "curandeiro.protecao.purificar"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma barreira de 5 m que anula 1 Acréscimo de todo golpe vindo de fora por 2 turnos.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.escudo-reativo",
+   "nome": "Escudo Reativo",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "curandeiro.protecao.domo"
+    ]
+   ],
+   "tipo": "reacao",
+   "usos": "1 vez por turno",
+   "texto": "Joga a Barreira num aliado sem gastar a ação, fora do seu turno.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "curandeiro.protecao.voto-de-vida",
+   "nome": "Voto de Vida",
+   "ramo": [
+    "protecao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "curandeiro.protecao.escudo-reativo",
+     "curandeiro.protecao.bencao",
+     "curandeiro.protecao.purificar"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma vez por cena, devolve um aliado do Ferimento IV ao III na hora.",
+   "legado": "Proteção/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.toque-seco",
+   "nome": "Toque Seco",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "O alvo tocado não recebe cura por feitiço até o fim da cena.",
+   "legado": "Corrupção/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.diagnostico-cruel",
+   "nome": "Diagnóstico Cruel",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Ao tocar um inimigo, sabe o Ferimento mais grave dele e a parte do corpo mais fraca.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.toque-debilitante",
+   "nome": "Toque Debilitante",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "curandeiro.corrupcao.toque-seco"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "O alvo tocado perde 1 Acréscimo por 2 turnos.",
+   "legado": "Corrupção/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.venenos",
+   "nome": "Venenos",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "curandeiro.corrupcao.diagnostico-cruel"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Prepara 2 venenos por Jornada sem ser Boticário: o alvo perde 10% de Mana por turno durante 3 turnos.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.febre",
+   "nome": "Febre",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "curandeiro.corrupcao.toque-debilitante"
+    ],
+    [
+     "curandeiro.corrupcao.venenos"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "O alvo tocado leva Ferimento I no fim de cada turno, por 2 turnos.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.contagio",
+   "nome": "Contágio",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "curandeiro.corrupcao.febre"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O Toque Debilitante passa para quem estiver ao lado do alvo.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "curandeiro.corrupcao.mao-que-tira",
+   "nome": "Mão que Tira",
+   "ramo": [
+    "corrupcao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "curandeiro.corrupcao.contagio",
+     "curandeiro.corrupcao.toque-debilitante",
+     "curandeiro.corrupcao.venenos"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Inverte uma cura: o alvo recebe um Ferimento um grau acima do que tinha.",
+   "legado": "Corrupção/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "curandeiro.elo.santuario",
+   "nome": "Santuário",
+   "ramo": [
+    "restauracao",
+    "protecao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "curandeiro.restauracao.cura-em-area",
+     "curandeiro.protecao.domo"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Dentro do Domo, a cura também trata 1 casa de Ferimento II por turno.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "curandeiro.elo.espinhos",
+   "nome": "Espinhos",
+   "ramo": [
+    "protecao",
+    "corrupcao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "curandeiro.protecao.domo",
+     "curandeiro.corrupcao.febre"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Quem acerta um aliado com a sua Barreira perde 1 Acréscimo por 2 turnos.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "curandeiro.elo.equilibrio",
+   "nome": "Equilíbrio",
+   "ramo": [
+    "restauracao",
+    "corrupcao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "curandeiro.restauracao.cura-em-area",
+     "curandeiro.corrupcao.febre"
+    ]
+   ],
+   "tipo": "reacao",
+   "usos": "1 vez por cena",
+   "texto": "Quando um inimigo cura, você cura um aliado no mesmo tanto, sem custo.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

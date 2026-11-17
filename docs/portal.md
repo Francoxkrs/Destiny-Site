@@ -36,9 +36,19 @@ O bot é a fonte das regras. Sempre que um personagem muda (treino, despertar, S
 - progressão: `estagio`, `pe`, `controle`, `proximo` (`{ estagio, pe, controle, cristais }` do próximo Estágio, ou `null` no 1º)
 - atributos: `fisicos[]` com `indice` (0 Comum ... 7 Transcendental), `teto` (de `limiteFisicoPorEstagio`), `acrescimos`, `treino`; `mana { atual, max }`, `reserva` (1–10), `poder` (1–6)
 - bolsa: `moedas { yuls, meritos, antimeritos, cristais { branco, negro, dourado } }`
-- trilha: `trilha { pontos, gastos, livres, nos[] }` (ids "Ramo/0".."Ramo/2", iguais a `estado.trilhaClasse`)
+- trilha: `trilha { versao, pontos, gastos, livres, nos[] }`. Com as árvores v2, `versao: 2`, `nos` usa os ids novos ("batalha.furia.avanco") e `pontos` já soma os Pontos de Feito. Sem `versao: 2`, o site só mostra e planeja (os ids antigos "Ramo/0" são convertidos pelo campo `legado`).
 - `conhecimentos[]`, `tracos[]`, `tecnicas[]`, `historia { vidaPassada, renascimento, personalidade }`, `atualizadoEm`
 
-Quando o site gasta Pontos de Trilha, ele grava `estado.trilhaClasse` em `personagens` (só se a trilha não mudou desde a leitura), registra no `diario` e atualiza `trilha` em `fichasWeb`. O bot deve recalcular a foto quando notar a mudança.
+Quando o site gasta Pontos de Trilha (só com `trilha.versao === 2`), ele grava `estado.trilhaClasse` em `personagens` (só se a trilha não mudou desde a leitura), registra no `diario` e atualiza `trilha` em `fichasWeb`. O bot deve recalcular a foto quando notar a mudança.
 
 Saldo de Cristais Prismáticos: coleção `contas` `{ userId, cp }` (por conta do Discord, não por personagem). Formato final depende da monetização aprovada.
+
+## De onde vem cada tela
+
+| Tela | Dados | Como atualizar |
+|---|---|---|
+| Árvores | `src/data/trilhas/*.json` (cópia de `trilhas-v2/`) | Copiar os JSON novos da frente das trilhas; o bot lê os mesmos arquivos |
+| Altar dos Vestígios | `src/data/altar.js` | Banner, chances e garantia da temporada. Hoje o giro é **prévia** no navegador; o giro real precisa de uma rota no servidor ligada ao bot |
+| Cristais | `src/data/cristais.js` | `aprovado: false` mostra o selo de proposta. Nada cobra até existir o pagamento |
+| Eventos | `src/data/eventos.js` | Um item por evento: `estado` ativo, sempre ou breve |
+| Patch Notes | `src/data/patches.js` | Copiar o `PATCH_ATUAL` de `functions/patch/notas.ts` do bot para o topo da lista |

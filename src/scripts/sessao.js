@@ -27,7 +27,7 @@ sessao().then((s) => {
       if (s.avatar) av.src = s.avatar; else av.remove();
     }
     const cp = $('[data-sessao-cp]');
-    if (cp && typeof s.cp === 'number') { cp.hidden = false; $('[data-sessao-cp-n]').textContent = fmt.format(s.cp); }
+    if (cp && typeof s.cp === 'number') { $('[data-sessao-cp-n]').textContent = fmt.format(s.cp); $('[data-sessao-cp-u]').hidden = false; cp.setAttribute('aria-label', `${fmt.format(s.cp)} Cristais Prismáticos`); }
   }
   document.dispatchEvent(new CustomEvent('bd:sessao', { detail: s }));
 });

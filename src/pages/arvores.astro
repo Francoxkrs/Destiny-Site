@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import TecnicasArvore from '../components/TecnicasArvore.astro';
+import TecnicasLeque from '../components/TecnicasLeque.astro';
+import ConhecimentosEstante from '../components/ConhecimentosEstante.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { carregarFicha } from '../lib/ficha.js';
 import { arvores, arvorePorClasse, migrarIds, graus, regras } from '../data/arvores.js';
@@ -13,7 +14,6 @@ Astro.response.headers.set('cache-control', 'private, no-store');
 
 const real = estado === 'ok';
 const minha = arvorePorClasse(f.classeMago) ?? arvores[0];
-const tecnicas = Astro.url.searchParams.get('arvore') === 'tecnicas';
 const pedida = arvores.find((a) => a.id === Astro.url.searchParams.get('classe'));
 const ativa = pedida ?? minha;
 const pontos = f.trilha.pontos ?? pontosDeTrilha(f.estagio);
@@ -73,26 +73,30 @@ const dados = {
   arvores: arvores.map((a) => ({ id: a.id, nome: a.nome, papel: a.papel, raiz: a.raiz, ramos: a.ramos, nos: a.nos })),
 };
 ---
-<Base title="Árvores" slug="arvores" aba="arvores" description="Duas árvores: a Trilha das oito Classes de Mago (24 habilidades cada) e as Técnicas de Mana, do 9º ao 2º Estágio.">
-  <div class="tr" data-arvores data-modo={tecnicas ? 'tecnicas' : 'classe'} style={`--cc:${tecnicas ? '#ff3b2e' : ativa.cor}`}>
-    <nav class="tr-modo wrap" aria-label="Árvores">
-      <a href="/arvores/" data-modo-ir="classe" aria-current={tecnicas ? undefined : 'page'}><span aria-hidden="true">樹</span><b>Trilha da Classe</b><small>Pontos de Trilha · 24 habilidades</small></a>
-      <a href="/arvores/?arvore=tecnicas" data-modo-ir="tecnicas" aria-current={tecnicas ? 'page' : undefined}><span aria-hidden="true">技</span><b>Técnicas de Mana</b><small>Treinos de Técnica · 19 técnicas</small></a>
+<Base title="Árvores" slug="arvores" aba="arvores" description="Uma página que desce: a Trilha da sua Classe de Mago, depois as Técnicas de Mana do 9º ao 2º Estágio e, por fim, a estante dos Conhecimentos.">
+  <div class="tr" data-arvores style={`--cc:${ativa.cor}`}>
+    <nav class="tr-indice" aria-label="Partes da página" data-indice>
+      <div class="tr-indice__in wrap">
+        <a href="#classe" data-ir="classe" aria-current="true"><span aria-hidden="true">樹</span><b>Classe</b><small>01</small></a>
+        <a href="#tecnicas" data-ir="tecnicas"><span aria-hidden="true">技</span><b>Técnicas</b><small>02</small></a>
+        <a href="#conhecimentos" data-ir="conhecimentos"><span aria-hidden="true">識</span><b>Conhecimentos</b><small>03</small></a>
+        <i class="tr-indice__fio" aria-hidden="true"></i>
+      </div>
     </nav>
+
+    <section id="classe" class="tr-parte" data-parte="classe" aria-label="Trilha da Classe">
     <header class="tr-hd wrap">
       <div class="tr-hd__l">
-        <span class="eyebrow" data-eyebrow><b>{tecnicas ? '技' : '樹'}</b>{tecnicas ? 'Árvore de Técnicas' : 'Árvore de Trilha'}</span>
-        <h1 class="tr-hd__t" data-titulo>{tecnicas ? 'Técnicas de Mana' : ativa.nome}</h1>
-        <p class="tr-hd__p" data-papel>{tecnicas ? 'O que a sua mana aprende fora do Grimório. O tronco sobe do 9º ao 2º Estágio e enche até onde você está.' : ativa.papel}</p>
+        <span class="eyebrow"><b>01 樹</b>Trilha da Classe</span>
+        <h1 class="tr-hd__t" data-titulo>{ativa.nome}</h1>
+        <p class="tr-hd__p" data-papel>{ativa.papel}</p>
       </div>
-      <div class="tr-hd__r" data-so-classe hidden={tecnicas}>
+      <div class="tr-hd__r">
         <button class="btn tr-planejar" type="button" data-planejar aria-pressed="false"><span class="tr-planejar__k" aria-hidden="true">策</span>Planejar árvore</button>
       </div>
     </header>
 
-    <TecnicasArvore ficha={f} real={real} ativo={tecnicas} />
-
-    <div class="tr-corpo wrap" data-so-classe hidden={tecnicas}>
+    <div class="tr-corpo wrap">
       <!-- dossiê: cartaz de papel -->
       <aside class="tr-dos" aria-label="Dossiê do Marcado">
         <div class="tr-dos__cartaz">
@@ -183,7 +187,7 @@ const dados = {
     </div>
 
     <!-- abas: lombadas de volume -->
-    <nav class="tr-abas wrap" aria-label="Classes de Mago" data-so-classe hidden={tecnicas}>
+    <nav class="tr-abas wrap" aria-label="Classes de Mago">
       {arvores.map((a, i) => (
         <a href={`/arvores/?classe=${a.id}`} class="tr-aba" data-aba={a.id} aria-current={a.id === ativa.id ? 'page' : undefined} style={`--cc:${a.cor}`}>
           <span class="tr-aba__n">{String(i + 1).padStart(2, '0')}</span>
@@ -193,6 +197,33 @@ const dados = {
         </a>
       ))}
     </nav>
+    </section>
+
+    <div class="tr-desce wrap" aria-hidden="true"><i></i><span>技</span></div>
+
+    <section id="tecnicas" class="tr-parte" data-parte="tecnicas" aria-labelledby="tecnicas-t" style="--cc:#ff3b2e">
+      <header class="tr-hd wrap">
+        <div class="tr-hd__l">
+          <span class="eyebrow"><b>02 技</b>Técnicas de Mana</span>
+          <h2 class="tr-hd__t tr-hd__t--2" id="tecnicas-t">O Leque do Despertar</h2>
+          <p class="tr-hd__p">O que a sua mana aprende fora do Grimório. O sol nasce da Respiração de Mana, cada anel é um Estágio e tudo dentro do seu anel fica aceso.</p>
+        </div>
+      </header>
+      <TecnicasLeque ficha={f} real={real} />
+    </section>
+
+    <div class="tr-desce wrap" aria-hidden="true"><i></i><span>識</span></div>
+
+    <section id="conhecimentos" class="tr-parte" data-parte="conhecimentos" aria-labelledby="conhecimentos-t" style="--cc:#ff3b2e">
+      <header class="tr-hd wrap">
+        <div class="tr-hd__l">
+          <span class="eyebrow"><b>03 識</b>Conhecimentos</span>
+          <h2 class="tr-hd__t tr-hd__t--2" id="conhecimentos-t">A estante do Marcado</h2>
+          <p class="tr-hd__p">O que o personagem sabe fazer fora da magia. Seis vagas, três prateleiras e o caminho de cada livro.</p>
+        </div>
+      </header>
+      <ConhecimentosEstante ficha={f} real={real} />
+    </section>
   </div>
   <script is:inline type="application/json" id="av-dados" set:html={JSON.stringify(dados)}></script>
 </Base>
@@ -383,29 +414,30 @@ const dados = {
   raiz.addEventListener('focusin', (e) => { const el = (e.target as Element).closest<HTMLElement>('.tr-no[data-no]'); if (el && el.matches(':focus-visible')) dica(el); });
   raiz.addEventListener('focusout', (e) => { if (!(e as FocusEvent).relatedTarget) return; dica(null); });
 
-  // troca entre a Trilha da Classe e as Técnicas de Mana
-  const TXT = { tecnicas: ['技', 'Árvore de Técnicas', 'Técnicas de Mana', 'O que a sua mana aprende fora do Grimório. O tronco sobe do 9º ao 2º Estágio e enche até onde você está.'] };
-  raiz.querySelectorAll<HTMLAnchorElement>('[data-modo-ir]').forEach((a) => a.addEventListener('click', (e) => {
+  // índice fixo: acende a parte que está na tela; ?arvore=tecnicas (link antigo) desce até as Técnicas
+  const partes = [...document.querySelectorAll<HTMLElement>('[data-parte]')];
+  const links = [...raiz.querySelectorAll<HTMLAnchorElement>('[data-ir]')];
+  const acende = (id: string) => links.forEach((l) => l.toggleAttribute('aria-current', l.dataset.ir === id));
+  const io = new IntersectionObserver((es) => {
+    const vis = es.filter((e) => e.isIntersecting).sort((x, y) => x.boundingClientRect.top - y.boundingClientRect.top)[0];
+    if (vis) acende((vis.target as HTMLElement).dataset.parte!);
+  }, { rootMargin: '-35% 0px -55% 0px' });
+  partes.forEach((p) => io.observe(p));
+  links.forEach((l) => l.addEventListener('click', (e) => {
     e.preventDefault(); e.stopPropagation();
-    const m = a.dataset.modoIr!;
-    raiz.dataset.modo = m;
-    raiz.querySelectorAll('[data-modo-ir]').forEach((x) => x.toggleAttribute('aria-current', x === a));
-    a.setAttribute('aria-current', 'page');
-    raiz.querySelectorAll<HTMLElement>('[data-so-classe]').forEach((x) => (x.hidden = m !== 'classe'));
-    const tc = raiz.querySelector<HTMLElement>('[data-tc]'); if (tc) tc.hidden = m !== 'tecnicas';
-    const ab = raiz.querySelector<HTMLAnchorElement>(`[data-aba="${ativa}"]`);
-    const [k, eb, t, p] = m === 'tecnicas' ? TXT.tecnicas : [ab?.querySelector('.tr-aba__k')?.textContent ?? '樹', 'Árvore de Trilha', arv().nome, arv().papel];
-    $('[data-eyebrow]').innerHTML = `<b>${k === '技' ? '技' : '樹'}</b>${eb}`;
-    $('[data-titulo]').textContent = t; $('[data-papel]').textContent = p;
-    raiz.style.setProperty('--cc', m === 'tecnicas' ? '#ff3b2e' : (ab?.style.getPropertyValue('--cc') ?? ''));
-    const arvTc = raiz.querySelector<HTMLElement>('.tc-arv'); if (m === 'tecnicas' && arvTc) { arvTc.classList.remove('is-in'); void arvTc.offsetWidth; arvTc.classList.add('is-in'); }
-    try { history.replaceState(null, '', a.href); } catch { /* sem histórico */ }
+    const alvo = document.getElementById(l.dataset.ir!);
+    if (!alvo) return;
+    acende(l.dataset.ir!);
+    const lenis = (window as any).__lenis;
+    if (lenis?.scrollTo) lenis.scrollTo(alvo, { offset: -110 }); else alvo.scrollIntoView({ behavior: 'smooth' });
+    try { history.replaceState(null, '', `#${l.dataset.ir}`); } catch { /* sem histórico */ }
   }, true));
-  raiz.querySelector('.tc-arv')?.classList.add('is-in');
+  const pedido = new URLSearchParams(location.search).get('arvore') === 'tecnicas' ? 'tecnicas' : location.hash.slice(1);
+  if (['tecnicas', 'conhecimentos'].includes(pedido)) requestAnimationFrame(() => document.getElementById(pedido)?.scrollIntoView());
 
   palco().classList.add('is-in');
   // no celular a árvore rola de lado: começa centrada na Raiz
-  const pal = document.querySelector<HTMLElement>('.tr-palco:not(.tc-palco)');
+  const pal = document.querySelector<HTMLElement>('#classe .tr-palco');
   if (pal && pal.scrollWidth > pal.clientWidth) pal.scrollLeft = (pal.scrollWidth - pal.clientWidth) / 2;
   pinta();
 </script>

@@ -1,5 +1,5 @@
 /**
- * Árvore das Técnicas de Mana (/arvores/?arvore=tecnicas).
+ * Árvore das Técnicas de Mana (/arvores/#tecnicas).
  * As técnicas, Estágios, Controles e textos são os do Cânone (canon.js) e do bot (canon/progressao.ts: TECNICAS).
  * Regra de verdade: só "requer" (requerTecnica no bot) trava uma técnica atrás de outra.
  * "vem" é só o desenho: a linha tracejada que mostra o caminho natural; o que vale é Estágio e Controle.
@@ -59,5 +59,5 @@ export const regrasTecnicas = [
   'Cada técnica pede um Estágio e um Controle mínimos.',
   'Aprende com Treinos de Técnica: 5 com um mentor ou 8 sozinho, 1 por ciclo de 24 horas, ação de 800 caracteres.',
   'Elfos e quem tem a Anomalia Mágica aprendem com metade dos treinos.',
-  'Linha cheia: precisa dominar a técnica de antes. Linha tracejada: só o caminho natural.',
+  'Linha vermelha com cadeado: precisa dominar a técnica de antes (o bot trava). Linha tracejada: só a ordem dos Estágios.',
 ];

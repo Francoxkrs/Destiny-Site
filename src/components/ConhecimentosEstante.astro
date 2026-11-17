@@ -1,0 +1,170 @@
+---
+/**
+ * Estante dos Conhecimentos na página de árvores (terceira parada, depois da Classe e das Técnicas).
+ * Três prateleiras de lombadas (Comuns, Incomuns, Perdidos). As que o Marcado tem ficam vermelhas e
+ * puxadas para fora. O cartão ao lado diz o que cada uma faz e por onde ela chega: Estudo numa
+ * Biblioteca, Cápsula no Fosso, Pedra do Destino, giros, sorteios ou eventos.
+ * Só mostra: quem registra Estudos e Cápsulas é o bot.
+ */
+import { conhecimentos as C, capsulas } from '../data/canon.js';
+
+interface Props { ficha: any; real: boolean }
+const { ficha: f, real } = Astro.props;
+
+const LIMITE = 6;
+const SO_EVENTO = /\s*\(sorteios e eventos\)\s*$/;
+const preco = Object.fromEntries(capsulas.map(([n, , p]) => [n, p]));
+const tem = new Set<string>(f.conhecimentos ?? []);
+
+type Item = { id: string; nome: string; cat: 'comum' | 'incomum' | 'perdido'; txt: string; dias?: string; soEvento?: boolean };
+const slug = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const itens: Item[] = [
+  ...C.comuns.map(([nome, txt, dias]) => ({ id: slug(nome), nome, cat: 'comum' as const, txt, dias: String(dias) })),
+  ...C.incomuns.map(([nome, txt]) => ({ id: slug(nome), nome, cat: 'incomum' as const, txt: txt.replace(SO_EVENTO, ''), soEvento: SO_EVENTO.test(txt) })),
+  ...C.perdidos.map(([nome, txt]) => ({ id: slug(nome), nome, cat: 'perdido' as const, txt })),
+];
+const conhecido = new Set(itens.map((i) => i.nome));
+// o que o Marcado tem e não está nas listas veio de raça, classe, família ou evento
+const proprios = [...tem].filter((n) => !conhecido.has(n)).map((nome) => ({ id: `x-${slug(nome)}`, nome, cat: 'proprio' as const, txt: 'Conhecimento que veio da família, da raça, da classe ou de um evento. Não está nas estantes do Grande Arquivo.' }));
+
+const CAT = {
+  comum: { k: '書', nome: 'Comuns', um: 'Comum', lead: 'Se estudam numa Biblioteca. O número na lombada é quantos dias de Estudo.' },
+  incomum: { k: '稀', nome: 'Incomuns', um: 'Incomum', lead: 'Nunca se estudam: chegam por giros, Cápsulas, sorteios e eventos. Os marcados com 催 só saem em sorteios e eventos.' },
+  perdido: { k: '失', nome: 'Perdidos', um: 'Perdido', lead: 'O que o mundo tentou esquecer. Só por encomenda ou evento.' },
+} as const;
+
+const como = (i: Item | (typeof proprios)[number]) => {
+  if (i.cat === 'proprio') return ['Dado pela família, raça, classe ou evento'];
+  if (i.cat === 'comum') {
+    const ondeEstuda = i.dias.includes('Grande Arquivo') ? `${i.dias.split('·')[0].trim()} dias de Estudo, só no Grande Arquivo de Valcristal` : `${i.dias} ${i.dias === '1' ? 'dia' : 'dias'} de Estudo numa Biblioteca`;
+    return [ondeEstuda, `Cápsula Direcionada Comum no Fosso · ${preco['Direcionada Comum']}`, `Cápsula Aleatória no Fosso · ${preco['Aleatória']} (80% de sair uma Comum)`, 'Pedra do Destino · 1 Inscrição (80% Comum)', 'Giros na criação, sorteios e eventos'];
+  }
+  if (i.cat === 'incomum') {
+    if (i.soEvento) return ['Só em sorteios e eventos', 'Não sai em Cápsula nem se estuda'];
+    return [`Cápsula Direcionada Incomum no Fosso · ${preco['Direcionada Incomum']}`, `Cápsula Aleatória no Fosso · ${preco['Aleatória']} (20% de sair uma Incomum)`, 'Pedra do Destino · 1 Inscrição (20% Incomum)', 'Giros na criação, sorteios e eventos', 'Nunca por Estudo'];
+  }
+  return [`Cápsula Perdida, sob encomenda no Fosso · ${preco['Perdida']}`, 'Sorteios e eventos'];
+};
+
+const meus = [...tem];
+const vagas = Math.max(0, LIMITE - meus.length);
+const todos = [...itens, ...proprios];
+const dados = { real, vagas, itens: todos.map((i) => ({ id: i.id, nome: i.nome, cat: i.cat, txt: i.txt, dias: 'dias' in i ? i.dias : undefined, tem: tem.has(i.nome), como: como(i) })) };
+const primeiro = todos.find((i) => tem.has(i.nome)) ?? itens[0];
+const idDe = (nome: string) => todos.find((i) => i.nome === nome)?.id ?? '';
+let d = 0;
+---
+<div class="tr-corpo wrap ce" data-ce>
+  <aside class="tr-dos" aria-label="Seus Conhecimentos">
+    <div class="tr-dos__cartaz">
+      <p class="tr-dos__selo" aria-hidden="true">{real ? '本人' : '見本'}</p>
+      <p class="t-label">{real ? 'Seus Conhecimentos' : 'Conhecimentos de exemplo'}</p>
+      <p class="tr-dos__nome">{f.nome}<small>{meus.length} de {LIMITE} · o limite não cresce</small></p>
+      <ol class="ce-vagas" aria-label="Suas seis vagas">
+        {Array.from({ length: LIMITE }, (_, i) => meus[i]
+          ? <li><button type="button" data-ce-ir={idDe(meus[i])}><span>{String(i + 1).padStart(2, '0')}</span>{meus[i]}</button></li>
+          : <li class="is-vaga"><span>{String(i + 1).padStart(2, '0')}</span>vaga</li>)}
+      </ol>
+      {!real && <p class="tr-dos__aviso">{f.nome}, de exemplo. <a href="/api/auth/login?volta=/arvores/%23conhecimentos">Entre com o Discord</a> para ver os seus.</p>}
+    </div>
+
+    <div class="tr-det ce-det" aria-live="polite">
+      <p class="tr-det__tag" data-ce-tag></p>
+      <h3 class="tr-det__nome" data-ce-nome>{primeiro.nome}</h3>
+      <p class="tr-det__txt" data-ce-txt>{primeiro.txt}</p>
+      <p class="t-label ce-det__h">Como conseguir</p>
+      <ul class="tc-req ce-como" data-ce-como></ul>
+      <p class="tr-det__st" data-ce-st></p>
+      <div class="ce-links">
+        <a class="btn tr-sm" href="/conhecimentos/#capsulas">Cápsulas no Fosso</a>
+        <a class="btn tr-sm" href="/altar/#pedra">Pedra do Destino</a>
+      </div>
+    </div>
+
+    <details class="tr-regras">
+      <summary>Como os Conhecimentos funcionam</summary>
+      <ul>
+        <li>Todo personagem tem no máximo <b>6</b>, de qualquer categoria, e esse limite não cresce.</li>
+        <li>Os que vêm de raça, classe, família ou evento não ocupam essas vagas.</li>
+        <li><b>Comuns</b> se estudam numa Biblioteca pelos dias da lombada. O Científico só no Grande Arquivo de Valcristal.</li>
+        <li><b>Cápsulas</b> são vendidas no Fosso e ensinam na hora. Fora do RP, uma Cápsula também sai na Pedra do Destino por 1 Inscrição.</li>
+        <li>Conhecimentos abrem Profissões e a cura de Ferimentos. <a href="/conhecimentos/">Ver a página completa</a>.</li>
+      </ul>
+    </details>
+  </aside>
+
+  <section class="ce-palco" aria-label="Estante dos Conhecimentos">
+    <span class="ce-palco__k" aria-hidden="true">識</span>
+    {(['comum', 'incomum', 'perdido'] as const).map((cat) => {
+      const lista = itens.filter((i) => i.cat === cat);
+      return (
+        <div class="ce-prat" data-cat={cat}>
+          <header class="ce-prat__hd">
+            <span class="ce-prat__k" aria-hidden="true">{CAT[cat].k}</span>
+            <h3>{CAT[cat].nome}<small>{lista.length}</small></h3>
+            <p>{CAT[cat].lead}</p>
+          </header>
+          <ul class="ce-livros">
+            {lista.map((i) => (
+              <li style={`--d:${d++}`}>
+                <button type="button" class:list={['ce-livro', tem.has(i.nome) && 'is-tem', i.nome === primeiro.nome && 'is-sel', 'soEvento' in i && i.soEvento && 'is-evento']} data-ce-livro={i.id} aria-label={`${i.nome}, ${CAT[cat].um}${tem.has(i.nome) ? ', você tem' : ''}`} style={`--alt:${Math.max(150, i.nome.length * 10 + 64) + (d % 3) * 7}px`}>
+                  <span class="ce-livro__k" aria-hidden="true">{tem.has(i.nome) ? '識' : CAT[cat].k}</span>
+                  <span class="ce-livro__t">{i.nome}</span>
+                  {cat === 'comum' && <span class="ce-livro__n" aria-hidden="true">{String(i.dias).split('·')[0].trim()}d</span>}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    })}
+    {proprios.length > 0 && (
+      <p class="ce-proprios">Fora das estantes, {proprios.length === 1 ? 'você tem' : 'você também tem'} {proprios.map((p, i) => <>{i ? ', ' : ''}<button type="button" data-ce-ir={p.id}>{p.nome}</button></>)}, {proprios.length === 1 ? 'que veio' : 'que vieram'} da família, da raça, da classe ou de um evento.</p>
+    )}
+  </section>
+  <script is:inline type="application/json" id="ce-dados" set:html={JSON.stringify(dados)}></script>
+</div>
+
+<script>
+  type It = { id: string; nome: string; cat: string; txt: string; dias?: string; tem: boolean; como: string[] };
+  const box = document.querySelector<HTMLElement>('[data-ce]');
+  if (box) {
+    const D = JSON.parse(document.getElementById('ce-dados')!.textContent!) as { real: boolean; vagas: number; itens: It[] };
+    const q = (s: string) => box.querySelector<HTMLElement>(s)!;
+    const CAT: Record<string, string> = { comum: '書 Comum', incomum: '稀 Incomum', perdido: '失 Perdido', proprio: '家 De família ou evento' };
+    const mostra = (id: string) => {
+      const it = D.itens.find((x) => x.id === id);
+      if (!it) return;
+      box.querySelectorAll<HTMLElement>('[data-ce-livro]').forEach((b) => b.classList.toggle('is-sel', b.dataset.ceLivro === id));
+      const dias = it.cat === 'comum' && it.dias ? ` · ${it.dias.split('·')[0].trim()} dias de Estudo` : '';
+      q('[data-ce-tag]').textContent = `${CAT[it.cat]}${dias}`;
+      q('[data-ce-nome]').textContent = it.nome;
+      q('[data-ce-txt]').textContent = it.txt;
+      const ul = q('[data-ce-como]');
+      ul.innerHTML = '';
+      it.como.forEach((c) => { const li = document.createElement('li'); li.textContent = c; if (it.tem) li.className = 'is-ok'; ul.append(li); });
+      const s = q('[data-ce-st]');
+      s.dataset.st = it.tem ? 'tem' : D.vagas ? 'livre' : 'bloqueado';
+      const quem = D.real ? 'Você' : 'Este exemplo';
+      s.textContent = it.tem ? `${quem} já tem este Conhecimento.` : D.vagas ? `${quem} ainda tem ${D.vagas} ${D.vagas === 1 ? 'vaga livre' : 'vagas livres'} de 6.` : 'As 6 vagas estão cheias. Só entra um novo se vier de família, raça, classe ou evento.';
+    };
+    const alvo = (e: Event) => (e.target as Element).closest<HTMLElement>('[data-ce-livro], [data-ce-ir]');
+    const id = (el: HTMLElement) => el.dataset.ceLivro ?? el.dataset.ceIr!;
+    box.addEventListener('click', (e) => {
+      const el = alvo(e); if (!el) return;
+      mostra(id(el));
+      if (el.dataset.ceIr) box.querySelector<HTMLElement>(`[data-ce-livro="${el.dataset.ceIr}"]`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    });
+    box.addEventListener('pointerover', (e) => { if ((e as PointerEvent).pointerType !== 'mouse') return; const el = alvo(e); if (el?.dataset.ceLivro) mostra(id(el)); });
+    box.addEventListener('focusin', (e) => { const el = alvo(e); if (el?.dataset.ceLivro) mostra(id(el)); });
+    mostra(box.querySelector<HTMLElement>('.ce-livro.is-sel')?.dataset.ceLivro ?? D.itens[0].id);
+
+    // entrada: os livros caem na prateleira, um atrás do outro
+    const palco = q('.ce-palco');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      palco.classList.add('is-espera');
+      const io = new IntersectionObserver((es) => { if (es.some((x) => x.isIntersecting)) { io.disconnect(); palco.classList.remove('is-espera'); palco.classList.add('is-in'); } }, { threshold: 0.15 });
+      io.observe(palco);
+    }
+  }
+</script>

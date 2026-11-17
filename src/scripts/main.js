@@ -281,7 +281,7 @@ if (menu && toggle) {
 }
 
 /* ---------------------------------------------------------------- cursor */
-if (fine && !reduce) {
+if (fine && !reduce && $('.cursor')) {
   html.classList.add('has-cursor');
   const c = $('.cursor');
   const dot = $('.cursor__dot', c);

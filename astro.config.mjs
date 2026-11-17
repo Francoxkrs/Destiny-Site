@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import vercel from '@astrojs/vercel';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -38,7 +39,10 @@ function indiceDeBusca() {
 }
 
 export default defineConfig({
+  // Páginas estáticas por padrão; Ficha, Árvores, Cristais e /api/* rodam no servidor (export const prerender = false).
   output: 'static',
+  adapter: vercel(),
+  devToolbar: { enabled: false },
   build: { format: 'directory' },
   trailingSlash: 'ignore',
   integrations: [indiceDeBusca()],

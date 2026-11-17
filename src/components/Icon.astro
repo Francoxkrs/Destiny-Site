@@ -1,0 +1,26 @@
+---
+// Ícones de traço do portal (24×24, traço 1.6). Desenhados para o Black Destiny.
+const { name, size = 20, class: cls = '' } = Astro.props;
+const paths = {
+  inicio: '<path d="M12 2.5 20 9l-8 12.5L4 9z"/><path d="M4 9h16M9 9l3 12.5L15 9M8.5 3.8 9 9M15.5 3.8 15 9"/>',
+  guia: '<path d="M4 4.5h6.5a2 2 0 0 1 2 2V20a1.6 1.6 0 0 0-1.6-1.6H4z"/><path d="M20 4.5h-6.5a2 2 0 0 0-2 2V20a1.6 1.6 0 0 1 1.6-1.6H20z"/>',
+  ficha: '<path d="M5 3.5h14v17H5z"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17.5c.8-2.2 2.5-3.3 4.5-3.3s3.7 1.1 4.5 3.3"/>',
+  arvore: '<circle cx="12" cy="4.5" r="2"/><circle cx="5" cy="13" r="2"/><circle cx="19" cy="13" r="2"/><circle cx="12" cy="19.5" r="2"/><path d="M12 6.5v11M10.6 6 6.4 11.5M13.4 6l4.2 5.5"/>',
+  cristais: '<path d="M12 2 18.5 8 12 22 5.5 8z"/><path d="M5.5 8h13M12 2v20M9 8l3 14M15 8l-3 14"/>',
+  busca: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5.5 5.5"/>',
+  sair: '<path d="M14 4.5h5v15h-5"/><path d="M10 8l-4 4 4 4M6 12h10"/>',
+  discord: '<path d="M8.5 7.2a14 14 0 0 1 7 0M7 17c3 1.6 7 1.6 10 0"/><path d="M6.2 6.3c1.5-.7 2.7-1 3.4-1.1l.6 1.3M17.8 6.3c-1.5-.7-2.7-1-3.4-1.1l-.6 1.3M6.2 6.3C4.6 8.8 3.8 11.7 4 15c1.2 1.3 2.6 2.1 4.3 2.6l.9-1.6M17.8 6.3c1.6 2.5 2.4 5.4 2.2 8.7-1.2 1.3-2.6 2.1-4.3 2.6l-.9-1.6"/><circle cx="9.3" cy="12.2" r="1.2"/><circle cx="14.7" cy="12.2" r="1.2"/>',
+  cadeado: '<path d="M6 10.5h12v10H6z"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  seta: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  plano: '<path d="M4 6h10M4 12h7M4 18h10"/><path d="m15 15 2 2 4-5"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  fechar: '<path d="M6 6l12 12M18 6 6 18"/>',
+  estrela: '<path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/>',
+  moeda: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/>',
+  presente: '<path d="M4 10h16v10H4zM3 6.5h18V10H3zM12 6.5V20"/><path d="M12 6.5C10.5 3 7 3.2 7 5.2s3.5 1.3 5 1.3zM12 6.5c1.5-3.5 5-3.3 5-1.3s-3.5 1.3-5 1.3z"/>',
+  giro: '<path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4.5v4h-4"/>',
+};
+const d = paths[name] ?? '';
+---
+<svg class:list={['ico', cls]} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={d} />

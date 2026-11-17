@@ -2,29 +2,42 @@
 import '../styles/global.css';
 import '../styles/v2.css';
 import '../styles/sistemas.css';
+import '../styles/portal.css';
 import Gem from '../components/Gem.astro';
-import Arrow from '../components/Arrow.astro';
+import Icon from '../components/Icon.astro';
 import { site, paginas, capitulos, glossario } from '../data/canon.js';
 
-const { title, description = 'Servidor de RP de texto no Discord inspirado em Black Clover. Toda alma volta, e toda alma volta em Diamond.', slug = 'inicio' } = Astro.props;
+/**
+ * Casca do portal v2.
+ * modo: 'guia' (páginas de sistema, com a lateral do Guia), 'app' (Ficha, Árvores, Cristais: tela cheia) ou 'inicio'.
+ * aba: qual item do menu principal fica aceso.
+ */
+const { title, description = 'Servidor de RP de texto no Discord. Toda alma volta, e toda alma volta em Diamond.', slug = 'inicio' } = Astro.props;
 const atual = paginas.find((p) => p.slug === slug);
-const fullTitle = title ? `${title} · ${site.nome}` : `${site.nome} · RP de Black Clover no Discord`;
-const discordExterno = site.discord !== '#';
+const modo = Astro.props.modo ?? (atual || slug === 'indice' || slug === 'guia' ? 'guia' : 'inicio');
+const aba = Astro.props.aba ?? (modo === 'guia' ? 'guia' : slug);
+const fullTitle = title ? `${title} · ${site.nome}` : `${site.nome} · RP de texto no Discord`;
 const cap = atual ? capitulos.find((c) => c.id === atual.cap) : null;
-const titulos = Object.fromEntries([['/', 'Black Destiny'], ['/indice/', 'Índice'], ...paginas.map((p) => [`/${p.slug}/`, p.titulo])]);
 const busca = {
-  paginas: paginas.map((p) => ({ t: p.titulo, d: p.resumo, u: `/${p.slug}/`, c: `Cap. ${p.cap}`, e: (p.essencial || []).join(' ') })),
+  paginas: paginas.map((p) => ({ t: p.titulo, d: p.resumo, u: `/${p.slug}/`, c: capitulos.find((c) => c.id === p.cap)?.nome ?? '', e: (p.essencial || []).join(' ') })),
   termos: glossario.map(([t, d, u]) => ({ t, d, u: `/${u.replace('#', '/#')}`.replace(/\/?$/, (m) => (u.includes('#') ? '' : '/')) })),
 };
+const nav = [
+  { id: 'inicio', href: '/', nome: 'Início', icon: 'inicio' },
+  { id: 'guia', href: '/guia/', nome: 'Guia', icon: 'guia' },
+  { id: 'ficha', href: '/ficha/', nome: 'Ficha', icon: 'ficha' },
+  { id: 'arvores', href: '/arvores/', nome: 'Árvores', icon: 'arvore' },
+  { id: 'cristais', href: '/cristais/', nome: 'Cristais', icon: 'cristais' },
+];
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-modo={modo}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0a0a0b" />
+    <meta name="theme-color" content="#09080b" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -33,100 +46,61 @@ const busca = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Shippori+Mincho+B1:wght@800&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Grenze+Gotisch:wght@500..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Shippori+Mincho+B1:wght@800&display=swap" />
     <script is:inline>
       (function () {
         var d = document.documentElement;
-        d.classList.add('js');
-        try {
-          if (sessionStorage.getItem('bd-seen')) d.classList.add('no-preloader');
-          if (sessionStorage.getItem('bd-nav')) d.classList.add('is-entering');
-        } catch (e) { d.classList.add('no-preloader'); }
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('no-preloader');
-        // Garantia: se os scripts falharem, mostra tudo depois de 4 s.
-        setTimeout(function () { if (!window.__bdReady) { d.classList.add('reveal-all', 'no-preloader'); d.classList.remove('is-entering'); } }, 4000);
+        d.classList.add('js', 'no-preloader');
+        // Garantia: se os scripts falharem, mostra tudo depois de 3 s.
+        setTimeout(function () { if (!window.__bdReady) d.classList.add('reveal-all'); }, 3000);
       })();
     </script>
   </head>
   <body data-page={slug}>
     <a class="skip" href="#main">Pular para o conteúdo</a>
-    <div class="guides" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
-    <div class="preloader" aria-hidden="true">
-      <div class="preloader__half preloader__half--a"></div>
-      <div class="preloader__half preloader__half--b"></div>
-      <div class="preloader__in">
-        <span class="preloader__kanji">黒の運命</span>
-        <p class="preloader__title"><span>Black</span> <em>Destiny</em></p>
-        <p class="preloader__sub t-label">Toda alma volta</p>
-      </div>
-      <span class="preloader__count">000</span>
-      <span class="preloader__bar"></span>
-      <svg class="preloader__slash" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="62" y1="-2" x2="38" y2="102" pathLength="1" /></svg>
-    </div>
+    <header class="px-hdr">
+      <div class="px-hdr__in">
+        <a href="/" class="px-brand" aria-label="Black Destiny, início">
+          <span class="px-brand__gem"><Gem /></span>
+          <span class="px-brand__txt"><b>Black Destiny</b><small>Portal do Marcado</small></span>
+        </a>
 
-    <div class="transition" aria-hidden="true">
-      <div class="transition__panel transition__panel--a"></div>
-      <div class="transition__panel transition__panel--b"></div>
-      <svg class="transition__slash" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="62" y1="-2" x2="38" y2="102" pathLength="1" /></svg>
-      <p class="transition__title" data-transition-title></p>
-    </div>
-    <script is:inline>
-      try { var t = sessionStorage.getItem('bd-nav'); if (t && t !== '1') document.querySelector('[data-transition-title]').textContent = t; } catch (e) {}
-    </script>
-    <script is:inline type="application/json" id="bd-titles" set:html={JSON.stringify(titulos)}></script>
+        <nav class="px-nav" aria-label="Principal">
+          {nav.map((n) => (
+            <a href={n.href} class="px-nav__a" aria-current={aba === n.id ? 'page' : undefined}>
+              <Icon name={n.icon} size={18} /><span>{n.nome}</span>
+            </a>
+          ))}
+        </nav>
 
-    <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span></span></span></div>
-
-    <header class="hdr">
-      <div class="wrap hdr__in">
-        <a href="/" class="brand" aria-label="Black Destiny, início"><Gem /><span>Black Destiny</span></a>
-        <p class="hdr__where">{atual && cap ? <><b>Cap. {cap.id}</b> {cap.nome} <i>/</i> {atual.titulo}</> : <><b>黒</b> Reino de Diamond</>}</p>
-        <div class="hdr__actions">
-          <button class="hdr__search" type="button" data-search-open aria-label="Buscar no site (Ctrl+K)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg><span>Buscar</span><kbd>Ctrl K</kbd></button>
-          <a class="hdr__idx" href="/indice/" aria-current={slug === 'indice' ? 'page' : undefined}>Índice</a>
-          <a class="btn hdr__discord" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Discord</a>
-          <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
-            <span class="menu-btn__label" data-menu-label>Capítulos</span>
-            <span class="menu-btn__icon"><span></span></span>
+        <div class="px-hdr__end">
+          <button class="px-search" type="button" data-search-open aria-label="Buscar no Guia (Ctrl+K)">
+            <Icon name="busca" size={17} /><span>Buscar</span><kbd>Ctrl K</kbd>
           </button>
+          <a class="px-cp" href="/cristais/" data-sessao-cp hidden aria-label="Seus Cristais Prismáticos">
+            <span class="px-cp__gem" aria-hidden="true"></span><b data-sessao-cp-n>0</b><small>CP</small>
+          </a>
+          <a class="px-login" href="/entrar/" data-sessao-entrar>
+            <Icon name="discord" size={18} /><span>Entrar</span>
+          </a>
+          <a class="px-user" href="/ficha/" data-sessao-user hidden>
+            <span class="px-user__txt"><b data-sessao-nome>Marcado</b><small data-sessao-sub>9º Estágio</small></span>
+            <img class="px-user__av" data-sessao-av alt="" width="36" height="36" />
+          </a>
         </div>
       </div>
     </header>
 
-    <nav class="menu" id="menu" aria-label="Sistemas" data-lenis-prevent>
-      <div class="wrap menu__in">
-        <div class="menu__chapters">
-          {capitulos.map((c) => (
-            <div class="menu__chap" data-menu-item>
-              <p class="menu__chap-h"><span class="k">{c.kanji}</span><b>Cap. {c.id}</b>{c.nome}</p>
-              <ul class="menu__list">
-                {paginas.filter((p) => p.cap === c.id).map((p) => (
-                  <li>
-                    <a href={`/${p.slug}/`} aria-current={p.slug === slug ? 'page' : undefined}>
-                      <span class="n">{p.num}</span><span class="t">{p.titulo}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div class="menu__side" data-menu-item>
-          <p class="menu__quote">Toda alma volta. <em>Nenhuma volta igual.</em></p>
-          <p>Um RP de texto no Discord inspirado em Black Clover. Você foi alguém em outro reino; agora renasce em Diamond, um reino que esgotou a própria terra.</p>
-          <div class="btns">
-            <a class="btn btn--solid" href="/comecar/">Criar personagem <Arrow /></a>
-            <a class="btn" href="/indice/">Índice e glossário</a>
-            <a class="btn" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener">Entrar no Discord</a>
-          </div>
-        </div>
-      </div>
+    <nav class="px-tabbar" aria-label="Principal (celular)">
+      {nav.map((n) => (
+        <a href={n.href} aria-current={aba === n.id ? 'page' : undefined}><Icon name={n.icon} size={20} /><span>{n.nome}</span></a>
+      ))}
     </nav>
 
     <div class="search" data-search hidden data-lenis-prevent>
       <div class="search__veil" data-search-close></div>
-      <div class="search__box" role="dialog" aria-modal="true" aria-label="Buscar no site">
+      <div class="search__box" role="dialog" aria-modal="true" aria-label="Buscar no Guia">
         <div class="search__field">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg>
           <input type="search" placeholder="Buscar regra, termo ou página" autocomplete="off" spellcheck="false" data-search-input aria-label="Buscar" />
@@ -138,44 +112,64 @@ const busca = {
     </div>
     <script is:inline type="application/json" id="bd-search" set:html={JSON.stringify(busca)}></script>
 
-    <main id="main">
-      <slot />
-    </main>
-
-    <footer class="footer">
-      <div class="wrap">
-        <div class="footer__cols">
-          <div>
-            <p class="t-h2">Sua alma <em>já voltou</em>.<br />Falta você.</p>
-            <div class="btns" style="margin-top:28px">
-              <a class="btn btn--solid" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Entrar no servidor <Arrow /></a>
+    {modo === 'guia' ? (
+      <div class="px-guia">
+        <aside class="px-side" aria-label="Seções do Guia" data-lenis-prevent>
+          <details class="px-side__det" open>
+            <summary class="px-side__sum">
+              <span>{cap ? cap.nome : 'Guia'}</span><b>{atual ? atual.titulo : slug === 'indice' ? 'Índice' : 'Todas as seções'}</b>
+            </summary>
+            <div class="px-side__body">
+              <a class="px-side__home" href="/guia/" aria-current={slug === 'guia' ? 'page' : undefined}>Visão geral do Guia</a>
+              {capitulos.map((c) => (
+                <div class="px-side__grp" data-ativo={cap?.id === c.id ? '' : undefined}>
+                  <p class="px-side__h">{c.nome}</p>
+                  <ul>
+                    {paginas.filter((p) => p.cap === c.id).map((p) => (
+                      <li><a href={`/${p.slug}/`} aria-current={p.slug === slug ? 'page' : undefined}>{p.titulo}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              <a class="px-side__home" href="/indice/" aria-current={slug === 'indice' ? 'page' : undefined}>Índice e glossário</a>
             </div>
-          </div>
-          {[['I', 'II', 'III'], ['IV'], ['V', 'VI']].map((ids) => (
+          </details>
+        </aside>
+        <main id="main" class="px-main">
+          <slot />
+        </main>
+      </div>
+    ) : (
+      <main id="main" class:list={['px-main', `px-main--${modo}`]}>
+        <slot />
+      </main>
+    )}
+
+    <footer class="px-foot">
+      <div class="px-foot__in">
+        <div class="px-foot__brand">
+          <a href="/" class="px-brand"><span class="px-brand__gem"><Gem /></span><span class="px-brand__txt"><b>Black Destiny</b><small>Toda alma volta</small></span></a>
+          <p>RP de texto no Discord. Sua alma viveu em outro reino e renasce em Diamond, o reino que esgotou a própria terra.</p>
+          <a class="px-btn px-btn--ember" href={site.discord} target="_blank" rel="noopener"><Icon name="discord" size={18} />Entrar no servidor</a>
+        </div>
+        <div class="px-foot__cols">
+          {capitulos.map((c) => (
             <div>
-              {ids.map((id) => {
-                const c = capitulos.find((x) => x.id === id);
-                return (
-                  <>
-                    <h4 class="t-label">Cap. {c.id} · {c.nome}</h4>
-                    <ul>{paginas.filter((p) => p.cap === id).map((p) => <li><a href={`/${p.slug}/`}>{p.titulo}</a></li>)}</ul>
-                  </>
-                );
-              })}
+              <p class="px-foot__h">{c.nome}</p>
+              <ul>{paginas.filter((p) => p.cap === c.id).map((p) => <li><a href={`/${p.slug}/`}>{p.titulo}</a></li>)}</ul>
             </div>
           ))}
         </div>
-        <p class="footer__idx"><a href="/indice/">Índice, glossário e busca <Arrow /></a></p>
-        <p class="footer__big" aria-hidden="true"><span>Black</span> <em>Destiny</em></p>
-        <div class="footer__bottom">
-          <span class="t-label">© {new Date().getFullYear()} Black Destiny · Servidor de fãs, sem fins lucrativos</span>
-          <span class="t-label">Black Clover © Yūki Tabata / Shueisha</span>
-        </div>
+      </div>
+      <div class="px-foot__bar">
+        <span>© {new Date().getFullYear()} Black Destiny · Servidor de fãs</span>
+        <span><a href="/indice/">Índice e glossário</a> · <a href="/cristais/">Cristais Prismáticos</a></span>
       </div>
     </footer>
 
     <script>
       import '../scripts/main.js';
+      import '../scripts/sessao.js';
     </script>
   </body>
 </html>

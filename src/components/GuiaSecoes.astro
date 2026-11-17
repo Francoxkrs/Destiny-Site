@@ -1,0 +1,18 @@
+---
+// Grade das seções do Guia: usada no Início e em /guia/.
+import Icon from './Icon.astro';
+import { paginas, capitulos } from '../data/canon.js';
+---
+<div class="gd-grid">
+  {capitulos.map((c) => (
+    <section class="gd-sec" id={c.id}>
+      <div class="gd-sec__h"><h3>{c.nome}</h3><span aria-hidden="true">{c.kanji}</span></div>
+      <p>{c.texto}</p>
+      <ul>
+        {paginas.filter((p) => p.cap === c.id).map((p) => (
+          <li><a href={`/${p.slug}/`}><b>{p.titulo}</b><small>{p.resumo}</small><Icon name="seta" size={18} /></a></li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>

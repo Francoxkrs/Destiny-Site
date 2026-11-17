@@ -1,1 +1,1 @@
-{"framework":"astro","buildCommand":"npm run build","outputDirectory":"dist"}
+{"framework":"astro","buildCommand":"npm run build"}

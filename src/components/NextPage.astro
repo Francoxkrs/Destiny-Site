@@ -8,11 +8,11 @@ const n = paginas[(i + 1) % paginas.length];
 const c = capitulos.find((x) => x.id === n.cap);
 const muda = paginas[i]?.cap !== n.cap;
 ---
-<a class="next" href={`/${n.slug}/`} data-cursor="Virar a página">
+<a class="next" href={`/${n.slug}/`}>
   <div class="next__bg" aria-hidden="true"><ImageSlot src={`${n.slug}/capa`} label={n.titulo} ratio="21 / 9" compact parallax={false} /></div>
   <div class="wrap">
     <div class="next__label">
-      <span class="eyebrow"><b>{muda ? `Cap. ${c.id}` : n.num}</b>{muda ? c.nome : 'Próxima página'}</span>
+      <span class="eyebrow"><b>A seguir</b>{muda ? c.nome : 'Próxima página'}</span>
       <span class="t-label">{n.resumo}</span>
     </div>
     <p class="next__title t-display">{n.titulo}<Arrow class="" /></p>

@@ -1,0 +1,19 @@
+---
+// Faixa de estado da ficha: exemplo, sem banco, sem ficha ou erro.
+import Icon from '../Icon.astro';
+const { estado, aviso, volta = '/ficha/', logado = false } = Astro.props;
+const textos = {
+  exemplo: ['Ficha de exemplo', 'Entre com o Discord para ver o seu Marcado aqui.'],
+  'sem-banco': ['Ficha de exemplo', 'O site ainda está sendo ligado ao banco do bot. Logo a sua ficha aparece aqui.'],
+  'sem-ficha': ['Ficha de exemplo', aviso],
+  erro: ['Ficha de exemplo', aviso],
+};
+const t = textos[estado];
+---
+{t && (
+  <div class="fc-aviso" role="status">
+    <span class="fc-aviso__tag">{t[0]}</span>
+    <p>{t[1]}</p>
+    {!logado && <a class="px-btn px-btn--sm px-btn--ember" href={`/api/auth/login?volta=${encodeURIComponent(volta)}`} data-login><Icon name="discord" size={16} />Entrar com Discord</a>}
+  </div>
+)}

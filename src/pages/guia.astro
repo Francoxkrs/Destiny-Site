@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import GuiaSecoes from '../components/GuiaSecoes.astro';
+import { paginas, comecePorAqui } from '../data/canon.js';
+const por = Object.fromEntries(paginas.map((p) => [p.slug, p]));
+---
+<Base title="Guia" slug="guia" description="Todos os sistemas do Black Destiny organizados por assunto: mundo, personagem, magia, progressão, aventura e sustento.">
+  <header class="gd-hero">
+    <p class="px-label" style="color:var(--gold);margin-bottom:12px">Guia do Marcado</p>
+    <h1>Todos os sistemas, <em>por assunto</em>.</h1>
+    <p>{paginas.length} páginas em sete seções. Cada uma abre com um resumo de 30 segundos; a busca (Ctrl K) acha regras e termos pelo nome.</p>
+  </header>
+  <div class="gd-body">
+    <div>
+      <p class="px-label" style="margin-bottom:12px">Ordem de leitura para quem chegou agora</p>
+      <div class="gd-start">
+        {comecePorAqui.map(([s, t], i) => <a href={`/${s}/`}><span>0{i + 1}</span><b>{por[s].titulo}</b><small>{t}</small></a>)}
+      </div>
+    </div>
+    <GuiaSecoes />
+  </div>
+</Base>

@@ -10,7 +10,7 @@ const c = capitulos.find((x) => x.id === p.cap);
   <div class="wrap">
     <div class="page-hero__meta" data-hero-fade>
       <nav class="crumbs t-label" aria-label="Trilha">
-        <a href="/">Black Destiny</a><span>/</span><span>Cap. {c.id} · {c.nome}</span><span>/</span><span class="t-mana">{p.titulo}</span>
+        <a href="/guia/">Guia</a><span>/</span><a href={`/guia/#${c.id}`}>{c.nome}</a><span>/</span><span class="t-mana">{p.titulo}</span>
       </nav>
     </div>
     <div class="page-hero__title">

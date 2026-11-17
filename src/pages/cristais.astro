@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Cristal from '../components/portal/Cristal.astro';
+import { lerSessao } from '../lib/sessao.js';
+import { banco } from '../lib/db.js';
+import { moeda, primeiraCompra, pacotes, secoes } from '../data/cristais.js';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+Astro.response.headers.set('cache-control', 'private, no-store');
+let saldo = null;
+if (sessao) {
+  try { const db = await banco(); const c = db && (await db.collection('contas').findOne({ userId: sessao.id }, { projection: { cp: 1 } })); saldo = db ? (c?.cp ?? 0) : null; } catch { /* sem saldo */ }
+}
+const fmt = new Intl.NumberFormat('pt-BR');
+const brl = (v) => (v == null ? null : v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+const icones = { giros: 'giro', loja: 'cristais', gratis: 'presente' };
+---
+<Base title="Cristais Prismáticos" slug="cristais" modo="app" aba="cristais" description="Cristais Prismáticos: a moeda da sua conta no Black Destiny. Pacotes, giros e a loja da conta.">
+  <div class="cp">
+    <header class="cp-topo">
+      <div class="cp-topo__txt">
+        <p class="px-label">Moeda da conta · {moeda.sigla}</p>
+        <h1>Cristais <em>Prismáticos</em></h1>
+        <p>{moeda.texto}</p>
+      </div>
+      <div class="cp-saldo">
+        <span class="cp-saldo__gem" aria-hidden="true"></span>
+        <div>
+          <p class="px-label">Seu saldo</p>
+          {saldo != null ? <b class="px-num">{fmt.format(saldo)} <small>CP</small></b> : sessao ? <b class="cp-saldo__nd">Ainda indisponível</b> : <a class="cp-saldo__in" href="/api/auth/login?volta=/cristais/">Entre para ver</a>}
+        </div>
+      </div>
+    </header>
+
+    <p class="cp-aviso" role="status"><span>Em preparação</span>A loja abre quando os pacotes e os preços forem aprovados. Por enquanto, nada aqui cobra nem vende.</p>
+
+    <section class="cp-banner px-frame" aria-labelledby="cp-pc">
+      <div class="cp-banner__txt">
+        <h2 id="cp-pc">{primeiraCompra.titulo}</h2>
+        <p>{primeiraCompra.texto}</p>
+        <ul class="cp-banner__premios">
+          {primeiraCompra.premios.map((p) => <li class:list={[!p && 'is-tbd']}><Icon name="presente" size={18} />{p ?? 'Prêmio a definir'}</li>)}
+        </ul>
+        <p class="cp-banner__nota">Vale uma única vez por conta.</p>
+      </div>
+      <div class="cp-banner__arte"><Cristal tamanho={6} id="pc" /></div>
+    </section>
+
+    <section aria-labelledby="cp-pac">
+      <div class="cp-head"><h2 id="cp-pac">Pacotes</h2><p>Do menor ao maior, até {moeda.teto}.</p></div>
+      <ul class="cp-pacotes">
+        {pacotes.map((p) => (
+          <li class="cp-pac">
+            <p class="cp-pac__n px-label">Pacote {String(p.n).padStart(2, '0')}</p>
+            <div class="cp-pac__arte">
+              {p.bonus != null && <span class="cp-pac__bonus"><span class="px-gem"></span>Bônus {fmt.format(p.bonus)} CP</span>}
+              <Cristal tamanho={p.n} id={`p${p.n}`} />
+            </div>
+            <h3>{p.nome ?? 'Nome a definir'}</h3>
+            <dl class="cp-pac__dl">
+              <div><dt>Cristais</dt><dd>{p.cp != null ? `${fmt.format(p.cp)} CP` : 'A definir'}</dd></div>
+              <div><dt>Valor</dt><dd class="is-preco">{brl(p.preco) ?? 'A definir'}</dd></div>
+              {p.bonus != null && <div><dt>Bônus</dt><dd>+{fmt.format(p.bonus)} CP</dd></div>}
+            </dl>
+            <button class="px-btn px-btn--gold" type="button" disabled>Em breve</button>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="cp-secoes" aria-label="O que os Cristais compram">
+      {secoes.map((s) => (
+        <article class="cp-sec">
+          <span class="cp-sec__ic"><Icon name={icones[s.id]} size={22} /></span>
+          <h2>{s.titulo}</h2>
+          <p>{s.texto}</p>
+          <span class="cp-sec__tag">Em breve</span>
+        </article>
+      ))}
+    </section>
+  </div>
+</Base>

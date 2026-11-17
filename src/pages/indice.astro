@@ -51,11 +51,11 @@ const porPagina = Object.fromEntries(paginas.map((p) => [p.slug, p]));
 
   <section class="sec sec--line sec--raise" id="mapa">
     <div class="wrap">
-      <SectionHead num="02" label="Mapa dos sistemas" title={`Seis capítulos, <em>${paginas.length} páginas</em>.`} lead="Cada página traz no topo um resumo de 30 segundos e, logo abaixo, as abas da página. Aqui está o resumo de todas." />
+      <SectionHead num="02" label="Mapa dos sistemas" title={`${capitulos.length} seções, <em>${paginas.length} páginas</em>.`} lead="Cada página traz no topo um resumo de 30 segundos e, logo abaixo, as abas da página. Aqui está o resumo de todas." />
       <div class="atlas">
         {capitulos.map((c) => (
           <div class="atlas__chap" data-reveal>
-            <p class="atlas__h"><span class="k" aria-hidden="true">{c.kanji}</span><b>Cap. {c.id}</b>{c.nome}</p>
+            <p class="atlas__h"><span class="k" aria-hidden="true">{c.kanji}</span>{c.nome}</p>
             <p class="t-small atlas__t">{c.texto}</p>
             <ul class="atlas__list">
               {paginas.filter((p) => p.cap === c.id).map((p) => (

@@ -205,6 +205,8 @@ body::after { opacity: 0.05; animation: none; }
 [data-modo='guia'] .sec-head { margin-bottom: clamp(28px, 3.5vw, 48px); }
 [data-modo='guia'] .sec-head__top { margin-bottom: clamp(20px, 2.5vw, 32px); }
 [data-modo='guia'] .page-hero { padding-top: clamp(28px, 4vw, 56px); }
+[data-modo='guia'] .page-hero__grid { align-items: start; margin-top: clamp(16px, 2vw, 28px); }
+[data-modo='guia'] .page-hero__title { margin-top: 14px; }
 [data-modo='guia'] .page-hero__kanji { top: 16px; font-size: clamp(4rem, 9vw, 9rem); -webkit-text-stroke-color: rgba(217, 181, 106, 0.28); }
 [data-modo='guia'] .t-h1 { font-size: clamp(2.8rem, 6.4vw, 5.6rem); }
 [data-modo='guia'] .t-h2 { font-size: clamp(1.9rem, 3.6vw, 3.1rem); }

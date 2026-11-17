@@ -5,7 +5,7 @@ import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
-import { treinos, treinosFisicos, treinosMana, treinosPoder, romanos, bibliotecas, estagios, pontosEstagio, slugify } from '../data/canon.js';
+import { treinos, treinosFisicos, treinosMana, treinosPoder, romanos, bibliotecas, estagios, tetoFisico, pontosEstagio, slugify } from '../data/canon.js';
 
 const niveisMagicos = romanos.slice(1).map((r, i) => [r, treinosMana[i], treinosPoder[i] ?? '—']);
 ---
@@ -84,6 +84,8 @@ const niveisMagicos = romanos.slice(1).map((r, i) => [r, treinosMana[i], treinos
             <p class="t-small" data-reveal>Contam só o que foi conquistado depois da criação.</p>
             <dl class="kv" data-reveal>{pontosEstagio.map(([a, b]) => <><dt class="t-mana">{a}</dt><dd>{b}</dd></>)}</dl>
             <p class="t-small" data-reveal>Em todo Estágio o personagem também ganha os espaços de feitiço que o Grimório indicar.</p>
+            <h3 class="t-h4" data-reveal id="teto">Teto de atributo</h3>
+            <p class="t-small" data-reveal>{tetoFisico.texto} {tetoFisico.apice}</p>
           </div>
         </div>
         <div class="c-5-12">
@@ -94,6 +96,7 @@ const niveisMagicos = romanos.slice(1).map((r, i) => [r, treinosMana[i], treinos
                 <p class="tl-item__n">{e.n}</p>
                 <p class="tl-item__req"><small>Requisitos</small>{e.req}</p>
                 <p class="tl-item__gain"><small>Ganhos</small>{e.ganhos}</p>
+                <p class="tl-item__gain"><small>Teto físico</small>{e.teto}</p>
               </div>
             ))}
           </div>

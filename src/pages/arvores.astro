@@ -30,7 +30,7 @@ const geo = (a) => {
   const pos = Object.fromEntries(a.nos.map((n) => [n.id, { x: x(n.coluna), y: y(n.linha) }]));
   pos.raiz = { x: 50, y: y(0) };
   const arestas = a.nos.flatMap((n) => (n.requer.length ? n.requer : ['raiz']).map((r) => [r, n.id]));
-  const ramos = [...new Set(a.nos.map((n) => n.ramo))].map((r, i) => ({ nome: r, x: x(i), y: y(1) - 15 }));
+  const ramos = [...new Set(a.nos.map((n) => n.ramo))].map((r, i) => ({ nome: r, x: x(i), y: y(1) - 9.5 }));
   return { pos, arestas, ramos };
 };
 

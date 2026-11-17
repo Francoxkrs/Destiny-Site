@@ -134,6 +134,10 @@ const nav = [
               <a class="px-side__home" href="/indice/" aria-current={slug === 'indice' ? 'page' : undefined}>Índice e glossário</a>
             </div>
           </details>
+          <script is:inline>
+            // No celular a lista de seções começa fechada (vira um seletor no topo).
+            if (matchMedia('(max-width: 1000px)').matches) document.currentScript.previousElementSibling.removeAttribute('open');
+          </script>
         </aside>
         <main id="main" class="px-main">
           <slot />

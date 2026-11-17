@@ -48,3 +48,9 @@ Netlify e Cloudflare Pages também funcionam: basta enviar a pasta `dist/`.
 - Quem ativa "reduzir movimento" no sistema vê o site sem animações e sem o cristal girando.
 - O cristal 3D só desenha quando está visível e tem uma versão estática se o navegador não suportar WebGL.
 - No celular, a rolagem horizontal das regiões vira uma lista vertical e as tabelas viram blocos.
+
+
+## Portal v2 (login com Discord, ficha e árvore)
+
+Ficha, Árvores, Cristais e `/api/*` rodam no servidor (adaptador da Vercel). Sem as variáveis de ambiente, mostram um exemplo.
+Configuração, permissões do banco e o contrato `fichasWeb` com o bot: [docs/portal.md](docs/portal.md).

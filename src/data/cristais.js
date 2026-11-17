@@ -24,14 +24,15 @@ export const primeiraCompra = {
   ],
 };
 
-/** Do menor ao maior. tamanho = desenho do cristal (1 a 6). */
+/** Do menor ao maior. tamanho = desenho do cristal (1 a 6).
+ * Selos de destaque só com fato que dá para conferir (nada de "mais escolhido" sem dado de venda). */
 export const pacotes = [
   { n: 1, nome: 'Lasca', cp: 300, base: 300, bonus: 0, preco: 4.99 },
   { n: 2, nome: 'Fragmento', cp: 990, base: 900, bonus: 90, preco: 14.99 },
   { n: 3, nome: 'Geodo', cp: 2070, base: 1800, bonus: 270, preco: 29.99 },
-  { n: 4, nome: 'Veio', cp: 4320, base: 3600, bonus: 720, preco: 59.99, destaque: 'Mais escolhido' },
+  { n: 4, nome: 'Veio', cp: 4320, base: 3600, bonus: 720, preco: 59.99 },
   { n: 5, nome: 'Coração do Veio', cp: 7500, base: 6000, bonus: 1500, preco: 99.99 },
-  { n: 6, nome: 'Cristal da Coroa', cp: 11700, base: 9000, bonus: 2700, preco: 149.99, destaque: 'Maior bônus' },
+  { n: 6, nome: 'Cristal da Coroa', cp: 11700, base: 9000, bonus: 2700, preco: 149.99, destaque: 'Mais CP por real' },
 ];
 
 export const selo = {

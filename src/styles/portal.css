@@ -834,3 +834,40 @@
 .cp-muro__l li, .cp-muro__r li { padding: 10px 0 10px 24px; border-bottom: 1px solid rgba(10, 10, 11, 0.14); position: relative; }
 .cp-muro__l li::before { content: '×'; position: absolute; left: 2px; color: var(--mana-2); font-weight: 700; }
 .cp-muro__r li::before { content: '◆'; position: absolute; left: 2px; color: var(--mana-2); font-size: 11px; top: 13px; }
+
+/* ---------- Cristais: valor de cada pacote, calculadora e vitrine do Altar */
+.cp-pac__barra { position: relative; display: block; height: 4px; margin: 2px 14px 0; background: var(--line); }
+.cp-pac__barra::after { content: ''; position: absolute; inset: 0 auto 0 0; width: var(--b); background: linear-gradient(90deg, var(--mana), #ffb36b); }
+.cp-pac__vale { padding: 6px 14px 0; font-weight: 600; font-size: 0.92rem; display: grid; }
+.cp-pac__vale small { font-family: var(--f-mono); font-size: 10px; font-weight: 400; letter-spacing: 0.08em; color: var(--mute); }
+.cp-selo__vale { font-weight: 600; color: var(--mana); margin: 6px 0; }
+.cp-calc { display: grid; gap: clamp(18px, 3vw, 40px); margin-top: clamp(50px, 6vw, 90px); }
+@media (min-width: 980px) { .cp-calc { grid-template-columns: 1.2fr 1fr; align-items: start; } }
+.cp-calc .t-h2 em { font-style: normal; color: var(--mana); }
+.cp-calc .eyebrow { margin-bottom: 10px; }
+.cp-metas { display: grid; gap: 6px; margin-top: 18px; }
+.cp-metas label { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--ink-2); border: 1px solid var(--line-2); cursor: pointer; transition: border-color 0.25s, background 0.25s; }
+.cp-metas label:has(input:checked) { border-color: var(--mana); background: color-mix(in srgb, var(--mana) 10%, var(--ink-2)); }
+.cp-metas input { width: 18px; height: 18px; accent-color: var(--mana); }
+.cp-metas em { font-style: normal; font-family: var(--f-mono); font-size: 12px; color: var(--bone-2); }
+.cp-calc__r { position: sticky; top: calc(var(--hdr, 72px) + 16px); padding: clamp(18px, 2.4vw, 28px); background: var(--paper); color: var(--ink); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%); }
+.cp-calc__r .t-label { color: rgba(10, 10, 11, 0.55); }
+.cp-calc__total { font-family: var(--f-mono); font-size: 14px; margin: 4px 0 12px; }
+.cp-calc__total b { font-family: var(--f-display); font-size: clamp(3rem, 5vw, 4.4rem); line-height: 0.9; color: var(--mana); margin-right: 6px; }
+.cp-calc__plano ul { display: grid; gap: 6px; border-top: 2px solid var(--ink); padding-top: 10px; }
+.cp-calc__plano li { display: flex; gap: 8px; align-items: baseline; }
+.cp-calc__plano li span { margin-left: auto; font-family: var(--f-mono); font-size: 13px; }
+.cp-calc__preco { display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(10, 10, 11, 0.2); }
+.cp-calc__preco b { font-family: var(--f-display); font-size: 2rem; }
+.cp-calc__sobra, .cp-calc__nota, .cp-calc__vazio { font-size: 0.9rem; color: rgba(10, 10, 11, 0.7); margin-top: 6px; }
+.cp-calc__nota { padding-left: 10px; border-left: 3px solid var(--mana); }
+.cp-alt { display: grid; grid-template-columns: 140px 1fr auto; gap: clamp(14px, 2.4vw, 30px); align-items: center; margin-top: clamp(40px, 5vw, 70px); padding: 16px; background: linear-gradient(90deg, color-mix(in srgb, var(--mana) 16%, var(--ink-2)), var(--ink-2)); border: 1px solid var(--mana); transition: transform 0.4s var(--ease); }
+.cp-alt:hover { transform: translateY(-4px); }
+.cp-alt__img { aspect-ratio: 1; overflow: hidden; }
+.cp-alt__img img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1); }
+.cp-alt__txt { display: grid; gap: 6px; }
+.cp-alt__txt b { font-family: var(--f-display); font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 0.95; }
+.cp-alt__txt > span:not(.t-label):not(.cp-alt__g) { color: var(--bone-2); }
+.cp-alt__g { display: flex; flex-wrap: wrap; gap: 6px; }
+.cp-alt__g i { font-style: normal; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 8px; border: 1px solid var(--line-2); }
+@media (max-width: 760px) { .cp-alt { grid-template-columns: 90px 1fr; } .cp-alt > .btn { grid-column: 1 / -1; } }

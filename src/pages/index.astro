@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import Arrow from '../components/Arrow.astro';
 import PortalHome from '../components/portal/PortalHome.astro';
+import Destino from '../components/home/Destino.astro';
+import ComoJoga from '../components/home/ComoJoga.astro';
+import '../styles/home.css';
 import {
   site, paginas, capitulos, regioes, segundaVida, classesSociais, familias, classesMago, milagres, magias, estagios,
   confronto, primeirosPassos, generais, veioNegro, comecePorAqui, slugify,
@@ -113,27 +116,11 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <!-- COMECE POR AQUI -->
-  <section class="sec sec--tight start-sec">
-    <div class="wrap">
-      <div class="start-sec__head">
-        <span class="eyebrow" data-reveal><b>Novo aqui?</b>Comece por aqui</span>
-        <a class="btn" href="/indice/" data-reveal>Índice e glossário <Arrow /></a>
-      </div>
-      <ol class="start">
-        {comecePorAqui.map(([s, por], i) => (
-          <li data-reveal>
-            <a href={`/${s}/`}>
-              <span class="start__n">0{i + 1}</span>
-              <b>{porSlug[s].titulo}</b>
-              <span class="t-small">{por}</span>
-              <Arrow class="start__a" />
-            </a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
+  <!-- GIRE O SEU DESTINO: a criação em 30 segundos -->
+  <Destino />
+
+  <!-- O BÁSICO -->
+  <ComoJoga />
 
   <!-- PORTAL DO MARCADO -->
   <PortalHome />
@@ -256,44 +243,10 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <section class="sec sec--tight">
-    <div class="wrap">
-      <div class="grid" style="margin-bottom:clamp(32px,5vw,64px);align-items:end">
-        <p class="t-body c-1-7" data-reveal>Quando duas ações se encontram, o narrador compara nesta ordem e para no primeiro passo que decide. Sorteios só existem na criação de personagem.</p>
-        <div class="c-9-12" data-reveal><a class="btn" href="/atributos/">Testar o confronto <Arrow /></a></div>
-      </div>
-      <div class="nodice">
-        {confronto.map(([t, d], i) => (
-          <div data-reveal>
-            <b>Passo 0{i + 1}</b>
-            <div><h3>{t}</h3><p>{d}</p></div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
 
-  <section class="sec sec--tight idx" data-index-wrap>
-    <div class="wrap">
-      <ul class="index-list" data-index>
-        {pags('magia').map((p) => (
-          <li>
-            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
-              <span class="index-item__n">{p.num}</span>
-              <span class="index-item__t">{p.titulo}</span>
-              <span class="index-item__d">{p.resumo}</span>
-              <Arrow class="index-item__a" />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="index-preview" aria-hidden="true">
-      <div class="index-preview__frame">
-        {pags('magia').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
-      </div>
-    </div>
-  </section>
+  <nav class="sec sec--tight chap-links" aria-label="Páginas deste capítulo">
+    <div class="wrap"><ul>{pags('magia').map((p) => <li data-reveal><a href={`/${p.slug}/`}><span>{p.num}</span>{p.titulo}<Arrow /></a></li>)}</ul></div>
+  </nav>
 
   <!-- CAPÍTULO IV -->
   <section class="chap chap--paper" data-chap>
@@ -328,27 +281,9 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <section class="sec sec--tight idx chap--paper" data-index-wrap>
-    <div class="wrap">
-      <ul class="index-list" data-index>
-        {pags('progressao', 'aventura').map((p) => (
-          <li>
-            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
-              <span class="index-item__n">{p.num}</span>
-              <span class="index-item__t">{p.titulo}</span>
-              <span class="index-item__d">{p.resumo}</span>
-              <Arrow class="index-item__a" />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="index-preview" aria-hidden="true">
-      <div class="index-preview__frame">
-        {pags('progressao', 'aventura').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
-      </div>
-    </div>
-  </section>
+  <nav class="sec sec--tight chap-links chap--paper" aria-label="Páginas deste capítulo">
+    <div class="wrap"><ul>{pags('progressao', 'aventura').map((p) => <li data-reveal><a href={`/${p.slug}/`}><span>{p.num}</span>{p.titulo}<Arrow /></a></li>)}</ul></div>
+  </nav>
 
   <!-- CAPÍTULO V -->
   <section class="chap" data-chap>
@@ -361,50 +296,9 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <section class="sec sec--tight idx" data-index-wrap>
-    <div class="wrap">
-      <ul class="index-list" data-index>
-        {pags('sustento').map((p) => (
-          <li>
-            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
-              <span class="index-item__n">{p.num}</span>
-              <span class="index-item__t">{p.titulo}</span>
-              <span class="index-item__d">{p.resumo}</span>
-              <Arrow class="index-item__a" />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="index-preview" aria-hidden="true">
-      <div class="index-preview__frame">
-        {pags('sustento').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- CAPÍTULO VI -->
-  <section class="chap chap--paper" data-chap>
-    <span class="chap__num" aria-hidden="true" data-chap-num>VI</span>
-    <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.comecar.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo VI</b>Começar</span>
-      <h2 class="chap__title" data-split>O Despertar</h2>
-      <p class="chap__text" data-reveal>O bot cuida da criação, da ficha e das missões. Você cuida da história.</p>
-    </div>
-  </section>
-
-  <section class="sec sec--tight chap--paper">
-    <div class="wrap grid">
-      <div class="c-1-5 stack" style="--s:1.6rem">
-        <h3 class="t-h2" data-split>Do Discord à <em>primeira missão</em>.</h3>
-        <div data-reveal><a class="btn btn--solid" href="/comecar/" data-magnetic>Como criar <Arrow /></a></div>
-      </div>
-      <ol class="steps c-7-12">
-        {primeirosPassos.map(([t, d]) => <li data-reveal><div><h3>{t}</h3><p set:html={d.replace(/(\/[a-z-]+)/g, '<code>$1</code>')} /></div></li>)}
-      </ol>
-    </div>
-  </section>
+  <nav class="sec sec--tight chap-links" aria-label="Páginas deste capítulo">
+    <div class="wrap"><ul>{pags('sustento').map((p) => <li data-reveal><a href={`/${p.slug}/`}><span>{p.num}</span>{p.titulo}<Arrow /></a></li>)}</ul></div>
+  </nav>
 
   <section class="awaken" data-awaken>
     <div class="awaken__img" data-awaken-img><img src="/img/comecar/capa.jpg" alt="" loading="lazy" /></div>

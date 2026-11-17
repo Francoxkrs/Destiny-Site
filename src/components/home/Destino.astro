@@ -1,0 +1,176 @@
+---
+/**
+ * "Gire o seu destino": uma prévia do /criar-personagem na home.
+ * Usa as mesmas chances do Cânone (raça 85/8/7, família Comum 6 e Rara 1, magia 45/27/15/9/4, grimório 92/8).
+ * Não grava nada: só ensina como a criação funciona e dá a vontade de criar o de verdade.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { familias, magias, site, slugify } from '../../data/canon.js';
+import { arvores } from '../../data/arvores.js';
+
+const tem = (p) => fs.existsSync(path.join(process.cwd(), 'public', p));
+const racas = [['Humanos', 85, 'Humano'], ['Anões', 8, 'Anão'], ['Bruxas', 7, 'Bruxa']].map(([nome, peso, um]) => ({
+  nome, um, peso, img: `/img/racas/${slugify(nome)}.jpg`,
+  familias: familias.filter((f) => f.raca === nome && f.raridade !== 'Sorteio').map((f) => ({
+    nome: f.nome, peso: f.raridade === 'Rara' ? 1 : 6, rara: f.raridade === 'Rara', classe: f.classe, origem: f.origem, lema: f.lema,
+    brasao: tem(`img/brasoes/${slugify(f.nome)}.svg`) ? `/img/brasoes/${slugify(f.nome)}.svg` : null,
+  })),
+}));
+const dados = {
+  racas,
+  classes: arvores.map((a) => ({ nome: a.nome, kanji: a.kanji, cor: a.cor, papel: a.papel, img: a.img })),
+  magias: magias.filter((m) => m.chance).map((m) => ({ raridade: m.raridade, chance: m.chance, lista: m.lista })),
+  grimorios: [{ nome: 'Comum', peso: 92, img: '/img/grimorios/comum.jpg' }, { nome: 'Lendário', peso: 8, img: '/img/grimorios/lendario.jpg' }],
+};
+const cartas = [
+  ['raca', '種', 'Raça'],
+  ['familia', '家', 'Família'],
+  ['classe', '職', 'Classe de Mago'],
+  ['magia', '魔', 'Magia'],
+  ['grimorio', '書', 'Grimório'],
+];
+---
+<section class="ds" aria-labelledby="ds-t" data-destino>
+  <div class="ds__fundo" aria-hidden="true"><span>運</span></div>
+  <div class="wrap">
+    <header class="ds__hd">
+      <span class="eyebrow" data-reveal><b>運</b>Seu Marcado em 30 segundos</span>
+      <h2 id="ds-t" class="ds__t" data-split>Que destino a mana <em>te dá</em>?</h2>
+      <p class="ds__lead" data-reveal>Ninguém escolhe com quem renasce. No Discord, o bot sorteia sua raça, família, classe e magia. Gire aqui e sinta como é: <b>as chances são as mesmas do bot</b>.</p>
+    </header>
+
+    <ol class="ds__mesa" data-mesa>
+      {cartas.map(([id, k, rotulo], i) => (
+        <li class="ds-c" data-carta={id} style={`--i:${i}`}>
+          <div class="ds-c__in">
+            <div class="ds-c__verso" aria-hidden="true">
+              <span class="ds-c__k">{k}</span>
+              <span class="ds-c__q">?</span>
+              <span class="ds-c__r">{rotulo}</span>
+            </div>
+            <div class="ds-c__frente">
+              <div class="ds-c__img" data-img></div>
+              <p class="ds-c__rot">{rotulo}</p>
+              <p class="ds-c__nome" data-nome>—</p>
+              <p class="ds-c__info" data-info></p>
+            </div>
+          </div>
+          <span class="ds-c__rar" data-rar></span>
+        </li>
+      ))}
+    </ol>
+
+    <div class="ds__acoes">
+      <button class="btn btn--solid ds__girar" type="button" data-girar><span data-girar-t>Girar o destino</span></button>
+      <p class="ds__cont t-label" data-cont aria-live="polite"></p>
+    </div>
+
+    <div class="ds__fim" data-fim hidden>
+      <p class="ds__frase" data-frase></p>
+      <p class="ds__nota">Isso foi uma prévia. No <b>/criar-personagem</b> o bot monta <b>três modelos</b>, você gira as magias e escolhe o que mais combina com a história que quer escrever.</p>
+      <div class="ds__cta">
+        <a class="btn btn--solid" href={site.discord} target="_blank" rel="noopener">Criar o meu de verdade</a>
+        <a class="btn" href="/comecar/">Como a criação funciona</a>
+      </div>
+    </div>
+  </div>
+  <div class="ds__flash" aria-hidden="true" data-flash></div>
+  <script is:inline type="application/json" data-destino-dados set:html={JSON.stringify(dados)}></script>
+</section>
+
+<script>
+  type Fam = { nome: string; peso: number; rara: boolean; classe: string; origem: string; lema: string; brasao: string | null };
+  type Dados = {
+    racas: { nome: string; um: string; peso: number; img: string; familias: Fam[] }[];
+    classes: { nome: string; kanji: string; cor: string; papel: string; img: string }[];
+    magias: { raridade: string; chance: number; lista: string[] }[];
+    grimorios: { nome: string; peso: number; img: string }[];
+  };
+  const raiz = document.querySelector<HTMLElement>('[data-destino]');
+  if (raiz) {
+    const D = JSON.parse(raiz.querySelector('[data-destino-dados]')!.textContent!) as Dados;
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pesa = <T,>(l: T[], peso: (x: T) => number) => { const t = l.reduce((s, x) => s + peso(x), 0); let r = Math.random() * t; for (const x of l) { r -= peso(x); if (r <= 0) return x; } return l[l.length - 1]; };
+    const um = <T,>(l: T[]) => l[Math.floor(Math.random() * l.length)];
+    const espera = (ms: number) => new Promise((r) => setTimeout(r, reduz ? 0 : ms));
+    const COR: Record<string, string> = { Comum: '#bdb6a6', Incomum: '#7fd6e3', Rara: '#6aa0ff', 'Épica': '#b77bff', 'Lendária': '#ff3b2e' };
+    const btn = raiz.querySelector<HTMLButtonElement>('[data-girar]')!;
+    const btnT = raiz.querySelector<HTMLElement>('[data-girar-t]')!;
+    const fim = raiz.querySelector<HTMLElement>('[data-fim]')!;
+    const flash = raiz.querySelector<HTMLElement>('[data-flash]')!;
+    const cont = raiz.querySelector<HTMLElement>('[data-cont]')!;
+    let giros = 0;
+    try { giros = Number(localStorage.getItem('bd-destino-giros') ?? 0) || 0; } catch { /* sem armazenamento */ }
+    const contar = () => { cont.textContent = giros ? `${giros} ${giros === 1 ? 'destino girado' : 'destinos girados'} neste navegador` : ''; };
+    contar();
+
+    const carta = (id: string) => raiz.querySelector<HTMLElement>(`[data-carta="${id}"]`)!;
+    function vira(id: string, nome: string, info: string, img: string | null, rar?: string, cor?: string, kanji?: string) {
+      const c = carta(id);
+      c.querySelector<HTMLElement>('[data-nome]')!.textContent = nome;
+      c.querySelector<HTMLElement>('[data-info]')!.textContent = info;
+      const box = c.querySelector<HTMLElement>('[data-img]')!;
+      box.innerHTML = '';
+      if (img) { const im = new Image(); im.src = img; im.alt = ''; im.decoding = 'async'; box.append(im); }
+      if (kanji) { const k = document.createElement('span'); k.className = 'ds-c__glifo'; k.textContent = kanji; box.append(k); }
+      const r = c.querySelector<HTMLElement>('[data-rar]')!;
+      r.textContent = rar ?? '';
+      c.style.setProperty('--rc', cor ?? 'var(--bone)');
+      c.classList.add('is-virada');
+      c.classList.toggle('is-alta', ['Épica', 'Lendária', 'Lendário', 'Família Rara'].includes(rar ?? ''));
+    }
+    async function embaralha(id: string, nomes: string[], ms = 700) {
+      const c = carta(id);
+      c.classList.add('is-girando');
+      const q = c.querySelector<HTMLElement>('.ds-c__q')!;
+      const t0 = performance.now();
+      while (!reduz && performance.now() - t0 < ms) { q.textContent = um(nomes).slice(0, 14); await espera(60); }
+      q.textContent = '?';
+      c.classList.remove('is-girando');
+    }
+    function estoura(cor: string) {
+      if (reduz) return;
+      flash.style.setProperty('--fc', cor);
+      flash.classList.remove('is-on'); void flash.offsetWidth; flash.classList.add('is-on');
+    }
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      fim.hidden = true;
+      raiz.querySelectorAll('.ds-c').forEach((c) => c.classList.remove('is-virada', 'is-alta'));
+      await espera(380);
+      const raca = pesa(D.racas, (r) => r.peso);
+      await embaralha('raca', D.racas.map((r) => r.nome));
+      vira('raca', raca.um, raca.nome === 'Humanos' ? '85% das almas' : `${raca.peso}% das almas`, raca.img, raca.nome === 'Humanos' ? undefined : 'Raro', raca.nome === 'Humanos' ? undefined : '#7fd6e3');
+      await espera(260);
+      const fam = pesa(raca.familias, (f) => f.peso);
+      await embaralha('familia', raca.familias.map((f) => f.nome));
+      vira('familia', fam.nome, `${fam.classe} · alma de ${fam.origem}`, fam.brasao, fam.rara ? 'Família Rara' : undefined, fam.rara ? '#d6b46a' : undefined);
+      if (fam.rara) estoura('#d6b46a');
+      await espera(260);
+      const cl = um(D.classes);
+      await embaralha('classe', D.classes.map((c) => c.nome));
+      vira('classe', cl.nome, cl.papel, cl.img, undefined, cl.cor, cl.kanji);
+      await espera(260);
+      const rar = pesa(D.magias, (m) => m.chance);
+      const mg = um(rar.lista);
+      await embaralha('magia', D.magias.flatMap((m) => m.lista), 1100);
+      vira('magia', mg, `${rar.chance}% de chance`, null, rar.raridade, COR[rar.raridade], '魔');
+      if (rar.chance <= 15) estoura(COR[rar.raridade]);
+      await espera(260);
+      const gr = pesa(D.grimorios, (g) => g.peso);
+      await embaralha('grimorio', D.grimorios.map((g) => g.nome), 500);
+      vira('grimorio', gr.nome, gr.nome === 'Lendário' ? '8% de chance' : 'O de quase todos', gr.img, gr.nome === 'Lendário' ? 'Lendário' : undefined, gr.nome === 'Lendário' ? '#ff3b2e' : undefined);
+      if (gr.nome === 'Lendário') estoura('#ff3b2e');
+
+      raiz.querySelector<HTMLElement>('[data-frase]')!.innerHTML = `Você renasceria ${raca.nome === 'Humanos' ? 'Humano' : raca.um}, da família <b>${fam.nome}</b>, <b>${cl.nome}</b>, com <b>Magia de ${mg}</b> <em>(${rar.raridade})</em> num Grimório ${gr.nome}.`;
+      fim.hidden = false;
+      giros += 1;
+      try { localStorage.setItem('bd-destino-giros', String(giros)); } catch { /* sem armazenamento */ }
+      contar();
+      btnT.textContent = 'Girar de novo';
+      btn.disabled = false;
+    });
+  }
+</script>

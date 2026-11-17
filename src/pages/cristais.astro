@@ -5,6 +5,7 @@ import Cristal from '../components/portal/Cristal.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { banco } from '../lib/db.js';
 import { aprovado, moeda, primeiraCompra, pacotes, selo, presente, loja, nuncaAVenda, regras } from '../data/cristais.js';
+import { altar, garantia, inscricao } from '../data/altar.js';
 export const prerender = false;
 
 const sessao = lerSessao(Astro.cookies);
@@ -17,6 +18,19 @@ const fmt = new Intl.NumberFormat('pt-BR');
 const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const grupos = [...new Set(loja.map((i) => i.grupo))];
 const kanjiPremio = { moldura: '額', titulo: '名', classe: '魔' };
+const pctBonus = (p) => Math.round((p.bonus / p.base) * 100);
+const maxBonus = Math.max(...pacotes.map(pctBonus));
+const cpPorReal = (cp, r) => Math.round(cp / r);
+const seloVezes = Math.round((selo.total / selo.preco) / (pacotes[0].cp / pacotes[0].preco));
+// metas da calculadora: só itens que existem na loja e no Altar
+const metas = [
+  { id: 'i10', nome: '10 Inscrições do Altar', cp: inscricao.cp10 },
+  { id: 'passe', nome: 'Passe Premium da temporada', cp: loja.find((i) => i.nome.startsWith('Passe'))?.cp ?? 600 },
+  { id: 'lend', nome: `Lendário garantido (${garantia.lendario} Inscrições)`, cp: Math.ceil(garantia.lendario / 10) * inscricao.cp10 },
+  { id: 'atl', nome: 'Ateliê lendário animado', cp: 1200 },
+  { id: 'redef', nome: 'Redefinir a trilha', cp: 450 },
+  { id: 'classe', nome: 'Classe de Mago à escolha', cp: 900 },
+];
 ---
 <Base title="Cristais Prismáticos" slug="cristais" aba="cristais" description="Cristais Prismáticos: a moeda da sua conta no Black Destiny. Pacotes, Selo Mensal, presente para amigos e a loja da conta.">
   <div class="cp">
@@ -65,12 +79,43 @@ const kanjiPremio = { moldura: '額', titulo: '名', classe: '魔' };
             <p class="cp-pac__vol t-label">Nº {String(p.n).padStart(2, '0')}</p>
             <h3 class="cp-pac__nome">{p.nome}</h3>
             <p class="cp-pac__cp"><b>{fmt.format(p.cp)}</b> CP</p>
-            <p class="cp-pac__bonus">{p.bonus ? <><span>+{fmt.format(p.bonus)}</span> de bônus</> : 'Sem bônus'}</p>
+            <p class="cp-pac__bonus">{p.bonus ? <><span>+{fmt.format(p.bonus)}</span> de bônus · {pctBonus(p)}%</> : 'Sem bônus'}</p>
+            <span class="cp-pac__barra" style={`--b:${(pctBonus(p) / maxBonus) * 100}%`} aria-hidden="true"></span>
+            <p class="cp-pac__vale">≈ {Math.floor(p.cp / inscricao.cp)} {Math.floor(p.cp / inscricao.cp) === 1 ? 'Inscrição' : 'Inscrições'}<small>{cpPorReal(p.cp, p.preco)} CP por real</small></p>
             <button class="cp-pac__btn" type="button" disabled><span>{brl(p.preco)}</span><small>Em breve</small></button>
           </li>
         ))}
       </ul>
     </section>
+
+    <!-- calculadora -->
+    <section class="cp-calc wrap" aria-labelledby="cp-calc-t" data-calc data-pacotes={JSON.stringify(pacotes.map((p) => ({ nome: p.nome, cp: p.cp, preco: p.preco })))} data-selo={JSON.stringify(selo)}>
+      <div class="cp-calc__l">
+        <span class="eyebrow"><b>算</b>Calculadora</span>
+        <h2 id="cp-calc-t" class="t-h2">Do que você <em>precisa</em>?</h2>
+        <p class="t-body">Marque o que quer pegar. A calculadora soma os CP e acha o jeito mais barato de chegar lá, sem sobrar dinheiro na mesa.</p>
+        <ul class="cp-metas">
+          {metas.map((m) => <li><label><input type="checkbox" value={m.cp} data-meta={m.id} /><span>{m.nome}</span><em>{fmt.format(m.cp)} CP</em></label></li>)}
+        </ul>
+      </div>
+      <div class="cp-calc__r" aria-live="polite">
+        <p class="t-label">Você precisa de</p>
+        <p class="cp-calc__total"><b data-total>0</b> CP</p>
+        <div class="cp-calc__plano" data-plano><p class="cp-calc__vazio">Marque pelo menos um item.</p></div>
+      </div>
+    </section>
+
+    <!-- vitrine do Altar -->
+    <a class="cp-alt wrap" href="/altar/">
+      <span class="cp-alt__img"><img src={altar.destaque.img} alt="" loading="lazy" /></span>
+      <span class="cp-alt__txt">
+        <span class="t-label">{altar.temporada} · Destaque{altar.proposta ? ' (proposta)' : ''}</span>
+        <b>{altar.destaque.nome}</b>
+        <span>{altar.destaque.texto}</span>
+        <span class="cp-alt__g"><i>Garantido na {garantia.lendario}ª Inscrição</i><i>Sem 50/50</i><i>Chances sempre à vista</i></span>
+      </span>
+      <span class="btn btn--solid tr-sm">Ver o Altar <Arrow /></span>
+    </a>
 
     <!-- selo e presente -->
     <section class="cp-duo wrap">
@@ -84,6 +129,7 @@ const kanjiPremio = { moldura: '額', titulo: '名', classe: '魔' };
           {Array.from({ length: 6 }, (_, i) => <li><b>+{selo.porDia}</b><small>dia {i + 1}</small></li>)}
           <li class="is-mais"><b>…</b><small>até o dia {selo.dias}</small></li>
         </ol>
+        <p class="cp-selo__vale">{seloVezes}× mais CP por real que a Lasca, se você usar /selo todo dia.</p>
         <p class="t-small">{selo.texto}</p>
         <button class="cp-pac__btn" type="button" disabled><span>{brl(selo.preco)}</span><small>Em breve</small></button>
       </article>
@@ -128,3 +174,44 @@ const kanjiPremio = { moldura: '額', titulo: '名', classe: '魔' };
     </section>
   </div>
 </Base>
+
+<script>
+  const c = document.querySelector<HTMLElement>('[data-calc]');
+  if (c) {
+    type P = { nome: string; cp: number; preco: number };
+    const P = JSON.parse(c.dataset.pacotes!) as P[];
+    const S = JSON.parse(c.dataset.selo!) as { total: number; preco: number };
+    const fmt = new Intl.NumberFormat('pt-BR');
+    const brl = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    // o combo mais barato que alcança a meta (até 4 de cada pacote; a lista é pequena)
+    function melhor(meta: number) {
+      let best: { q: number[]; preco: number; cp: number } | null = null;
+      const q = new Array(P.length).fill(0);
+      const rec = (i: number, cp: number, preco: number) => {
+        if (best && preco >= best.preco) return;
+        if (cp >= meta) { best = { q: [...q], preco, cp }; return; }
+        if (i === P.length) return;
+        for (let n = 0; n <= 4; n++) { q[i] = n; rec(i + 1, cp + n * P[i].cp, preco + n * P[i].preco); }
+        q[i] = 0;
+      };
+      rec(0, 0, 0);
+      return best as { q: number[]; preco: number; cp: number } | null;
+    }
+    const plano = c.querySelector<HTMLElement>('[data-plano]')!;
+    const tot = c.querySelector<HTMLElement>('[data-total]')!;
+    const roda = () => {
+      const meta = [...c.querySelectorAll<HTMLInputElement>('[data-meta]:checked')].reduce((s, i) => s + Number(i.value), 0);
+      tot.textContent = fmt.format(meta);
+      if (!meta) { plano.innerHTML = '<p class="cp-calc__vazio">Marque pelo menos um item.</p>'; return; }
+      const b = melhor(meta);
+      if (!b) { plano.innerHTML = '<p class="cp-calc__vazio">Passa do que dá para comprar de uma vez.</p>'; return; }
+      const itens = b.q.map((n, i) => (n ? `<li><b>${n}×</b> ${P[i].nome}<span>${brl(n * P[i].preco)}</span></li>` : '')).join('');
+      const sobra = b.cp - meta;
+      const teto = b.preco > 150 ? '<p class="cp-calc__nota">Passa do teto de R$ 150 por mês: dá para dividir em dois meses.</p>' : '';
+      const seloDica = meta <= S.total ? `<p class="cp-calc__nota">Sem pressa? O Selo Mensal (${brl(S.preco)}) junta ${fmt.format(S.total)} CP em 30 dias.</p>` : '';
+      plano.innerHTML = `<ul>${itens}</ul><p class="cp-calc__preco"><span>Total</span><b>${brl(b.preco)}</b></p><p class="cp-calc__sobra">${sobra ? `Sobram ${fmt.format(sobra)} CP na conta.` : 'Sem sobra.'}</p>${teto}${seloDica}`;
+    };
+    c.addEventListener('change', roda);
+    roda();
+  }
+</script>

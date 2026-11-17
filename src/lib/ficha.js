@@ -20,6 +20,10 @@
  *   conhecimentos: string[], tracos: string[], tecnicas: string[],
  *   feiticos: { nome: string, tipo?: string, estagio?: number, imagem?: string | null }[],
  *   historia: { vidaPassada?: string, renascimento?: string, personalidade?: string },
+ *   // opcionais (o site mostra o que vier; sem eles, mostra o padrão da ficha do bot)
+ *   profissao?: string | null, riqueza?: string, racasHibrido?: string[], feiticosTotal?: number,
+ *   ferimentos?: { pior: 0 | 1 | 2 | 3 | 4, desnutrido?: boolean, casas: { grau: 1 | 2 | 3 | 4, ocupada: boolean, fome?: boolean }[] },
+ *   treinosLivres?: { fisico: [number, number], magico: [number, number], controle: [number, number], tecnica: [number, number] },
  * }} FichaWeb
  */
 import { banco } from './db.js';
@@ -51,6 +55,9 @@ export const fichaExemplo = {
     { nome: 'Veia Aberta', tipo: 'Suporte', estagio: 8 },
     { nome: 'Chuva de Agulhas', tipo: 'Ataque', estagio: 6 },
   ],
+  profissao: null, feiticosTotal: 7,
+  ferimentos: { pior: 1, desnutrido: false, casas: [{ grau: 1, ocupada: true }, { grau: 1, ocupada: false }, { grau: 1, ocupada: false }, { grau: 2, ocupada: false }, { grau: 2, ocupada: false }, { grau: 3, ocupada: false }, { grau: 4, ocupada: false }] },
+  treinosLivres: { fisico: [1, 2], magico: [2, 2], controle: [0, 1], tecnica: [1, 1] },
   historia: {
     vidaPassada: 'Herdeiro menor dos Zogratis em Spades, criado para obedecer à Tríade. Morreu na própria cerimônia de juramento, pela mão de um irmão.',
     renascimento: 'Acordou num quarto da Coroa com o mesmo sangue nas mãos e um Grimório que sussurra em duas vozes.',

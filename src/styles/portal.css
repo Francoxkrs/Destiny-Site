@@ -946,56 +946,103 @@ body:has(.hdr:not(.is-hidden)) .tr-indice { top: var(--hdr); }
 .tc-req li.is-ok { color: var(--bone); }
 .tc-req li.is-ok::before { content: '✓ '; color: var(--mana); }
 
-/* ---------- 03 · Estante dos Conhecimentos ---------- */
-.ce-vagas { display: grid; gap: 0; border-top: 2px solid var(--ink); counter-reset: v; }
-.ce-vagas li { border-bottom: 1px solid rgba(10, 10, 11, 0.15); }
-.ce-vagas button, .ce-vagas .is-vaga { width: 100%; display: flex; align-items: baseline; gap: 10px; padding: 7px 0; text-align: left; font-weight: 600; color: var(--ink); cursor: pointer; }
-.ce-vagas span { font-family: var(--f-mono); font-size: 10.5px; color: var(--mana-2); }
-.ce-vagas .is-vaga { color: rgba(10, 10, 11, 0.4); font-weight: 400; font-style: italic; cursor: default; }
-@media (hover: hover) { .ce-vagas button:hover { color: var(--mana-2); } }
-.ce-det { border-left-color: var(--mana); }
-.ce-det__h { margin-top: 4px; }
-.ce-links { display: flex; flex-wrap: wrap; gap: 8px; }
+/* ---------- 03 · Livro dos Conhecimentos ---------- */
+.lv-vagas { display: grid; border-top: 2px solid var(--ink); }
+.lv-vagas li { border-bottom: 1px solid rgba(10, 10, 11, 0.15); }
+.lv-vagas button, .lv-vagas .is-vaga { width: 100%; display: flex; align-items: baseline; gap: 10px; padding: 7px 0; text-align: left; font-weight: 600; color: var(--ink); cursor: pointer; }
+.lv-vagas span { font-family: var(--f-mono); font-size: 10.5px; color: var(--mana-2); }
+.lv-vagas .is-vaga { color: rgba(10, 10, 11, 0.4); font-weight: 400; font-style: italic; cursor: default; }
+@media (hover: hover) { .lv-vagas button:hover { color: var(--mana-2); } }
 
-.ce-palco { position: relative; display: grid; gap: clamp(26px, 3.4vw, 40px); padding: clamp(18px, 2.6vw, 34px); border: 2px solid var(--bone); background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 59, 46, 0.08), transparent 70%), var(--tone), var(--ink); background-size: auto, 5px 5px, auto; overflow: hidden; isolation: isolate; }
-.ce-palco::before, .ce-palco::after { content: ''; position: absolute; width: 26px; height: 26px; border: 2px solid var(--mana); z-index: 3; pointer-events: none; }
-.ce-palco::before { left: 10px; top: 10px; border-right: 0; border-bottom: 0; }
-.ce-palco::after { right: 10px; bottom: 10px; border-left: 0; border-top: 0; }
-.ce-palco__k { position: absolute; right: -3%; bottom: -12%; z-index: -1; font-family: var(--f-kanji); font-weight: 800; font-size: clamp(14rem, 30vw, 28rem); line-height: 1; color: transparent; -webkit-text-stroke: 1.5px rgba(241, 235, 223, 0.06); pointer-events: none; }
-.ce-prat__hd { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: center; margin-bottom: 14px; }
-.ce-prat__k { grid-row: 1 / 3; display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--mana); color: var(--mana); font-family: var(--f-kanji); font-weight: 800; font-size: 22px; line-height: 1; transform: rotate(-5deg); }
-.ce-prat__hd h3 { font-family: var(--f-display); font-weight: 800; font-size: 1.7rem; line-height: 1; display: flex; align-items: baseline; gap: 10px; }
-.ce-prat__hd small { font-family: var(--f-mono); font-size: 11px; color: var(--mute); }
-.ce-prat__hd p { font-size: 0.9rem; color: var(--mute); }
+.lv-mesa { position: relative; perspective: 2200px; padding-top: 60px; }
+.lv-livro { --pap: #ebe2cd; --tin: #2a1a0e; --ver: #b8221a; position: relative; padding: 14px; background: linear-gradient(135deg, #1b1416, #0e0b0c 60%, #1b1214); border: 1px solid rgba(255, 59, 46, 0.35); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px #000, inset 0 0 0 4px #0a0809, inset 0 0 0 5px rgba(220, 180, 101, 0.18); transform-style: preserve-3d; }
+.lv-livro::before, .lv-livro::after { content: ''; position: absolute; width: 34px; height: 34px; border: 3px solid var(--mana); z-index: 4; pointer-events: none; }
+.lv-livro::before { left: -4px; top: -4px; border-right: 0; border-bottom: 0; }
+.lv-livro::after { right: -4px; bottom: -4px; border-left: 0; border-top: 0; }
 
-/* as lombadas: cada livro em pé numa prateleira de tinta */
-.ce-livros { display: flex; flex-wrap: wrap; align-items: flex-end; row-gap: 34px; padding-top: 22px; }
-.ce-livros li { position: relative; padding: 0 3px; }
-.ce-livros li::after { content: ''; position: absolute; left: 0; right: 0; bottom: -7px; height: 5px; background: var(--bone); opacity: 0.85; clip-path: polygon(0 0, 100% 0, 100% 60%, 0 100%); }
-.ce-livro { --alt: 170px; position: relative; display: grid; grid-template-rows: auto 1fr auto; justify-items: center; gap: 8px; width: 46px; height: var(--alt); padding: 9px 0 8px; background: #19181c; color: var(--bone-2); border: 1.5px solid rgba(241, 235, 223, 0.32); cursor: pointer; transition: transform 0.45s var(--ease), background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s; }
-.ce-livro::before { content: ''; position: absolute; left: 5px; right: 5px; top: 38px; height: 2px; background: currentColor; opacity: 0.35; box-shadow: 0 5px 0 currentColor; }
-.ce-livro__k { font-family: var(--f-kanji); font-weight: 800; font-size: 15px; line-height: 1; color: var(--mana); }
-.ce-livro__t { writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--f-display); font-weight: 700; font-size: 1.02rem; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 100%; }
-.ce-livro__n { font-family: var(--f-mono); font-size: 9.5px; color: var(--mute); }
-.ce-prat[data-cat='incomum'] .ce-livro { background: #0d0d10; border-style: double; border-width: 3px; }
-.ce-prat[data-cat='perdido'] .ce-livro { background: #ebe0c7; color: #2a1a0e; border-color: #4a2f1b; width: 54px; }
-.ce-prat[data-cat='perdido'] .ce-livro__k { color: var(--mana-2); }
-.ce-livro.is-evento::after { content: '催'; position: absolute; top: -9px; right: -9px; width: 20px; height: 20px; display: grid; place-items: center; background: var(--ink); border: 1px solid var(--gold); color: var(--gold); font-family: var(--f-kanji); font-size: 11px; line-height: 1; }
-.ce-livros .ce-livro.is-tem { background: var(--mana); border-color: #ffb3a8; color: #fff; transform: translateY(-14px); box-shadow: 0 0 22px rgba(255, 59, 46, 0.45); }
-.ce-livros .ce-livro.is-tem .ce-livro__k, .ce-livros .ce-livro.is-tem .ce-livro__n { color: var(--ink); }
-.ce-livro.is-sel { transform: translateY(-14px) rotate(-5deg); border-color: var(--bone); color: var(--bone); }
-.ce-livro.is-tem.is-sel { transform: translateY(-22px) rotate(-5deg); color: #fff; }
-.ce-prat[data-cat='perdido'] .ce-livro.is-sel:not(.is-tem) { color: #2a1a0e; border-color: var(--mana); }
-@media (hover: hover) { .ce-livro:not(.is-sel):hover { transform: translateY(-10px); border-color: var(--bone); } .ce-livro.is-tem:not(.is-sel):hover { transform: translateY(-18px); } }
-.ce-livro:focus-visible { outline: 2px solid var(--mana); outline-offset: 3px; }
-.ce-proprios { font-size: 0.92rem; color: var(--bone-2); border-left: 2px solid var(--mana); padding-left: 12px; }
-.ce-proprios button { color: var(--bone); border-bottom: 1px solid var(--mana); cursor: pointer; }
-/* entrada: os livros caem na prateleira um atrás do outro */
-.ce-palco.is-espera .ce-livros li { opacity: 0; }
-.ce-palco.is-in .ce-livros li { animation: ceCai 0.6s cubic-bezier(0.3, 1.4, 0.5, 1) both; animation-delay: calc(var(--d, 0) * 28ms); }
-@keyframes ceCai { from { opacity: 0; transform: translateY(-40px) rotate(-8deg); } to { opacity: 1; transform: none; } }
-@media (max-width: 560px) { .ce-livro { width: 40px; height: calc(var(--alt) * 0.9); } .ce-livro__t { font-size: 0.92rem; } .ce-prat[data-cat='perdido'] .ce-livro { width: 46px; } }
-@media (prefers-reduced-motion: reduce) { .ce-palco.is-in .ce-livros li { animation: none; } }
+/* fitas-marcador penduradas no topo do livro */
+.lv-fitas { position: absolute; right: 40px; top: -60px; z-index: 5; display: flex; gap: 6px; }
+.lv-fita { position: relative; display: grid; justify-items: center; gap: 4px; width: 62px; height: 82px; padding: 8px 4px 22px; background: #2a2226; color: var(--bone-2); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 14px), 0 100%); cursor: pointer; transform-origin: top; transition: height 0.4s var(--ease), background 0.3s, color 0.3s; }
+.lv-fita span { font-family: var(--f-kanji); font-weight: 800; font-size: 19px; line-height: 1; }
+.lv-fita b { font-family: var(--f-mono); font-weight: 500; font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.15; text-align: center; }
+.lv-fita[aria-pressed='true'] { background: var(--mana); color: #fff; height: 98px; }
+.lv-fita:disabled { opacity: 0.35; cursor: default; }
+@media (hover: hover) { .lv-fita:not([aria-pressed='true']):not(:disabled):hover { height: 90px; color: var(--bone); } }
+.lv-fita:focus-visible { outline: 2px solid var(--bone); outline-offset: 2px; }
+
+.lv-folhas { position: relative; display: grid; grid-template-columns: 1fr 22px 1fr; min-height: 600px; transform-style: preserve-3d; }
+.lv-pag { position: relative; padding: clamp(28px, 3.4vw, 46px) clamp(22px, 3vw, 42px) 54px; background: var(--pap); color: var(--tin); backface-visibility: hidden; }
+.lv-pag::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 30% 10%, transparent 45%, rgba(90, 55, 25, 0.22)), repeating-linear-gradient(0deg, rgba(74, 47, 27, 0.035) 0 1px, transparent 1px 3px); }
+.lv-pag--esq { background: linear-gradient(90deg, var(--pap) 78%, #d8ccb0); box-shadow: -3px 0 0 #d9cfb8, -6px 0 0 #c9bea4, -8px 0 0 #0a0809; }
+.lv-pag--dir { background: linear-gradient(270deg, var(--pap) 78%, #d8ccb0); box-shadow: 3px 0 0 #d9cfb8, 6px 0 0 #c9bea4, 8px 0 0 #0a0809; }
+.lv-lombada { background: linear-gradient(90deg, #cfc2a4, #8f7f62 45%, #5d4f3a 50%, #8f7f62 55%, #cfc2a4); }
+.lv-folio { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; color: rgba(42, 26, 14, 0.55); }
+
+/* sumário */
+.lv-cap__n { display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ver); }
+.lv-cap__n span { display: grid; place-items: center; width: 30px; height: 30px; border: 1.5px solid var(--ver); font-family: var(--f-kanji); font-weight: 800; font-size: 15px; letter-spacing: 0; transform: rotate(-6deg); }
+.lv-cap__t { font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 3.2vw, 2.8rem); line-height: 0.95; margin: 10px 0 6px; color: #120c08; }
+.lv-cap__lead { font-size: 0.9rem; color: rgba(42, 26, 14, 0.7); padding-bottom: 12px; border-bottom: 2px solid var(--tin); margin-bottom: 8px; }
+.lv-sum { display: grid; }
+.lv-sum__i { width: 100%; display: flex; align-items: baseline; gap: 8px; padding: 4px 6px 4px 18px; position: relative; text-align: left; color: var(--tin); cursor: pointer; transition: background 0.25s, color 0.25s, padding 0.3s var(--ease); }
+.lv-sum__i::before { content: '▸'; position: absolute; left: 2px; color: var(--ver); opacity: 0; transform: translateX(-6px); transition: opacity 0.25s, transform 0.3s var(--ease); }
+.lv-sum__nome { font-weight: 600; display: inline-flex; align-items: baseline; gap: 6px; }
+.lv-sum__pontos { flex: 1; border-bottom: 2px dotted rgba(42, 26, 14, 0.3); transform: translateY(-4px); min-width: 16px; }
+.lv-sum__p { font-family: var(--f-mono); font-size: 11px; color: rgba(42, 26, 14, 0.6); }
+.lv-sum__i.is-tem .lv-sum__nome { color: var(--ver); }
+.lv-sum__i.is-tem .lv-sum__nome::after { content: '識'; display: inline-grid; place-items: center; width: 17px; height: 17px; background: var(--ver); color: var(--pap); font-family: var(--f-kanji); font-size: 10px; line-height: 1; transform: rotate(6deg); }
+.lv-sum__i.is-sel { background: rgba(184, 34, 26, 0.1); padding-left: 24px; }
+.lv-sum__i.is-sel::before { opacity: 1; transform: none; }
+@media (hover: hover) { .lv-sum__i:not(.is-sel):hover { background: rgba(42, 26, 14, 0.06); } }
+.lv-sum__i:focus-visible { outline: 2px solid var(--ver); outline-offset: -2px; }
+.lv-evento { font-style: normal; display: inline-grid; place-items: center; width: 17px; height: 17px; border: 1px solid #9a7a35; color: #7a5a1a; font-family: var(--f-kanji); font-size: 10px; line-height: 1; }
+
+/* página do Conhecimento */
+.lv-ent { position: sticky; top: calc(var(--hdr) + 90px); }
+.lv-ent__cat { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ver); padding-right: 80px; }
+.lv-ent__t { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.2rem, 3.6vw, 3.2rem); line-height: 0.95; margin: 12px 0 16px; color: #120c08; padding-right: 70px; display: flex; align-items: center; gap: 14px; text-wrap: balance; }
+.lv-cap1 { flex: none; display: grid; place-items: center; width: 1.25em; height: 1.25em; background: var(--ver); color: var(--pap); font-size: 0.9em; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%); }
+.lv-ent__txt { font-size: 1.06rem; line-height: 1.6; color: #2a1a0e; }
+.lv-ent__h { margin-top: 22px; padding-top: 12px; border-top: 1px solid rgba(42, 26, 14, 0.25); font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(42, 26, 14, 0.6); }
+.lv-como { display: grid; gap: 6px; margin-top: 10px; font-size: 0.95rem; }
+.lv-como li { display: flex; gap: 10px; }
+.lv-como li::before { content: '—'; color: var(--ver); font-weight: 700; }
+.lv-ent__st { margin-top: 18px; padding: 10px 12px; border: 1.5px solid var(--tin); font-size: 0.94rem; }
+.lv-ent__st[data-st='tem'] { background: #120c08; color: var(--pap); border-color: #120c08; }
+.lv-ent__st[data-st='livre'] { border-color: var(--ver); color: var(--ver); }
+.lv-ent__links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
+.lv-ent__links a { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tin); border-bottom: 1.5px solid var(--ver); padding-bottom: 2px; }
+@media (hover: hover) { .lv-ent__links a:hover { color: var(--ver); } }
+.lv-hanko { position: absolute; top: 52px; right: 24px; display: grid; place-items: center; width: 64px; height: 64px; border: 3px solid var(--ver); border-radius: 6px; color: var(--ver); font-family: var(--f-kanji); font-weight: 800; font-size: 22px; line-height: 1; writing-mode: vertical-rl; transform: rotate(9deg); mix-blend-mode: multiply; opacity: 0.88; animation: lvCarimbo 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+@keyframes lvCarimbo { from { transform: rotate(-10deg) scale(1.8); opacity: 0; } to { transform: rotate(9deg) scale(1); opacity: 0.88; } }
+
+/* entrada: o livro se abre */
+.lv-livro.is-fechado .lv-pag--esq { transform-origin: right center; transform: rotateY(175deg); opacity: 0; }
+.lv-livro.is-fechado .lv-pag--dir > * { opacity: 0; }
+.lv-livro.is-fechado .lv-fita { transform: scaleY(0.2); }
+.lv-livro.is-abrindo .lv-pag--esq { transform-origin: right center; animation: lvAbre 1.1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.lv-livro.is-abrindo .lv-pag--dir > * { animation: lvTinta 0.6s ease-out both; animation-delay: 0.6s; }
+.lv-livro.is-abrindo .lv-fita { animation: lvFita 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+.lv-livro.is-abrindo .lv-fita:nth-child(2) { animation-delay: 0.08s; } .lv-livro.is-abrindo .lv-fita:nth-child(3) { animation-delay: 0.16s; } .lv-livro.is-abrindo .lv-fita:nth-child(4) { animation-delay: 0.24s; }
+@keyframes lvAbre { from { transform: rotateY(175deg); opacity: 0; } 25% { opacity: 1; } to { transform: none; opacity: 1; } }
+@keyframes lvTinta { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes lvFita { from { transform: scaleY(0.2); } to { transform: none; } }
+
+@media (max-width: 760px) {
+  .lv-mesa { padding-top: 56px; }
+  .lv-livro { padding: 8px; }
+  .lv-fitas { right: 14px; left: 14px; justify-content: flex-end; top: -56px; }
+  .lv-fita { width: 25%; max-width: 70px; height: 76px; }
+  .lv-fita[aria-pressed='true'] { height: 88px; }
+  .lv-ent { position: static; }
+  .lv-folhas { grid-template-columns: 1fr; min-height: 0; }
+  .lv-lombada { height: 14px; background: linear-gradient(180deg, #cfc2a4, #8f7f62 45%, #5d4f3a 50%, #8f7f62 55%, #cfc2a4); }
+  .lv-pag--esq, .lv-pag--dir { box-shadow: none; background: var(--pap); padding-top: 64px; }
+  .lv-pag--dir { padding-top: 30px; }
+  .lv-livro.is-fechado .lv-pag--esq, .lv-livro.is-abrindo .lv-pag--esq { transform-origin: center bottom; }
+  @keyframes lvAbre { from { transform: rotateX(-80deg); opacity: 0; } to { transform: none; opacity: 1; } }
+}
+@media (prefers-reduced-motion: reduce) { .lv-hanko, .lv-livro.is-abrindo * { animation: none !important; } }
 
 /* ===================================================================
    Altar v2: o que cada banner gasta e entrega, Pedra com escolha de giro,

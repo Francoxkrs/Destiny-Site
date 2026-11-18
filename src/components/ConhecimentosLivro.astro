@@ -1,0 +1,227 @@
+---
+/**
+ * Livro dos Conhecimentos na página de árvores (terceira parada, depois da Classe e das Técnicas).
+ * Um livro aberto: fitas-marcador viram o capítulo (Seus, Comuns, Incomuns, Perdidos), a página da
+ * esquerda é o sumário do capítulo e a da direita é a página do Conhecimento escolhido, com o que ele
+ * faz e por onde chega (Estudo numa Biblioteca, Cápsula no Fosso, Pedra do Destino, giros, eventos).
+ * Trocar de Conhecimento vira a página. Só mostra: quem registra Estudos e Cápsulas é o bot.
+ */
+import { conhecimentos as C, capsulas } from '../data/canon.js';
+
+interface Props { ficha: any; real: boolean }
+const { ficha: f, real } = Astro.props;
+
+const LIMITE = 6;
+const SO_EVENTO = /\s*\(sorteios e eventos\)\s*$/;
+const preco = Object.fromEntries(capsulas.map(([n, , p]) => [n, p]));
+const tem = new Set<string>(f.conhecimentos ?? []);
+const slug = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+type Cat = 'comum' | 'incomum' | 'perdido' | 'proprio';
+type Item = { id: string; nome: string; cat: Cat; txt: string; dias?: string; soEvento?: boolean; pag: number };
+let pag = 0;
+const itens: Item[] = [
+  ...C.comuns.map(([nome, txt, dias]) => ({ id: slug(nome), nome, cat: 'comum' as Cat, txt, dias: String(dias), pag: ++pag })),
+  ...C.incomuns.map(([nome, txt]) => ({ id: slug(nome), nome, cat: 'incomum' as Cat, txt: txt.replace(SO_EVENTO, ''), soEvento: SO_EVENTO.test(txt), pag: ++pag })),
+  ...C.perdidos.map(([nome, txt]) => ({ id: slug(nome), nome, cat: 'perdido' as Cat, txt, pag: ++pag })),
+];
+const conhecido = new Set(itens.map((i) => i.nome));
+// o que o Marcado tem e não está nas listas veio de raça, classe, família ou evento
+const proprios: Item[] = [...tem].filter((n) => !conhecido.has(n)).map((nome) => ({ id: `x-${slug(nome)}`, nome, cat: 'proprio', txt: 'Conhecimento que veio da família, da raça, da classe ou de um evento. Não está nos livros do Grande Arquivo.', pag: ++pag }));
+const todos = [...itens, ...proprios];
+const meus = [...tem];
+const vagas = Math.max(0, LIMITE - meus.length);
+
+const CAP = {
+  seus: { k: '識', nome: real ? 'Os seus' : 'Os do exemplo', lead: real ? 'O que você já sabe.' : 'O que este Marcado de exemplo sabe.' },
+  comum: { k: '書', nome: 'Comuns', lead: 'Se estudam numa Biblioteca. Ao lado de cada um, os dias de Estudo.' },
+  incomum: { k: '稀', nome: 'Incomuns', lead: 'Nunca se estudam: chegam por giros, Cápsulas, sorteios e eventos. 催 = só em sorteios e eventos.' },
+  perdido: { k: '失', nome: 'Perdidos', lead: 'O que o mundo tentou esquecer. Só por encomenda ou evento.' },
+} as const;
+const CAT_NOME: Record<Cat, string> = { comum: '書 Comum', incomum: '稀 Incomum', perdido: '失 Perdido', proprio: '家 De família ou evento' };
+const capDe = (i: Item) => (tem.has(i.nome) ? 'seus' : i.cat === 'proprio' ? 'seus' : i.cat);
+const caps = Object.keys(CAP) as (keyof typeof CAP)[];
+const lista = (c: keyof typeof CAP) => (c === 'seus' ? todos.filter((i) => tem.has(i.nome)) : itens.filter((i) => i.cat === c));
+const diasN = (i: Item) => (i.dias ? i.dias.split('·')[0].trim() : '');
+
+const como = (i: Item) => {
+  if (i.cat === 'proprio') return ['Dado pela família, raça, classe ou evento'];
+  if (i.cat === 'comum') {
+    const n = diasN(i);
+    const estudo = i.dias!.includes('Grande Arquivo') ? `${n} dias de Estudo, só no Grande Arquivo de Valcristal` : `${n} ${n === '1' ? 'dia' : 'dias'} de Estudo numa Biblioteca`;
+    return [estudo, `Cápsula Direcionada Comum no Fosso · ${preco['Direcionada Comum']}`, `Cápsula Aleatória no Fosso · ${preco['Aleatória']} (80% de sair uma Comum)`, 'Pedra do Destino · 1 Inscrição (80% Comum)', 'Giros na criação, sorteios e eventos'];
+  }
+  if (i.cat === 'incomum') {
+    if (i.soEvento) return ['Só em sorteios e eventos', 'Não sai em Cápsula nem se estuda'];
+    return [`Cápsula Direcionada Incomum no Fosso · ${preco['Direcionada Incomum']}`, `Cápsula Aleatória no Fosso · ${preco['Aleatória']} (20% de sair uma Incomum)`, 'Pedra do Destino · 1 Inscrição (20% Incomum)', 'Giros na criação, sorteios e eventos', 'Nunca por Estudo'];
+  }
+  return [`Cápsula Perdida, sob encomenda no Fosso · ${preco['Perdida']}`, 'Sorteios e eventos'];
+};
+const status = (i: Item) => (tem.has(i.nome) ? `${real ? 'Você já tem' : 'Este exemplo já tem'} este Conhecimento.` : vagas ? `${real ? 'Você ainda tem' : 'Este exemplo ainda tem'} ${vagas} ${vagas === 1 ? 'vaga livre' : 'vagas livres'} de 6.` : 'As 6 vagas estão cheias. Só entra um novo se vier de família, raça, classe ou evento.');
+
+const capIni: keyof typeof CAP = meus.length ? 'seus' : 'comum';
+const primeiro = lista(capIni)[0] ?? itens[0];
+const dados = { real, vagas, itens: todos.map((i) => ({ id: i.id, nome: i.nome, cat: i.cat, catNome: CAT_NOME[i.cat], txt: i.txt, dias: diasN(i), pag: i.pag, tem: tem.has(i.nome), como: como(i), st: status(i) })) };
+const idDe = (nome: string) => todos.find((i) => i.nome === nome)?.id ?? '';
+---
+<div class="tr-corpo wrap lv" data-lv>
+  <aside class="tr-dos" aria-label="Seus Conhecimentos">
+    <div class="tr-dos__cartaz">
+      <p class="tr-dos__selo" aria-hidden="true">{real ? '本人' : '見本'}</p>
+      <p class="t-label">{real ? 'Seus Conhecimentos' : 'Conhecimentos de exemplo'}</p>
+      <p class="tr-dos__nome">{f.nome}<small>{meus.length} de {LIMITE} · o limite não cresce</small></p>
+      <ol class="lv-vagas" aria-label="Suas seis vagas">
+        {Array.from({ length: LIMITE }, (_, i) => meus[i]
+          ? <li><button type="button" data-lv-ir={idDe(meus[i])} data-lv-cap="seus"><span>{String(i + 1).padStart(2, '0')}</span>{meus[i]}</button></li>
+          : <li class="is-vaga"><span>{String(i + 1).padStart(2, '0')}</span>vaga</li>)}
+      </ol>
+      {!real && <p class="tr-dos__aviso">{f.nome}, de exemplo. <a href="/api/auth/login?volta=/arvores/%23conhecimentos">Entre com o Discord</a> para ver os seus.</p>}
+    </div>
+    <details class="tr-regras">
+      <summary>Como os Conhecimentos funcionam</summary>
+      <ul>
+        <li>Todo personagem tem no máximo <b>6</b>, de qualquer categoria, e esse limite não cresce.</li>
+        <li>Os que vêm de raça, classe, família ou evento não ocupam essas vagas.</li>
+        <li><b>Comuns</b> se estudam numa Biblioteca pelos dias indicados. O Científico só no Grande Arquivo de Valcristal.</li>
+        <li><b>Cápsulas</b> são vendidas no Fosso e ensinam na hora. Fora do RP, uma Cápsula também sai na Pedra do Destino por 1 Inscrição.</li>
+        <li>Conhecimentos abrem Profissões e a cura de Ferimentos. <a href="/conhecimentos/">Ver a página completa</a>.</li>
+      </ul>
+    </details>
+  </aside>
+
+  <section class="lv-mesa" aria-label="Livro dos Conhecimentos">
+    <div class="lv-livro" data-lv-livro>
+      <!-- fitas-marcador: viram o capítulo -->
+      <nav class="lv-fitas" aria-label="Capítulos">
+        {caps.map((c) => (
+          <button type="button" class="lv-fita" data-lv-fita={c} aria-pressed={c === capIni ? 'true' : 'false'} disabled={c === 'seus' && !meus.length}>
+            <span aria-hidden="true">{CAP[c].k}</span><b>{CAP[c].nome}</b>
+          </button>
+        ))}
+      </nav>
+
+      <div class="lv-folhas">
+        <!-- página esquerda: sumário do capítulo -->
+        <div class="lv-pag lv-pag--esq" data-lv-esq>
+          {caps.map((c) => (
+            <div class="lv-cap" data-lv-sumario={c} hidden={c !== capIni}>
+              <p class="lv-cap__n"><span aria-hidden="true">{CAP[c].k}</span>Capítulo {caps.indexOf(c) + 1}</p>
+              <h3 class="lv-cap__t">{CAP[c].nome}</h3>
+              <p class="lv-cap__lead">{CAP[c].lead}</p>
+              <ol class="lv-sum">
+                {lista(c).map((i) => (
+                  <li>
+                    <button type="button" class:list={['lv-sum__i', tem.has(i.nome) && 'is-tem', i.id === primeiro.id && 'is-sel']} data-lv-item={i.id}>
+                      <span class="lv-sum__nome">{i.nome}{i.soEvento && <i class="lv-evento" title="Só em sorteios e eventos">催</i>}</span>
+                      <span class="lv-sum__pontos" aria-hidden="true"></span>
+                      <span class="lv-sum__p">{c === 'comum' ? `${diasN(i)}d` : c === 'seus' ? CAT_NOME[i.cat].split(' ')[0] : i.pag}</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+          <p class="lv-folio">{'識'}</p>
+        </div>
+
+        <div class="lv-lombada" aria-hidden="true"></div>
+
+        <!-- página direita: o Conhecimento escolhido -->
+        <article class="lv-pag lv-pag--dir" data-lv-dir aria-live="polite">
+          <div class="lv-ent">
+          <p class="lv-ent__cat" data-lv-cat>{CAT_NOME[primeiro.cat]}{primeiro.dias ? ` · ${diasN(primeiro)} dias de Estudo` : ''}</p>
+          <h3 class="lv-ent__t" data-lv-nome><span class="lv-cap1" aria-hidden="true">{primeiro.nome[0]}</span>{primeiro.nome}</h3>
+          <p class="lv-ent__txt" data-lv-txt>{primeiro.txt}</p>
+          <p class="lv-ent__h">Como conseguir</p>
+          <ul class="lv-como" data-lv-como>{como(primeiro).map((c) => <li>{c}</li>)}</ul>
+          <p class="lv-ent__st" data-lv-st data-st={tem.has(primeiro.nome) ? 'tem' : 'livre'}>{status(primeiro)}</p>
+          <div class="lv-ent__links">
+            <a href="/conhecimentos/#capsulas">Cápsulas no Fosso →</a>
+            <a href="/altar/#pedra">Pedra do Destino →</a>
+          </div>
+          </div>
+          <span class="lv-hanko" data-lv-hanko hidden={!tem.has(primeiro.nome)} aria-hidden="true">習得</span>
+          <p class="lv-folio" data-lv-folio>{primeiro.pag}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+  <script is:inline type="application/json" id="lv-dados" set:html={JSON.stringify(dados)}></script>
+</div>
+
+<script>
+  type It = { id: string; nome: string; cat: string; catNome: string; txt: string; dias: string; pag: number; tem: boolean; como: string[]; st: string };
+  const box = document.querySelector<HTMLElement>('[data-lv]');
+  if (box) {
+    const D = JSON.parse(document.getElementById('lv-dados')!.textContent!) as { real: boolean; vagas: number; itens: It[] };
+    const q = (s: string) => box.querySelector<HTMLElement>(s)!;
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const esq = q('[data-lv-esq]'), dir = q('[data-lv-dir]');
+    let atual = (box.querySelector<HTMLElement>('.lv-sum__i.is-sel')?.dataset.lvItem) ?? '';
+    let cap = box.querySelector<HTMLElement>('[aria-pressed="true"]')?.dataset.lvFita ?? 'comum';
+    let virando: Promise<unknown> = Promise.resolve();
+
+    // vira uma página: dobra até a lombada, troca o texto e abre do outro lado
+    const vira = (el: HTMLElement, lado: 1 | -1, troca: () => void) => {
+      if (reduz || !el.animate) { troca(); return Promise.resolve(); }
+      const ori = lado === 1 ? 'left center' : 'right center';
+      el.style.transformOrigin = ori;
+      const a = el.animate([{ transform: 'rotateY(0)', filter: 'brightness(1)' }, { transform: `rotateY(${-88 * lado}deg)`, filter: 'brightness(.7)' }], { duration: 230, easing: 'cubic-bezier(.55,0,.8,.4)' });
+      return a.finished.then(() => {
+        troca();
+        return el.animate([{ transform: `rotateY(${88 * lado}deg)`, filter: 'brightness(.7)' }, { transform: 'rotateY(0)', filter: 'brightness(1)' }], { duration: 300, easing: 'cubic-bezier(.2,.6,.3,1)' }).finished;
+      });
+    };
+
+    const pinta = (it: It) => {
+      q('[data-lv-cat]').textContent = it.dias ? `${it.catNome} · ${it.dias} dias de Estudo` : it.catNome;
+      const t = q('[data-lv-nome]');
+      t.innerHTML = '';
+      const c1 = document.createElement('span'); c1.className = 'lv-cap1'; c1.setAttribute('aria-hidden', 'true'); c1.textContent = it.nome[0];
+      t.append(c1, it.nome);
+      q('[data-lv-txt]').textContent = it.txt;
+      const ul = q('[data-lv-como]'); ul.innerHTML = '';
+      it.como.forEach((c) => { const li = document.createElement('li'); li.textContent = c; ul.append(li); });
+      const s = q('[data-lv-st]'); s.dataset.st = it.tem ? 'tem' : D.vagas ? 'livre' : 'cheio'; s.textContent = it.st;
+      q('[data-lv-hanko]').hidden = !it.tem;
+      q('[data-lv-folio]').textContent = String(it.pag);
+    };
+
+    const marca = () => box.querySelectorAll<HTMLElement>('[data-lv-item]').forEach((b) => b.classList.toggle('is-sel', b.dataset.lvItem === atual));
+
+    const abre = (id: string) => {
+      if (id === atual) return;
+      const it = D.itens.find((x) => x.id === id); if (!it) return;
+      const ant = D.itens.find((x) => x.id === atual);
+      atual = id; marca();
+      virando = virando.then(() => vira(dir, it.pag >= (ant?.pag ?? 0) ? 1 : -1, () => pinta(it)));
+    };
+
+    const capitulo = (c: string, depois?: string) => {
+      const lista = box.querySelector<HTMLElement>(`[data-lv-sumario="${c}"]`); if (!lista) return;
+      const ordem = ['seus', 'comum', 'incomum', 'perdido'];
+      const lado = ordem.indexOf(c) >= ordem.indexOf(cap) ? 1 : -1;
+      box.querySelectorAll<HTMLElement>('[data-lv-fita]').forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.lvFita === c)));
+      const mudou = c !== cap; cap = c;
+      const alvo = depois ?? lista.querySelector<HTMLElement>('[data-lv-item]')?.dataset.lvItem;
+      if (mudou) virando = virando.then(() => vira(esq, lado === 1 ? -1 : 1, () => box.querySelectorAll<HTMLElement>('[data-lv-sumario]').forEach((s) => (s.hidden = s.dataset.lvSumario !== c))));
+      if (alvo) abre(alvo);
+    };
+
+    box.addEventListener('click', (e) => {
+      const el = (e.target as Element).closest<HTMLElement>('[data-lv-item], [data-lv-fita], [data-lv-ir]');
+      if (!el) return;
+      if (el.dataset.lvFita) capitulo(el.dataset.lvFita);
+      else if (el.dataset.lvIr) { capitulo(el.dataset.lvCap!, el.dataset.lvIr); q('[data-lv-livro]').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      else { abre(el.dataset.lvItem!); if (matchMedia('(max-width: 760px)').matches) dir.scrollIntoView({ block: 'start', behavior: reduz ? 'auto' : 'smooth' }); }
+    });
+
+    // entrada: o livro se abre quando aparece na tela
+    const livro = q('[data-lv-livro]');
+    if (!reduz && 'IntersectionObserver' in window) {
+      livro.classList.add('is-fechado');
+      const io = new IntersectionObserver((es) => { if (es.some((x) => x.isIntersecting)) { io.disconnect(); livro.classList.remove('is-fechado'); livro.classList.add('is-abrindo'); } }, { threshold: 0.3 });
+      io.observe(livro);
+    }
+  }
+</script>

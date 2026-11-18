@@ -11,10 +11,12 @@ const limpa = (t) => t.replace(/<[^>]+>/g, ' ').replace(/&amp;/g, '&').replace(/
 const slug = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
 function indiceDeBusca() {
+  let base;
   return {
     name: 'bd-busca',
     hooks: {
-      'astro:build:done': ({ dir }) => {
+      'astro:config:done': ({ config }) => { base = config.site; },
+      'astro:build:done': async ({ dir }) => {
         const raiz = fileURLToPath(dir);
         const saida = [];
         for (const pasta of fs.readdirSync(raiz)) {
@@ -32,13 +34,39 @@ function indiceDeBusca() {
             saida.push({ t: limpa(rotulo), d: [titulo, texto].filter(Boolean).join(' · '), c: pagina, u: `/${pasta}/#${id}` });
           }
         }
+        // Páginas do Portal que rodam no servidor não estão no build: as seções delas entram à mão.
+        const { loja } = await import('./src/data/cristais.js');
+        const { tecnicasArvore } = await import('./src/data/tecnicas-arvore.js');
+        saida.push(
+          { t: 'Trilha da Classe', d: 'A árvore de habilidades da sua Classe de Mago', c: 'Árvores', u: '/arvores/#classe' },
+          { t: 'Técnicas de Mana', d: 'O Leque do Despertar: as técnicas por Estágio e Controle', c: 'Árvores', u: '/arvores/#tecnicas' },
+          { t: 'Conhecimentos', d: 'O livro dos Conhecimentos: as 6 vagas e como conseguir cada um', c: 'Árvores', u: '/arvores/#conhecimentos' },
+          ...tecnicasArvore.map((x) => ({ t: x.nome, d: `Técnica de Mana · ${x.estagio}º Estágio · Controle ${x.controle}%`, c: 'Árvores', u: '/arvores/#tecnicas' })),
+          { t: 'Pacotes de Cristais', d: 'Os 6 pacotes de Cristais Prismáticos', c: 'Cristais Prismáticos', u: '/cristais/#cp-pac' },
+          { t: 'Calculadora de Cristais', d: 'Quanto custa chegar no que você quer', c: 'Cristais Prismáticos', u: '/cristais/#cp-calc-t' },
+          ...loja.map((x) => ({ t: x.nome, d: `Loja da conta · ${x.cp} CP${x.limite ? ` · ${x.limite}` : ''}`, c: 'Cristais Prismáticos', u: '/cristais/#cp-loja' })),
+          { t: 'Perfil e Poder', d: 'Estágio, Mana, atributos e Ferimentos do seu Marcado', c: 'Ficha', u: '/ficha/#gv-perfil' },
+          { t: 'Feitiços', d: 'Os feitiços do Grimório na sua ficha', c: 'Ficha', u: '/ficha/#gv-feiticos' },
+          { t: 'História', d: 'A história do Marcado na ficha', c: 'Ficha', u: '/ficha/#gv-historia' },
+        );
         fs.writeFileSync(path.join(raiz, 'busca.json'), JSON.stringify(saida));
+        // sitemap.xml e a linha Sitemap do robots.txt (só quando o endereço público é conhecido)
+        if (base) {
+          const paginas = ['', ...fs.readdirSync(raiz).filter((p) => p !== '404' && fs.existsSync(path.join(raiz, p, 'index.html'))), 'ficha', 'arvores', 'cristais'];
+          const urls = [...new Set(paginas)].map((p) => `<url><loc>${new URL(p ? `/${p}/` : '/', base).href}</loc></url>`).join('');
+          fs.writeFileSync(path.join(raiz, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
+          fs.appendFileSync(path.join(raiz, 'robots.txt'), `Sitemap: ${new URL('/sitemap.xml', base).href}\n`);
+        }
       },
     },
   };
 }
 
+// Endereço público (a Vercel informa no build). Serve para a imagem de prévia do link e o sitemap.
+const dominio = process.env.SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined);
+
 export default defineConfig({
+  site: dominio,
   // Páginas estáticas por padrão; Ficha, Árvores, Cristais e /api/* rodam no servidor (export const prerender = false).
   output: 'static',
   adapter: vercel(),

@@ -33,14 +33,14 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
       {[altar, pedra].map((b, i) => (
         <div class="al-banner" data-banner={b.id} hidden={i > 0}>
           <div class="al-banner__arte" aria-hidden="true">
-            <img src={b.id === 'pedra' ? '/img/grimorios/lendario.jpg' : altar.destaque.img} alt="" fetchpriority={i ? undefined : 'high'} />
+            <img src={b.id === 'pedra' ? '/img/grimorios/lendario.webp' : altar.destaque.img} alt="" fetchpriority={i ? undefined : 'high'} />
             <svg class="al-banner__corte" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="58,0 100,0 100,100 34,100" /></svg>
           </div>
           <span class="al-banner__k" aria-hidden="true">{b.kanji}</span>
           <div class="wrap al-banner__in">
             <div class="al-info">
               <span class="eyebrow"><b>{b.kanji}</b>{b.id === 'pedra' ? 'Giros de sempre' : altar.temporada}</span>
-              <h1 class="al-info__t">{b.id === 'pedra' ? <>Pedra do <em>Destino</em></> : <>Altar dos <em>Vestígios</em></>}</h1>
+              {i === 0 ? <h1 class="al-info__t">Altar dos <em>Vestígios</em></h1> : <h2 class="al-info__t">Pedra do <em>Destino</em></h2>}
               <p class="al-info__p">{b.texto}</p>
               <dl class="al-trato">
                 <div><dt>Gasta</dt><dd>{b.id === 'pedra' ? '1 a 15 Inscrições por giro' : '1 Inscrição por invocação'}</dd></div>
@@ -88,7 +88,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
       <!-- troca de banner, no alto (como os ícones de banner dos gachas) -->
       <div class="al-troca" role="tablist" aria-label="Banners">
         <button role="tab" aria-selected="true" data-troca="vestigios"><img src={altar.destaque.img} alt="" /><span>Altar dos Vestígios<small>Visual da temporada</small></span></button>
-        <button role="tab" aria-selected="false" data-troca="pedra"><img src="/img/grimorios/lendario.jpg" alt="" /><span>Pedra do Destino<small>Giros da ficha</small></span></button>
+        <button role="tab" aria-selected="false" data-troca="pedra"><img src="/img/grimorios/lendario.webp" alt="" /><span>Pedra do Destino<small>Giros da ficha</small></span></button>
       </div>
 
       <div class="al-saldo" aria-label="Seu saldo">

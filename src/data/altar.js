@@ -29,7 +29,7 @@ export const altar = {
     nome: 'Capa do Miasma',
     tipo: 'Capa de grimório animada',
     texto: 'A capa do grimório se desfaz em névoa negra na sua ficha, no Discord e aqui no site.',
-    img: '/img/grimorios/demoniaco.jpg',
+    img: '/img/grimorios/demoniaco.webp',
   },
   texto: 'O gacha da temporada. Tudo o que sai aqui é visual: nada do Altar muda números da ficha. Repetidos viram Fragmentos de Vestígio, e 400 Fragmentos compram o Lendário de uma temporada passada.',
   regras: [
@@ -39,7 +39,7 @@ export const altar = {
     'Nada do Altar se troca entre jogadores.',
   ],
   premios: {
-    lendario: [{ nome: 'Capa do Miasma', tipo: 'Capa de grimório animada', img: '/img/grimorios/demoniaco.jpg' }],
+    lendario: [{ nome: 'Capa do Miasma', tipo: 'Capa de grimório animada', img: '/img/grimorios/demoniaco.webp' }],
     // Épicos e Raros sem arte própria ainda: a carta mostra o kanji do item (k) até a arte chegar.
     epico: [
       { nome: 'Título da Temporada', tipo: 'Título', k: '名' },

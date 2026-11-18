@@ -9,10 +9,10 @@ const ultimo = patches[0];
 const vivos = eventos.filter((e) => e.estado !== 'breve');
 const manchetes = [...ultimo.secoes.flatMap((s) => s.itens.map((i) => i.titulo.replace(/`/g, ''))), ...vivos.map((e) => e.nome)];
 const quadros = [
-  { id: 'ficha', href: '/ficha/', k: '魂', t: 'Sua ficha', d: 'O seu Marcado do jeito que o bot calcula: Estágio, atributos e o que falta para subir.', img: '/img/inicio/marcado.jpg' },
-  { id: 'arvores', href: '/arvores/', k: '樹', t: 'A árvore', d: '24 habilidades por Classe de Mago. Planeje e gaste os seus Pontos de Trilha.', img: '/img/classes/capa.jpg' },
-  { id: 'altar', href: '/altar/', k: '運', t: 'O Altar', d: 'Vestígios da temporada, com as chances e a garantia sempre à vista.', img: '/img/grimorios/demoniaco.jpg' },
-  { id: 'eventos', href: '/eventos/', k: '祭', t: 'Eventos', d: `${vivos.length} valendo agora no servidor.`, img: '/img/criaturas/dragao-negro.jpg' },
+  { id: 'ficha', href: '/ficha/', k: '魂', t: 'Sua ficha', d: 'O seu Marcado do jeito que o bot calcula: Estágio, atributos e o que falta para subir.', img: '/img/inicio/marcado.webp' },
+  { id: 'arvores', href: '/arvores/', k: '樹', t: 'A árvore', d: '24 habilidades por Classe de Mago. Planeje e gaste os seus Pontos de Trilha.', img: '/img/classes/capa.webp' },
+  { id: 'altar', href: '/altar/', k: '運', t: 'O Altar', d: 'Vestígios da temporada, com as chances e a garantia sempre à vista.', img: '/img/grimorios/demoniaco.webp' },
+  { id: 'eventos', href: '/eventos/', k: '祭', t: 'Eventos', d: `${vivos.length} valendo agora no servidor.`, img: '/img/criaturas/dragao-negro.webp' },
 ];
 ---
 <section class="ph" aria-labelledby="ph-t">

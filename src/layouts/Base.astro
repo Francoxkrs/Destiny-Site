@@ -43,7 +43,11 @@ const busca = {
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/img/og.jpg" />
+    <meta property="og:image" content={new URL('/img/og.jpg', Astro.site ?? Astro.url).href} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
+    <meta property="og:site_name" content="Black Destiny" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

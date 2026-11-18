@@ -11,7 +11,7 @@ import { arvores } from '../../data/arvores.js';
 
 const tem = (p) => fs.existsSync(path.join(process.cwd(), 'public', p));
 const racas = [['Humanos', 85, 'Humano'], ['Anões', 8, 'Anão'], ['Bruxas', 7, 'Bruxa']].map(([nome, peso, um]) => ({
-  nome, um, peso, img: `/img/racas/${slugify(nome)}.jpg`,
+  nome, um, peso, img: `/img/racas/${slugify(nome)}.webp`,
   familias: familias.filter((f) => f.raca === nome && f.raridade !== 'Sorteio').map((f) => ({
     nome: f.nome, peso: f.raridade === 'Rara' ? 1 : 6, rara: f.raridade === 'Rara', classe: f.classe, origem: f.origem, lema: f.lema,
     brasao: tem(`img/brasoes/${slugify(f.nome)}.svg`) ? `/img/brasoes/${slugify(f.nome)}.svg` : null,
@@ -21,7 +21,7 @@ const dados = {
   racas,
   classes: arvores.map((a) => ({ nome: a.nome, kanji: a.kanji, cor: a.cor, papel: a.papel, img: a.img })),
   magias: magias.filter((m) => m.chance).map((m) => ({ raridade: m.raridade, chance: m.chance, lista: m.lista })),
-  grimorios: [{ nome: 'Comum', peso: 92, img: '/img/grimorios/comum.jpg' }, { nome: 'Lendário', peso: 8, img: '/img/grimorios/lendario.jpg' }],
+  grimorios: [{ nome: 'Comum', peso: 92, img: '/img/grimorios/comum.webp' }, { nome: 'Lendário', peso: 8, img: '/img/grimorios/lendario.webp' }],
 };
 const cartas = [
   ['raca', '種', 'Raça'],

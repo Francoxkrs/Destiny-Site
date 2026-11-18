@@ -41,7 +41,7 @@ const origens = [
   { nome: 'Outras terras', sim: '✦', img: 'racas/bruxas', fams: familias.filter((f) => outras.includes(f.origem)) },
 ];
 
-const painel = (n) => `/img/inicio/${n}.jpg`;
+const painel = (n) => `/img/inicio/${n}.webp`;
 ---
 <Base slug="inicio">
   <!-- CAPA: uma página de mangá -->
@@ -91,7 +91,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <div class="prologue__stage">
       {prologo.map((p, i) => (
         <div class="prologue__bg" data-pro-bg style={`--i:${i}`}>
-          <img src={`/img/${p.img}.jpg`} alt="" loading={i ? 'lazy' : 'eager'} />
+          <img src={`/img/${p.img}.webp`} alt="" loading={i ? 'lazy' : 'eager'} />
         </div>
       ))}
       <div class="prologue__shade" aria-hidden="true"></div>
@@ -193,7 +193,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <div class="origins__row" data-origins>
       {origens.map((o, i) => (
         <a class="origin" href="/familias/" data-origin data-cursor="Ver famílias">
-          <div class="origin__img"><img src={`/img/${o.img}.jpg`} alt="" loading="lazy" /></div>
+          <div class="origin__img"><img src={`/img/${o.img}.webp`} alt="" loading="lazy" /></div>
           <div class="origin__body">
             <span class="origin__sym" aria-hidden="true">{o.sim}</span>
             <span class="t-label">0{i + 1} · {o.fams.length} {o.fams.length === 1 ? 'família' : 'famílias'}</span>
@@ -235,7 +235,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
   </section>
 
   <section class="impact" data-impact>
-    <div class="impact__img"><img src="/img/inicio/sfx.jpg" alt="" loading="lazy" /></div>
+    <div class="impact__img"><img src="/img/inicio/sfx.webp" alt="" loading="lazy" /></div>
     <span class="impact__sfx" aria-hidden="true" data-sfx>ドン</span>
     <div class="wrap impact__in">
       <span class="eyebrow" data-reveal><b>×</b>Confronto sem dados</span>
@@ -301,7 +301,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
   </nav>
 
   <section class="awaken" data-awaken>
-    <div class="awaken__img" data-awaken-img><img src="/img/comecar/capa.jpg" alt="" loading="lazy" /></div>
+    <div class="awaken__img" data-awaken-img><img src="/img/comecar/capa.webp" alt="" loading="lazy" /></div>
     <div class="awaken__lids" aria-hidden="true"><span data-lid></span><span data-lid></span></div>
     <div class="wrap awaken__in">
       <span class="eyebrow" data-reveal><b>黒</b>A Marca começa no Discord</span>

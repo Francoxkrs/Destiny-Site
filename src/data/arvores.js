@@ -35,7 +35,7 @@ export const arvores = [arcano, batalha, balistico, curandeiro, caos, conjurador
     nome: t.classe,
     papel: t.papel,
     conhecimento: canon?.conhecimento ?? null,
-    img: `/img/classes/${slugify(t.classe)}.jpg`,
+    img: `/img/classes/${slugify(t.classe)}.webp`,
     cor: CORES[t.slug] ?? '#ff3b2e',
     kanji: KANJI[t.slug] ?? '道',
     raiz: t.raiz,

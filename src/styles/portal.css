@@ -303,7 +303,7 @@
 
 /* ==================================================================================== ENTRAR */
 .en { min-height: 100svh; display: grid; place-items: center; padding: calc(var(--hdr) + 40px) var(--gutter) 60px; position: relative; overflow: hidden; }
-.en::before { content: ''; position: absolute; inset: 0; background: url('/img/inicio/hero-bg.jpg') center / cover; filter: grayscale(1) contrast(1.2) brightness(0.3); }
+.en::before { content: ''; position: absolute; inset: 0; background: url('/img/inicio/hero-bg.webp') center / cover; filter: grayscale(1) contrast(1.2) brightness(0.3); }
 .en::after { content: ''; position: absolute; inset: 0; background-image: var(--dots); background-size: 4px 4px; opacity: 0.6; }
 .en__card { position: relative; z-index: 1; width: min(560px, 100%); background: var(--paper); color: var(--ink); padding: clamp(28px, 4vw, 48px); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%); display: grid; gap: 18px; }
 .en__k { position: absolute; right: 18px; top: 10px; font-family: var(--f-kanji); font-weight: 800; font-size: 90px; line-height: 1; color: rgba(255, 59, 46, 0.14); }
@@ -635,7 +635,7 @@
 .inv__palco { grid-row: 2; }
 .inv__fim { grid-row: 3; align-self: start; }
 .inv__pular { position: absolute; z-index: 4; top: 18px; right: 18px; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 10px 14px; border: 1px solid var(--line-2); color: var(--bone-2); }
-@media (max-width: 600px) { .inv-card__t { display: none; } .inv-card__n { font-size: 0.8rem; } }
+@media (max-width: 600px) { .inv-card__t { display: none; } .inv-card__txt { padding: 6px 5px 8px; } .inv-card__n { font-size: 0.72rem; hyphens: auto; overflow-wrap: anywhere; } .inv-card__d { font-size: 8px; } }
 .al-hist { margin: auto; width: min(460px, 92vw); max-height: 80vh; background: var(--paper); color: var(--ink); border: 0; padding: 26px; }
 .al-hist::backdrop { background: rgba(5, 5, 6, 0.8); }
 .al-hist h2 { font-family: var(--f-display); font-size: 2rem; line-height: 1; }

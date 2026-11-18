@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import TecnicasLeque from '../components/TecnicasLeque.astro';
-import ConhecimentosEstante from '../components/ConhecimentosEstante.astro';
+import ConhecimentosLivro from '../components/ConhecimentosLivro.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { carregarFicha } from '../lib/ficha.js';
 import { arvores, arvorePorClasse, migrarIds, graus, regras } from '../data/arvores.js';
@@ -73,7 +73,7 @@ const dados = {
   arvores: arvores.map((a) => ({ id: a.id, nome: a.nome, papel: a.papel, raiz: a.raiz, ramos: a.ramos, nos: a.nos })),
 };
 ---
-<Base title="Árvores" slug="arvores" aba="arvores" description="Uma página que desce: a Trilha da sua Classe de Mago, depois as Técnicas de Mana do 9º ao 2º Estágio e, por fim, a estante dos Conhecimentos.">
+<Base title="Árvores" slug="arvores" aba="arvores" description="Uma página que desce: a Trilha da sua Classe de Mago, depois as Técnicas de Mana do 9º ao 2º Estágio e, por fim, o livro dos Conhecimentos.">
   <div class="tr" data-arvores style={`--cc:${ativa.cor}`}>
     <nav class="tr-indice" aria-label="Partes da página" data-indice>
       <div class="tr-indice__in wrap">
@@ -218,11 +218,11 @@ const dados = {
       <header class="tr-hd wrap">
         <div class="tr-hd__l">
           <span class="eyebrow"><b>03 識</b>Conhecimentos</span>
-          <h2 class="tr-hd__t tr-hd__t--2" id="conhecimentos-t">A estante do Marcado</h2>
-          <p class="tr-hd__p">O que o personagem sabe fazer fora da magia. Seis vagas, três prateleiras e o caminho de cada livro.</p>
+          <h2 class="tr-hd__t tr-hd__t--2" id="conhecimentos-t">O Livro do Marcado</h2>
+          <p class="tr-hd__p">O que o personagem sabe fazer fora da magia. Seis vagas e um livro com tudo o que se pode aprender: vire os capítulos pelas fitas e veja por onde cada um chega.</p>
         </div>
       </header>
-      <ConhecimentosEstante ficha={f} real={real} />
+      <ConhecimentosLivro ficha={f} real={real} />
     </section>
   </div>
   <script is:inline type="application/json" id="av-dados" set:html={JSON.stringify(dados)}></script>

@@ -50,7 +50,7 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
               {e.passos.length > 0 && (
                 <div class="ev-p__bloco">
                   <h3 class="t-label">Como participar</h3>
-                  <ol class="ev-passos">{e.passos.map((p) => <li set:html={md(p)} />)}</ol>
+                  <ol class="ev-passos">{e.passos.map((p) => <li><span set:html={md(p)} /></li>)}</ol>
                 </div>
               )}
               {e.premios.length > 0 && (

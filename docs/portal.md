@@ -48,7 +48,7 @@ O bot é a fonte das regras (`functions/portal/` no bot). Ele ouve o banco (chan
 Quando o site gasta Pontos de Trilha (só com `trilha.versao === 2`), ele conta os pontos pelo personagem (Estágio + Feitos), grava `estado.trilhaClasse` com os ids novos e `updatedAt` em `personagens` (só se a trilha não mudou desde a leitura), registra no `diario` e atualiza `trilha` em `fichasWeb`. O bot vê a mudança pela escuta e refaz a foto inteira.
 
 ### No bot (`.env` na Discloud)
-- `SITE_URL`: o endereço público do site, sem barra no fim (ex.: `https://destiny-site.vercel.app`). É para onde o `/site` manda.
+- `SITE_URL`: o endereço público do site, sem barra no fim (ex.: `https://black-destiny.vercel.app`). É para onde o `/site` manda; sem ele, o bot usa esse mesmo endereço.
 - O usuário do MongoDB do bot já pode tudo; a escuta (change stream) precisa de um cluster com replica set, que é o padrão do Atlas (inclusive o gratuito). Sem isso, o bot cai sozinho para a conferência de 2 em 2 minutos.
 
 Saldo de Cristais Prismáticos: coleção `contas` `{ userId, cp }` (por conta do Discord, não por personagem). Formato final depende da monetização aprovada.

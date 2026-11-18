@@ -3,6 +3,11 @@
 O site é estático, com quatro partes que rodam no servidor da Vercel: **Ficha**, **Árvores**, **Cristais**, **Entrar** e as rotas `/api/*`.
 Sem as variáveis abaixo, tudo funciona em modo de exemplo (ficha do Lúx, nada grava).
 
+## Dois jeitos de entrar
+
+1. **Pelo bot (`/site`)**: o jogador usa `/site` no Discord e recebe um botão "Abrir o site" que só ele vê. O link vale 10 minutos e uma vez só; o site pede um clique em "Entrar" (quem só abre o link, como a pré-visualização de um antivírus, não gasta o código). Precisa só de `SESSION_SECRET`, `MONGO_URI` e `GUILD_ID` na Vercel e de `SITE_URL` no `.env` do bot. Funciona também nas prévias de PR (o link aponta para o `SITE_URL`).
+2. **Entrar com Discord (OAuth2)**: o botão da página /entrar. Precisa também de `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` e do Redirect cadastrado.
+
 ## Variáveis de ambiente (Vercel → Project → Settings → Environment Variables)
 
 | Nome | O que é | Onde pegar |
@@ -22,24 +27,29 @@ O site pede só o escopo `identify` (nome e avatar).
 ### Usuário do MongoDB para o site
 O site lê a ficha e grava só o que ele muda. Crie no Atlas (Database Access → Custom Roles) uma função `site-portal` com:
 
-- `find` em `personagens`, `fichasWeb`, `assets`, `contas`
-- `update` em `personagens` (só para a trilha; o site valida as regras antes) e `fichasWeb`
+- `find` em `personagens`, `fichasWeb`, `assets`, `contas`, `acessosWeb`
+- `update` em `personagens` (só para a trilha; o site valida as regras antes), `fichasWeb` e `acessosWeb` (marcar o link do /site como usado)
 
 e um usuário com essa função. Em Network Access, a Vercel não tem IP fixo, então é preciso liberar `0.0.0.0/0`; por isso o usuário do site deve ter senha forte e só essa função.
 
 ## Contrato com o bot: `fichasWeb`
 
-O bot é a fonte das regras. Sempre que um personagem muda (treino, despertar, Staff, trilha), ele grava em `fichasWeb` a ficha já calculada, um documento por `{ guildId, userId }`, no formato `FichaWeb` versão 1 (`src/lib/ficha.js`). Campos principais:
+O bot é a fonte das regras (`functions/portal/` no bot). Ele ouve o banco (change stream em `personagens`, `feiticos` e `itens`) e, a cada mudança de um jogador, regrava em até 2 s a ficha já calculada; ao ligar, confere todos, e a cada 2 min pega o que escapou. Grava em `fichasWeb` um documento por `{ guildId, userId }`, no formato `FichaWeb` versão 1 (`src/lib/ficha.js`). Campos principais:
 
 - identidade: `nome`, `sobrenome`, `epiteto`, `imagem` (hash da coleção `assets`), `cor`, `raca`, `familia`, `classeSocial`, `regiao`, `origem`, `patente`
 - magia: `classeMago`, `magia`, `magiaRaridade`, `grimorio`, `milagres[]`, `feiticos[]` (com `imagem` opcional)
 - progressão: `estagio`, `pe`, `controle`, `proximo` (`{ estagio, pe, controle, cristais }` do próximo Estágio, ou `null` no 1º)
 - atributos: `fisicos[]` com `indice` (0 Comum ... 7 Transcendental), `teto` (de `limiteFisicoPorEstagio`), `acrescimos`, `treino`; `mana { atual, max }`, `reserva` (1–10), `poder` (1–6)
 - bolsa: `moedas { yuls, meritos, antimeritos, cristais { branco, negro, dourado } }`
-- trilha: `trilha { versao, pontos, gastos, livres, nos[] }`. Com as árvores v2, `versao: 2`, `nos` usa os ids novos ("batalha.furia.avanco") e `pontos` já soma os Pontos de Feito. Sem `versao: 2`, o site só mostra e planeja (os ids antigos "Ramo/0" são convertidos pelo campo `legado`).
+- trilha: `trilha { versao: 2, pontos, gastos, livres, feitos, nos[] }`. O bot usa as árvores v2 (`assets/trilhas/*.json`, os mesmos JSON de `src/data/trilhas/`), `nos` vem com os ids novos ("batalha.furia.avanco") e `pontos` já soma os Pontos de Feito (`estado.trilhaFeitos`, máx. 2, dados pela Staff com `/staff trilha feito:`). Fichas antigas guardam "Ramo/0"; bot e site convertem pelo campo `legado`.
+- `mana { atual, max, regenHora, em }`: o site soma a regeneração desde `em`.
 - `conhecimentos[]`, `tracos[]`, `tecnicas[]`, `historia { vidaPassada, renascimento, personalidade }`, `atualizadoEm`
 
-Quando o site gasta Pontos de Trilha (só com `trilha.versao === 2`), ele grava `estado.trilhaClasse` em `personagens` (só se a trilha não mudou desde a leitura), registra no `diario` e atualiza `trilha` em `fichasWeb`. O bot deve recalcular a foto quando notar a mudança.
+Quando o site gasta Pontos de Trilha (só com `trilha.versao === 2`), ele conta os pontos pelo personagem (Estágio + Feitos), grava `estado.trilhaClasse` com os ids novos e `updatedAt` em `personagens` (só se a trilha não mudou desde a leitura), registra no `diario` e atualiza `trilha` em `fichasWeb`. O bot vê a mudança pela escuta e refaz a foto inteira.
+
+### No bot (`.env` na Discloud)
+- `SITE_URL`: o endereço público do site, sem barra no fim (ex.: `https://destiny-site.vercel.app`). É para onde o `/site` manda.
+- O usuário do MongoDB do bot já pode tudo; a escuta (change stream) precisa de um cluster com replica set, que é o padrão do Atlas (inclusive o gratuito). Sem isso, o bot cai sozinho para a conferência de 2 em 2 minutos.
 
 Saldo de Cristais Prismáticos: coleção `contas` `{ userId, cp }` (por conta do Discord, não por personagem). Formato final depende da monetização aprovada.
 

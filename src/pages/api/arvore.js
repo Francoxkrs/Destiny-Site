@@ -1,7 +1,7 @@
 import { lerSessao, mesmaOrigem } from '../../lib/sessao.js';
 import { banco } from '../../lib/db.js';
 import { env } from '../../lib/env.js';
-import { arvorePorClasse } from '../../data/arvores.js';
+import { arvorePorClasse, migrarIds } from '../../data/arvores.js';
 import { bloqueio, pontosDeTrilha, gastos } from '../../lib/arvore-regras.js';
 export const prerender = false;
 
@@ -28,14 +28,16 @@ export async function POST({ request, url, cookies }) {
   if (!p) return json(404, { erro: 'Você não tem personagem aprovado.' });
 
   const foto = await db.collection('fichasWeb').findOne({ guildId: env.guildId, userId: s.id }, { projection: { trilha: 1 } });
-  if (foto?.trilha?.versao !== 2) return json(409, { erro: 'A árvore nova abre no bot junto com a versão 2. Até lá, use /trilha no Discord.' });
+  if (foto?.trilha?.versao !== 2) return json(409, { erro: 'O bot ainda não mandou a sua ficha nova para o site. Use /site no Discord e tente de novo.' });
   const modelo = p.modelos?.[p.escolhido ?? 0];
   const arvore = arvorePorClasse(modelo?.classeMago);
   if (!arvore) return json(400, { erro: 'Sua Classe de Mago não tem árvore.' });
   const estagio = p.estado?.estagio ?? 9;
+  // o que está gravado (para a trava) e o mesmo já com os ids novos (fichas antigas guardam "Ramo/0")
   const antes = Array.isArray(p.estado?.trilhaClasse) ? p.estado.trilhaClasse : [];
-  const tem = [...antes];
-  const pontos = Number.isFinite(foto.trilha.pontos) ? foto.trilha.pontos : pontosDeTrilha(estagio);
+  const tem = migrarIds(arvore, antes);
+  // conta de novo a partir do personagem (Estágio + Pontos de Feito), igual ao bot: não confia na foto
+  const pontos = pontosDeTrilha(estagio, p.estado?.trilhaFeitos ?? 0);
   for (const id of pedidos) {
     const motivo = bloqueio(arvore, pontos, estagio, tem, id);
     if (motivo) return json(409, { erro: motivo, no: id });
@@ -47,7 +49,8 @@ export async function POST({ request, url, cookies }) {
   const r = await db.collection('personagens').updateOne(
     { _id: p._id, 'estado.estagio': estagio, ...filtroTrilha },
     {
-      $set: { 'estado.trilhaClasse': tem },
+      // updatedAt muda junto: a trava do bot (salvar) percebe que a ficha mudou e não grava por cima
+      $set: { 'estado.trilhaClasse': tem, updatedAt: new Date() },
       $push: { diario: { $each: [{ em: new Date(), tipo: 'trilha', texto: `Trilha pelo site: ${nomes}`, por: s.id }] } },
     },
   );

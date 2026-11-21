@@ -55,7 +55,7 @@ export const loja = [
   { nome: 'Inscrição do Altar', cp: 160, nota: '10 por 1.440 CP', limite: null, grupo: 'Giros' },
   { nome: 'Passe Premium da temporada', cp: 600, nota: '≈ R$ 9,90', limite: '1 por temporada', grupo: 'Temporada' },
   { nome: 'Redefinir a trilha', cp: 450, nota: 'Devolve todos os Pontos de Trilha', limite: '1 a cada 30 dias', grupo: 'Personagem' },
-  { nome: 'Skip Treino', cp: 120, nota: 'Libera um treino do ciclo', limite: '3 por semana por personagem', grupo: 'Personagem' },
+  { nome: 'Skip Treino', cp: 120, nota: 'Libera um treino do ciclo. Também sai jogando, em missões e no Passe grátis', limite: '3 por semana por personagem', grupo: 'Personagem' },
   { nome: 'Família Comum à escolha', cp: 900, nota: 'Com vaga', limite: '1 por personagem', grupo: 'Personagem' },
   { nome: 'Classe de Mago à escolha', cp: 900, nota: '', limite: '1 por personagem', grupo: 'Personagem' },
   { nome: 'Raça à escolha', cp: 1200, nota: 'Humanos, Anões ou Bruxas', limite: '1 por personagem', grupo: 'Personagem' },

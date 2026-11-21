@@ -636,6 +636,14 @@
 .inv__fim { grid-row: 3; align-self: start; }
 .inv__pular { position: absolute; z-index: 4; top: 18px; right: 18px; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; padding: 10px 14px; border: 1px solid var(--line-2); color: var(--bone-2); }
 @media (max-width: 600px) { .inv-card__t { display: none; } .inv-card__txt { padding: 6px 5px 8px; } .inv-card__n { font-size: 0.72rem; hyphens: auto; overflow-wrap: anywhere; } .inv-card__d { font-size: 8px; } }
+.inv-card__g { margin-top: 4px; font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bone); opacity: 0.75; }
+.inv-card__g.is-novo { color: var(--rc, var(--mana)); opacity: 1; }
+.inv-card--g .inv-card__g { font-size: 11px; }
+@media (max-width: 600px) { .inv-card:not(.inv-card--g) .inv-card__g { display: none; } }
+.al-previa.is-erro { color: var(--bone); }
+.al-previa a { color: var(--mana); text-decoration: underline; text-underline-offset: 3px; }
+.al-previa b.al-falta { font-family: var(--f-mono); color: var(--mana); background: none; padding: 0; transform: none; font-size: inherit; letter-spacing: 0; text-transform: none; }
+.al-btn[aria-busy='true'] { opacity: 0.6; pointer-events: none; }
 .al-hist { margin: auto; width: min(460px, 92vw); max-height: 80vh; background: var(--paper); color: var(--ink); border: 0; padding: 26px; }
 .al-hist::backdrop { background: rgba(5, 5, 6, 0.8); }
 .al-hist h2 { font-family: var(--f-display); font-size: 2rem; line-height: 1; }

@@ -2,7 +2,9 @@
  * Altar dos Vestígios e Pedra do Destino (proposta de monetização v2, 17/11/2026).
  * Decidido: gacha pago aberto, Inscrição a 160 CP (10 por 1.440). Chances e garantia ficam SEMPRE visíveis.
  * O destaque da temporada é exemplo da proposta até o Silas escolher.
- * No site, por enquanto, o giro é uma PRÉVIA: roda no navegador, não gasta nada e não entrega nada.
+ * Altar dos Vestígios: o giro é de verdade (src/lib/altar.js, /api/altar): gasta Inscrições e depois CP, entrega na conta.
+ * Os materiais dos Raros valem o mesmo que 1 Inscrição no mercado (Pó 150, Quartzo 2×80, Couro 3×50 Yuls).
+ * Pedra do Destino: ainda prévia (os giros vão para a /bolsa do bot, que ainda não recebe do site).
  */
 export const inscricao = { nome: 'Inscrição', cp: 160, cp10: 1440 };
 
@@ -24,7 +26,7 @@ export const altar = {
   nome: 'Altar dos Vestígios',
   kanji: '運',
   temporada: 'Temporada I · Miasma',
-  proposta: true,
+  proposta: false, // era o exemplo da proposta; ficou como destaque da Temporada I quando o Altar abriu (21/11)
   destaque: {
     nome: 'Capa do Miasma',
     tipo: 'Capa de grimório animada',
@@ -39,26 +41,26 @@ export const altar = {
     'Nada do Altar se troca entre jogadores.',
   ],
   premios: {
-    lendario: [{ nome: 'Capa do Miasma', tipo: 'Capa de grimório animada', img: '/img/grimorios/demoniaco.webp' }],
+    lendario: [{ id: 't1-capa-miasma', nome: 'Capa do Miasma', tipo: 'Capa de grimório animada', img: '/img/grimorios/demoniaco.webp' }],
     // Épicos e Raros sem arte própria ainda: a carta mostra o kanji do item (k) até a arte chegar.
     epico: [
-      { nome: 'Título da Temporada', tipo: 'Título', k: '名' },
-      { nome: 'Fundo do Miasma', tipo: 'Fundo de ficha', k: '景' },
-      { nome: 'Tinta Negra', tipo: 'Tinta', k: '墨' },
-      { nome: 'Selo da Temporada', tipo: 'Selo', k: '印' },
-      { nome: 'Emote da Temporada', tipo: 'Emote', k: '顔' },
+      { id: 't1-titulo', nome: 'Título da Temporada', tipo: 'Título', k: '名' },
+      { id: 't1-fundo', nome: 'Fundo do Miasma', tipo: 'Fundo de ficha', k: '景' },
+      { id: 't1-tinta', nome: 'Tinta Negra', tipo: 'Tinta', k: '墨' },
+      { id: 't1-selo', nome: 'Selo da Temporada', tipo: 'Selo', k: '印' },
+      { id: 't1-emote', nome: 'Emote da Temporada', tipo: 'Emote', k: '顔' },
     ],
     raro: [
-      { nome: '3 Fragmentos de Vestígio', tipo: 'Fragmento', k: '片' },
-      { nome: 'Pó de Cristal', tipo: 'Material', k: '粉' },
-      { nome: 'Couro de Besta', tipo: 'Material', k: '革' },
-      { nome: 'Quartzo de Mana', tipo: 'Material', k: '晶' },
+      { id: 'fragmentos-3', nome: '3 Fragmentos de Vestígio', tipo: 'Fragmento', k: '片', fragmentos: 3 },
+      { id: 'po-de-cristal', nome: '1 Pó de Cristal', tipo: 'Material', k: '粉', material: { chave: 'po-de-cristal', qtd: 1 } },
+      { id: 'couro', nome: '3 Couros de Besta', tipo: 'Material', k: '革', material: { chave: 'couro', qtd: 3 } },
+      { id: 'quartzo', nome: '2 Quartzos de Mana', tipo: 'Material', k: '晶', material: { chave: 'quartzo', qtd: 2 } },
     ],
   },
   oQueSai: {
     lendario: 'Capa de grimório animada, moldura animada, aura do feitiço na ficha e no site, Familiar de enfeite.',
     epico: 'Título, fundo de ficha, tinta, selo, emote da temporada.',
-    raro: '3 Fragmentos de Vestígio ou um material (Pó de Cristal, Couro de Besta, Quartzo de Mana).',
+    raro: '3 Fragmentos de Vestígio ou um material que cai na bolsa do bot (1 Pó de Cristal, 2 Quartzos de Mana ou 3 Couros de Besta).',
   },
 };
 

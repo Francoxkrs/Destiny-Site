@@ -100,9 +100,10 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
         <div class="al-links">
           <a href="#chances">Chances</a>
           <a href="#ganhar">Como ganhar Inscrições</a>
-          <button type="button" data-historico>Histórico da prévia</button>
+          <button type="button" data-historico>Histórico</button>
         </div>
-        <p class="al-previa"><b>Prévia</b>Os giros aqui ainda não gastam nem entregam nada: o Altar abre com a versão 2 do bot.</p>
+        <p class="al-previa" data-aviso-banner="vestigios" data-al-aviso>Gasta suas Inscrições primeiro. O que faltar sai dos seus Cristais Prismáticos.</p>
+        <p class="al-previa" data-aviso-banner="pedra" hidden><b>Prévia</b>A Pedra ainda não gasta nem entrega: os giros dela vão para a /bolsa do bot, que ainda não recebe do site.</p>
         <div class="al-btns" data-btns="vestigios">
           <button class="al-btn" type="button" data-girar="1"><span class="al-btn__t">Invocar ×1</span><span class="al-btn__c"><i class="al-insc" aria-hidden="true"></i>1 · {fmt.format(inscricao.cp)} CP</span></button>
           <button class="al-btn al-btn--10" type="button" data-girar="10"><span class="al-btn__t">Invocar ×10</span><span class="al-btn__c"><i class="al-insc" aria-hidden="true"></i>10 · {fmt.format(inscricao.cp10)} CP</span></button>
@@ -118,7 +119,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
       <ol>
         <li><span>1</span><b>Junte Inscrições</b><small>Jogando (missões, RP, eventos) ou comprando com Cristais Prismáticos: {fmt.format(inscricao.cp)} CP cada.</small><a href="#ganhar">Como ganhar</a></li>
         <li><span>2</span><b>Escolha onde gastar</b><small>No Altar sai visual da temporada. Na Pedra saem os giros da ficha, como Cápsula de Conhecimento, Magia e Grimório.</small></li>
-        <li><span>3</span><b>Invoque</b><small>O resultado aparece aqui e vai para a sua ficha ou para a sua bolsa no bot.</small><a href="#chances">Ver as chances</a></li>
+        <li><span>3</span><b>Invoque</b><small>O resultado aparece aqui e vai para a sua ficha (visual) ou para a bolsa do seu personagem no bot (materiais).</small><a href="#chances">Ver as chances</a></li>
       </ol>
     </section>
 
@@ -193,8 +194,8 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
 
   <dialog class="al-hist" data-hist>
     <form method="dialog"><button class="al-hist__x" aria-label="Fechar">×</button></form>
-    <h2>Histórico da prévia</h2>
-    <p class="t-small">Só neste navegador. Não vale como giro de verdade.</p>
+    <h2>Histórico</h2>
+    <p class="t-small" data-hist-nota>Suas últimas invocações no Altar dos Vestígios.</p>
     <ol data-hist-lista></ol>
   </dialog>
 

@@ -1,0 +1,36 @@
+// Aviso para a Staff no Discord quando uma compra de Cristais entra (opcional).
+// DISCORD_WEBHOOK_COMPRAS = URL de um Webhook do canal de logs (Editar canal → Integrações → Webhooks).
+// Sem ela, nada é enviado; a compra funciona igual.
+const url = () => String(process.env.DISCORD_WEBHOOK_COMPRAS ?? import.meta.env?.DISCORD_WEBHOOK_COMPRAS ?? '').trim();
+
+export async function avisarCompra(p, { saldo, primeira }, f = fetch) {
+  const u = url();
+  if (!/^https:\/\/(?:canary\.|ptb\.)?discord(?:app)?\.com\/api\/webhooks\//.test(u)) return;
+  const valor = p.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const linhas = [
+    `💎 <@${p.userId}> comprou **${p.nomePacote}** (${p.cp.toLocaleString('pt-BR')} CP) por ${valor} no site.`,
+    `-# Mercado Pago \`${p.mpId ?? '?'}\` ・ saldo agora: ${saldo.toLocaleString('pt-BR')} CP`,
+    primeira ? '🎁 **Primeira compra da conta**: entreguem o presente (Moldura Centelha Prismática, Título "Patrono de Diamond" e 1 Classe de Mago à escolha).' : null,
+  ].filter(Boolean);
+  await f(u, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ username: 'Cristais Prismáticos', content: linhas.join('\n'), allowed_mentions: { parse: [] } }),
+    signal: AbortSignal.timeout(5000),
+  }).catch((e) => console.error('cristais (aviso Staff):', e?.message ?? e));
+}
+
+/** Estorno ou reembolso: os CP saíram da conta (o saldo pode ter ficado negativo). */
+export async function avisarEstorno(p, { saldo, motivo }, f = fetch) {
+  const u = url();
+  if (!/^https:\/\/(?:canary\.|ptb\.)?discord(?:app)?\.com\/api\/webhooks\//.test(u)) return;
+  const nome = motivo === 'charged_back' ? 'Estorno no cartão (chargeback)' : 'Reembolso';
+  const linhas = [
+    `⚠️ **${nome}**: <@${p.userId}> ・ ${p.nomePacote} (${p.cp.toLocaleString('pt-BR')} CP, ${p.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}).`,
+    `-# Mercado Pago \`${p.mpId ?? '?'}\` ・ os CP saíram da conta ・ saldo agora: ${saldo.toLocaleString('pt-BR')} CP${saldo < 0 ? ' (negativo: já tinha gastado)' : ''}`,
+  ];
+  await f(u, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ username: 'Cristais Prismáticos', content: linhas.join('\n'), allowed_mentions: { parse: [] } }),
+    signal: AbortSignal.timeout(5000),
+  }).catch((e) => console.error('cristais (aviso Staff):', e?.message ?? e));
+}

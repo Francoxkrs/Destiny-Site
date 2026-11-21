@@ -1103,3 +1103,54 @@ body:has(.hdr:not(.is-hidden)) .tr-indice { top: var(--hdr); }
 .cp-pac__arte img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
 @media (hover: hover) { .cp-pac:hover .cp-pac__arte img { transform: scale(1.05); } }
 .en__dica { font-size: 0.95rem; opacity: .85; }
+
+/* ---------- Pix dos Cristais (janela de compra) ---------- */
+a.cp-pac__btn { text-decoration: none; }
+.cp-pac__btn:not([disabled]) { cursor: pointer; transition: background 0.3s var(--ease); }
+@media (hover: hover) { .cp-pac__btn:not([disabled]):hover { background: var(--mana); } }
+.cp-pac__btn:focus-visible { outline: 2px solid var(--mana); outline-offset: 3px; }
+.cp-pac__btn[aria-busy='true'] small { animation: cp-pisca 1s ease-in-out infinite; }
+@keyframes cp-pisca { 50% { opacity: 0.3; } }
+
+.cp-pix { width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; margin: auto; border: 2px solid var(--bone); background: var(--ink-2); color: var(--bone); overflow: auto; }
+.cp-pix::backdrop { background: rgba(4, 5, 8, 0.78); backdrop-filter: blur(4px); }
+.cp-pix[open] { animation: cp-pix-entra 0.45s var(--ease); }
+@keyframes cp-pix-entra { from { opacity: 0; transform: translateY(18px) scale(0.98); } }
+.cp-pix__in { position: relative; display: grid; gap: 10px; padding: clamp(20px, 4vw, 30px); }
+.cp-pix__in::before { content: '晶'; position: absolute; right: 18px; bottom: 6px; font-family: var(--f-kanji); font-weight: 800; font-size: 120px; line-height: 1; color: transparent; -webkit-text-stroke: 1px var(--line-2); pointer-events: none; }
+.cp-pix__x { position: absolute; top: 10px; right: 12px; width: 40px; height: 40px; font-size: 26px; line-height: 1; color: var(--mute); background: none; border: 0; cursor: pointer; }
+.cp-pix__x:hover, .cp-pix__x:focus-visible { color: var(--bone); }
+.cp-pix .t-label b { color: var(--mana); font-family: var(--f-kanji); }
+.cp-pix__t { font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 6vw, 2.6rem); line-height: 0.95; padding-right: 36px; }
+.cp-pix__res { font-family: var(--f-mono); font-size: 12px; color: var(--bone-2); }
+.cp-pix__corpo { position: relative; display: grid; gap: 14px; padding-top: 8px; }
+.cp-pix__corpo[hidden] { display: none; }
+.cp-pix__msg { color: var(--bone-2); }
+.cp-pix__qr { justify-self: center; padding: 12px; background: #fff; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%); }
+.cp-pix__qr img { display: block; width: min(220px, 60vw); height: auto; image-rendering: pixelated; }
+.cp-pix__passos { display: grid; gap: 6px; padding-left: 1.2em; font-size: 0.94rem; color: var(--bone-2); list-style: decimal; }
+.cp-pix__passos b { color: var(--bone); font-weight: 600; }
+.cp-pix__cc { display: grid; gap: 6px; }
+.cp-pix__cc input { width: 100%; height: 42px; padding: 0 12px; background: var(--ink); color: var(--bone); border: 1px solid var(--line-2); font-family: var(--f-mono); font-size: 12px; text-overflow: ellipsis; }
+.cp-pix__acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.cp-pix__acoes .btn { flex: 1 1 160px; justify-content: center; }
+.cp-pix__espera { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--mute); }
+.cp-pix__espera b { color: var(--bone); font-variant-numeric: tabular-nums; }
+.cp-pix__pulso { width: 8px; height: 8px; border-radius: 50%; background: var(--mana); box-shadow: 0 0 0 0 var(--mana-glow); animation: cp-pulso 1.6s ease-out infinite; }
+@keyframes cp-pulso { 70% { box-shadow: 0 0 0 10px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.cp-pix__cancelar { justify-self: start; padding: 4px 0; background: none; border: 0; color: var(--mute); font-size: 0.86rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.cp-pix__cancelar:hover { color: var(--blood); }
+.cp-pix__ok { justify-items: center; text-align: center; padding-block: 16px 4px; }
+.cp-pix__gem { width: 64px; height: 74px; animation: prisma 3s linear infinite, cp-gema 0.9s var(--ease) both; }
+@keyframes cp-gema { from { transform: scale(0.2) rotate(-40deg); opacity: 0; } 60% { transform: scale(1.15) rotate(6deg); opacity: 1; } }
+.cp-pix__ok-t { font-family: var(--f-display); font-weight: 800; font-size: 1.9rem; color: var(--mana); }
+.cp-pix__ok b { font-family: var(--f-mono); }
+@media (prefers-reduced-motion: reduce) { .cp-pix[open], .cp-pix__gem, .cp-pix__pulso { animation: none; } }
+.cp-pix__metodos { display: grid; gap: 10px; }
+.cp-pix__met { position: relative; display: grid; gap: 2px; padding: 16px 18px 16px 70px; text-align: left; background: var(--ink); color: var(--bone); border: 1px solid var(--line-2); cursor: pointer; transition: border-color 0.25s var(--ease), transform 0.25s var(--ease); }
+.cp-pix__met b { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1; }
+.cp-pix__met small { color: var(--bone-2); font-size: 0.88rem; }
+.cp-pix__met-k { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-family: var(--f-kanji); font-weight: 800; font-size: 34px; color: var(--mana); }
+.cp-pix__met:focus-visible { outline: 2px solid var(--mana); outline-offset: 2px; }
+@media (hover: hover) { .cp-pix__met:hover { border-color: var(--mana); transform: translateX(4px); } }
+.cp-pix__nota { font-size: 0.82rem; color: var(--mute); }

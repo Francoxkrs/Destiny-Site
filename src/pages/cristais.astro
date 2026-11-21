@@ -4,6 +4,8 @@ import Arrow from '../components/Arrow.astro';
 import Cristal from '../components/portal/Cristal.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { banco } from '../lib/db.js';
+import { env, pagamentoPronto } from '../lib/env.js';
+import { conferirAbertos } from '../lib/compras.js';
 import { aprovado, moeda, primeiraCompra, pacotes, selo, presente, loja, nuncaAVenda, regras } from '../data/cristais.js';
 import { altar, garantia, inscricao } from '../data/altar.js';
 export const prerender = false;
@@ -12,8 +14,14 @@ const sessao = lerSessao(Astro.cookies);
 Astro.response.headers.set('cache-control', 'private, no-store');
 let saldo = null;
 if (sessao) {
-  try { const db = await banco(); const c = db && (await db.collection('contas').findOne({ userId: sessao.id }, { projection: { cp: 1 } })); saldo = db ? (c?.cp ?? 0) : null; } catch { /* sem saldo */ }
+  try {
+    const db = await banco();
+    // Pix pago com a página fechada (e sem o aviso do Mercado Pago): credita agora, antes de mostrar o saldo
+    if (db && pagamentoPronto()) await conferirAbertos(db, env.mpToken, sessao.id).catch(() => null);
+    const c = db && (await db.collection('contas').findOne({ userId: sessao.id }, { projection: { cp: 1 } })); saldo = db ? (c?.cp ?? 0) : null;
+  } catch { /* sem saldo */ }
 }
+const vende = pagamentoPronto();
 const fmt = new Intl.NumberFormat('pt-BR');
 const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const grupos = [...new Set(loja.map((i) => i.grupo))];
@@ -43,7 +51,7 @@ const metas = [
       <div class="cp-saldo">
         <span class="hcp__gem cp-saldo__gem" aria-hidden="true"></span>
         <p class="t-label">Seu saldo</p>
-        {saldo != null ? <b class="cp-saldo__n">{fmt.format(saldo)} <small>CP</small></b> : sessao ? <b class="cp-saldo__nd">Ainda indisponível</b> : <a class="cp-saldo__in" href="/api/auth/login?volta=/cristais/">Entre para ver</a>}
+        {saldo != null ? <b class="cp-saldo__n" data-saldo>{fmt.format(saldo)} <small>CP</small></b> : sessao ? <b class="cp-saldo__nd">Ainda indisponível</b> : <a class="cp-saldo__in" href="/api/auth/login?volta=/cristais/">Entre para ver</a>}
       </div>
     </header>
 
@@ -70,7 +78,7 @@ const metas = [
 
     <!-- pacotes -->
     <section class="cp-sec wrap" aria-labelledby="cp-pac">
-      <div class="cp-sec__h"><h2 id="cp-pac" class="t-h2">Pacotes</h2><p class="t-body">Pix pelo Mercado Pago, o mesmo carrinho do bot. Do menor ao maior, até {brl(pacotes.at(-1).preco)}.</p></div>
+      <div class="cp-sec__h"><h2 id="cp-pac" class="t-h2">Pacotes</h2><p class="t-body">Pix ou cartão pelo Mercado Pago. Os Cristais entram na sua conta assim que o pagamento é confirmado. Do menor ao maior, até {brl(pacotes.at(-1).preco)}.</p></div>
       <ul class="cp-pacs">
         {pacotes.map((p) => (
           <li class:list={['cp-pac', p.destaque && 'cp-pac--dest']}>
@@ -82,7 +90,9 @@ const metas = [
             <p class="cp-pac__bonus">{p.bonus ? <><span>+{fmt.format(p.bonus)}</span> de bônus · {pctBonus(p)}%</> : 'Sem bônus'}</p>
             <span class="cp-pac__barra" style={`--b:${(pctBonus(p) / maxBonus) * 100}%`} aria-hidden="true"></span>
             <p class="cp-pac__vale">≈ {Math.floor(p.cp / inscricao.cp)} {Math.floor(p.cp / inscricao.cp) === 1 ? 'Inscrição' : 'Inscrições'}<small>{cpPorReal(p.cp, p.preco)} CP por real</small></p>
-            <button class="cp-pac__btn" type="button" disabled><span>{brl(p.preco)}</span><small>Em breve</small></button>
+            {vende && sessao ? <button class="cp-pac__btn" type="button" data-comprar={p.n} data-nome={p.nome} data-cp={p.cp} data-preco={p.preco}><span>{brl(p.preco)}</span><small>Comprar</small></button>
+              : vende ? <a class="cp-pac__btn" href="/api/auth/login?volta=/cristais/"><span>{brl(p.preco)}</span><small>Entrar</small></a>
+              : <button class="cp-pac__btn" type="button" disabled><span>{brl(p.preco)}</span><small>Em breve</small></button>}
           </li>
         ))}
       </ul>
@@ -173,6 +183,62 @@ const metas = [
       </div>
     </section>
   </div>
+
+  {vende && sessao && (
+    <dialog class="cp-pix" data-pix aria-labelledby="cp-pix-t">
+      <div class="cp-pix__in">
+        <button class="cp-pix__x" type="button" data-fechar aria-label="Fechar">×</button>
+        <p class="t-label"><b>晶</b> <span data-via>Mercado Pago</span></p>
+        <h2 id="cp-pix-t" class="cp-pix__t" data-titulo>Pacote</h2>
+        <p class="cp-pix__res" data-resumo></p>
+
+        <div class="cp-pix__corpo" data-etapa="escolher">
+          <p class="t-label">Como você quer pagar?</p>
+          <div class="cp-pix__metodos">
+            <button class="cp-pix__met" type="button" data-metodo="pix">
+              <span class="cp-pix__met-k" aria-hidden="true">即</span>
+              <b>Pix</b><small>QR Code aqui mesmo. Confirma em segundos.</small>
+            </button>
+            <button class="cp-pix__met" type="button" data-metodo="cartao">
+              <span class="cp-pix__met-k" aria-hidden="true">札</span>
+              <b>Cartão</b><small>Crédito (até 12x) ou débito, na página segura do Mercado Pago.</small>
+            </button>
+          </div>
+          <p class="cp-pix__nota">O número do cartão nunca passa pelo site do Black Destiny.</p>
+        </div>
+
+        <div class="cp-pix__corpo" data-etapa="carregando" hidden><p class="cp-pix__msg" data-carregando>Gerando o seu Pix…</p></div>
+
+        <div class="cp-pix__corpo" data-etapa="pagar" hidden>
+          <div class="cp-pix__qr"><img data-qr alt="QR Code do Pix" width="220" height="220" /></div>
+          <ol class="cp-pix__passos">
+            <li>Abra o app do seu banco e escolha <b>Pix</b>.</li>
+            <li>Leia o QR Code ou use o <b>copia e cola</b>.</li>
+            <li>Pague e deixe esta janela aberta. Os Cristais entram sozinhos.</li>
+          </ol>
+          <label class="cp-pix__cc"><span class="t-label">Pix copia e cola</span><input data-cc readonly /></label>
+          <div class="cp-pix__acoes">
+            <button class="btn btn--solid" type="button" data-copiar>Copiar código</button>
+            <a class="btn" data-link target="_blank" rel="noopener" hidden>Abrir no Mercado Pago</a>
+          </div>
+          <p class="cp-pix__espera" aria-live="polite"><span class="cp-pix__pulso" aria-hidden="true"></span><span data-espera>Esperando o pagamento</span> · vence em <b data-tempo>30:00</b></p>
+          <button class="cp-pix__cancelar" type="button" data-cancelar>Desistir deste Pix</button>
+        </div>
+
+        <div class="cp-pix__corpo cp-pix__ok" data-etapa="pago" hidden aria-live="assertive">
+          <span class="hcp__gem cp-pix__gem" aria-hidden="true"></span>
+          <p class="cp-pix__ok-t">Pagamento confirmado</p>
+          <p><b data-ganhou></b> CP na sua conta. Saldo agora: <b data-saldo-novo></b> CP.</p>
+          <button class="btn btn--solid" type="button" data-fechar>Fechar</button>
+        </div>
+
+        <div class="cp-pix__corpo" data-etapa="fim" hidden>
+          <p class="cp-pix__msg" data-fim></p>
+          <button class="btn" type="button" data-fechar>Fechar</button>
+        </div>
+      </div>
+    </dialog>
+  )}
 </Base>
 
 <script>
@@ -213,5 +279,161 @@ const metas = [
     };
     c.addEventListener('change', roda);
     roda();
+  }
+</script>
+
+<script>
+  // Compra pelo Pix: abre a janela, gera o Pix no servidor, mostra o QR e pergunta a cada 4 s se já pagou.
+  const dlg = document.querySelector<HTMLDialogElement>('[data-pix]');
+  if (dlg) {
+    type Pedido = { id: string; status: string; nome: string; cp: number; valor: number; expiraEm: string | null; copiaCola: string | null; qr: string | null; link: string | null };
+    const fmt = new Intl.NumberFormat('pt-BR');
+    const brl = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const $ = <T extends HTMLElement>(sel: string) => dlg.querySelector<T>(sel)!;
+    const etapa = (nome: string) => dlg.querySelectorAll<HTMLElement>('[data-etapa]').forEach((e) => (e.hidden = e.dataset.etapa !== nome));
+    let atual: Pedido | null = null;
+    let timer = 0, relogio = 0, falhas = 0;
+
+    const parar = () => { clearTimeout(timer); clearInterval(relogio); };
+    const fim = (msg: string) => { parar(); $('[data-fim]').textContent = msg; etapa('fim'); };
+    const saldoNaPagina = (n: number) => { const el = document.querySelector('[data-saldo]'); if (el) el.innerHTML = `${fmt.format(n)} <small>CP</small>`; const h = document.querySelector('.hcp b'); if (h) h.textContent = fmt.format(n); };
+
+    function pago(p: Pedido, saldo: number) {
+      parar();
+      $('[data-ganhou]').textContent = fmt.format(p.cp);
+      $('[data-saldo-novo]').textContent = fmt.format(saldo);
+      saldoNaPagina(saldo);
+      etapa('pago');
+    }
+
+    function contar() {
+      const vence = atual?.expiraEm ? new Date(atual.expiraEm).getTime() : 0;
+      const tick = () => {
+        const r = Math.max(0, Math.round((vence - Date.now()) / 1000));
+        $('[data-tempo]').textContent = `${String(Math.floor(r / 60)).padStart(2, '0')}:${String(r % 60).padStart(2, '0')}`;
+      };
+      tick(); clearInterval(relogio); relogio = window.setInterval(tick, 1000);
+    }
+
+    async function conferir() {
+      if (!atual || !dlg!.open) return;
+      try {
+        const r = await fetch(`/api/cristais/pedido?id=${atual.id}`, { cache: 'no-store' });
+        const d = await r.json();
+        falhas = 0;
+        const p: Pedido | undefined = d.pedido;
+        if (p?.status === 'pago') return pago(p, d.saldo);
+        if (p?.status === 'expirado') return fim('Este Pix venceu sem pagamento. Se quiser, é só abrir de novo.');
+        if (p?.status === 'cancelado') return fim('Este Pix foi cancelado. Nada foi cobrado.');
+        if (!r.ok) $('[data-espera]').textContent = d.erro ?? 'Conferindo';
+        else $('[data-espera]').textContent = 'Esperando o pagamento';
+      } catch {
+        falhas++;
+        $('[data-espera]').textContent = falhas > 2 ? 'Sem conexão, tentando de novo' : 'Esperando o pagamento';
+      }
+      timer = window.setTimeout(conferir, falhas ? 8000 : 4000);
+    }
+
+    let escolhido: HTMLButtonElement | null = null;
+    const carregando = (msg: string) => { $('[data-carregando]').textContent = msg; etapa('carregando'); };
+
+    // 1º passo: escolher Pix ou cartão
+    function abrir(btn: HTMLButtonElement) {
+      parar();
+      atual = null;
+      escolhido = btn;
+      $('[data-via]').textContent = 'Mercado Pago';
+      $('[data-titulo]').textContent = btn.dataset.nome ?? 'Pacote';
+      $('[data-resumo]').textContent = `${fmt.format(Number(btn.dataset.cp))} CP · ${brl(Number(btn.dataset.preco))}`;
+      etapa('escolher');
+      if (!dlg!.open) dlg!.showModal();
+      dlg!.querySelector<HTMLButtonElement>('[data-metodo="pix"]')?.focus();
+    }
+
+    async function pedir(metodo: 'pix' | 'cartao') {
+      const btn = escolhido;
+      if (!btn) return;
+      $('[data-via]').textContent = metodo === 'pix' ? 'Pix · Mercado Pago' : 'Cartão · Mercado Pago';
+      carregando(metodo === 'pix' ? 'Gerando o seu Pix…' : 'Abrindo a página segura do Mercado Pago…');
+      btn.setAttribute('aria-busy', 'true');
+      try {
+        const r = await fetch('/api/cristais/comprar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pacote: Number(btn.dataset.comprar), metodo }) });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok || !d.pedido) return fim(d.erro ?? 'Não consegui abrir o pagamento agora. Tente de novo em alguns minutos.');
+        if (metodo === 'cartao') {
+          if (!d.pedido.link) return fim('Não consegui abrir o pagamento com cartão agora.');
+          window.location.assign(d.pedido.link);
+          return;
+        }
+        atual = d.pedido as Pedido;
+        const qr = $<HTMLImageElement>('[data-qr]');
+        qr.src = atual.qr ?? '';
+        qr.parentElement!.hidden = !atual.qr;
+        $<HTMLInputElement>('[data-cc]').value = atual.copiaCola ?? '';
+        const link = $<HTMLAnchorElement>('[data-link]');
+        link.hidden = !atual.link; if (atual.link) link.href = atual.link;
+        $('[data-copiar]').textContent = 'Copiar código';
+        etapa('pagar');
+        contar();
+        timer = window.setTimeout(conferir, 4000);
+      } catch {
+        fim('Sem conexão com o site. Confira a internet e tente de novo.');
+      } finally {
+        btn.removeAttribute('aria-busy');
+      }
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-comprar]').forEach((b) => b.addEventListener('click', () => abrir(b)));
+    dlg.querySelectorAll<HTMLButtonElement>('[data-metodo]').forEach((b) => b.addEventListener('click', () => pedir(b.dataset.metodo as 'pix' | 'cartao')));
+
+    // volta do cartão: /cristais/?compra=<id> → confere até o Mercado Pago confirmar
+    const volta = new URLSearchParams(location.search).get('compra');
+    if (volta && /^[a-f0-9]{24}$/i.test(volta)) {
+      history.replaceState(null, '', location.pathname);
+      let tentativas = 0;
+      $('[data-via]').textContent = 'Cartão · Mercado Pago';
+      $('[data-titulo]').textContent = 'Sua compra';
+      $('[data-resumo]').textContent = '';
+      carregando('Conferindo o pagamento com o Mercado Pago…');
+      dlg.showModal();
+      const olhar = async () => {
+        if (!dlg.open) return;
+        tentativas++;
+        try {
+          const r = await fetch(`/api/cristais/pedido?id=${volta}`, { cache: 'no-store' });
+          const d = await r.json();
+          const p: Pedido | undefined = d.pedido;
+          if (p) { $('[data-titulo]').textContent = p.nome; $('[data-resumo]').textContent = `${fmt.format(p.cp)} CP · ${brl(p.valor)}`; }
+          if (p?.status === 'pago') return pago(p, d.saldo);
+          if (!r.ok) return fim(d.erro ?? 'Não achei essa compra.');
+          if (p?.status === 'expirado' || p?.status === 'cancelado') return fim('O pagamento não foi concluído e nada foi cobrado. Se quiser, é só tentar de novo.');
+        } catch { /* tenta de novo */ }
+        if (tentativas >= 15) return fim('Ainda não recebemos a confirmação. Se o pagamento foi aprovado, os Cristais entram sozinhos em alguns minutos.');
+        timer = window.setTimeout(olhar, 3000);
+      };
+      olhar();
+    }
+    $('[data-copiar]').addEventListener('click', async () => {
+      const cc = $<HTMLInputElement>('[data-cc]');
+      try { await navigator.clipboard.writeText(cc.value); } catch { cc.select(); document.execCommand('copy'); }
+      $('[data-copiar]').textContent = 'Copiado';
+    });
+    $('[data-cc]').addEventListener('focus', (e) => (e.target as HTMLInputElement).select());
+    $('[data-cancelar]').addEventListener('click', async () => {
+      if (!atual) return;
+      const b = $<HTMLButtonElement>('[data-cancelar]');
+      b.disabled = true;
+      try {
+        const r = await fetch('/api/cristais/cancelar', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: atual.id }) });
+        const d = await r.json();
+        if (d.status === 'pago') return pago(atual, d.saldo);
+        if (d.status === 'cancelado' || d.status === 'expirado') return fim('Pix cancelado. Nada foi cobrado.');
+        $('[data-espera]').textContent = d.erro ?? 'Não deu para cancelar agora';
+      } catch { /* segue esperando */ } finally { b.disabled = false; }
+    });
+    // fechar a janela não cancela o Pix: se pagar depois, os Cristais entram do mesmo jeito
+    dlg.querySelectorAll('[data-fechar]').forEach((b) => b.addEventListener('click', () => dlg.close()));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', parar);
   }
 </script>

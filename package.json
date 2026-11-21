@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "cristais:teste": "node scripts/cristais-teste.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "8.2.11",

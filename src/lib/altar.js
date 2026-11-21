@@ -14,6 +14,7 @@
  * pelo mesmo caminho que o bot usa em mexerRecurso. O histórico de cada invocação fica em `altarGiros`.
  */
 import { altar, raridades, garantia, inscricao } from '../data/altar.js';
+import { darVisualNoBot } from './visual.js';
 
 export const TETO_INVOCAR = 10;
 
@@ -62,7 +63,7 @@ export function sortear(est, qtd, rng = Math.random, agora = new Date()) {
       // repetido vira Fragmento
       const f = rar === 'lendario' ? 100 : 20;
       fragmentos += f; vestigios[p.id].n += 1; item.repetido = true; item.ganho = `Repetido · +${f} Fragmentos`;
-    } else { vestigios[p.id] = { n: 1, em: agora }; item.novo = true; item.ganho = 'Novo na sua ficha do site'; }
+    } else { vestigios[p.id] = { n: 1, em: agora }; item.novo = true; item.ganho = p.bot ? 'Novo · já vestido na sua ficha, no site e no bot' : 'Novo · a Staff libera no Discord'; }
     res.push(item);
   }
   return { res, pity, pityE, fragmentos, vestigios, materiais };
@@ -127,6 +128,11 @@ export async function invocar(db, { userId, guildId, qtd, ref }, o = {}) {
       await db.collection('personagens').updateOne({ _id: pers._id }, { $inc: inc })
         .catch((err) => console.error('altar (materiais):', userId, JSON.stringify(s.materiais), err?.message ?? err));
     }
+    // visuais novos: vão para a aba Visual do bot (coleção `visuais`), e o primeiro de cada tipo já fica equipado
+    for (const x of s.res.filter((r) => r.novo)) {
+      const p = [...altar.premios.lendario, ...altar.premios.epico].find((y) => y.id === x.id);
+      if (p?.bot) await darVisualNoBot(db, { guildId, userId }, p.bot).catch((err) => console.error('altar (visual):', userId, p.id, err?.message ?? err));
+    }
     await giros.insertOne({ userId, guildId, ref: chave, qtd, cp: preco.cp, insc: preco.insc, res: s.res, materiais: s.materiais, em: agora })
       .catch((err) => console.error('altar (histórico):', err?.message ?? err));
     return { ok: true, res: s.res, estado: await estadoAltar(db, userId) };
@@ -142,3 +148,4 @@ export async function vestigiosDaConta(db, userId) {
   const lista = ordem.flatMap((rar) => altar.premios[rar].filter((p) => tem[p.id]).map((p) => ({ ...p, rar, n: tem[p.id].n })));
   return { lista, fragmentos: c?.fragmentos ?? 0 };
 }
+

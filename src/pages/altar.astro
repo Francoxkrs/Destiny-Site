@@ -102,7 +102,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde:
       <ol>
         <li><span>1</span><b>Junte Inscrições</b><small>Jogando (missões de Rank D ou acima, criaturas, cada Estágio novo) ou com Cristais Prismáticos: o que faltar sai a {fmt.format(inscricao.cp)} CP cada.</small><a href="#ganhar">Como ganhar</a></li>
         <li><span>2</span><b>Escolha onde gastar</b><small>No Altar sai visual da temporada. Na Pedra saem os giros da ficha, como Cápsula de Conhecimento, Magia e Grimório.</small></li>
-        <li><span>3</span><b>Invoque</b><small>O resultado aparece aqui e vai para a sua ficha (visual) ou para a bolsa do seu personagem no bot (materiais).</small><a href="#chances">Ver as chances</a></li>
+        <li><span>3</span><b>Invoque</b><small>O resultado aparece aqui. O visual vai para a sua ficha (no site e na <code>/ficha</code> do bot) e os materiais para o <code>/inventario</code> do bot.</small><a href="#chances">Ver as chances</a></li>
       </ol>
     </section>
 
@@ -125,6 +125,21 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde:
         ))}
       </div>
       <ul class="al-regras">{altar.regras.map((r) => <li>{r}</li>)}</ul>
+
+      <div class="al-sec__h" id="colecao" style="margin-top:clamp(56px,8vw,110px)">
+        <span class="eyebrow"><b>集</b>Coleção da temporada</span>
+        <h2 class="t-h2">{altar.colecao.nome}: <em>prove antes</em>.</h2>
+        <p class="t-body">{altar.colecao.texto} Toque em uma peça para ver como ela fica na sua ficha. Só a prévia, nada é gravado.</p>
+      </div>
+      <ul class="al-col">
+        {[...altar.premios.lendario.map((p) => ({ ...p, rar: 'lendario' })), ...altar.premios.epico.map((p) => ({ ...p, rar: 'epico' }))].map((p) => (
+          <li class="al-col__p" data-r={p.rar}>
+            <span class="al-col__a" aria-hidden="true">{p.img ? <img src={p.img} alt="" loading="lazy" /> : p.k}</span>
+            <span class="al-col__t"><small>{p.rar === 'lendario' ? 'Lendário' : 'Épico'} · {p.tipo}</small><b>{p.nome}</b><span>{p.efeito}</span></span>
+            {p.bot ? <a class="al-col__ver" href={`/ficha/?provar=${p.id}`}>Ver na minha ficha</a> : <span class="al-col__ver is-off">Vai para o Discord</span>}
+          </li>
+        ))}
+      </ul>
 
       <div class="al-sec__h" style="margin-top:clamp(56px,8vw,110px)">
         <span class="eyebrow"><b>石</b>Pedra do Destino</span>

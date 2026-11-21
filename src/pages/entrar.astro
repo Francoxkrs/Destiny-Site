@@ -4,25 +4,45 @@ import Icon from '../components/Icon.astro';
 import Gem from '../components/Gem.astro';
 import { loginPronto } from '../lib/env.js';
 import { lerSessao } from '../lib/sessao.js';
+import { verCodigo } from '../lib/codigo.js';
 export const prerender = false;
 
 const sessao = lerSessao(Astro.cookies);
 const erro = Astro.url.searchParams.get('erro');
 const pronto = loginPronto();
+// link do /site (bot): mostra de quem é e só entra com o clique (o POST gasta o código)
+const codigo = Astro.url.searchParams.get('codigo');
+const voltaQ = Astro.url.searchParams.get('volta') ?? '/ficha/';
+const volta = voltaQ.startsWith('/') && !voltaQ.startsWith('//') ? voltaQ : '/ficha/';
+const doLink = codigo ? await verCodigo(codigo) : null;
+Astro.response.headers.set('cache-control', 'private, no-store');
+Astro.response.headers.set('referrer-policy', 'no-referrer');
 const msgs = {
-  config: 'O login com Discord ainda está sendo ligado. Enquanto isso, a Ficha, as Árvores e o Altar mostram um exemplo.',
+  config: 'O login com Discord ainda está sendo ligado. Use /site no Discord para entrar pelo bot.',
   negado: 'Você cancelou no Discord. Nada foi compartilhado.',
   estado: 'O pedido de login expirou. Tente de novo.',
   discord: 'O Discord não respondeu agora. Tente de novo em instantes.',
+  codigo: 'Esse link já foi usado ou passou dos 10 minutos. Use /site no Discord para pegar outro.',
 };
-const msg = erro ? (msgs[erro] ?? msgs.discord) : !pronto ? msgs.config : null;
+const msg = codigo && !doLink ? msgs.codigo : erro ? (msgs[erro] ?? msgs.discord) : !pronto ? msgs.config : null;
 ---
 <Base title="Entrar" slug="entrar" aba="entrar" description="Entre com a sua conta do Discord para ver a sua ficha, a sua árvore e os seus Cristais.">
   <section class="en">
     <div class="en__card">
       <span class="en__k" aria-hidden="true">門</span>
       <span class="en__gem"><Gem /></span>
-      {sessao ? (
+      {doLink ? (
+        <>
+          <h1>Entrar como <em>{doLink.nome}</em>?</h1>
+          <p>Este link veio do <b>/site</b> no Discord e só vale uma vez. Se não foi você que pediu, feche esta página.</p>
+          <form class="en__btns" method="post" action="/api/auth/codigo">
+            <input type="hidden" name="codigo" value={codigo} />
+            <input type="hidden" name="volta" value={volta} />
+            <button class="btn btn--solid" type="submit"><Icon name="seta" size={18} />Entrar</button>
+            <a class="btn" href="/">Agora não</a>
+          </form>
+        </>
+      ) : sessao ? (
         <>
           <h1>Você já entrou, <em>{sessao.nome}</em>.</h1>
           <p>Sua conta do Discord está ligada a este navegador.</p>
@@ -36,6 +56,7 @@ const msg = erro ? (msgs[erro] ?? msgs.discord) : !pronto ? msgs.config : null;
           <h1>Entre com o <em>Discord</em>.</h1>
           <p>Use a mesma conta do servidor. O portal pede só o seu nome e o seu avatar; não lê mensagens nem a lista de servidores.</p>
           {msg && <p class="en__msg" role="status">{msg}</p>}
+          <p class="en__dica">Ou use <b>/site</b> no Discord: o bot manda um link que já entra com a sua conta.</p>
           <div class="en__btns">
             <a class="btn btn--solid" href="/api/auth/login" aria-disabled={pronto ? undefined : 'true'}><Icon name="discord" size={18} />Entrar com Discord</a>
             <a class="btn" href="/ficha/">Ver a ficha de exemplo</a>

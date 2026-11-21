@@ -1181,3 +1181,5 @@ a.cp-pac__btn { text-decoration: none; }
 .cp-pix__met:focus-visible { outline: 2px solid var(--mana); outline-offset: 2px; }
 @media (hover: hover) { .cp-pix__met:hover { border-color: var(--mana); transform: translateX(4px); } }
 .cp-pix__nota { font-size: 0.82rem; color: var(--mute); }
+/* Pedra: pacotes (2026-11-21) */
+.al-pedra__desc { justify-self: start; font-style: normal; font-family: var(--f-mono); font-weight: 500; font-size: 9.5px; letter-spacing: 0.08em; color: var(--gold); border: 1px solid currentColor; padding: 0 4px; line-height: 1.5; }

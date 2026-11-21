@@ -31,12 +31,12 @@ export function semanaDe(agora = new Date()) {
 /** O que pode ser comprado aqui: giros da Pedra e itens da Loja com entrega na bolsa. */
 export function ofertaDe(tipo, id) {
   if (tipo === 'pedra') {
-    const g = pedra.giros.find((x) => x.chave === id);
-    return g ? { tipo, id: g.chave, chave: g.chave, nome: g.nome, insc: g.custo, so: g.so ?? null, max: g.limite, por: 'temporada', sorteio: g.sorteio ?? null } : null;
+    const g = pedra.giros.find((x) => (x.id ?? x.chave) === id);
+    return g ? { tipo, id: g.id ?? g.chave, chave: g.chave, qtd: g.qtd ?? 1, nome: g.nome, insc: g.custo, so: g.so ?? null, max: g.limite, por: 'temporada', sorteio: g.sorteio ?? null } : null;
   }
   if (tipo === 'loja') {
     const i = loja.find((x) => x.id === id && x.chave);
-    return i ? { tipo, id: i.id, chave: i.chave, nome: i.nome, cp: i.cp, max: i.max ?? null, por: i.por ?? null } : null;
+    return i ? { tipo, id: i.id, chave: i.chave, qtd: 1, nome: i.nome, cp: i.cp, max: i.max ?? null, por: i.por ?? null } : null;
   }
   return null;
 }
@@ -66,7 +66,7 @@ export async function limitesDaConta(db, { userId, guildId }, agora = new Date()
   const persId = String(pers?._id ?? 'novo');
   const conta = contaDe(c);
   const usados = {};
-  for (const g of pedra.giros) usados[`pedra:${g.chave}`] = conta.limites[chaveLimite(ofertaDe('pedra', g.chave), persId, agora)] ?? 0;
+  for (const g of pedra.giros) usados[`pedra:${g.id ?? g.chave}`] = conta.limites[chaveLimite(ofertaDe('pedra', g.id ?? g.chave), persId, agora)] ?? 0;
   for (const i of loja.filter((x) => x.chave)) { const o = ofertaDe('loja', i.id); if (o.max) usados[`loja:${i.id}`] = conta.limites[chaveLimite(o, persId, agora)] ?? 0; }
   return { cp: conta.cp, inscricoes: conta.insc, usados };
 }
@@ -124,9 +124,11 @@ export async function comprar(db, { userId, guildId, tipo, id, ref }, o = {}) {
 
   for (let tentativa = 0; tentativa < 4; tentativa++) {
     const c = contaDe(await contas.findOne({ userId }));
-    if (lim && (c.limites[lim] ?? 0) >= of.max) {
+    const pegou = lim ? c.limites[lim] ?? 0 : 0;
+    if (lim && pegou + of.qtd > of.max) {
       const quando = of.por === 'semana' ? 'nesta semana' : of.por === 'temporada' ? 'nesta temporada' : 'para este personagem';
-      return { ok: false, status: 409, erro: `Você já pegou o máximo de ${of.nome} ${quando} (${of.max}).` };
+      const sobra = Math.max(0, of.max - pegou);
+      return { ok: false, status: 409, erro: sobra && of.qtd > 1 ? `O pacote passa do limite ${quando}: ainda cabem ${sobra} de ${of.max}.` : `Você já pegou o máximo de ${of.nome} ${quando} (${of.max}).` };
     }
     const preco = precoDe(of, c.insc);
     if (preco.cp === null) return { ok: false, status: 402, erro: `${of.nome} só sai com Inscrições ganhas jogando. Faltam ${preco.faltamInsc}.`, falta: { insc: preco.faltamInsc } };
@@ -136,7 +138,7 @@ export async function comprar(db, { userId, guildId, tipo, id, ref }, o = {}) {
     const inc = { altarV: 1 };
     if (preco.cp) { filtro.cp = { $gte: preco.cp }; inc.cp = -preco.cp; }
     if (preco.insc) { filtro.inscricoes = { $gte: preco.insc }; inc.inscricoes = -preco.insc; }
-    if (lim) inc[`limites.${lim}`] = 1;
+    if (lim) inc[`limites.${lim}`] = of.qtd;
     const motivo = `${tipo === 'pedra' ? 'Pedra do Destino' : 'Loja'}: ${of.nome}${preco.insc ? ` (${preco.insc} Inscrições)` : ''}`;
     const feito = await contas.findOneAndUpdate(filtro, { $inc: inc, $set: { atualizadoEm: agora }, $push: { gastos: { ref: chave, cp: preco.cp, insc: preco.insc, motivo, em: agora } } }, { returnDocument: 'after' });
     if (!feito) {
@@ -151,18 +153,18 @@ export async function comprar(db, { userId, guildId, tipo, id, ref }, o = {}) {
         const s = sortearPeso(of.sorteio, o.rng);
         saiu = await respeitaTeto(db, { guildId, userId }, { chave: s.chave, nome: s.nome, rar: s.rar, k: s.k });
       }
-      await darNaBolsa(db, { guildId, userId }, { [saiu.chave]: 1 }, `${motivo}${of.sorteio ? ` → ${saiu.nome}` : ''} (site)`, agora);
+      await darNaBolsa(db, { guildId, userId }, { [saiu.chave]: of.qtd }, `${motivo}${of.sorteio ? ` → ${saiu.nome}` : ''} (site)`, agora);
     } catch (e) {
       // não entregou: devolve tudo (CP, Inscrições, limite) e tira a ref, para poder tentar de novo
       const volta = { altarV: 1 };
       if (preco.cp) volta.cp = preco.cp;
       if (preco.insc) volta.inscricoes = preco.insc;
-      if (lim) volta[`limites.${lim}`] = -1;
+      if (lim) volta[`limites.${lim}`] = -of.qtd;
       await contas.updateOne({ userId, 'gastos.ref': chave }, { $inc: volta, $pull: { gastos: { ref: chave } } }).catch(() => null);
       console.error('loja (bolsa):', userId, of.chave, e?.message ?? e);
       return { ok: false, status: 503, erro: 'Não consegui pôr o item na sua /bolsa agora. Nada foi cobrado. Tente de novo.' };
     }
-    const recibo = { userId, guildId, ref: chave, tipo, id: of.id, chave: saiu.chave, nome: saiu.nome, ...(of.sorteio ? { sorteio: true, rar: saiu.rar ?? null, k: saiu.k ?? null, nota: saiu.nota ?? null } : {}), cp: preco.cp, insc: preco.insc, em: agora };
+    const recibo = { userId, guildId, ref: chave, tipo, id: of.id, chave: saiu.chave, nome: saiu.nome, qtd: of.qtd, ...(of.sorteio ? { sorteio: true, rar: saiu.rar ?? null, k: saiu.k ?? null, nota: saiu.nota ?? null } : {}), cp: preco.cp, insc: preco.insc, em: agora };
     await recibos.insertOne(recibo).catch((e) => console.error('loja (recibo):', e?.message ?? e));
     return { ok: true, recibo, conta: await limitesDaConta(db, { userId, guildId }, agora) };
   }

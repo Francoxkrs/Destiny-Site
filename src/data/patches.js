@@ -116,7 +116,7 @@ const PATCH_ATUAL = {
                 { titulo: "Gastar pelo site", texto: "dá para gastar os pontos na árvore do site ou com `/trilha pegar`. As duas usam a mesma regra e o bot vê na hora." },
                 { titulo: "Site novo", texto: "o site foi refeito no traço do Destiny: a sua ficha como um grimório, as árvores das Classes, das Técnicas e dos Conhecimentos numa página só, a Academia do Marcado para quem está chegando, e as páginas de **Eventos** e de **Patch**." },
                 { titulo: "Altar dos Vestígios", texto: "no site, o gacha da temporada: cada invocação gasta 1 Inscrição (ou 160 Cristais). Sai visual para a sua ficha (capa, título, fundo, tinta), Fragmentos ou materiais, que caem direto na bolsa do personagem. As chances e a garantia ficam sempre à vista: o Lendário é certo na 60ª invocação." },
-                { titulo: "Pedra do Destino", texto: "também no site: troque Inscrições (ou Cristais) por giros e rerolls da `/bolsa` (Cápsula, Giro de Magia, Grimório, Giro de Linhagem e outros). O item cai na sua `/bolsa` e você gira aqui no bot, com as chances e as vagas de sempre. O Reroll de Milagre é sorteado na hora: 80% sai um Traço à escolha e 20% sai o Reroll de Milagre." },
+                { titulo: "Pedra do Destino", texto: "também no site: troque Inscrições (ou Cristais) por giros e rerolls da `/bolsa` (Cápsula, Giro de Magia, Grimório, Giro de Linhagem e outros), avulsos ou em pacotes de 5 e 10 com desconto. O item cai na sua `/bolsa` e você gira aqui no bot, com as chances e as vagas de sempre. O Reroll de Milagre é sorteado na hora: 80% sai um Traço à escolha e 20% sai o Reroll de Milagre." },
             ],
         },
         {

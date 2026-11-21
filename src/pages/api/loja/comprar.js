@@ -11,7 +11,7 @@ export async function POST(ctx) {
   try { corpo = await ctx.request.json(); } catch { return json(400, { erro: 'Pedido inválido.' }); }
   try {
     const r = await comprar(p.db, { userId: p.s.id, guildId: env.guildId, tipo: String(corpo?.tipo ?? ''), id: String(corpo?.id ?? ''), ref: corpo?.ref });
-    return r.ok ? json(200, { recibo: { nome: r.recibo.nome, chave: r.recibo.chave, cp: r.recibo.cp, insc: r.recibo.insc, sorteio: Boolean(r.recibo.sorteio), rar: r.recibo.rar ?? null, k: r.recibo.k ?? null, nota: r.recibo.nota ?? null }, conta: r.conta, repetido: Boolean(r.repetido) }) : json(r.status, { erro: r.erro, falta: r.falta });
+    return r.ok ? json(200, { recibo: { nome: r.recibo.nome, chave: r.recibo.chave, qtd: r.recibo.qtd ?? 1, cp: r.recibo.cp, insc: r.recibo.insc, sorteio: Boolean(r.recibo.sorteio), rar: r.recibo.rar ?? null, k: r.recibo.k ?? null, nota: r.recibo.nota ?? null }, conta: r.conta, repetido: Boolean(r.repetido) }) : json(r.status, { erro: r.erro, falta: r.falta });
   } catch (e) {
     console.error('loja (comprar):', e?.message ?? e);
     return json(500, { erro: 'Algo deu errado na compra. Confira a sua /bolsa no bot antes de tentar de novo.' });

@@ -70,6 +70,9 @@ export const altar = {
  * `sorteio` = o site sorteia na hora entre esses itens (pesos) e entrega o que saiu. Liberados em CP pelo Silas em 21/11/2026,
  * com o Reroll de Milagre virando 80% Traço à escolha e 20% Reroll de Milagre.
  * O limite é por personagem e por temporada.
+ * Tabela de 21/11/2026 (Silas achou os preços estranhos e poucos giros): preços em escada de 1 a 10 Inscrições, limites
+ * maiores e pacotes. Pacote = `id` próprio + `qtd`: cobra uma vez, entrega `qtd` itens e conta `qtd` no limite do item
+ * (o limite é do item, `chave`, então avulso e pacote dividem o mesmo teto).
  */
 export const pedra = {
   id: 'pedra',
@@ -77,16 +80,19 @@ export const pedra = {
   kanji: '石',
   texto: 'Aqui as Inscrições viram giros e rerolls da sua /bolsa no bot. Você gira lá, quando quiser, com as chances de sempre e respeitando as vagas.',
   giros: [
-    { chave: 'giroConhecimento', nome: 'Cápsula de Conhecimento', custo: 1, chances: 'Comum 80%, Incomum 20%', limite: 6 },
-    { chave: 'rerollFamilia', nome: 'Reroll de Família', custo: 2, chances: 'Peso Comum 6, Rara 1', limite: 4 },
-    { chave: 'rerollClasse', nome: 'Reroll de Classe de Mago', custo: 2, chances: 'Pesa a herança da família', limite: 2 },
-    { chave: 'giroMagia', nome: 'Giro de Magia', custo: 2, chances: 'Comum 45%, Incomum 27%, Rara 15%, Épica 9%, Lendária 4%', limite: 6 },
-    { chave: 'rerollRaca', nome: 'Reroll de Raça', custo: 3, chances: 'Humanos 85%, Anões 8%, Bruxas 7%', limite: 2 },
-    { chave: 'giroMagiaSemComum', nome: 'Giro de Magia sem Comum', custo: 4, chances: 'As mesmas, sem Comum', limite: 3 },
-    { chave: 'giroGrimorio', nome: 'Giro de Grimório', custo: 4, chances: 'Comum 92%, Lendário 8%', limite: 2 },
-    { chave: 'giroLinhagem', nome: 'Giro de Linhagem', custo: 6, chances: 'O da família', limite: 1 },
+    { chave: 'giroConhecimento', nome: 'Cápsula de Conhecimento', custo: 1, chances: 'Comum 80%, Incomum 20%', limite: 15 },
+    { chave: 'giroMagia', nome: 'Giro de Magia', custo: 2, chances: 'Comum 45%, Incomum 27%, Rara 15%, Épica 9%, Lendária 4%', limite: 20 },
+    { chave: 'rerollFamilia', nome: 'Reroll de Família', custo: 2, chances: 'Peso Comum 6, Rara 1', limite: 6 },
+    { id: 'giroConhecimento-5', chave: 'giroConhecimento', qtd: 5, nome: '5 Cápsulas de Conhecimento', custo: 4, chances: 'Comum 80%, Incomum 20%, cada uma', limite: 15 },
+    { id: 'giroMagia-5', chave: 'giroMagia', qtd: 5, nome: '5 Giros de Magia', custo: 9, chances: 'Comum 45%, Incomum 27%, Rara 15%, Épica 9%, Lendária 4%, cada um', limite: 20 },
+    { id: 'giroMagia-10', chave: 'giroMagia', qtd: 10, nome: '10 Giros de Magia', custo: 16, chances: 'Comum 45%, Incomum 27%, Rara 15%, Épica 9%, Lendária 4%, cada um', limite: 20 },
+    { chave: 'rerollClasse', nome: 'Reroll de Classe de Mago', custo: 2, chances: 'Pesa a herança da família', limite: 4 },
+    { chave: 'rerollRaca', nome: 'Reroll de Raça', custo: 3, chances: 'Humanos 85%, Anões 8%, Bruxas 7%', limite: 4 },
+    { chave: 'giroMagiaSemComum', nome: 'Giro de Magia sem Comum', custo: 4, chances: 'As mesmas, sem Comum', limite: 10 },
+    { chave: 'giroGrimorio', nome: 'Giro de Grimório', custo: 4, chances: 'Comum 92%, Lendário 8%', limite: 5 },
+    { chave: 'giroLinhagem', nome: 'Giro de Linhagem', custo: 6, chances: 'O da família', limite: 2 },
     {
-      chave: 'rerollMilagre', nome: 'Reroll de Milagre de família', custo: 15, limite: 1,
+      chave: 'rerollMilagre', nome: 'Reroll de Milagre de família', custo: 10, limite: 2,
       chances: '80% Traço à escolha, 20% Reroll de Milagre (o da família, se houver vaga)',
       sorteio: [
         { chave: 'traco', nome: 'Traço à escolha', peso: 80, rar: 'epico', k: '徴' },

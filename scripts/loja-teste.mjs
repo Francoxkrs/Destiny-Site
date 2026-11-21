@@ -61,8 +61,8 @@ const conta = (db) => db.cols.contas.docs[0];
 const bolsa = (db) => db.cols.bolsas.docs[0];
 
 await caso('preço da Pedra: Inscrições primeiro, resto a 160 CP; Milagre também em CP', () => {
-  igual([precoDe(ofertaDe('pedra', 'giroMagia'), 0), precoDe(ofertaDe('pedra', 'giroMagia'), 1), precoDe(ofertaDe('pedra', 'rerollMilagre'), 10), precoDe(ofertaDe('pedra', 'rerollMilagre'), 15)],
-    [{ insc: 0, cp: 320 }, { insc: 1, cp: 160 }, { insc: 10, cp: 800 }, { insc: 15, cp: 0 }]);
+  igual([precoDe(ofertaDe('pedra', 'giroMagia'), 0), precoDe(ofertaDe('pedra', 'giroMagia'), 1), precoDe(ofertaDe('pedra', 'rerollMilagre'), 4), precoDe(ofertaDe('pedra', 'rerollMilagre'), 15)],
+    [{ insc: 0, cp: 320 }, { insc: 1, cp: 160 }, { insc: 4, cp: 960 }, { insc: 10, cp: 0 }]);
 });
 await caso('Família à escolha não está mais à venda', () => igual([ofertaDe('loja', 'familia-escolha'), ofertaDe('loja', 'classe-escolha')?.chave], [null, 'classeEscolha']));
 await caso('semana vira na segunda 00h de Brasília', () => igual([semanaDe(new Date('2026-11-23T02:59:00Z')), semanaDe(new Date('2026-11-23T03:00:00Z'))], ['2026-11-16', '2026-11-23']));
@@ -81,13 +81,30 @@ await caso('Pedra: soma numa bolsa que já existe', async () => {
 await caso('Pedra: limite por personagem e temporada', async () => {
   const db = bancoFalso({ cp: 99999 });
   const rs = [];
-  for (let i = 0; i < 3; i++) rs.push(await comprar(db, { ...quem, tipo: 'pedra', id: 'giroGrimorio', ref: ref() }));
-  igual([rs.map((r) => r.ok), rs[2].status, bolsa(db).itens.giroGrimorio], [[true, true, false], 409, 2]);
+  for (let i = 0; i < 6; i++) rs.push(await comprar(db, { ...quem, tipo: 'pedra', id: 'giroGrimorio', ref: ref() }));
+  igual([rs.map((r) => r.ok), rs[5].status, bolsa(db).itens.giroGrimorio], [[true, true, true, true, true, false], 409, 5]);
+});
+await caso('Pacote: cobra uma vez, entrega 10 na bolsa e divide o limite com o avulso', async () => {
+  const db = bancoFalso({ cp: 99999, inscricoes: 3 });
+  const r = await comprar(db, { ...quem, tipo: 'pedra', id: 'giroMagia-10', ref: ref() });
+  igual([r.ok, r.recibo.qtd, r.recibo.insc, r.recibo.cp, bolsa(db).itens.giroMagia, r.conta.usados['pedra:giroMagia'], r.conta.usados['pedra:giroMagia-5']], [true, 10, 3, 13 * 160, 10, 10, 10]);
+  const r2 = await comprar(db, { ...quem, tipo: 'pedra', id: 'giroMagia-5', ref: ref() });
+  const r3 = await comprar(db, { ...quem, tipo: 'pedra', id: 'giroMagia-10', ref: ref() });
+  igual([r2.ok, r3.ok, r3.status, /cabem 5 de 20/.test(r3.erro), bolsa(db).itens.giroMagia], [true, false, 409, true, 15]);
+  for (let i = 0; i < 5; i++) await comprar(db, { ...quem, tipo: 'pedra', id: 'giroMagia', ref: ref() });
+  const r4 = await comprar(db, { ...quem, tipo: 'pedra', id: 'giroMagia', ref: ref() });
+  igual([r4.ok, bolsa(db).itens.giroMagia], [false, 20]);
+});
+await caso('Pacotes custam menos que o avulso e todo giro tem id único', async () => {
+  const { pedra } = await import('../src/data/altar.js');
+  const ids = pedra.giros.map((g) => g.id ?? g.chave);
+  const caros = pedra.giros.filter((g) => g.qtd).filter((g) => g.custo >= g.qtd * pedra.giros.find((x) => x.chave === g.chave && !x.qtd).custo);
+  igual([new Set(ids).size === ids.length, caros.length, pedra.giros.every((g) => (g.qtd ?? 1) <= g.limite)], [true, 0, true]);
 });
 await caso('Reroll de Milagre: 80% Traço, 20% Milagre, sorteado no servidor e pago em CP', async () => {
   const db = bancoFalso({ cp: 99999 });
   const r1 = await comprar(db, { ...quem, tipo: 'pedra', id: 'rerollMilagre', ref: ref() }, { rng: () => 0.79 });
-  igual([r1.ok, r1.recibo.chave, r1.recibo.rar, conta(db).cp, bolsa(db).itens], [true, 'traco', 'epico', 99999 - 2400, { traco: 1 }]);
+  igual([r1.ok, r1.recibo.chave, r1.recibo.rar, conta(db).cp, bolsa(db).itens], [true, 'traco', 'epico', 99999 - 1600, { traco: 1 }]);
   const db2 = bancoFalso({ cp: 99999 });
   const r2 = await comprar(db2, { ...quem, tipo: 'pedra', id: 'rerollMilagre', ref: ref() }, { rng: () => 0.8 });
   igual([r2.recibo.chave, r2.recibo.rar, bolsa(db2).itens], ['rerollMilagre', 'lendario', { rerollMilagre: 1 }]);

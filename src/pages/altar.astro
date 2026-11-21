@@ -53,9 +53,9 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
                   <legend class="t-label">Escolha o giro</legend>
                   <div class="al-pedra__g">
                     {giros.map((g) => (
-                      <label class:list={['al-pedra__o', g.so && 'is-so']} data-giro={g.chave}>
+                      <label class:list={['al-pedra__o', g.so && 'is-so', g.qtd && 'is-pacote']} data-giro={g.id ?? g.chave}>
                         <input type="radio" name="giro" value={g.i} checked={g.i === 0} />
-                        <span>{g.nome}<small data-lim>{g.so ? 'Só Inscrições · ' : ''}até {g.limite}</small></span>
+                        <span>{g.nome}{g.qtd && <em class="al-pedra__desc">−{Math.round(100 - (g.custo * 100) / (g.qtd * giros.find((x) => x.chave === g.chave && !x.qtd).custo))}%</em>}<small data-lim>{g.so ? 'Só Inscrições · ' : ''}até {g.limite}</small></span>
                         <b>{g.custo}<i class="al-insc" aria-hidden="true"></i></b>
                       </label>
                     ))}

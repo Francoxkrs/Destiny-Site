@@ -7,7 +7,7 @@ const fmt = new Intl.NumberFormat('pt-BR');
 const pct = (n) => `${String(n).replace('.', ',')}%`;
 // Pedra do Destino: o site entrega o item na /bolsa e o jogador gira no bot (src/lib/loja.js).
 const giros = pedra.giros.map((g, i) => ({ ...g, i }));
-const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, raridades, garantia, giros, inscricao };
+const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde: altar.onde }, raridades, garantia, giros, inscricao };
 ---
 <Base title="Altar dos Vestígios" slug="altar" aba="altar" description="O Altar dos Vestígios: o gacha da temporada do Black Destiny, com chances e garantia sempre à vista, e a Pedra do Destino.">
   <div class="al" data-altar>
@@ -179,6 +179,11 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
     <form method="dialog"><button class="al-hist__x" aria-label="Fechar">×</button></form>
     <h2>Histórico</h2>
     <p class="t-small" data-hist-nota>Suas últimas invocações no Altar dos Vestígios.</p>
+    <dl class="al-hist__onde">
+      <div><dt>Visuais</dt><dd>{altar.onde.visual}. <a href="/ficha/">Abrir a ficha</a></dd></div>
+      <div><dt>Fragmentos</dt><dd>{altar.onde.fragmentos}</dd></div>
+      <div><dt>Materiais</dt><dd>{altar.onde.material}</dd></div>
+    </dl>
     <ol data-hist-lista></ol>
   </dialog>
 

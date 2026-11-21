@@ -1183,3 +1183,11 @@ a.cp-pac__btn { text-decoration: none; }
 .cp-pix__nota { font-size: 0.82rem; color: var(--mute); }
 /* Pedra: pacotes (2026-11-21) */
 .al-pedra__desc { justify-self: start; font-style: normal; font-family: var(--f-mono); font-weight: 500; font-size: 9.5px; letter-spacing: 0.08em; color: var(--gold); border: 1px solid currentColor; padding: 0 4px; line-height: 1.5; }
+
+/* Histórico do Altar: onde cada prêmio cai (2026-11-21) */
+.al-hist__onde { margin-top: 12px; display: grid; gap: 6px; padding: 10px 12px; border: 1px solid rgba(10, 10, 11, 0.16); font-size: 0.85rem; }
+.al-hist__onde div { display: grid; grid-template-columns: 84px 1fr; gap: 8px; }
+.al-hist__onde dt { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10, 10, 11, 0.6); padding-top: 2px; }
+.al-hist__onde a { color: var(--mana-2); text-decoration: underline; }
+.al-hist li small { display: block; font-family: var(--f-mono); font-weight: 400; font-size: 10px; letter-spacing: 0.04em; color: rgba(10, 10, 11, 0.55); }
+.al-hist .t-small { color: rgba(10, 10, 11, 0.65); }

@@ -156,11 +156,20 @@ await caso('desistir: cancela; se já pagou, credita', async () => {
   const [a, b] = db.cols.comprasCristais.docs; mp.pagar(b.mpId);
   igual([(await cancelarCompra(db, 'TESTE', a, { agora: T0, f: mp.f })).status, (await cancelarCompra(db, 'TESTE', b, { agora: T0, f: mp.f })).status, db.cols.contas.docs[0].cp], ['cancelado', 'pago', 990]);
 });
-await caso('teto de R$ 150 no mês conta pagos e Pix abertos', async () => {
+await caso('teto de R$ 500 no mês conta pagos e Pix abertos', async () => {
   const db = bancoFalso(), mp = mpFalso();
-  const a = await abrirCompra(db, cfg, { ...quem, n: 6 }, { agora: T0, f: mp.f });
-  const b = await abrirCompra(db, cfg, { ...quem, n: 1 }, { agora: T0, f: mp.f });
-  igual([a.ok, b.ok, b.erro.includes('teto')], [true, false, true]);
+  const tres = [];
+  for (let i = 0; i < 3; i++) {
+    tres.push((await abrirCompra(db, cfg, { ...quem, n: 6 }, { agora: T0, f: mp.f })).ok);
+    const d = db.cols.comprasCristais.docs.at(-1);
+    if (i < 2) { mp.pagar(d.mpId); await conferir(db, 'TESTE', d, { agora: T0, f: mp.f }); } // duas pagas, a terceira aberta
+  }
+  const veio = await abrirCompra(db, cfg, { ...quem, n: 4 }, { agora: T0, f: mp.f }); // 449,97 + 59,99 passa de 500
+  const lasca = await abrirCompra(db, cfg, { ...quem, n: 1 }, { agora: T0, f: mp.f }); // 449,97 + 4,99 cabe
+  const outra = await abrirCompra(db, cfg, { ...quem, n: 3 }, { agora: T0, f: mp.f }); // 454,96 + 29,99 cabe
+  const mais = await abrirCompra(db, cfg, { ...quem, n: 2 }, { agora: T0, f: mp.f }); // 484,95 + 14,99 = 499,94 cabe
+  const fim = await abrirCompra(db, cfg, { ...quem, n: 5 }, { agora: T0, f: mp.f }); // 499,94 + 99,99 passa
+  igual([tres, veio.ok, veio.erro.includes('R$ 500'), lasca.ok, outra.ok, mais.ok, fim.ok], [[true, true, true], false, true, true, true, true, false]);
   // pagou a Coroa em novembro: em dezembro abre de novo
   const d = db.cols.comprasCristais.docs[0]; mp.pagar(d.mpId); await conferir(db, 'TESTE', d, { agora: T0, f: mp.f });
   igual((await abrirCompra(db, cfg, { ...quem, n: 1 }, { agora: new Date('2026-12-01T03:30:00Z'), f: mp.f })).ok, true);

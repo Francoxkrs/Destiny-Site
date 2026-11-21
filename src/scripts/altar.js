@@ -421,6 +421,14 @@ addEventListener('keydown', (e) => { if (!inv.hidden && e.key === 'Escape') fech
 addEventListener('resize', () => { if (!inv.hidden) ceuInicia(); });
 
 /* ---------------------------------------------------------------- histórico */
+// onde cada prêmio caiu: material no /inventario, Fragmento e visual na ficha do site
+const todosPremios = Object.values(D.altar.premios).flat();
+function ondeCai(nome) {
+  const p = todosPremios.find((x) => x.nome === nome);
+  if (p?.material) return D.altar.onde.material;
+  if (p?.fragmentos) return D.altar.onde.fragmentos;
+  return D.altar.onde.visual;
+}
 const hist = $('[data-hist]');
 $('[data-historico]').addEventListener('click', async () => {
   if (st.modo === 'ok') await carregar();
@@ -428,6 +436,14 @@ $('[data-historico]').addEventListener('click', async () => {
   const ol = $('[data-hist-lista]');
   ol.innerHTML = '';
   if (!st.hist.length) { const li = document.createElement('li'); li.textContent = 'Nenhuma invocação ainda.'; ol.append(li); }
-  st.hist.slice(0, 60).forEach((h) => { const li = document.createElement('li'); li.dataset.r = h.rar; li.textContent = `${nomeR[h.rar]} · ${h.nome}`; ol.append(li); });
+  st.hist.slice(0, 60).forEach((h) => {
+    const li = document.createElement('li');
+    li.dataset.r = h.rar;
+    li.textContent = `${nomeR[h.rar]} · ${h.nome}`;
+    const onde = document.createElement('small');
+    onde.textContent = ondeCai(h.nome);
+    li.append(onde);
+    ol.append(li);
+  });
   hist.showModal();
 });

@@ -57,12 +57,12 @@ export function sortear(est, qtd, rng = Math.random, agora = new Date()) {
     const p = pool[Math.min(pool.length - 1, Math.floor(rng() * pool.length))];
     const item = { id: p.id, nome: p.nome, tipo: p.tipo, rar, ...(p.img ? { img: p.img } : {}), ...(p.k ? { k: p.k } : {}) };
     if (p.fragmentos) { fragmentos += p.fragmentos; item.ganho = `+${p.fragmentos} Fragmentos`; }
-    else if (p.material) { materiais[p.material.chave] = (materiais[p.material.chave] ?? 0) + p.material.qtd; item.ganho = `${p.material.qtd}× na bolsa do bot`; }
+    else if (p.material) { materiais[p.material.chave] = (materiais[p.material.chave] ?? 0) + p.material.qtd; item.ganho = 'No /inventario do bot, em Recursos'; }
     else if (vestigios[p.id]) {
       // repetido vira Fragmento
       const f = rar === 'lendario' ? 100 : 20;
       fragmentos += f; vestigios[p.id].n += 1; item.repetido = true; item.ganho = `Repetido · +${f} Fragmentos`;
-    } else { vestigios[p.id] = { n: 1, em: agora }; item.novo = true; item.ganho = 'Novo na sua ficha'; }
+    } else { vestigios[p.id] = { n: 1, em: agora }; item.novo = true; item.ganho = 'Novo na sua ficha do site'; }
     res.push(item);
   }
   return { res, pity, pityE, fragmentos, vestigios, materiais };
@@ -121,7 +121,7 @@ export async function invocar(db, { userId, guildId, qtd, ref }, o = {}) {
       if (ja) return { ok: true, repetido: true, res: ja.res, estado: await estadoAltar(db, userId) };
       continue; // outra invocação gravou antes: sorteia de novo com o estado novo
     }
-    // materiais dos Raros: direto na bolsa do personagem (mesmo caminho do mexerRecurso do bot)
+    // materiais dos Raros: direto nos Recursos do personagem, que o /inventario mostra (mesmo caminho do mexerRecurso do bot)
     const inc = Object.fromEntries(Object.entries(s.materiais).map(([k, n]) => [`estado.recursos.${k}`, n]));
     if (Object.keys(inc).length) {
       await db.collection('personagens').updateOne({ _id: pers._id }, { $inc: inc })

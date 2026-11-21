@@ -287,7 +287,7 @@ const metas = [
       if (!b) { plano.innerHTML = '<p class="cp-calc__vazio">Passa do que dá para comprar de uma vez.</p>'; return; }
       const itens = b.q.map((n, i) => (n ? `<li><b>${n}×</b> ${P[i].nome}<span>${brl(n * P[i].preco)}</span></li>` : '')).join('');
       const sobra = b.cp - meta;
-      const teto = b.preco > 150 ? '<p class="cp-calc__nota">Passa do teto de R$ 150 por mês: dá para dividir em dois meses.</p>' : '';
+      const teto = b.preco > 500 ? '<p class="cp-calc__nota">Passa do teto de R$ 500 por mês: dá para dividir em dois meses.</p>' : '';
       const jaTem = tem ? `<p class="cp-calc__nota">Já descontei os ${fmt.format(tem)} CP que você tem.</p>` : '';
       plano.innerHTML = `<ul>${itens}</ul><p class="cp-calc__preco"><span>Total</span><b>${brl(b.preco)}</b></p><p class="cp-calc__sobra">${sobra ? `Sobram ${fmt.format(sobra)} CP na conta.` : 'Sem sobra.'}</p>${teto}${jaTem}`;
     };

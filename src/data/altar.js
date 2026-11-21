@@ -57,10 +57,16 @@ export const altar = {
       { id: 'quartzo', nome: '2 Quartzos de Mana', tipo: 'Material', k: '晶', material: { chave: 'quartzo', qtd: 2 } },
     ],
   },
+  /** Onde cada prêmio cai (o Histórico e a carta mostram isso). */
+  onde: {
+    visual: 'Na sua ficha do site, em Vestígios',
+    fragmentos: 'Somam na sua ficha do site, em Vestígios',
+    material: 'No /inventario do bot, em Recursos',
+  },
   oQueSai: {
     lendario: 'Capa de grimório animada, moldura animada, aura do feitiço na ficha e no site, Familiar de enfeite.',
     epico: 'Título, fundo de ficha, tinta, selo, emote da temporada.',
-    raro: '3 Fragmentos de Vestígio ou um material que cai na bolsa do bot (1 Pó de Cristal, 2 Quartzos de Mana ou 3 Couros de Besta).',
+    raro: '3 Fragmentos de Vestígio ou um material que cai no /inventario do bot, em Recursos (1 Pó de Cristal, 2 Quartzos de Mana ou 3 Couros de Besta).',
   },
 };
 

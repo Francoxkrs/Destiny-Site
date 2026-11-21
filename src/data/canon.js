@@ -22,7 +22,7 @@ export const capitulos = [
 export const paginas = [
   { slug: 'comecar', cap: 'comecar', num: '01', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
   { slug: 'mundo', cap: 'mundo', num: '02', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos', essencial: ['Todo personagem renasce em Diamond, o reino que esgotou a própria terra.', 'A Coroa, o Lapidário e os Veios separam Realeza, Nobreza e Plebe; o Fosso é o mercado negro.', 'Clover, Spades e Heart são os reinos de onde as almas vieram.'] },
-  { slug: 'mapa', cap: 'mundo', num: '03', titulo: 'Mapa de Diamond', resumo: 'Os 31 lugares, a mana de cada um e as viagens', essencial: ['Cada região é uma categoria do Discord, e cada lugar tem uma placa com o que vale ali.', 'A mana muda de lugar para lugar: Forte nas Câmaras e na Fenda de Clover, Rala no Fosso, Morta nas Valas e nos Planaltos.', 'Viajar entre regiões leva de 2 a 70 minutos reais, conforme a estrada e o jeito de ir.'] },
+  { slug: 'mapa', cap: 'mundo', num: '03', titulo: 'Mapa de Diamond', resumo: 'Os 51 canais, a mana de cada um e as viagens', essencial: ['Cada região é uma categoria do Discord, e cada lugar tem uma placa com o que vale ali.', 'A mana muda de lugar para lugar: Forte nas Câmaras e na Fenda de Clover, Rala no Fosso, Morta nas Valas e nos Planaltos.', 'Viajar entre regiões leva de 2 a 70 minutos reais, conforme a estrada e o jeito de ir.'] },
   { slug: 'generais', cap: 'mundo', num: '04', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
   { slug: 'familias', cap: 'personagem', num: '05', titulo: 'Famílias', resumo: 'Classes sociais e as 25 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
   { slug: 'racas', cap: 'personagem', num: '06', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas, Elfos e Híbridos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
@@ -62,7 +62,7 @@ export const eventosDiamond = [
 ];
 
 /* ==========================================================================
-   Mapa de Diamond (2026-11-08): os 31 lugares de RP que o bot cria com o
+   Mapa de Diamond (2026-11-21): os 51 canais de RP que o bot cria com o
    /regioes, as zonas de mana e o deslocamento (/viajar). Fonte: o bot
    (mapa/canais.ts e canon/viagem.ts).
    ========================================================================== */
@@ -85,470 +85,569 @@ export const lugaresRegras = [
 
 export const lugares = [
   {
-    nome: "A Coroa",
-    kanji: "王冠",
-    quem: "Realeza e alto comando",
-    mana: "comum",
-    resumo: "Almas da Realeza renascem aqui.",
-    mercado: "Minério e Cristal ×1,3; comida e madeira ×1; itens mágicos ×0,9",
-    lugares: [
+    "nome": "A Coroa",
+    "kanji": "王冠",
+    "quem": "Realeza e alto comando",
+    "mana": "comum",
+    "resumo": "Almas da Realeza renascem aqui.",
+    "mercado": "Minério e Cristal ×1,3; comida e madeira ×1; itens mágicos ×0,9",
+    "lugares": [
       {
-        nome: "Valcristal",
-        texto: "A capital. Avenidas de cristal polido, guardas em cada esquina e o barulho de uma cidade que finge que o reino não está morrendo. As missões dos Generais são anunciadas na praça."
+        "nome": "Portões de Valcristal",
+        "texto": "A muralha de cristal e o único portão aberto ao público. Os guardas pedem nome, motivo e, às vezes, um suborno. Quem chega de fora passa por aqui."
       },
       {
-        nome: "Palácio de cristal",
-        texto: "Sede do trono de Diamond. Audiências, bailes e conspirações. Só entra quem foi chamado.",
-        quem: "Realeza e convidados",
-        dentro: [
+        "nome": "Praça das facetas",
+        "texto": "O coração de Valcristal: um relógio de cristal que marca as horas com luz, bancos de pedra polida e todo mundo vendo todo mundo."
+      },
+      {
+        "nome": "Taverna do último brilho",
+        "texto": "Taverna fina de paredes espelhadas. O vinho é caro, os segredos também, e a taverneira lembra de todo rosto que já passou pela porta."
+      },
+      {
+        "nome": "Valcristal",
+        "texto": "A capital. Avenidas de cristal polido, guardas em cada esquina e o barulho de uma cidade que finge que o reino não está morrendo. As missões dos Generais são anunciadas na praça."
+      },
+      {
+        "nome": "Palácio de cristal",
+        "texto": "Sede do trono de Diamond. Audiências, bailes e conspirações. Só entra quem foi chamado.",
+        "quem": "Realeza e convidados",
+        "dentro": [
           {
-            nome: "Salão do Trono",
-            texto: "Onde o rei recebe audiências e distribui favores. Uma palavra errada aqui custa caro.",
-            quem: "Realeza e convidados"
+            "nome": "Salão do Trono",
+            "texto": "Onde o rei recebe audiências e distribui favores. Uma palavra errada aqui custa caro.",
+            "quem": "Realeza e convidados"
           },
           {
-            nome: "Salão dos Espelhos",
-            texto: "Bailes, alianças de família e intrigas. Cada espelho tem alguém escutando do outro lado.",
-            quem: "Realeza e convidados"
+            "nome": "Salão dos Espelhos",
+            "texto": "Bailes, alianças de família e intrigas. Cada espelho tem alguém escutando do outro lado.",
+            "quem": "Realeza e convidados"
           },
           {
-            nome: "Jardins de Vidro",
-            texto: "Flores de cristal que nunca murcham, porque nunca viveram. Bom para conversas que não podem ser ouvidas.",
-            quem: "Realeza e convidados"
+            "nome": "Jardins de Vidro",
+            "texto": "Flores de cristal que nunca murcham, porque nunca viveram. Bom para conversas que não podem ser ouvidas.",
+            "quem": "Realeza e convidados"
           },
           {
-            nome: "Câmara do Conselho",
-            texto: "O Conselho decide o que o Tesouro da Coroa paga e quando um evento começa.",
-            quem: "Realeza",
-            eventos: "Todos: os eventos são anunciados aqui"
+            "nome": "Câmara do Conselho",
+            "texto": "O Conselho decide o que o Tesouro da Coroa paga e quando um evento começa.",
+            "quem": "Realeza",
+            "eventos": "Todos: os eventos são anunciados aqui"
           },
           {
-            nome: "Masmorra de Cristal",
-            texto: "Celas de cristal sob o palácio. Sonegadores pegos pagam o triplo ou ficam aqui."
+            "nome": "Masmorra de Cristal",
+            "texto": "Celas de cristal sob o palácio. Sonegadores pegos pagam o triplo ou ficam aqui."
           }
         ]
       },
       {
-        nome: "Forja dos generais",
-        texto: "Quartel dos Generais Brilhantes. Treino, patentes, experimentos e o Exame da Forja.",
-        dentro: [
+        "nome": "Forja dos generais",
+        "texto": "Quartel dos Generais Brilhantes. Treino, patentes, experimentos e o Exame da Forja.",
+        "dentro": [
           {
-            nome: "Pátio da Forja",
-            texto: "Treino físico sob o olhar dos Tenentes. Força, Resistência e Velocidade, até alguém cair."
+            "nome": "Pátio da Forja",
+            "texto": "Treino físico sob o olhar dos Tenentes. Força, Resistência e Velocidade, até alguém cair."
           },
           {
-            nome: "Arena do Exame",
-            texto: "Onde o Exame da Forja escolhe os Recrutas Brilhantes. No resto do ano, duelos marcados.",
-            eventos: "Exame da Forja"
+            "nome": "Arena do Exame",
+            "texto": "Onde o Exame da Forja escolhe os Recrutas Brilhantes. No resto do ano, duelos marcados.",
+            "eventos": "Exame da Forja"
           },
           {
-            nome: "Salão das Patentes",
-            texto: "Méritos, promoções e a disputa pelos sete postos de General.",
-            quem: "Generais Brilhantes e recrutas"
+            "nome": "Salão das Patentes",
+            "texto": "Méritos, promoções e a disputa pelos sete postos de General.",
+            "quem": "Generais Brilhantes e recrutas"
           },
           {
-            nome: "Arsenal Brilhante",
-            texto: "Armas e armaduras da Coroa. Ferreiros Oficiais e Mestres pegam encomendas pagas pelo Tesouro.",
-            oficios: [
+            "nome": "Arsenal Brilhante",
+            "texto": "Armas e armaduras da Coroa. Ferreiros Oficiais e Mestres pegam encomendas pagas pelo Tesouro.",
+            "oficios": [
               "Ferreiro"
             ]
           },
           {
-            nome: "Alas das Tropas",
-            texto: "As alas das Tropas de Reconhecimento, de Abate e de Conquista. Daqui saem as missões militares.",
-            quem: "Generais Brilhantes e recrutas"
+            "nome": "Alas das Tropas",
+            "texto": "As alas das Tropas de Reconhecimento, de Abate e de Conquista. Daqui saem as missões militares.",
+            "quem": "Generais Brilhantes e recrutas"
           },
           {
-            nome: "Sala de Procedimentos",
-            texto: "Onde a Forja faz seus soldados. Mesas de ferro, frascos rotulados e gente que não lembra o próprio nome.",
-            quem: "Generais Brilhantes e recrutas",
-            perigo: "C, B"
+            "nome": "Sala de Procedimentos",
+            "texto": "Onde a Forja faz seus soldados. Mesas de ferro, frascos rotulados e gente que não lembra o próprio nome.",
+            "quem": "Generais Brilhantes e recrutas",
+            "perigo": "C, B"
           }
         ]
       },
       {
-        nome: "Torre dos grimórios",
-        texto: "Onde os grimórios são registrados, estudados e, às vezes, confiscados. Feitiços novos passam por aqui."
+        "nome": "Torre dos grimórios",
+        "texto": "Onde os grimórios são registrados, estudados e, às vezes, confiscados. Feitiços novos passam por aqui."
       },
       {
-        nome: "Grande arquivo",
-        texto: "O Grande Arquivo de Valcristal, a maior biblioteca de Diamond.",
-        dentro: [
+        "nome": "Grande arquivo",
+        "texto": "O Grande Arquivo de Valcristal, a maior biblioteca de Diamond.",
+        "dentro": [
           {
-            nome: "Salão de Leitura",
-            texto: "Mesas longas, silêncio e bibliotecários que cobram multa por página dobrada.",
-            estudo: "Todos os Conhecimentos Comuns"
+            "nome": "Salão de Leitura",
+            "texto": "Mesas longas, silêncio e bibliotecários que cobram multa por página dobrada.",
+            "estudo": "Todos os Conhecimentos Comuns"
           },
           {
-            nome: "Ala Científica",
-            texto: "O único lugar fora das Academias que ensina Científico. Os livros ficam presos por correntes.",
-            estudo: "Científico"
+            "nome": "Ala Científica",
+            "texto": "O único lugar fora das Academias que ensina Científico. Os livros ficam presos por correntes.",
+            "estudo": "Científico"
           },
           {
-            nome: "Sala Rúnica",
-            texto: "Paredes cobertas de runas antigas. Quem aprende a lê-las entende a Matriz Rúnica.",
-            estudo: "Runas de Diamond e Leitor de Runas"
+            "nome": "Sala Rúnica",
+            "texto": "Paredes cobertas de runas antigas. Quem aprende a lê-las entende a Matriz Rúnica.",
+            "estudo": "Runas de Diamond e Leitor de Runas"
           },
           {
-            nome: "Cofre Lacrado",
-            texto: "Atrás de três portas seladas, os Conhecimentos que a Coroa quer esquecidos.",
-            quem: "Só com autorização da Staff",
-            estudo: "Conhecimentos Perdidos"
+            "nome": "Cofre Lacrado",
+            "texto": "Atrás de três portas seladas, os Conhecimentos que a Coroa quer esquecidos.",
+            "quem": "Só com autorização da Staff",
+            "estudo": "Conhecimentos Perdidos"
           }
         ]
       },
       {
-        nome: "Paço das corporações",
-        texto: "Cartórios e tribunais da Coroa. Licenças de ofício, Contratos com Notário, impostos, julgamentos e a Casa do Tesouro.",
-        oficios: [
+        "nome": "Paço das corporações",
+        "texto": "Cartórios e tribunais da Coroa. Licenças de ofício, Contratos com Notário, impostos, julgamentos e a Casa do Tesouro.",
+        "oficios": [
           "Notário",
           "Magistrado"
         ]
       },
       {
-        nome: "Avenida lapidada",
-        texto: "Lojas finas, joalheiros e casas de família. Tudo é caro, e quem compra aqui quer ser visto comprando.",
-        oficios: [
+        "nome": "Avenida lapidada",
+        "texto": "Lojas finas, joalheiros e casas de família. Tudo é caro, e quem compra aqui quer ser visto comprando.",
+        "oficios": [
           "Mercador"
         ],
-        mercado: true,
-        terras: "Lote Urbano 20.000; Feudos só pela Coroa"
+        "mercado": true,
+        "terras": "Lote Urbano 20.000; Feudos só pela Coroa"
+      },
+      {
+        "nome": "Sala de guerra",
+        "texto": "O quartel fechado dos Generais Brilhantes. Mapas na mesa, ordens do Rei e os relatórios das sentinelas. Cada Tropa tem o seu tópico.",
+        "quem": "Os Generais Brilhantes",
+        "topicos": [
+          "Tropas de Reconhecimento",
+          "Tropas de Abate",
+          "Tropas de Conquista"
+        ]
+      },
+      {
+        "nome": "Moradas da coroa",
+        "texto": "As casas, os lotes e os feudos da Coroa. Cada Terra comprada aqui vira um post do dono, onde ele recebe quem quiser.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "O Lapidário",
-    kanji: "研磨",
-    quem: "Nobreza e cientistas",
-    mana: "comum",
-    resumo: "Almas da Nobreza renascem aqui.",
-    mercado: "Minério e Cristal ×1; comida e madeira ×1,2; itens mágicos ×1",
-    lugares: [
+    "nome": "O Lapidário",
+    "kanji": "研磨",
+    "quem": "Nobreza e cientistas",
+    "mana": "comum",
+    "resumo": "Almas da Nobreza renascem aqui.",
+    "mercado": "Minério e Cristal ×1; comida e madeira ×1,2; itens mágicos ×1",
+    "lugares": [
       {
-        nome: "Cidades laboratório",
-        texto: "Ruas limpas, chaminés de vidro e gente de jaleco. Aqui Diamond transforma o que sobrou de mana em ciência."
+        "nome": "Estação do trilho",
+        "texto": "Onde o Trilho de Cristal para, entre vapor e vidro. Quem chega ao Lapidário desce aqui e é olhado de cima a baixo."
       },
       {
-        nome: "Câmaras de mana",
-        texto: "As zonas de Forte Mana do reino. Disputadas, vigiadas e caras.",
-        mana: "forte",
-        dentro: [
+        "nome": "Praça dos jalecos",
+        "texto": "Praça de pedra branca cercada de laboratórios. Pesquisadores discutem em voz alta e aprendizes vendem anotações roubadas."
+      },
+      {
+        "nome": "Salão de chá refratário",
+        "texto": "Chá servido em xícaras de cristal que mudam de cor com o humor de quem bebe. A Nobreza vem aqui para ser vista conversando."
+      },
+      {
+        "nome": "Cidades laboratório",
+        "texto": "Ruas limpas, chaminés de vidro e gente de jaleco. Aqui Diamond transforma o que sobrou de mana em ciência."
+      },
+      {
+        "nome": "Câmaras de mana",
+        "texto": "As zonas de Forte Mana do reino. Disputadas, vigiadas e caras.",
+        "mana": "forte",
+        "controle": 3,
+        "dentro": [
           {
-            nome: "Câmara Pública",
-            texto: "Fila na porta e entrada paga por cena. Quase sempre lotada."
+            "nome": "Câmara Pública",
+            "texto": "Fila na porta e entrada paga por cena. Quase sempre lotada."
           },
           {
-            nome: "Câmara de Ressonância",
-            texto: "As paredes devolvem a mana de quem treina. Feita para o Treino de Controle e o Método de Mana."
+            "nome": "Câmara de Ressonância",
+            "texto": "As paredes devolvem a mana de quem treina. Feita para o Treino de Controle e o Método de Mana."
           },
           {
-            nome: "Câmara Selada",
-            texto: "Reservada às famílias que pagam por ela. Silenciosa e sempre vazia.",
-            quem: "Nobreza e Realeza"
+            "nome": "Câmara Selada",
+            "texto": "Reservada às famílias que pagam por ela. Silenciosa e sempre vazia.",
+            "quem": "Nobreza e Realeza"
           },
           {
-            nome: "Câmara Rachada",
-            texto: "Abandonada depois de um acidente. A mana ainda é forte, mas o Gás de Mana vaza: sem Máscara de Filtro, Doença de Mana em 3 turnos.",
-            perigo: "D, C"
+            "nome": "Câmara Rachada",
+            "texto": "Abandonada depois de um acidente. A mana ainda é forte, mas o Gás de Mana vaza: sem Máscara de Filtro, Doença de Mana em 3 turnos.",
+            "perigo": "D, C"
           }
         ]
       },
       {
-        nome: "Academias",
-        texto: "As Academias do Lapidário, onde a Nobreza estuda e pesquisa.",
-        dentro: [
+        "nome": "Academias",
+        "texto": "As Academias do Lapidário, onde a Nobreza estuda e pesquisa.",
+        "dentro": [
           {
-            nome: "Academia Arcana",
-            texto: "Salas de aula em anfiteatro e professores que nunca viram os Veios.",
-            estudo: "Todos os Comuns, menos Científico"
+            "nome": "Academia Arcana",
+            "texto": "Salas de aula em anfiteatro e professores que nunca viram os Veios.",
+            "estudo": "Todos os Comuns, menos Científico"
           },
           {
-            nome: "Escola de Medicina",
-            texto: "Onde se formam os Médicos de Diamond. Os cadáveres de estudo vêm de algum lugar.",
-            estudo: "Medicinal e Medicina Avançada"
+            "nome": "Escola de Medicina",
+            "texto": "Onde se formam os Médicos de Diamond. Os cadáveres de estudo vêm de algum lugar.",
+            "estudo": "Medicinal e Medicina Avançada"
           },
           {
-            nome: "Escola de Engenharia",
-            texto: "Máquinas a meio caminho, plantas espalhadas e o cheiro de óleo queimado.",
-            oficios: [
+            "nome": "Escola de Engenharia",
+            "texto": "Máquinas a meio caminho, plantas espalhadas e o cheiro de óleo queimado.",
+            "oficios": [
               "Engenheiro"
             ],
-            estudo: "Científico e Engenharia"
+            "estudo": "Científico e Engenharia"
           },
           {
-            nome: "Ateliê de Lapidação",
-            texto: "Bancadas de lapidar, lentes e Pó de Cristal no ar. Aluga Laboratório por Jornada.",
-            oficios: [
+            "nome": "Ateliê de Lapidação",
+            "texto": "Bancadas de lapidar, lentes e Pó de Cristal no ar. Aluga Laboratório por Jornada.",
+            "oficios": [
               "Lapidador de Cristais"
             ]
           },
           {
-            nome: "Salão da Exposição Real",
-            texto: "Onde as pesquisas competem pela atenção da Coroa. No resto do ano, palestras.",
-            eventos: "Exposição Real"
+            "nome": "Salão da Exposição Real",
+            "texto": "Onde as pesquisas competem pela atenção da Coroa. No resto do ano, palestras.",
+            "eventos": "Exposição Real"
           }
         ]
       },
       {
-        nome: "Estufas de mana",
-        texto: "Estufas que cultivam comida e ervas raras em terra morta. Algumas foram abandonadas e ninguém sabe o que cresce nelas.",
-        oficios: [
+        "nome": "Estufas de mana",
+        "texto": "Estufas que cultivam comida e ervas raras em terra morta. Algumas foram abandonadas e ninguém sabe o que cresce nelas.",
+        "oficios": [
           "Cultivador de Estufa"
         ],
-        terras: "Estufa de Mana 25.000; Lote Urbano 10.000",
-        eventos: "Inverno da Fome"
+        "terras": "Estufa de Mana 25.000; Lote Urbano 10.000",
+        "eventos": "Inverno da Fome"
       },
       {
-        nome: "Enfermaria arcana",
-        texto: "O único lugar de Diamond com Cirurgia Arcana: trata Ferimento IV, corrige Sequelas e implanta próteses.",
-        oficios: [
+        "nome": "Enfermaria arcana",
+        "texto": "O único lugar de Diamond com Cirurgia Arcana: trata Ferimento IV, corrige Sequelas e implanta próteses.",
+        "oficios": [
           "Médico"
         ]
       },
       {
-        nome: "Oficina de engaste",
-        texto: "Onde os Discos de Engaste são lapidados e encaixados no corpo. Também grava encantamentos em itens.",
-        oficios: [
+        "nome": "Oficina de engaste",
+        "texto": "Onde os Discos de Engaste são lapidados e encaixados no corpo. Também grava encantamentos em itens.",
+        "oficios": [
           "Engenheiro",
           "Lapidador de Cristais"
         ]
       },
       {
-        nome: "Forjas abandonadas",
-        texto: "Forjas desligadas nos fundos do Lapidário, cheias de sucata de máquina. Ainda quentes, e ninguém volta de lá sem marca.",
-        perigo: "C, B"
+        "nome": "Forjas abandonadas",
+        "texto": "Forjas desligadas nos fundos do Lapidário, cheias de sucata de máquina. Ainda quentes, e ninguém volta de lá sem marca.",
+        "perigo": "C, B"
+      },
+      {
+        "nome": "Moradas do lapidário",
+        "texto": "Os lotes e as estufas do Lapidário. Cada Terra comprada aqui vira um post do dono, onde ele recebe quem quiser.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "Os Veios",
-    kanji: "鉱脈",
-    quem: "Plebe",
-    mana: "comum",
-    resumo: "Almas da Plebe renascem aqui.",
-    mercado: "Minério e Cristal ×0,8; comida e madeira ×1,5; itens mágicos ×1,3",
-    lugares: [
+    "nome": "Os Veios",
+    "kanji": "鉱脈",
+    "quem": "Plebe",
+    "mana": "comum",
+    "resumo": "Almas da Plebe renascem aqui.",
+    "mercado": "Minério e Cristal ×0,8; comida e madeira ×1,5; itens mágicos ×1,3",
+    "lugares": [
       {
-        nome: "Vilarejos mineiros",
-        texto: "Casas de pedra em volta de minas esgotadas. Fome, Doença de Mana e trabalho forçado. É aqui que a maioria acorda.",
-        terras: "Barraco 800; Lote Urbano 3.000",
-        eventos: "Inverno da Fome"
+        "nome": "Boca da estrada",
+        "texto": "Onde a estrada de cascalho entra nos Veios, entre carroças de minério e gente indo embora. Daqui se vê a fumaça de todas as chaminés."
       },
       {
-        nome: "As minas",
-        texto: "As jazidas dos Veios, da mais pobre à porta das Minas Profundas.",
-        dentro: [
+        "nome": "Praça do poço",
+        "texto": "Um poço velho no meio da vila, onde todo mundo busca água e notícia. Os panfletos aparecem pregados aqui de madrugada."
+      },
+      {
+        "nome": "Taverna da picareta torta",
+        "texto": "Cerveja aguada, mesas tortas e mineiros que bebem o salário do dia. Briga é comum; dedo-duro, raro."
+      },
+      {
+        "nome": "Vilarejos mineiros",
+        "texto": "Casas de pedra em volta de minas esgotadas. Fome, Doença de Mana e trabalho forçado. É aqui que a maioria acorda.",
+        "terras": "Barraco 800; Lote Urbano 3.000",
+        "eventos": "Inverno da Fome"
+      },
+      {
+        "nome": "As minas",
+        "texto": "As jazidas dos Veios, da mais pobre à porta das Minas Profundas.",
+        "dentro": [
           {
-            nome: "Poços Esgotados",
-            texto: "Galerias que já deram tudo. Sobra carvão, para quem tiver paciência.",
-            oficios: [
+            "nome": "Poços Esgotados",
+            "texto": "Galerias que já deram tudo. Sobra carvão, para quem tiver paciência.",
+            "oficios": [
               "Mineiro"
             ],
-            jazida: "Esgotada"
+            "jazida": "Esgotada"
           },
           {
-            nome: "Mina Comunitária",
-            texto: "Aberta a quem tiver picareta. Rende pouco, e a Reserva é de todos.",
-            oficios: [
+            "nome": "Mina Comunitária",
+            "texto": "Aberta a quem tiver picareta. Rende pouco, e a Reserva é de todos.",
+            "oficios": [
               "Mineiro"
             ],
-            jazida: "Pobre"
+            "jazida": "Pobre"
           },
           {
-            nome: "Concessões",
-            texto: "Jazidas Comuns com escritura da Coroa. Só o dono ou quem tem Contrato com ele trabalha aqui.",
-            quem: "Donos e arrendatários",
-            oficios: [
+            "nome": "Concessões",
+            "texto": "Jazidas Comuns com escritura da Coroa. Só o dono ou quem tem Contrato com ele trabalha aqui.",
+            "quem": "Donos e arrendatários",
+            "oficios": [
               "Mineiro"
             ],
-            jazida: "Comum",
-            terras: "Concessão de Mina 15.000"
+            "terras": "Concessão de Mina 15.000",
+            "jazida": "Comum"
           },
           {
-            nome: "Galeria de Prospecção",
-            texto: "Túneis novos, abertos às cegas. 3 Jornadas procurando um veio, e a Staff revela o que foi achado.",
-            quem: "Mineiro Oficial ou Mestre",
-            oficios: [
+            "nome": "Galeria de Prospecção",
+            "texto": "Túneis novos, abertos às cegas. 3 Jornadas procurando um veio, e a Staff revela o que foi achado.",
+            "quem": "Mineiro Oficial ou Mestre",
+            "oficios": [
               "Mineiro"
             ]
           },
           {
-            nome: "Boca das Profundas",
-            texto: "A descida para as Minas Profundas. Expedições de Rank D a A, com narrador: desabamento, Gás de Mana e criaturas.",
-            mana: "rala",
-            perigo: "D, C, B, A",
-            eventos: "Colheita Cristalina"
+            "nome": "Boca das Profundas",
+            "texto": "A descida para as Minas Profundas. Expedições de Rank D a A, com narrador: desabamento, Gás de Mana e criaturas.",
+            "mana": "rala",
+            "eventos": "Colheita Cristalina",
+            "perigo": "D, C, B, A"
           }
         ]
       },
       {
-        nome: "Fornalhas",
-        texto: "Fornos comunitários onde o minério vira Lingote de Ferro e Fio Rúnico. Ferreiros consertam o que quebrou.",
-        oficios: [
+        "nome": "Fornalhas",
+        "texto": "Fornos comunitários onde o minério vira Lingote de Ferro e Fio Rúnico. Ferreiros consertam o que quebrou.",
+        "oficios": [
           "Ferreiro"
         ]
       },
       {
-        nome: "Feira dos veios",
-        texto: "Boticas, Bestas Comuns e barracas de tudo. Tudo se troca, até favor.",
-        oficios: [
+        "nome": "Feira dos veios",
+        "texto": "Boticas, Bestas Comuns e barracas de tudo. Tudo se troca, até favor.",
+        "oficios": [
           "Mercador",
           "Boticário"
         ],
-        mercado: true
+        "mercado": true
       },
       {
-        nome: "Biblioteca dos veios",
-        texto: "Ensina a quem não pode pagar uma academia. Os livros são velhos e faltam páginas.",
-        estudo: "Esgrima, Arquearia, Combate e Herbalístico"
+        "nome": "Biblioteca dos veios",
+        "texto": "Ensina a quem não pode pagar uma academia. Os livros são velhos e faltam páginas.",
+        "estudo": "Esgrima, Arquearia, Combate e Herbalístico"
       },
       {
-        nome: "Barracões da doença",
-        texto: "Onde os doentes de Mana e os feridos pobres esperam. Boticários tratam Ferimento I e II por pouco.",
-        oficios: [
+        "nome": "Barracões da doença",
+        "texto": "Onde os doentes de Mana e os feridos pobres esperam. Boticários tratam Ferimento I e II por pouco.",
+        "oficios": [
           "Boticário"
         ]
+      },
+      {
+        "nome": "Moradas dos veios",
+        "texto": "Os barracos, os lotes e as concessões dos Veios. Cada Terra comprada aqui vira um post do dono, onde ele recebe quem quiser.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "O Fosso",
-    kanji: "奈落",
-    quem: "Ninguém admite",
-    mana: "rala",
-    resumo: "Abaixo dos Veios. Não cobra imposto.",
-    mercado: "Minério e Cristal ×1,2 sem imposto; comida ×1; itens ×1,5, inclusive proibidos",
-    lugares: [
+    "nome": "O Fosso",
+    "kanji": "奈落",
+    "quem": "Ninguém admite",
+    "mana": "rala",
+    "resumo": "Abaixo dos Veios. Não cobra imposto.",
+    "mercado": "Minério e Cristal ×1,2 sem imposto; comida ×1; itens ×1,5, inclusive proibidos",
+    "lugares": [
       {
-        nome: "Galerias",
-        texto: "Túneis abaixo dos Veios, iluminados por lâmpadas roubadas. Cada curva tem dono."
+        "nome": "A descida",
+        "texto": "A escada de pedra que leva dos Veios para o Fosso. Quem desce não pergunta; quem sobe não conta o que viu."
       },
       {
-        nome: "Mercado negro",
-        texto: "O mercado sem imposto das galerias. Paga-se mais, pergunta-se menos.",
-        mercado: true,
-        dentro: [
+        "nome": "Balcão do mural",
+        "texto": "O canto dos Caçadores no Fosso. Cartazes de procurado pregados uns sobre os outros e um agenciador que paga em dia, desde que o serviço venha feito."
+      },
+      {
+        "nome": "Toca do lampião",
+        "texto": "A taverna clandestina do Fosso, iluminada por um lampião roubado da Coroa. Ninguém usa o nome verdadeiro."
+      },
+      {
+        "nome": "Galerias",
+        "texto": "Túneis abaixo dos Veios, iluminados por lâmpadas roubadas. Cada curva tem dono."
+      },
+      {
+        "nome": "Mercado negro",
+        "texto": "O mercado sem imposto das galerias. Paga-se mais, pergunta-se menos.",
+        "mercado": true,
+        "dentro": [
           {
-            nome: "Balcão das Cápsulas",
-            texto: "Cápsulas de Conhecimento, Aleatórias e Direcionadas. A Perdida é por encomenda.",
-            mercado: true
+            "nome": "Balcão das Cápsulas",
+            "texto": "Cápsulas de Conhecimento, Aleatórias e Direcionadas. A Perdida é por encomenda.",
+            "mercado": true
           },
           {
-            nome: "Câmbio de Cristais",
-            texto: "Cristais comprados e vendidos sem a Taxa de Cristal da Coroa.",
-            oficios: [
+            "nome": "Câmbio de Cristais",
+            "texto": "Cristais comprados e vendidos sem a Taxa de Cristal da Coroa.",
+            "oficios": [
               "Contrabandista"
             ],
-            mercado: true
+            "mercado": true
           },
           {
-            nome: "Leilão Mudo",
-            texto: "Itens proibidos e Quimeras. Ninguém fala, todos levantam a mão.",
-            mercado: true
+            "nome": "Leilão Mudo",
+            "texto": "Itens proibidos e Quimeras. Ninguém fala, todos levantam a mão.",
+            "mercado": true
           },
           {
-            nome: "Fosso das Apostas",
-            texto: "Lutas num poço de pedra, com aposta em Yuls. Às vezes de gente, às vezes de Quimera."
+            "nome": "Fosso das Apostas",
+            "texto": "Lutas num poço de pedra, com aposta em Yuls. Às vezes de gente, às vezes de Quimera."
           },
           {
-            nome: "Agulheiro",
-            texto: "Cirurgias e próteses clandestinas, mais baratas que na Enfermaria. O risco vem de brinde.",
-            oficios: [
+            "nome": "Agulheiro",
+            "texto": "Cirurgias e próteses clandestinas, mais baratas que na Enfermaria. O risco vem de brinde.",
+            "oficios": [
               "Médico"
             ]
           }
         ]
       },
       {
-        nome: "Covil do veio negro",
-        texto: "O ponto de encontro do Veio Negro. Paga em Antiméritos e contrabando.",
-        quem: "Membros do Veio Negro",
-        terras: "Toca 2.000"
+        "nome": "Covil do veio negro",
+        "texto": "O quartel do Veio Negro, de todos que estão contra os Generais. Paga em Antiméritos e contrabando. Cada ala tem o seu tópico.",
+        "quem": "O Veio Negro (Rebeldes e Desgarrados)",
+        "terras": "Toca 2.000",
+        "topicos": [
+          "Rebeldes",
+          "Desgarrados"
+        ]
       },
       {
-        nome: "Minas ilegais",
-        texto: "Veios achados sem Concessão. Sem imposto, mas uma missão de General pode fechar tudo de uma vez.",
-        oficios: [
+        "nome": "Minas ilegais",
+        "texto": "Veios achados sem Concessão. Sem imposto, mas uma missão de General pode fechar tudo de uma vez.",
+        "oficios": [
           "Mineiro",
           "Contrabandista"
         ],
-        jazida: "Pobre"
+        "jazida": "Pobre"
       },
       {
-        nome: "As valas",
-        texto: "Onde o Fosso joga o que não quer mais: corpos, lixo de laboratório e coisas que ainda se mexem.",
-        mana: "morta",
-        perigo: "E, D, C"
+        "nome": "As valas",
+        "texto": "Onde o Fosso joga o que não quer mais: corpos, lixo de laboratório e coisas que ainda se mexem.",
+        "mana": "morta",
+        "perigo": "E, D, C"
+      },
+      {
+        "nome": "Moradas do fosso",
+        "texto": "As tocas do Fosso, sem escritura e sem endereço. Cada Toca vira um post do dono, onde ele recebe quem souber chegar.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "Fronteira Cinzenta",
-    kanji: "灰境",
-    quem: "Soldados e contrabandistas",
-    mana: "comum",
-    resumo: "A divisa com Clover e a Zona Neutra.",
-    mercado: null,
-    lugares: [
+    "nome": "Fronteira Cinzenta",
+    "kanji": "灰境",
+    "quem": "Soldados e contrabandistas",
+    "mana": "comum",
+    "resumo": "A divisa com Clover e a Zona Neutra.",
+    "mercado": null,
+    "lugares": [
       {
-        nome: "Postos militares",
-        texto: "Fortes de pedra cinza na linha com Clover. Daqui saem as escoltas, e durante a Ofensiva da Fronteira é daqui que Diamond ataca.",
-        eventos: "Ofensiva da Fronteira"
+        "nome": "Pedágio cinzento",
+        "texto": "A barreira na estrada para a Fronteira. Quem paga passa; quem não paga dá a volta pela mata."
       },
       {
-        nome: "Zona neutra",
-        texto: "Terra de ninguém entre os reinos.",
-        dentro: [
+        "nome": "Estalagem da encruzilhada",
+        "texto": "Estalagem de beira de estrada onde viajantes, desertores e Caçadores dividem a mesma sopa. O mural da porta tem os cartazes da semana."
+      },
+      {
+        "nome": "Fogueira dos desertores",
+        "texto": "Uma fogueira que nunca apaga, num descampado longe dos postos. Desertores dos dois lados contam histórias que ninguém pode confirmar."
+      },
+      {
+        "nome": "Postos militares",
+        "texto": "Fortes de pedra cinza na linha com Clover. Daqui saem as escoltas, e durante a Ofensiva da Fronteira é daqui que Diamond ataca.",
+        "eventos": "Ofensiva da Fronteira"
+      },
+      {
+        "nome": "Zona neutra",
+        "texto": "Terra de ninguém entre os reinos.",
+        "dentro": [
           {
-            nome: "Acampamento de Refugiados",
-            texto: "Gente de Spades que fugiu com o que coube nas costas. Desconfiam de todo mundo."
+            "nome": "Acampamento de Refugiados",
+            "texto": "Gente de Spades que fugiu com o que coube nas costas. Desconfiam de todo mundo."
           },
           {
-            nome: "Mercado de Trocas",
-            texto: "Madeira de Clover, comida e contrabando. Sem a Coroa olhando, o preço é o que se combinar.",
-            oficios: [
+            "nome": "Mercado de Trocas",
+            "texto": "Madeira de Clover, comida e contrabando. Sem a Coroa olhando, o preço é o que se combinar.",
+            "oficios": [
               "Mercador",
               "Contrabandista"
             ]
           },
           {
-            nome: "Ponte Partida",
-            texto: "A passagem para Clover, metade derrubada na última guerra. Atravessar é fácil, voltar nem tanto.",
-            perigo: "D, C"
+            "nome": "Ponte Partida",
+            "texto": "A passagem para Clover, metade derrubada na última guerra. Atravessar é fácil, voltar nem tanto.",
+            "perigo": "D, C"
           },
           {
-            nome: "Fenda de Clover",
-            texto: "Uma rachadura na terra por onde a mana densa de Clover vaza. Forte Mana, mas quem fica muito sai Embriagado de Mana.",
-            mana: "forte",
-            perigo: "C, B"
+            "nome": "Fenda de Clover",
+            "texto": "Uma rachadura na terra por onde a mana densa de Clover vaza. Forte Mana, mas quem fica muito sai Embriagado de Mana.",
+            "mana": "forte",
+            "perigo": "C, B"
           }
         ]
       },
       {
-        nome: "Ruínas",
-        texto: "Cidades antigas que a guerra apagou. Um Veio Virgem só aparece aqui por conquista.",
-        perigo: "D, C, B"
+        "nome": "Ruínas",
+        "texto": "Cidades antigas que a guerra apagou. Um Veio Virgem só aparece aqui por conquista.",
+        "perigo": "D, C, B"
       },
       {
-        nome: "Mata de cinzas",
-        texto: "O último bosque de Diamond, cinza de fuligem. Caça, Madeira e Bestas que não gostam de visita.",
-        oficios: [
+        "nome": "Mata de cinzas",
+        "texto": "O último bosque de Diamond, cinza de fuligem. Caça, Madeira e Bestas que não gostam de visita.",
+        "oficios": [
           "Caçador"
         ],
-        perigo: "F, E, D"
+        "perigo": "F, E, D"
       },
       {
-        nome: "Rotas de fuga",
-        texto: "Trilhas de contrabandistas para sair de Diamond sem ser visto.",
-        oficios: [
+        "nome": "Rotas de fuga",
+        "texto": "Trilhas de contrabandistas para sair de Diamond sem ser visto.",
+        "oficios": [
           "Contrabandista"
         ]
       },
       {
-        nome: "Planaltos mortos",
-        texto: "Planaltos áridos onde a mana morreu. Nada cresce, mas muita coisa caça.",
-        mana: "morta",
-        perigo: "B, A"
+        "nome": "Planaltos mortos",
+        "texto": "Planaltos áridos onde a mana morreu. Nada cresce, mas muita coisa caça.",
+        "mana": "morta",
+        "perigo": "B, A"
       }
     ]
   }

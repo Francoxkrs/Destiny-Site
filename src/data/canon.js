@@ -22,27 +22,28 @@ export const capitulos = [
 export const paginas = [
   { slug: 'comecar', cap: 'comecar', num: '01', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
   { slug: 'mundo', cap: 'mundo', num: '02', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos', essencial: ['Todo personagem renasce em Diamond, o reino que esgotou a própria terra.', 'A Coroa, o Lapidário e os Veios separam Realeza, Nobreza e Plebe; o Fosso é o mercado negro.', 'Clover, Spades e Heart são os reinos de onde as almas vieram.'] },
-  { slug: 'mapa', cap: 'mundo', num: '03', titulo: 'Mapa de Diamond', resumo: 'Os 31 lugares, a mana de cada um e as viagens', essencial: ['Cada região é uma categoria do Discord, e cada lugar tem uma placa com o que vale ali.', 'A mana muda de lugar para lugar: Forte nas Câmaras e na Fenda de Clover, Rala no Fosso, Morta nas Valas e nos Planaltos.', 'Viajar entre regiões leva de 2 a 70 minutos reais, conforme a estrada e o jeito de ir.'] },
-  { slug: 'generais', cap: 'mundo', num: '04', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
-  { slug: 'familias', cap: 'personagem', num: '05', titulo: 'Famílias', resumo: 'Classes sociais e as 25 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
-  { slug: 'racas', cap: 'personagem', num: '06', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas, Elfos e Híbridos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
-  { slug: 'milagres', cap: 'personagem', num: '07', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras: no máximo dois por Marcado e três Marcados por Milagre.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
-  { slug: 'atributos', cap: 'personagem', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
-  { slug: 'ferimentos', cap: 'personagem', num: '09', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
-  { slug: 'magia', cap: 'magia', num: '10', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
-  { slug: 'classes', cap: 'magia', num: '11', titulo: 'Classes de Mago', resumo: 'Oito estilos e as trilhas de cada um', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma tem uma passiva e uma trilha de três ramos; você gasta 4 pontos nela.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
-  { slug: 'mana', cap: 'magia', num: '12', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
-  { slug: 'discos', cap: 'magia', num: '13', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Só os Discos Autorais do Mago Artífice dão Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
-  { slug: 'progressao', cap: 'progressao', num: '14', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 7º Estágio cada Estágio pede Cristais de Mana, e cada Estágio tem um teto de atributo físico.'] },
-  { slug: 'estagios', cap: 'progressao', num: '15', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
-  { slug: 'conhecimentos', cap: 'progressao', num: '16', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
-  { slug: 'missoes', cap: 'aventura', num: '17', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
-  { slug: 'criaturas', cap: 'aventura', num: '18', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
-  { slug: 'profissoes', cap: 'sustento', num: '19', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
-  { slug: 'mineracao', cap: 'sustento', num: '20', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
-  { slug: 'itens', cap: 'sustento', num: '21', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
-  { slug: 'terras', cap: 'sustento', num: '22', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
-  { slug: 'economia', cap: 'sustento', num: '23', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
+  { slug: 'mapa', cap: 'mundo', num: '03', titulo: 'Mapa de Diamond', resumo: 'Os 51 canais, a mana de cada um e as viagens', essencial: ['Cada região é uma categoria do Discord, e cada lugar tem uma placa com o que vale ali.', 'A mana muda de lugar para lugar: Forte nas Câmaras e na Fenda de Clover, Rala no Fosso, Morta nas Valas e nos Planaltos.', 'Viajar entre regiões leva de 2 a 70 minutos reais, conforme a estrada e o jeito de ir.'] },
+  { slug: 'vivo', cap: 'mundo', num: '04', titulo: 'Diamond vivo', resumo: 'Territórios, esquadrões, cabeças a prêmio, segredos e clima', essencial: ['Cada lugar tem 100 pontos de influência; quem passa de 50 domina.', 'Méritos e Antiméritos põem preço na sua cabeça, e quem não tem patente caça pelo Mural Livre.', 'Todo lugar esconde segredos, e o clima de cada região vira às 6h.'] },
+  { slug: 'generais', cap: 'mundo', num: '05', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
+  { slug: 'familias', cap: 'personagem', num: '06', titulo: 'Famílias', resumo: 'Classes sociais e as 25 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
+  { slug: 'racas', cap: 'personagem', num: '07', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas, Elfos e Híbridos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
+  { slug: 'milagres', cap: 'personagem', num: '08', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras: no máximo dois por Marcado e três Marcados por Milagre.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
+  { slug: 'atributos', cap: 'personagem', num: '09', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
+  { slug: 'ferimentos', cap: 'personagem', num: '10', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
+  { slug: 'magia', cap: 'magia', num: '11', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
+  { slug: 'classes', cap: 'magia', num: '12', titulo: 'Classes de Mago', resumo: 'Oito estilos e as trilhas de cada um', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma tem uma passiva e uma trilha de três ramos; você gasta 4 pontos nela.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
+  { slug: 'mana', cap: 'magia', num: '13', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
+  { slug: 'discos', cap: 'magia', num: '14', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Só os Discos Autorais do Mago Artífice dão Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
+  { slug: 'progressao', cap: 'progressao', num: '15', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 7º Estágio cada Estágio pede Cristais de Mana, e cada Estágio tem um teto de atributo físico.'] },
+  { slug: 'estagios', cap: 'progressao', num: '16', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
+  { slug: 'conhecimentos', cap: 'progressao', num: '17', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
+  { slug: 'missoes', cap: 'aventura', num: '18', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
+  { slug: 'criaturas', cap: 'aventura', num: '19', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
+  { slug: 'profissoes', cap: 'sustento', num: '20', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
+  { slug: 'mineracao', cap: 'sustento', num: '21', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
+  { slug: 'itens', cap: 'sustento', num: '22', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
+  { slug: 'terras', cap: 'sustento', num: '23', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
+  { slug: 'economia', cap: 'sustento', num: '24', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
 ];
 
 export const regioes = [
@@ -62,14 +63,14 @@ export const eventosDiamond = [
 ];
 
 /* ==========================================================================
-   Mapa de Diamond (2026-11-08): os 31 lugares de RP que o bot cria com o
+   Mapa de Diamond (2026-11-21): os 51 canais de RP que o bot cria com o
    /regioes, as zonas de mana e o deslocamento (/viajar). Fonte: o bot
    (mapa/canais.ts e canon/viagem.ts).
    ========================================================================== */
 
 // Grau de mana de cada lugar. Treino de Controle = % por treino.
 export const zonasMana = [
-  { grau: 'forte', nome: 'Forte Mana', controle: '+2%', concentracao: 'Em dobro', efeito: 'Concentração em dobro, Treino de Controle rende +2% e o Método de Mana funciona.', onde: 'As Câmaras de Mana do Lapidário e a Fenda de Clover, na Fronteira.' },
+  { grau: 'forte', nome: 'Forte Mana', controle: '+3% nas Câmaras; +2% na Fenda', concentracao: 'Em dobro', efeito: 'Concentração em dobro, Treino de Controle rende +3% nas Câmaras de Mana e +2% na Fenda de Clover, e o Método de Mana funciona.', onde: 'As Câmaras de Mana do Lapidário e a Fenda de Clover, na Fronteira.' },
   { grau: 'comum', nome: 'Mana Comum', controle: '+1%', concentracao: 'Normal', efeito: 'Nenhum efeito. É a mana da maior parte do reino.', onde: 'A Coroa, o Lapidário, os Veios e a Fronteira, fora das exceções.' },
   { grau: 'rala', nome: 'Mana Rala', controle: '+1%', concentracao: 'Normal', efeito: 'A Respiração de Mana recupera só 3%, mesmo com pó de cristal no ar.', onde: 'Todo o Fosso e a Boca das Profundas, nos Veios.' },
   { grau: 'morta', nome: 'Mana Morta', controle: 'Não funciona', concentracao: 'Não recupera', efeito: 'A Concentração não recupera nada, o Treino de Controle não funciona e a Respiração de Mana falha.', onde: 'As Valas do Fosso e os Planaltos Mortos da Fronteira.' },
@@ -85,470 +86,569 @@ export const lugaresRegras = [
 
 export const lugares = [
   {
-    nome: "A Coroa",
-    kanji: "王冠",
-    quem: "Realeza e alto comando",
-    mana: "comum",
-    resumo: "Almas da Realeza renascem aqui.",
-    mercado: "Minério e Cristal ×1,3; comida e madeira ×1; itens mágicos ×0,9",
-    lugares: [
+    "nome": "A Coroa",
+    "kanji": "王冠",
+    "quem": "Realeza e alto comando",
+    "mana": "comum",
+    "resumo": "Almas da Realeza renascem aqui.",
+    "mercado": "Minério e Cristal ×1,3; comida e madeira ×1; itens mágicos ×0,9",
+    "lugares": [
       {
-        nome: "Valcristal",
-        texto: "A capital. Avenidas de cristal polido, guardas em cada esquina e o barulho de uma cidade que finge que o reino não está morrendo. As missões dos Generais são anunciadas na praça."
+        "nome": "Portões de Valcristal",
+        "texto": "A muralha de cristal e o único portão aberto ao público. Os guardas pedem nome, motivo e, às vezes, um suborno. Quem chega de fora passa por aqui."
       },
       {
-        nome: "Palácio de cristal",
-        texto: "Sede do trono de Diamond. Audiências, bailes e conspirações. Só entra quem foi chamado.",
-        quem: "Realeza e convidados",
-        dentro: [
+        "nome": "Praça das facetas",
+        "texto": "O coração de Valcristal: um relógio de cristal que marca as horas com luz, bancos de pedra polida e todo mundo vendo todo mundo."
+      },
+      {
+        "nome": "Taverna do último brilho",
+        "texto": "Taverna fina de paredes espelhadas. O vinho é caro, os segredos também, e a taverneira lembra de todo rosto que já passou pela porta."
+      },
+      {
+        "nome": "Valcristal",
+        "texto": "A capital. Avenidas de cristal polido, guardas em cada esquina e o barulho de uma cidade que finge que o reino não está morrendo. As missões dos Generais são anunciadas na praça."
+      },
+      {
+        "nome": "Palácio de cristal",
+        "texto": "Sede do trono de Diamond. Audiências, bailes e conspirações. Só entra quem foi chamado.",
+        "quem": "Realeza e convidados",
+        "dentro": [
           {
-            nome: "Salão do Trono",
-            texto: "Onde o rei recebe audiências e distribui favores. Uma palavra errada aqui custa caro.",
-            quem: "Realeza e convidados"
+            "nome": "Salão do Trono",
+            "texto": "Onde o rei recebe audiências e distribui favores. Uma palavra errada aqui custa caro.",
+            "quem": "Realeza e convidados"
           },
           {
-            nome: "Salão dos Espelhos",
-            texto: "Bailes, alianças de família e intrigas. Cada espelho tem alguém escutando do outro lado.",
-            quem: "Realeza e convidados"
+            "nome": "Salão dos Espelhos",
+            "texto": "Bailes, alianças de família e intrigas. Cada espelho tem alguém escutando do outro lado.",
+            "quem": "Realeza e convidados"
           },
           {
-            nome: "Jardins de Vidro",
-            texto: "Flores de cristal que nunca murcham, porque nunca viveram. Bom para conversas que não podem ser ouvidas.",
-            quem: "Realeza e convidados"
+            "nome": "Jardins de Vidro",
+            "texto": "Flores de cristal que nunca murcham, porque nunca viveram. Bom para conversas que não podem ser ouvidas.",
+            "quem": "Realeza e convidados"
           },
           {
-            nome: "Câmara do Conselho",
-            texto: "O Conselho decide o que o Tesouro da Coroa paga e quando um evento começa.",
-            quem: "Realeza",
-            eventos: "Todos: os eventos são anunciados aqui"
+            "nome": "Câmara do Conselho",
+            "texto": "O Conselho decide o que o Tesouro da Coroa paga e quando um evento começa.",
+            "quem": "Realeza",
+            "eventos": "Todos: os eventos são anunciados aqui"
           },
           {
-            nome: "Masmorra de Cristal",
-            texto: "Celas de cristal sob o palácio. Sonegadores pegos pagam o triplo ou ficam aqui."
+            "nome": "Masmorra de Cristal",
+            "texto": "Celas de cristal sob o palácio. Sonegadores pegos pagam o triplo ou ficam aqui."
           }
         ]
       },
       {
-        nome: "Forja dos generais",
-        texto: "Quartel dos Generais Brilhantes. Treino, patentes, experimentos e o Exame da Forja.",
-        dentro: [
+        "nome": "Forja dos generais",
+        "texto": "Quartel dos Generais Brilhantes. Treino, patentes, experimentos e o Exame da Forja.",
+        "dentro": [
           {
-            nome: "Pátio da Forja",
-            texto: "Treino físico sob o olhar dos Tenentes. Força, Resistência e Velocidade, até alguém cair."
+            "nome": "Pátio da Forja",
+            "texto": "Treino físico sob o olhar dos Tenentes. Força, Resistência e Velocidade, até alguém cair."
           },
           {
-            nome: "Arena do Exame",
-            texto: "Onde o Exame da Forja escolhe os Recrutas Brilhantes. No resto do ano, duelos marcados.",
-            eventos: "Exame da Forja"
+            "nome": "Arena do Exame",
+            "texto": "Onde o Exame da Forja escolhe os Recrutas Brilhantes. No resto do ano, duelos marcados.",
+            "eventos": "Exame da Forja"
           },
           {
-            nome: "Salão das Patentes",
-            texto: "Méritos, promoções e a disputa pelos sete postos de General.",
-            quem: "Generais Brilhantes e recrutas"
+            "nome": "Salão das Patentes",
+            "texto": "Méritos, promoções e a disputa pelos sete postos de General.",
+            "quem": "Generais Brilhantes e recrutas"
           },
           {
-            nome: "Arsenal Brilhante",
-            texto: "Armas e armaduras da Coroa. Ferreiros Oficiais e Mestres pegam encomendas pagas pelo Tesouro.",
-            oficios: [
+            "nome": "Arsenal Brilhante",
+            "texto": "Armas e armaduras da Coroa. Ferreiros Oficiais e Mestres pegam encomendas pagas pelo Tesouro.",
+            "oficios": [
               "Ferreiro"
             ]
           },
           {
-            nome: "Alas das Tropas",
-            texto: "As alas das Tropas de Reconhecimento, de Abate e de Conquista. Daqui saem as missões militares.",
-            quem: "Generais Brilhantes e recrutas"
+            "nome": "Alas das Tropas",
+            "texto": "As alas das Tropas de Reconhecimento, de Abate e de Conquista. Daqui saem as missões militares.",
+            "quem": "Generais Brilhantes e recrutas"
           },
           {
-            nome: "Sala de Procedimentos",
-            texto: "Onde a Forja faz seus soldados. Mesas de ferro, frascos rotulados e gente que não lembra o próprio nome.",
-            quem: "Generais Brilhantes e recrutas",
-            perigo: "C, B"
+            "nome": "Sala de Procedimentos",
+            "texto": "Onde a Forja faz seus soldados. Mesas de ferro, frascos rotulados e gente que não lembra o próprio nome.",
+            "quem": "Generais Brilhantes e recrutas",
+            "perigo": "C, B"
           }
         ]
       },
       {
-        nome: "Torre dos grimórios",
-        texto: "Onde os grimórios são registrados, estudados e, às vezes, confiscados. Feitiços novos passam por aqui."
+        "nome": "Torre dos grimórios",
+        "texto": "Onde os grimórios são registrados, estudados e, às vezes, confiscados. Feitiços novos passam por aqui."
       },
       {
-        nome: "Grande arquivo",
-        texto: "O Grande Arquivo de Valcristal, a maior biblioteca de Diamond.",
-        dentro: [
+        "nome": "Grande arquivo",
+        "texto": "O Grande Arquivo de Valcristal, a maior biblioteca de Diamond.",
+        "dentro": [
           {
-            nome: "Salão de Leitura",
-            texto: "Mesas longas, silêncio e bibliotecários que cobram multa por página dobrada.",
-            estudo: "Todos os Conhecimentos Comuns"
+            "nome": "Salão de Leitura",
+            "texto": "Mesas longas, silêncio e bibliotecários que cobram multa por página dobrada.",
+            "estudo": "Todos os Conhecimentos Comuns"
           },
           {
-            nome: "Ala Científica",
-            texto: "O único lugar fora das Academias que ensina Científico. Os livros ficam presos por correntes.",
-            estudo: "Científico"
+            "nome": "Ala Científica",
+            "texto": "O único lugar fora das Academias que ensina Científico. Os livros ficam presos por correntes.",
+            "estudo": "Científico"
           },
           {
-            nome: "Sala Rúnica",
-            texto: "Paredes cobertas de runas antigas. Quem aprende a lê-las entende a Matriz Rúnica.",
-            estudo: "Runas de Diamond e Leitor de Runas"
+            "nome": "Sala Rúnica",
+            "texto": "Paredes cobertas de runas antigas. Quem aprende a lê-las entende a Matriz Rúnica.",
+            "estudo": "Runas de Diamond e Leitor de Runas"
           },
           {
-            nome: "Cofre Lacrado",
-            texto: "Atrás de três portas seladas, os Conhecimentos que a Coroa quer esquecidos.",
-            quem: "Só com autorização da Staff",
-            estudo: "Conhecimentos Perdidos"
+            "nome": "Cofre Lacrado",
+            "texto": "Atrás de três portas seladas, os Conhecimentos que a Coroa quer esquecidos.",
+            "quem": "Só com autorização da Staff",
+            "estudo": "Conhecimentos Perdidos"
           }
         ]
       },
       {
-        nome: "Paço das corporações",
-        texto: "Cartórios e tribunais da Coroa. Licenças de ofício, Contratos com Notário, impostos, julgamentos e a Casa do Tesouro.",
-        oficios: [
+        "nome": "Paço das corporações",
+        "texto": "Cartórios e tribunais da Coroa. Licenças de ofício, Contratos com Notário, impostos, julgamentos e a Casa do Tesouro.",
+        "oficios": [
           "Notário",
           "Magistrado"
         ]
       },
       {
-        nome: "Avenida lapidada",
-        texto: "Lojas finas, joalheiros e casas de família. Tudo é caro, e quem compra aqui quer ser visto comprando.",
-        oficios: [
+        "nome": "Avenida lapidada",
+        "texto": "Lojas finas, joalheiros e casas de família. Tudo é caro, e quem compra aqui quer ser visto comprando.",
+        "oficios": [
           "Mercador"
         ],
-        mercado: true,
-        terras: "Lote Urbano 20.000; Feudos só pela Coroa"
+        "mercado": true,
+        "terras": "Lote Urbano 20.000; Feudos só pela Coroa"
+      },
+      {
+        "nome": "Sala de guerra",
+        "texto": "O quartel fechado dos Generais Brilhantes. Mapas na mesa, ordens do Rei e os relatórios das sentinelas. Cada Tropa tem o seu tópico.",
+        "quem": "Os Generais Brilhantes",
+        "topicos": [
+          "Tropas de Reconhecimento",
+          "Tropas de Abate",
+          "Tropas de Conquista"
+        ]
+      },
+      {
+        "nome": "Moradas da coroa",
+        "texto": "As casas, os lotes e os feudos da Coroa. Cada Terra comprada aqui vira um post do dono, onde ele recebe quem quiser.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "O Lapidário",
-    kanji: "研磨",
-    quem: "Nobreza e cientistas",
-    mana: "comum",
-    resumo: "Almas da Nobreza renascem aqui.",
-    mercado: "Minério e Cristal ×1; comida e madeira ×1,2; itens mágicos ×1",
-    lugares: [
+    "nome": "O Lapidário",
+    "kanji": "研磨",
+    "quem": "Nobreza e cientistas",
+    "mana": "comum",
+    "resumo": "Almas da Nobreza renascem aqui.",
+    "mercado": "Minério e Cristal ×1; comida e madeira ×1,2; itens mágicos ×1",
+    "lugares": [
       {
-        nome: "Cidades laboratório",
-        texto: "Ruas limpas, chaminés de vidro e gente de jaleco. Aqui Diamond transforma o que sobrou de mana em ciência."
+        "nome": "Estação do trilho",
+        "texto": "Onde o Trilho de Cristal para, entre vapor e vidro. Quem chega ao Lapidário desce aqui e é olhado de cima a baixo."
       },
       {
-        nome: "Câmaras de mana",
-        texto: "As zonas de Forte Mana do reino. Disputadas, vigiadas e caras.",
-        mana: "forte",
-        dentro: [
+        "nome": "Praça dos jalecos",
+        "texto": "Praça de pedra branca cercada de laboratórios. Pesquisadores discutem em voz alta e aprendizes vendem anotações roubadas."
+      },
+      {
+        "nome": "Salão de chá refratário",
+        "texto": "Chá servido em xícaras de cristal que mudam de cor com o humor de quem bebe. A Nobreza vem aqui para ser vista conversando."
+      },
+      {
+        "nome": "Cidades laboratório",
+        "texto": "Ruas limpas, chaminés de vidro e gente de jaleco. Aqui Diamond transforma o que sobrou de mana em ciência."
+      },
+      {
+        "nome": "Câmaras de mana",
+        "texto": "As zonas de Forte Mana do reino. Disputadas, vigiadas e caras.",
+        "mana": "forte",
+        "controle": "+3% por Treino de Controle, em todas as Câmaras",
+        "dentro": [
           {
-            nome: "Câmara Pública",
-            texto: "Fila na porta e entrada paga por cena. Quase sempre lotada."
+            "nome": "Câmara Pública",
+            "texto": "Fila na porta e entrada paga por cena. Quase sempre lotada."
           },
           {
-            nome: "Câmara de Ressonância",
-            texto: "As paredes devolvem a mana de quem treina. Feita para o Treino de Controle e o Método de Mana."
+            "nome": "Câmara de Ressonância",
+            "texto": "As paredes devolvem a mana de quem treina. Feita para o Treino de Controle e o Método de Mana."
           },
           {
-            nome: "Câmara Selada",
-            texto: "Reservada às famílias que pagam por ela. Silenciosa e sempre vazia.",
-            quem: "Nobreza e Realeza"
+            "nome": "Câmara Selada",
+            "texto": "Reservada às famílias que pagam por ela. Silenciosa e sempre vazia.",
+            "quem": "Nobreza e Realeza"
           },
           {
-            nome: "Câmara Rachada",
-            texto: "Abandonada depois de um acidente. A mana ainda é forte, mas o Gás de Mana vaza: sem Máscara de Filtro, Doença de Mana em 3 turnos.",
-            perigo: "D, C"
+            "nome": "Câmara Rachada",
+            "texto": "Abandonada depois de um acidente. A mana ainda é forte, mas o Gás de Mana vaza: sem Máscara de Filtro, Doença de Mana em 3 turnos.",
+            "perigo": "D, C"
           }
         ]
       },
       {
-        nome: "Academias",
-        texto: "As Academias do Lapidário, onde a Nobreza estuda e pesquisa.",
-        dentro: [
+        "nome": "Academias",
+        "texto": "As Academias do Lapidário, onde a Nobreza estuda e pesquisa.",
+        "dentro": [
           {
-            nome: "Academia Arcana",
-            texto: "Salas de aula em anfiteatro e professores que nunca viram os Veios.",
-            estudo: "Todos os Comuns, menos Científico"
+            "nome": "Academia Arcana",
+            "texto": "Salas de aula em anfiteatro e professores que nunca viram os Veios.",
+            "estudo": "Todos os Comuns, menos Científico"
           },
           {
-            nome: "Escola de Medicina",
-            texto: "Onde se formam os Médicos de Diamond. Os cadáveres de estudo vêm de algum lugar.",
-            estudo: "Medicinal e Medicina Avançada"
+            "nome": "Escola de Medicina",
+            "texto": "Onde se formam os Médicos de Diamond. Os cadáveres de estudo vêm de algum lugar.",
+            "estudo": "Medicinal e Medicina Avançada"
           },
           {
-            nome: "Escola de Engenharia",
-            texto: "Máquinas a meio caminho, plantas espalhadas e o cheiro de óleo queimado.",
-            oficios: [
+            "nome": "Escola de Engenharia",
+            "texto": "Máquinas a meio caminho, plantas espalhadas e o cheiro de óleo queimado.",
+            "oficios": [
               "Engenheiro"
             ],
-            estudo: "Científico e Engenharia"
+            "estudo": "Científico e Engenharia"
           },
           {
-            nome: "Ateliê de Lapidação",
-            texto: "Bancadas de lapidar, lentes e Pó de Cristal no ar. Aluga Laboratório por Jornada.",
-            oficios: [
+            "nome": "Ateliê de Lapidação",
+            "texto": "Bancadas de lapidar, lentes e Pó de Cristal no ar. Aluga Laboratório por Jornada.",
+            "oficios": [
               "Lapidador de Cristais"
             ]
           },
           {
-            nome: "Salão da Exposição Real",
-            texto: "Onde as pesquisas competem pela atenção da Coroa. No resto do ano, palestras.",
-            eventos: "Exposição Real"
+            "nome": "Salão da Exposição Real",
+            "texto": "Onde as pesquisas competem pela atenção da Coroa. No resto do ano, palestras.",
+            "eventos": "Exposição Real"
           }
         ]
       },
       {
-        nome: "Estufas de mana",
-        texto: "Estufas que cultivam comida e ervas raras em terra morta. Algumas foram abandonadas e ninguém sabe o que cresce nelas.",
-        oficios: [
+        "nome": "Estufas de mana",
+        "texto": "Estufas que cultivam comida e ervas raras em terra morta. Algumas foram abandonadas e ninguém sabe o que cresce nelas.",
+        "oficios": [
           "Cultivador de Estufa"
         ],
-        terras: "Estufa de Mana 25.000; Lote Urbano 10.000",
-        eventos: "Inverno da Fome"
+        "terras": "Estufa de Mana 25.000; Lote Urbano 10.000",
+        "eventos": "Inverno da Fome"
       },
       {
-        nome: "Enfermaria arcana",
-        texto: "O único lugar de Diamond com Cirurgia Arcana: trata Ferimento IV, corrige Sequelas e implanta próteses.",
-        oficios: [
+        "nome": "Enfermaria arcana",
+        "texto": "O único lugar de Diamond com Cirurgia Arcana: trata Ferimento IV, corrige Sequelas e implanta próteses.",
+        "oficios": [
           "Médico"
         ]
       },
       {
-        nome: "Oficina de engaste",
-        texto: "Onde os Discos de Engaste são lapidados e encaixados no corpo. Também grava encantamentos em itens.",
-        oficios: [
+        "nome": "Oficina de engaste",
+        "texto": "Onde os Discos de Engaste são lapidados e encaixados no corpo. Também grava encantamentos em itens.",
+        "oficios": [
           "Engenheiro",
           "Lapidador de Cristais"
         ]
       },
       {
-        nome: "Forjas abandonadas",
-        texto: "Forjas desligadas nos fundos do Lapidário, cheias de sucata de máquina. Ainda quentes, e ninguém volta de lá sem marca.",
-        perigo: "C, B"
+        "nome": "Forjas abandonadas",
+        "texto": "Forjas desligadas nos fundos do Lapidário, cheias de sucata de máquina. Ainda quentes, e ninguém volta de lá sem marca.",
+        "perigo": "C, B"
+      },
+      {
+        "nome": "Moradas do lapidário",
+        "texto": "Os lotes e as estufas do Lapidário. Cada Terra comprada aqui vira um post do dono, onde ele recebe quem quiser.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "Os Veios",
-    kanji: "鉱脈",
-    quem: "Plebe",
-    mana: "comum",
-    resumo: "Almas da Plebe renascem aqui.",
-    mercado: "Minério e Cristal ×0,8; comida e madeira ×1,5; itens mágicos ×1,3",
-    lugares: [
+    "nome": "Os Veios",
+    "kanji": "鉱脈",
+    "quem": "Plebe",
+    "mana": "comum",
+    "resumo": "Almas da Plebe renascem aqui.",
+    "mercado": "Minério e Cristal ×0,8; comida e madeira ×1,5; itens mágicos ×1,3",
+    "lugares": [
       {
-        nome: "Vilarejos mineiros",
-        texto: "Casas de pedra em volta de minas esgotadas. Fome, Doença de Mana e trabalho forçado. É aqui que a maioria acorda.",
-        terras: "Barraco 800; Lote Urbano 3.000",
-        eventos: "Inverno da Fome"
+        "nome": "Boca da estrada",
+        "texto": "Onde a estrada de cascalho entra nos Veios, entre carroças de minério e gente indo embora. Daqui se vê a fumaça de todas as chaminés."
       },
       {
-        nome: "As minas",
-        texto: "As jazidas dos Veios, da mais pobre à porta das Minas Profundas.",
-        dentro: [
+        "nome": "Praça do poço",
+        "texto": "Um poço velho no meio da vila, onde todo mundo busca água e notícia. Os panfletos aparecem pregados aqui de madrugada."
+      },
+      {
+        "nome": "Taverna da picareta torta",
+        "texto": "Cerveja aguada, mesas tortas e mineiros que bebem o salário do dia. Briga é comum; dedo-duro, raro."
+      },
+      {
+        "nome": "Vilarejos mineiros",
+        "texto": "Casas de pedra em volta de minas esgotadas. Fome, Doença de Mana e trabalho forçado. É aqui que a maioria acorda.",
+        "terras": "Barraco 800; Lote Urbano 3.000",
+        "eventos": "Inverno da Fome"
+      },
+      {
+        "nome": "As minas",
+        "texto": "As jazidas dos Veios, da mais pobre à porta das Minas Profundas.",
+        "dentro": [
           {
-            nome: "Poços Esgotados",
-            texto: "Galerias que já deram tudo. Sobra carvão, para quem tiver paciência.",
-            oficios: [
+            "nome": "Poços Esgotados",
+            "texto": "Galerias que já deram tudo. Sobra carvão, para quem tiver paciência.",
+            "oficios": [
               "Mineiro"
             ],
-            jazida: "Esgotada"
+            "jazida": "Esgotada"
           },
           {
-            nome: "Mina Comunitária",
-            texto: "Aberta a quem tiver picareta. Rende pouco, e a Reserva é de todos.",
-            oficios: [
+            "nome": "Mina Comunitária",
+            "texto": "Aberta a quem tiver picareta. Rende pouco, e a Reserva é de todos.",
+            "oficios": [
               "Mineiro"
             ],
-            jazida: "Pobre"
+            "jazida": "Pobre"
           },
           {
-            nome: "Concessões",
-            texto: "Jazidas Comuns com escritura da Coroa. Só o dono ou quem tem Contrato com ele trabalha aqui.",
-            quem: "Donos e arrendatários",
-            oficios: [
+            "nome": "Concessões",
+            "texto": "Jazidas Comuns com escritura da Coroa. Só o dono ou quem tem Contrato com ele trabalha aqui.",
+            "quem": "Donos e arrendatários",
+            "oficios": [
               "Mineiro"
             ],
-            jazida: "Comum",
-            terras: "Concessão de Mina 15.000"
+            "terras": "Concessão de Mina 15.000",
+            "jazida": "Comum"
           },
           {
-            nome: "Galeria de Prospecção",
-            texto: "Túneis novos, abertos às cegas. 3 Jornadas procurando um veio, e a Staff revela o que foi achado.",
-            quem: "Mineiro Oficial ou Mestre",
-            oficios: [
+            "nome": "Galeria de Prospecção",
+            "texto": "Túneis novos, abertos às cegas. 3 Jornadas procurando um veio, e a Staff revela o que foi achado.",
+            "quem": "Mineiro Oficial ou Mestre",
+            "oficios": [
               "Mineiro"
             ]
           },
           {
-            nome: "Boca das Profundas",
-            texto: "A descida para as Minas Profundas. Expedições de Rank D a A, com narrador: desabamento, Gás de Mana e criaturas.",
-            mana: "rala",
-            perigo: "D, C, B, A",
-            eventos: "Colheita Cristalina"
+            "nome": "Boca das Profundas",
+            "texto": "A descida para as Minas Profundas. Expedições de Rank D a A, com narrador: desabamento, Gás de Mana e criaturas.",
+            "mana": "rala",
+            "eventos": "Colheita Cristalina",
+            "perigo": "D, C, B, A"
           }
         ]
       },
       {
-        nome: "Fornalhas",
-        texto: "Fornos comunitários onde o minério vira Lingote de Ferro e Fio Rúnico. Ferreiros consertam o que quebrou.",
-        oficios: [
+        "nome": "Fornalhas",
+        "texto": "Fornos comunitários onde o minério vira Lingote de Ferro e Fio Rúnico. Ferreiros consertam o que quebrou.",
+        "oficios": [
           "Ferreiro"
         ]
       },
       {
-        nome: "Feira dos veios",
-        texto: "Boticas, Bestas Comuns e barracas de tudo. Tudo se troca, até favor.",
-        oficios: [
+        "nome": "Feira dos veios",
+        "texto": "Boticas, Bestas Comuns e barracas de tudo. Tudo se troca, até favor.",
+        "oficios": [
           "Mercador",
           "Boticário"
         ],
-        mercado: true
+        "mercado": true
       },
       {
-        nome: "Biblioteca dos veios",
-        texto: "Ensina a quem não pode pagar uma academia. Os livros são velhos e faltam páginas.",
-        estudo: "Esgrima, Arquearia, Combate e Herbalístico"
+        "nome": "Biblioteca dos veios",
+        "texto": "Ensina a quem não pode pagar uma academia. Os livros são velhos e faltam páginas.",
+        "estudo": "Esgrima, Arquearia, Combate e Herbalístico"
       },
       {
-        nome: "Barracões da doença",
-        texto: "Onde os doentes de Mana e os feridos pobres esperam. Boticários tratam Ferimento I e II por pouco.",
-        oficios: [
+        "nome": "Barracões da doença",
+        "texto": "Onde os doentes de Mana e os feridos pobres esperam. Boticários tratam Ferimento I e II por pouco.",
+        "oficios": [
           "Boticário"
         ]
+      },
+      {
+        "nome": "Moradas dos veios",
+        "texto": "Os barracos, os lotes e as concessões dos Veios. Cada Terra comprada aqui vira um post do dono, onde ele recebe quem quiser.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "O Fosso",
-    kanji: "奈落",
-    quem: "Ninguém admite",
-    mana: "rala",
-    resumo: "Abaixo dos Veios. Não cobra imposto.",
-    mercado: "Minério e Cristal ×1,2 sem imposto; comida ×1; itens ×1,5, inclusive proibidos",
-    lugares: [
+    "nome": "O Fosso",
+    "kanji": "奈落",
+    "quem": "Ninguém admite",
+    "mana": "rala",
+    "resumo": "Abaixo dos Veios. Não cobra imposto.",
+    "mercado": "Minério e Cristal ×1,2 sem imposto; comida ×1; itens ×1,5, inclusive proibidos",
+    "lugares": [
       {
-        nome: "Galerias",
-        texto: "Túneis abaixo dos Veios, iluminados por lâmpadas roubadas. Cada curva tem dono."
+        "nome": "A descida",
+        "texto": "A escada de pedra que leva dos Veios para o Fosso. Quem desce não pergunta; quem sobe não conta o que viu."
       },
       {
-        nome: "Mercado negro",
-        texto: "O mercado sem imposto das galerias. Paga-se mais, pergunta-se menos.",
-        mercado: true,
-        dentro: [
+        "nome": "Balcão do mural",
+        "texto": "O canto dos Caçadores no Fosso. Cartazes de procurado pregados uns sobre os outros e um agenciador que paga em dia, desde que o serviço venha feito."
+      },
+      {
+        "nome": "Toca do lampião",
+        "texto": "A taverna clandestina do Fosso, iluminada por um lampião roubado da Coroa. Ninguém usa o nome verdadeiro."
+      },
+      {
+        "nome": "Galerias",
+        "texto": "Túneis abaixo dos Veios, iluminados por lâmpadas roubadas. Cada curva tem dono."
+      },
+      {
+        "nome": "Mercado negro",
+        "texto": "O mercado sem imposto das galerias. Paga-se mais, pergunta-se menos.",
+        "mercado": true,
+        "dentro": [
           {
-            nome: "Balcão das Cápsulas",
-            texto: "Cápsulas de Conhecimento, Aleatórias e Direcionadas. A Perdida é por encomenda.",
-            mercado: true
+            "nome": "Balcão das Cápsulas",
+            "texto": "Cápsulas de Conhecimento, Aleatórias e Direcionadas. A Perdida é por encomenda.",
+            "mercado": true
           },
           {
-            nome: "Câmbio de Cristais",
-            texto: "Cristais comprados e vendidos sem a Taxa de Cristal da Coroa.",
-            oficios: [
+            "nome": "Câmbio de Cristais",
+            "texto": "Cristais comprados e vendidos sem a Taxa de Cristal da Coroa.",
+            "oficios": [
               "Contrabandista"
             ],
-            mercado: true
+            "mercado": true
           },
           {
-            nome: "Leilão Mudo",
-            texto: "Itens proibidos e Quimeras. Ninguém fala, todos levantam a mão.",
-            mercado: true
+            "nome": "Leilão Mudo",
+            "texto": "Itens proibidos e Quimeras. Ninguém fala, todos levantam a mão.",
+            "mercado": true
           },
           {
-            nome: "Fosso das Apostas",
-            texto: "Lutas num poço de pedra, com aposta em Yuls. Às vezes de gente, às vezes de Quimera."
+            "nome": "Fosso das Apostas",
+            "texto": "Lutas num poço de pedra, com aposta em Yuls. Às vezes de gente, às vezes de Quimera."
           },
           {
-            nome: "Agulheiro",
-            texto: "Cirurgias e próteses clandestinas, mais baratas que na Enfermaria. O risco vem de brinde.",
-            oficios: [
+            "nome": "Agulheiro",
+            "texto": "Cirurgias e próteses clandestinas, mais baratas que na Enfermaria. O risco vem de brinde.",
+            "oficios": [
               "Médico"
             ]
           }
         ]
       },
       {
-        nome: "Covil do veio negro",
-        texto: "O ponto de encontro do Veio Negro. Paga em Antiméritos e contrabando.",
-        quem: "Membros do Veio Negro",
-        terras: "Toca 2.000"
+        "nome": "Covil do veio negro",
+        "texto": "O quartel do Veio Negro, de todos que estão contra os Generais. Paga em Antiméritos e contrabando. Cada ala tem o seu tópico.",
+        "quem": "O Veio Negro (Rebeldes e Desgarrados)",
+        "terras": "Toca 2.000",
+        "topicos": [
+          "Rebeldes",
+          "Desgarrados"
+        ]
       },
       {
-        nome: "Minas ilegais",
-        texto: "Veios achados sem Concessão. Sem imposto, mas uma missão de General pode fechar tudo de uma vez.",
-        oficios: [
+        "nome": "Minas ilegais",
+        "texto": "Veios achados sem Concessão. Sem imposto, mas uma missão de General pode fechar tudo de uma vez.",
+        "oficios": [
           "Mineiro",
           "Contrabandista"
         ],
-        jazida: "Pobre"
+        "jazida": "Pobre"
       },
       {
-        nome: "As valas",
-        texto: "Onde o Fosso joga o que não quer mais: corpos, lixo de laboratório e coisas que ainda se mexem.",
-        mana: "morta",
-        perigo: "E, D, C"
+        "nome": "As valas",
+        "texto": "Onde o Fosso joga o que não quer mais: corpos, lixo de laboratório e coisas que ainda se mexem.",
+        "mana": "morta",
+        "perigo": "E, D, C"
+      },
+      {
+        "nome": "Moradas do fosso",
+        "texto": "As tocas do Fosso, sem escritura e sem endereço. Cada Toca vira um post do dono, onde ele recebe quem souber chegar.",
+        "quem": "O dono recebe as visitas",
+        "moradas": true
       }
     ]
   },
   {
-    nome: "Fronteira Cinzenta",
-    kanji: "灰境",
-    quem: "Soldados e contrabandistas",
-    mana: "comum",
-    resumo: "A divisa com Clover e a Zona Neutra.",
-    mercado: null,
-    lugares: [
+    "nome": "Fronteira Cinzenta",
+    "kanji": "灰境",
+    "quem": "Soldados e contrabandistas",
+    "mana": "comum",
+    "resumo": "A divisa com Clover e a Zona Neutra.",
+    "mercado": null,
+    "lugares": [
       {
-        nome: "Postos militares",
-        texto: "Fortes de pedra cinza na linha com Clover. Daqui saem as escoltas, e durante a Ofensiva da Fronteira é daqui que Diamond ataca.",
-        eventos: "Ofensiva da Fronteira"
+        "nome": "Pedágio cinzento",
+        "texto": "A barreira na estrada para a Fronteira. Quem paga passa; quem não paga dá a volta pela mata."
       },
       {
-        nome: "Zona neutra",
-        texto: "Terra de ninguém entre os reinos.",
-        dentro: [
+        "nome": "Estalagem da encruzilhada",
+        "texto": "Estalagem de beira de estrada onde viajantes, desertores e Caçadores dividem a mesma sopa. O mural da porta tem os cartazes da semana."
+      },
+      {
+        "nome": "Fogueira dos desertores",
+        "texto": "Uma fogueira que nunca apaga, num descampado longe dos postos. Desertores dos dois lados contam histórias que ninguém pode confirmar."
+      },
+      {
+        "nome": "Postos militares",
+        "texto": "Fortes de pedra cinza na linha com Clover. Daqui saem as escoltas, e durante a Ofensiva da Fronteira é daqui que Diamond ataca.",
+        "eventos": "Ofensiva da Fronteira"
+      },
+      {
+        "nome": "Zona neutra",
+        "texto": "Terra de ninguém entre os reinos.",
+        "dentro": [
           {
-            nome: "Acampamento de Refugiados",
-            texto: "Gente de Spades que fugiu com o que coube nas costas. Desconfiam de todo mundo."
+            "nome": "Acampamento de Refugiados",
+            "texto": "Gente de Spades que fugiu com o que coube nas costas. Desconfiam de todo mundo."
           },
           {
-            nome: "Mercado de Trocas",
-            texto: "Madeira de Clover, comida e contrabando. Sem a Coroa olhando, o preço é o que se combinar.",
-            oficios: [
+            "nome": "Mercado de Trocas",
+            "texto": "Madeira de Clover, comida e contrabando. Sem a Coroa olhando, o preço é o que se combinar.",
+            "oficios": [
               "Mercador",
               "Contrabandista"
             ]
           },
           {
-            nome: "Ponte Partida",
-            texto: "A passagem para Clover, metade derrubada na última guerra. Atravessar é fácil, voltar nem tanto.",
-            perigo: "D, C"
+            "nome": "Ponte Partida",
+            "texto": "A passagem para Clover, metade derrubada na última guerra. Atravessar é fácil, voltar nem tanto.",
+            "perigo": "D, C"
           },
           {
-            nome: "Fenda de Clover",
-            texto: "Uma rachadura na terra por onde a mana densa de Clover vaza. Forte Mana, mas quem fica muito sai Embriagado de Mana.",
-            mana: "forte",
-            perigo: "C, B"
+            "nome": "Fenda de Clover",
+            "texto": "Uma rachadura na terra por onde a mana densa de Clover vaza. Forte Mana, mas quem fica muito sai Embriagado de Mana.",
+            "mana": "forte",
+            "perigo": "C, B"
           }
         ]
       },
       {
-        nome: "Ruínas",
-        texto: "Cidades antigas que a guerra apagou. Um Veio Virgem só aparece aqui por conquista.",
-        perigo: "D, C, B"
+        "nome": "Ruínas",
+        "texto": "Cidades antigas que a guerra apagou. Um Veio Virgem só aparece aqui por conquista.",
+        "perigo": "D, C, B"
       },
       {
-        nome: "Mata de cinzas",
-        texto: "O último bosque de Diamond, cinza de fuligem. Caça, Madeira e Bestas que não gostam de visita.",
-        oficios: [
+        "nome": "Mata de cinzas",
+        "texto": "O último bosque de Diamond, cinza de fuligem. Caça, Madeira e Bestas que não gostam de visita.",
+        "oficios": [
           "Caçador"
         ],
-        perigo: "F, E, D"
+        "perigo": "F, E, D"
       },
       {
-        nome: "Rotas de fuga",
-        texto: "Trilhas de contrabandistas para sair de Diamond sem ser visto.",
-        oficios: [
+        "nome": "Rotas de fuga",
+        "texto": "Trilhas de contrabandistas para sair de Diamond sem ser visto.",
+        "oficios": [
           "Contrabandista"
         ]
       },
       {
-        nome: "Planaltos mortos",
-        texto: "Planaltos áridos onde a mana morreu. Nada cresce, mas muita coisa caça.",
-        mana: "morta",
-        perigo: "B, A"
+        "nome": "Planaltos mortos",
+        "texto": "Planaltos áridos onde a mana morreu. Nada cresce, mas muita coisa caça.",
+        "mana": "morta",
+        "perigo": "B, A"
       }
     ]
   }
@@ -644,14 +744,12 @@ export const carga = {
   equipamentoTexto: 'Seis espaços de equipamento. O bônus de qualidade e de encantamento dos itens equipados entra nos Acréscimos do atributo, até o teto de 10.',
 };
 
-// Recompensas de Boost e VIP (aprovadas pelo Silas em 2026-11-07). Tudo cai na /bolsa do bot.
+// Recompensas de Boost (aprovadas pelo Silas em 2026-11-07). Tudo cai na /bolsa do bot. O VIP saiu em 2026-11-21: o que é pago vai pelos Cristais Prismáticos.
 export const apoio = {
-  texto: 'Quem dá Boost no servidor ou assina um VIP recebe um pacote na /bolsa. Os giros, rerolls e escolhas valem na criação do personagem ou depois, na ficha aprovada, com prévia antes de confirmar.',
+  texto: 'Quem dá Boost no servidor recebe um pacote na /bolsa. Os giros, rerolls e escolhas valem na criação do personagem ou depois, na ficha aprovada, com prévia antes de confirmar.',
   pacotes: [
     { nome: 'Primeiro Impulso', preco: '1 Boost', vip: false, itens: ['2 Rerolls de Raça', '3 Rerolls de Família (escolhe a Classe Social e gira)', '2 Giros de Magia', '1 Giro de Linhagem extra', '1.500 Yuls', '+1 PE', '3 Skip Treino', '1 Espaço de feitiço', '2 Autoclaim'], nota: 'Entregue sozinho quando o cargo de Boost aparece. O Autoclaim renova todo mês enquanto o Boost estiver ativo.' },
     { nome: 'Segundo Impulso', preco: '2 Boosts', vip: false, itens: ['Família à escolha (menos Sorteio e Realeza)', 'Classe de Mago à escolha', '3 Giros de Magia sem Comum', '2 Giros de Grimório', '1 Giro de Linhagem extra', '1 Reroll de Milagre de família', '2 Espaços de feitiço', '2.500 Yuls, e mais 500 por mês', '+2 PE', '1 Cristal Branco', '2 Treinos Mágicos creditados', '5 Skip Treino', '4 Autoclaim'], nota: 'Substitui o Primeiro, não soma: quem já tinha recebe só a diferença. A Staff entrega, porque o Discord não diz quantos Boosts cada um deu. Tirar um Boost volta ao Primeiro; tirar os dois perde o que não foi usado.' },
-    { nome: 'VIP Sensacional', preco: 'R$ 15', vip: true, itens: ['3 Rerolls de Raça', '3 Rerolls de Família', '1 Giro de Linhagem extra', 'Magia à escolha, até Rara', '2 Cápsulas de Conhecimento', '1 Traço à escolha', '1 Técnica com metade dos treinos', '2 Espaços de feitiço', '2.000 Yuls', '+2 PE', '1 Cristal Branco', '+10% de Yuls em Missões', '3 Skip Treino', '3 Autoclaim'], nota: 'Entregue quando o cargo do VIP aparece.' },
-    { nome: 'VIP Essential', preco: 'R$ 35', vip: true, itens: ['Raça à escolha (menos Elfos)', 'Grimório Lendário', '3 Giros de Linhagem extras', 'Magia à escolha, até Lendária (menos as de Sorteio)', 'Classe de Mago à escolha', '2 Cápsulas de Conhecimento', '1 Troca de Traço', '2 Técnicas com metade dos treinos', '3.000 Yuls', '+50% de Yuls em Missões', '30% menos tempo em Estudos, Produções e Experimentos, uma vez', '5 Skip Treino', '5 Autoclaim'], nota: 'Entregue quando o cargo do VIP aparece.' },
   ],
   itens: [
     ['Giros', 'Magia, Magia sem Comum, Grimório, Cápsula de Conhecimento e Giro de Linhagem. Gire no /bolsa girar ou na criação; o resultado fica salvo para usar quando quiser.'],
@@ -788,13 +886,16 @@ export const familias = [
   { nome: 'Licht', classe: 'Plebe', origem: 'Elfos', raca: 'Elfos', raridade: 'Sorteio', lema: 'Almas élficas que voltam escondidas em corpos novos.', magias: 'Luz, Espadas', heranca: ['+3 feitiços iniciais', 'Poder Mágico +1 nível', 'Forma Mágica um Estágio antes'], giro: '45% de Terceiro Olho', marco: '6º Estágio: Conhecimento em Arcanologia' },
 ];
 
+// Trilhas v2 (2026-11-18): as mesmas regras de src/data/trilhas/regras.json e do bot (trilha/regras.ts).
 export const trilhaRegras = [
-  ['Raiz', 'A passiva da classe. Todo mago da classe tem desde a criação.'],
-  ['Três ramos', 'Cada ramo tem três nós em ordem: Nó I, Nó II e Ápice. Só se pega um nó depois do anterior do mesmo ramo.'],
-  ['4 Pontos de Trilha', '1 na criação, 1 no 7º Estágio, 1 no 5º e 1 no 3º. Pontos não gastos ficam guardados.'],
-  ['Ápice', 'Exige o 3º Estágio e os dois nós anteriores do ramo. Na prática, o mago fecha um ramo e abre o primeiro nó de outro, ou abre dois ramos até o Nó II e fica sem Ápice.'],
-  ['Teto de Acréscimos', 'Nenhum nó dá mais de 1 Acréscimo por aplicação, como toda Classe.'],
-  ['Quem já jogava', 'Quem já tinha a Classe Avançada mantém o efeito: ela virou o Ápice marcado com ★, e o personagem recebe os nós anteriores desse ramo.'],
+  ['Raiz', 'A passiva da classe. Todo mago da classe tem desde a criação, de graça.'],
+  ['Três ramos e três Elos', 'Cada ramo tem 7 nós: 2 entradas no Grau I, 2 nós no Grau II, um Grau III, um Grau IV e o Ápice. Os 3 Elos ligam dois ramos e pedem o Grau III dos dois. São 24 habilidades por classe.'],
+  ['Custo e Estágio', 'Grau I e II custam 1 Ponto de Trilha; Grau III e IV, 2; Ápice, 3; Elo, 2. O Grau II abre no 7º Estágio, o III no 5º, o IV no 4º, e o Ápice e os Elos no 3º.'],
+  ['Pontos de Trilha', '2 na criação e mais a cada Estágio (2 no 7º, 5º e 3º; 1 nos outros): 13 no 1º Estágio. A Staff pode dar até 2 Pontos de Feito por feitos de RP, que não se compram. Pontos não gastos ficam guardados.'],
+  ['Ápice', 'Pede o Grau IV e os dois nós de Grau II do ramo: quem chega lá pagou o ramo inteiro (11 PT). A árvore toda custa 39, então ninguém fecha tudo.'],
+  ['Teto de Acréscimos', 'Nenhum nó dá mais de 1 Acréscimo por aplicação, e tudo o que vem da trilha soma no máximo +2 no mesmo teste, golpe ou feitiço.'],
+  ['Redefinir', 'No lançamento da v2 todo mundo remonta a árvore de graça. Depois, só com Cristais Prismáticos (Redefinir a trilha, na loja da conta).'],
+  ['Trocar de Classe', 'O /classe leva ao mestre da classe nova, num lugar de Diamond. Ele passa 3 provas (missões Rank D, C e B); feitas as 3, a troca custa 5.000 Yuls. A trilha zera e os pontos voltam. Uma troca a cada 30 dias.'],
 ];
 
 const C = (nome, papel, conhecimento, passiva, trilha) => ({ nome, papel, conhecimento, passiva, trilha });
@@ -849,7 +950,7 @@ export const milagres = [
   { nome: 'Dupla Alma', texto: 'Duas almas dividem o mesmo corpo, acorrentadas uma à outra.', efeitos: ['Alma Forte e Alma Fraca, cada uma com magia e grimório.', 'A troca custa o turno e troca feitiços e personalidade.', 'A Alma Forte pode se disfarçar da outra.'] },
   { nome: 'Insignificância', restricao: 'Só Plebe', texto: 'Nasceu quase sem mana num mundo onde a magia é tudo. No lugar da força, engenho.', efeitos: ['Mana um nível abaixo da classe (mínimo 50).', 'Matriz Rúnica sem requisito e sem limite de runas.', 'Percepção de Mana desde o início.', 'Nobres subestimam suas armadilhas.'] },
   { nome: 'Vaso Defeituoso', texto: 'Correntes enferrujadas: falta controle e sobra potência.', efeitos: ['Cada nível de Mana vale o dobro.', 'Poder Mágico +1 nível.', 'Começa com -10% de Controle (mínimo 0%) e nunca passa de 70%.', 'Treinos de Controle rendem metade.'] },
-  { nome: 'Amado pela Mana', texto: 'A mana reconhece o personagem e flui com mais naturalidade ao seu redor.', efeitos: ['Mana e Poder Mágico +1 nível.', 'Treinos mágicos e de Controle contam em dobro.', 'Pode receber um Grimório Lendário.'] },
+  { nome: 'Amado pela Mana', texto: 'A mana reconhece o personagem e flui com mais naturalidade ao seu redor. É o único Milagre com seis vagas.', efeitos: ['Mana e Poder Mágico +1 nível.', 'Treinos mágicos e de Controle contam em dobro.', 'Pode receber um Grimório Lendário.'] },
   { nome: 'Tengentsu', texto: 'Técnica ocular do País do Sol que lê o Ki. O preço é a própria magia.', efeitos: ['Vê com precisão tudo ao redor no presente.', 'Lê intenções; nunca é pego desprevenido.', 'Renuncia à mana: sem feitiços nem Técnicas.'] },
   { nome: 'Corpo Amaldiçoado', restricao: 'Roselei, Boost ou sorteio', texto: 'Uma bênção de nascença paga com uma perda do mesmo tamanho. O corpo é mais forte num ponto e amaldiçoado nesse mesmo ponto.', efeitos: ['+1 Acréscimo permanente num atributo à escolha, físico ou mágico.', 'O jogador escreve a maldição ligada a esse atributo, maior que a bênção, e o Conselho Mágico aprova.', 'A família Agrippa anula a parte ruim.'] },
   { nome: 'Fúria de Batalha', restricao: 'Voltia (7º Estágio), Boost ou sorteio', texto: 'O corpo pede luta. A adrenalina cresce quando o combate fica sério e explode quando a morte chega perto.', efeitos: ['Em combate: +1 Acréscimo em Força, Velocidade e Poder Mágico.', 'Imune a Presença Impactante.', 'Com Ferimento III ou pior, entra em Fúria: +1 classificação em todos os atributos por 4 turnos. Depois desmaia.'] },
@@ -864,7 +965,8 @@ export const milagres = [
 // Limites dos Milagres (Silas, 2026-11-07 e 2026-11-08), iguais aos do bot.
 export const milagresRegras = [
   ['Dois por Marcado', 'No máximo dois Milagres: um da linhagem (Giro de Linhagem ou herança da família) e um do Despertar no 1º Estágio, de sorteios ou de eventos.'],
-  ['Três portadores', 'Cada Milagre existe em no máximo três Marcados ao mesmo tempo. Com as três vagas ocupadas, ele sai dos giros até uma vaga abrir.'],
+  ['Três portadores', 'Cada Milagre existe em no máximo três Marcados ao mesmo tempo. Com as vagas ocupadas, ele sai dos giros até uma vaga abrir. O /vagas mostra quem ocupa cada uma.'],
+  ['Amado pela Mana: seis', 'A exceção é o Amado pela Mana, que tem seis portadores. Na Boismortier ele sai por chance no giro, não vem garantido.'],
   ['Herança ocupa vaga', 'Quem herda um Milagre da família, como a Grinberryal, também ocupa uma das três vagas. Ninguém perde o Milagre que já tem, mas ele para de sair para os outros.'],
   ['Maldição não conta', 'O Corpo Amaldiçoado da Roselei é a maldição da família: não ocupa vaga nem conta no limite de dois.'],
   ['Quem já passou do limite', 'Fichas antigas com Milagre a mais não perdem nada. A Staff vê a lista no bot e decide caso a caso.'],
@@ -948,15 +1050,15 @@ export const grimorios = [
 ];
 
 export const estagios = [
-  { n: '9º', req: 'Inicial', ganhos: 'Ponto de Trilha da criação; feitiços do 9º Estágio', teto: 'Sobre-Humana' },
-  { n: '8º', req: '3 PE', ganhos: 'Percepção de Mana; feitiços sobem para o 8º', teto: 'Sobre-Humana' },
-  { n: '7º', req: '7 PE · 1 Cristal Branco', ganhos: 'Ponto de Trilha; Pele de Mana; Despertar de Traço', teto: 'Extrema' },
-  { n: '6º', req: '12 PE · 3 Brancos · Controle 20%', ganhos: 'Matriz Rúnica; +1 Encaixe de Disco; +1 criatura; Profissão secundária', teto: 'Extrema' },
-  { n: '5º', req: '17 PE · 5 Brancos', ganhos: 'Ponto de Trilha; Método de Mana; Despertar de Traço', teto: 'Colossal' },
-  { n: '4º', req: '23 PE · 12 Brancos · Controle 40%', ganhos: 'Zona de Mana; disputa de General', teto: 'Colossal' },
-  { n: '3º', req: '30 PE · 4 Cristais Negros', ganhos: 'Ponto de Trilha e Ápice; Despertar de Traço; +1 Encaixe; +1 criatura', teto: 'Monstruosa' },
-  { n: '2º', req: '37 PE · 8 Negros · Controle 60%', ganhos: 'Forma Mágica', teto: 'Monstruosa' },
-  { n: '1º', req: '44 PE · 2 Cristais Dourados', ganhos: 'Despertar: escolhe um Milagre, se houver vaga', teto: 'Titânica' },
+  { n: '9º', req: 'Inicial', ganhos: '2 Pontos de Trilha da criação; feitiços do 9º Estágio', teto: 'Sobre-Humana' },
+  { n: '8º', req: '3 PE', ganhos: '+1 Ponto de Trilha; Percepção de Mana; feitiços sobem para o 8º', teto: 'Sobre-Humana' },
+  { n: '7º', req: '7 PE · 1 Cristal Branco', ganhos: '+2 Pontos de Trilha (Grau II); Pele de Mana; Despertar de Traço', teto: 'Extrema' },
+  { n: '6º', req: '12 PE · 3 Brancos · Controle 20%', ganhos: '+1 Ponto de Trilha; Matriz Rúnica; +1 Encaixe de Disco; +1 criatura; Profissão secundária', teto: 'Extrema' },
+  { n: '5º', req: '17 PE · 5 Brancos', ganhos: '+2 Pontos de Trilha (Grau III); Método de Mana; Despertar de Traço', teto: 'Colossal' },
+  { n: '4º', req: '23 PE · 12 Brancos · Controle 40%', ganhos: '+1 Ponto de Trilha (Grau IV); Zona de Mana; disputa de General', teto: 'Colossal' },
+  { n: '3º', req: '30 PE · 4 Cristais Negros', ganhos: '+2 Pontos de Trilha (Ápice e Elos); Despertar de Traço; +1 Encaixe; +1 criatura', teto: 'Monstruosa' },
+  { n: '2º', req: '37 PE · 8 Negros · Controle 60%', ganhos: '+1 Ponto de Trilha; Forma Mágica', teto: 'Monstruosa' },
+  { n: '1º', req: '44 PE · 2 Cristais Dourados', ganhos: '+1 Ponto de Trilha (13 no total); Despertar: escolhe um Milagre, se houver vaga', teto: 'Titânica' },
 ];
 
 // Teto de classificação física por Estágio (bot: limiteFisicoPorEstagio). Com um Ápice da trilha, o teto vira Transcendental.
@@ -991,21 +1093,21 @@ export const nivelRegras = [
 
 // O que cada Estágio destrava, juntando todas as páginas.
 export const destravaEstagio = [
-  { n: '9º', itens: [['Classes', '1 Ponto de Trilha (criação)'], ['Grimório', 'Feitiços iniciais do Grimório'], ['Mana', 'Respiração de Mana e Corpo Seco'], ['Discos', '2 Encaixes'], ['Criaturas', '1 criatura vinculada; doma Rank F e E'], ['Missões', 'Ranks F e E']] },
-  { n: '8º', itens: [['Mana', 'Percepção de Mana e Leitura Rúnica'], ['Criaturas', 'Doma Rank D'], ['Missões', 'Ranks E e D']] },
-  { n: '7º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Pele de Mana'], ['Traços', 'Despertar de Traço'], ['Missões', 'Rank D']] },
-  { n: '6º', itens: [['Mana', 'Matriz Rúnica, Runa Condicional, Eco de Veio e Passo Cintilante'], ['Milagres', 'Requisito do Feitiço de Alma'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank C; Assimilação Parcial'], ['Profissões', 'Profissão secundária; pode virar Mestre'], ['Carreiras', 'Tenente Brilhante ou Lapidador'], ['Missões', 'Rank C']] },
-  { n: '5º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Método de Mana, Couraça de Pó, Inscrição e Runa em Cadeia'], ['Traços', 'Despertar de Traço'], ['Criaturas', 'Doma Rank B'], ['Missões', 'Rank B']] },
-  { n: '4º', itens: [['Mana', 'Zona de Mana, Selo Rúnico e Voto de Cristal'], ['Carreiras', 'General Brilhante ou Quilate, se houver posto'], ['Missões', 'Rank B']] },
-  { n: '3º', itens: [['Classes', '+1 Ponto de Trilha e o Ápice'], ['Traços', 'Despertar de Traço'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank A; Assimilação Total'], ['Missões', 'Rank A']] },
-  { n: '2º', itens: [['Mana', 'Forma Mágica'], ['Missões', 'Rank A']] },
-  { n: '1º', itens: [['Milagres', 'Despertar: o segundo Milagre, se ainda não tiver um do Despertar e houver vaga'], ['Missões', 'Rank S']] },
+  { n: '9º', itens: [['Classes', '2 Pontos de Trilha (criação)'], ['Grimório', 'Feitiços iniciais do Grimório'], ['Mana', 'Respiração de Mana e Corpo Seco'], ['Discos', '2 Encaixes'], ['Criaturas', '1 criatura vinculada; doma Rank F e E'], ['Missões', 'Ranks F e E']] },
+  { n: '8º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Percepção de Mana e Leitura Rúnica'], ['Criaturas', 'Doma Rank D'], ['Missões', 'Ranks E e D']] },
+  { n: '7º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau II'], ['Mana', 'Pele de Mana'], ['Traços', 'Despertar de Traço'], ['Missões', 'Rank D']] },
+  { n: '6º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Matriz Rúnica, Runa Condicional, Eco de Veio e Passo Cintilante'], ['Milagres', 'Requisito do Feitiço de Alma'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank C; Assimilação Parcial'], ['Profissões', 'Profissão secundária; pode virar Mestre'], ['Carreiras', 'Tenente Brilhante ou Lapidador'], ['Missões', 'Rank C']] },
+  { n: '5º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau III'], ['Mana', 'Método de Mana, Couraça de Pó, Inscrição e Runa em Cadeia'], ['Traços', 'Despertar de Traço'], ['Criaturas', 'Doma Rank B'], ['Missões', 'Rank B']] },
+  { n: '4º', itens: [['Classes', '+1 Ponto de Trilha; abre o Grau IV'], ['Mana', 'Zona de Mana, Selo Rúnico e Voto de Cristal'], ['Carreiras', 'General Brilhante ou Quilate, se houver posto'], ['Missões', 'Rank B']] },
+  { n: '3º', itens: [['Classes', '+2 Pontos de Trilha; abre o Ápice e os Elos'], ['Traços', 'Despertar de Traço'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank A; Assimilação Total'], ['Missões', 'Rank A']] },
+  { n: '2º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Forma Mágica'], ['Missões', 'Rank A']] },
+  { n: '1º', itens: [['Classes', '+1 Ponto de Trilha (13 no total)'], ['Milagres', 'Despertar: o segundo Milagre, se ainda não tiver um do Despertar e houver vaga'], ['Missões', 'Rank S']] },
 ];
 
 export const treinos = [
   { tipo: 'Físico', sobe: 'Força, Resistência ou Velocidade', duracao: '2 horas', limite: '2 por ciclo', acao: '500 caracteres' },
   { tipo: 'Mágico', sobe: 'Mana ou Poder Mágico', duracao: '1 hora', limite: '2 por ciclo', acao: '400 caracteres' },
-  { tipo: 'Controle', sobe: '+1% (+2% em Forte Mana; não funciona em Mana Morta)', duracao: '1 hora', limite: '1 por ciclo', acao: '600 caracteres' },
+  { tipo: 'Controle', sobe: '+1% (+2% em Forte Mana, +3% nas Câmaras de Mana; não funciona em Mana Morta)', duracao: '1 hora', limite: '1 por ciclo', acao: '600 caracteres' },
   { tipo: 'Técnica', sobe: 'Uma Técnica de Mana', duracao: '1 hora', limite: '1 por ciclo', acao: '800 caracteres' },
 ];
 
@@ -1077,7 +1179,8 @@ export const segundaVida = {
 export const primeirosPassos = [
   ['Entre no servidor', 'Leia as regras de RP e apresente-se.'],
   ['Use /criar-personagem', 'O bot gera três modelos com Raça, Família e Classe de Mago definidas. Você gira Magias, Conhecimentos e Grimório e distribui os resultados entre os três. No fim, escolhe um.'],
-  ['Escreva a história', 'Nome, aparência (imagem), a vida passada e o renascimento. O Conselho Mágico aprova.'],
+  ['Na câmara de criação', 'O /criar-personagem abre um canal só seu (a Staff também vê). Um passo por vez: os Três Destinos, o nome, idade, gênero e epíteto (esses três dá para pular), a imagem e a revisão. Você responde escrevendo no canal. Ao enviar, o canal fecha e a ficha vai para o Conselho Mágico; se pedirem ajustes, ele abre de novo.'],
+  ['A história fica para depois', 'A vida passada e o renascimento vão para a aba Pessoal da /ficha, onde a Staff também registra os Impactos de Eventos. Mudar nome, imagem ou história depois: Pedir alteração, na mesma aba.'],
   ['Receba a ficha', 'O bot gera a ficha em imagem com /ficha.'],
   ['Comece em Diamond', 'Almas da Realeza renascem na Coroa, da Nobreza no Lapidário e da Plebe nos Veios.'],
   ['Escolha um caminho', 'Treine, estude no Grande Arquivo, faça Missões de Rank F e prepare-se para o Exame da Forja, ou desça ao Fosso e ao Veio Negro.'],
@@ -1208,7 +1311,7 @@ export const criacao = {
   ],
   escolha: [
     'O jogador escolhe um dos três modelos; os outros dois são descartados.',
-    'Escreve nome, aparência (com imagem), a vida passada e o renascimento em Diamond.',
+    'Na câmara de criação, um passo por vez: nome, idade, gênero e epíteto (os três últimos são opcionais) e a imagem, por arquivo, link ou no chat; o bot tira o fundo se precisar. A vida passada e o renascimento vão depois para a aba Pessoal da ficha.',
     'O Conselho Mágico aprova, e a ficha é criada.',
     'O /criar-personagem só pode ser usado uma vez por conta; refazer exige liberação da Staff.',
   ],
@@ -1718,7 +1821,7 @@ export const glossario = [
   ['Ferimento', 'Dano de I (Leve) a IV (Crítico), marcado na Trilha.', 'ferimentos'],
   ['Ápice', 'O último nó de um ramo da trilha de Classe; um por personagem, no 3º Estágio.', 'classes#trilha'],
   ['Alcance', 'Até onde a magia chega depois de sair. Cresce a cada Estágio.', 'estagios'],
-  ['Ponto de Trilha', 'Ponto para abrir um nó da trilha de Classe: 4 no total.', 'classes#trilha'],
+  ['Ponto de Trilha', 'Ponto para abrir um nó da árvore da Classe: 13 até o 1º Estágio, mais até 2 de Feito.', 'classes#trilha'],
   ['Grimório', 'O livro que guarda os feitiços.', 'magia'],
   ['Jazida', 'Mina com grau e Reserva; rende Recursos por Jornada.', 'mineracao#jazidas'],
   ['Jornada de Trabalho', 'Post de 500 caracteres por ciclo que paga o salário do ofício.', 'profissoes#regras'],
@@ -1747,14 +1850,14 @@ export const glossario = [
   ['Trilha de Ferimentos', 'A barra de vida: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'ferimentos#trilha'],
   ['Vigor', 'O quanto uma terra produz: Morta, Exausta, Fraca ou Viva.', 'terras#vigor'],
   ['Yul', 'A moeda de todos os reinos.', 'economia#moedas'],
-  ['Forte Mana', 'Lugar onde a mana é densa: Concentração em dobro e Treino de Controle +2%.', 'mapa#zonas'],
+  ['Forte Mana', 'Lugar onde a mana é densa: Concentração em dobro e Treino de Controle +2% (+3% nas Câmaras de Mana).', 'mapa#zonas'],
   ['Mana Rala', 'Lugar de mana fraca, como o Fosso: a Respiração de Mana rende pouco.', 'mapa#zonas'],
   ['Mana Morta', 'Lugar onde a mana morreu: sem Concentração e sem Treino de Controle.', 'mapa#zonas'],
   ['Placa', 'A mensagem fixada de cada lugar de RP: quem entra, mana, perigo, ofícios e terras.', 'mapa#placas'],
   ['Viagem', 'Ir de uma região a outra com o /viajar: de 2 a 70 minutos reais.', 'mapa#viagem'],
   ['Aparição', 'Criatura que surge sozinha num lugar com Perigo, 4 vezes por dia.', 'criaturas#aparicoes'],
   ['Carga', 'Quantos espaços o Marcado carrega, pela Força.', 'itens#carga'],
-  ['Bolsa', 'Onde ficam os giros e recompensas de Boost, VIP e eventos.', 'comecar#apoio'],
+  ['Bolsa', 'Onde ficam os giros e recompensas de Boost, do Passe e dos eventos.', 'comecar#apoio'],
 ];
 
 /* ==========================================================================

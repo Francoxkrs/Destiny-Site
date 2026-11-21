@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { territorios as t, esquadroes as e, cabecas as c, muralLivre as m, segredos as s, lojas as l, clima as cl, oMundo } from '../data/vivo.js';
+
+const abas = [['territorios', 'Territórios'], ['esquadroes', 'Esquadrões'], ['cabecas', 'Cabeças a prêmio'], ['mural-livre', 'Mural Livre'], ['segredos', 'Segredos'], ['lojas', 'Lojas e NPCs'], ['clima', 'Clima'], ['o-mundo', 'O mundo']];
+---
+<Base title="Diamond vivo" slug="vivo" description="Territórios, esquadrões, cabeças a prêmio, Mural Livre, segredos, lojas com dono, NPCs e o clima de Diamond: o mundo que muda sozinho no bot.">
+  <PageHero
+    slug="vivo"
+    title="Diamond <em>vivo</em>"
+    lead="O reino não espera ninguém. Facções disputam cada lugar, cabeças ganham preço, o clima vira às seis e cada canto guarda um segredo."
+    intro="Tudo nesta página acontece sozinho no bot, com os mesmos números que ele usa. Quem joga muda o mapa."
+  />
+
+  <PageNav items={abas} />
+
+  <section class="sec" id="territorios">
+    <div class="wrap">
+      <SectionHead num="01" label="Territórios" title="Cem pontos <em>por lugar</em>." lead={t.texto} />
+      <dl class="gifts">{t.ganhar.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+      <h3 class="t-h3" style="margin:clamp(32px,4vw,56px) 0 16px" data-reveal>Disputas</h3>
+      <dl class="gifts">{t.disputa.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+      <h3 class="t-h3" style="margin:clamp(32px,4vw,56px) 0 16px" data-reveal>O que o domínio dá</h3>
+      <dl class="gifts">{t.vantagens.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="esquadroes">
+    <div class="wrap">
+      <SectionHead num="02" label="Esquadrões" title="Cada divisão <em>vigia um pedaço</em>." lead={e.texto} />
+      <Table head={['Divisão', 'Facção', 'Vigia', 'Vantagem']} rows={e.lista} />
+      <dl class="gifts" style="margin-top:clamp(32px,4vw,56px)">{e.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="cabecas">
+    <div class="wrap">
+      <SectionHead num="03" label="Cabeças a prêmio" title="Todo feito <em>tem preço</em>." lead={c.texto} />
+      <Table head={['O cartaz pede', 'Paga', 'O que acontece']} rows={c.pedidos} />
+      <dl class="gifts" style="margin-top:clamp(32px,4vw,56px)">
+        <div data-reveal><dt>Cobrar</dt><dd>{c.cobrar}</dd></div>
+        <div data-reveal><dt>Mural dos Notáveis</dt><dd>{c.notaveis}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="mural-livre">
+    <div class="wrap">
+      <SectionHead num="04" label="Mural Livre e Bounty" title="Sem patente, <em>sem dono</em>." lead={m.texto} />
+      <dl class="gifts">{m.tipos.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+      <h3 class="t-h3" style="margin:clamp(32px,4vw,56px) 0 16px" data-reveal>Títulos pelo Bounty juntado (/bounty ver)</h3>
+      <Table head={['Título', 'Bounty', 'O que dizem']} rows={m.titulos} numCols={[1]} />
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="segredos">
+    <div class="wrap">
+      <SectionHead num="05" label="Segredos" title="Todo lugar <em>esconde algo</em>." lead={s.texto} />
+      <dl class="gifts">{s.regras.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="lojas">
+    <div class="wrap">
+      <SectionHead num="06" label="Lojas com dono e NPCs" title="Quem vende <em>tem nome</em>." lead={l.texto} />
+      <Table head={['Loja', 'Região', 'Nota']} rows={l.lista} />
+      <dl class="gifts" style="margin-top:clamp(32px,4vw,56px)">
+        <div data-reveal><dt>Estoque do dia</dt><dd>{l.estoque}</dd></div>
+        <div data-reveal><dt>NPCs que conversam</dt><dd>{l.npcs}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="clima">
+    <div class="wrap">
+      <SectionHead num="07" label="Clima" title="O céu <em>vira às seis</em>." lead={cl.texto} />
+      <Table head={['Clima', 'O que muda']} rows={cl.lista} />
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="o-mundo">
+    <div class="wrap">
+      <SectionHead num="08" label="O mundo" title="Os canais que <em>contam tudo</em>." lead="Uma categoria do Discord onde só o bot escreve." />
+      <dl class="gifts">{oMundo.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <NextPage slug="vivo" />
+</Base>

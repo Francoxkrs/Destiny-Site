@@ -15,12 +15,15 @@ const dentro = lugares.reduce((n, r) => n + r.lugares.reduce((m, l) => m + (l.de
 // Linhas da placa de um lugar, na ordem em que aparecem no Discord.
 const placa = (l) => [
   l.quem && ['Só entra', l.quem],
+  l.controle && ['Controle', l.controle],
   l.oficios && ['Jornada de', l.oficios.join(', ')],
   l.jazida && ['Jazida', l.jazida],
   l.estudo && ['Estuda-se', l.estudo],
   l.terras && ['Terras', l.terras],
   l.mercado && ['Mercado', 'Preços da região'],
   l.eventos && ['Evento', l.eventos],
+  l.topicos && ['Tópicos', l.topicos.join(', ')],
+  l.moradas && ['Moradas', 'Cada Terra comprada na região vira um post aqui'],
 ].filter(Boolean);
 
 const titulo = (n) => { const m = n.match(/^(A|O|Os) (.+)$/); return m ? `${m[1]} <em>${m[2]}</em>.` : n.replace(/ (\S+)$/, ' <em>$1</em>.'); };
@@ -29,11 +32,11 @@ const modosCurtos = ['A pé', 'Montaria', 'Trilho', 'Vassoura', 'Voo', 'Portal']
 
 const abas = [['zonas', 'Zonas de mana'], ['placas', 'As placas'], ...lugares.map((r) => [slugify(r.nome), r.nome]), ['viagem', 'Viagem']];
 ---
-<Base title="Mapa de Diamond" slug="mapa" description="Os 31 lugares de RP de Diamond, o grau de mana de cada um, onde há perigo, minas, mercado e terras, e quanto tempo se leva entre as regiões.">
+<Base title="Mapa de Diamond" slug="mapa" description="Os 51 canais de RP de Diamond, o grau de mana de cada um, onde há perigo, minas, mercado e terras, e quanto tempo se leva entre as regiões.">
   <PageHero
     slug="mapa"
     title="Mapa de <em>Diamond</em>"
-    lead="Cinco regiões, trinta e um lugares. Cada um com a sua mana, os seus perigos e o que se pode fazer ali."
+    lead="Cinco regiões, cinquenta e um canais. Cada um com a sua mana, os seus perigos e o que se pode fazer ali."
     intro={`O mapa abaixo é o mesmo que o bot monta no Discord: ${total} canais e fóruns, com mais ${dentro} lugares dentro dos fóruns.`}
     image="mapa/capa"
     imageLabel="Mapa de Diamond com as cinco regiões"

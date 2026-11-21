@@ -5,21 +5,26 @@ import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import { classesMago, trilhaRegras, slugify } from '../data/canon.js';
-const nomesNo = ['Nó I', 'Nó II', 'Ápice'];
+
+// Árvores v2 (as mesmas do bot e da página Árvores): Raiz, 3 ramos de 7 nós e 3 Elos.
+const jsons = import.meta.glob('../data/trilhas/*.json', { eager: true });
+const arvores = Object.values(jsons).map((m) => m.default ?? m).filter((t) => t.classe);
+const arvoreDe = (nome) => arvores.find((t) => t.classe === nome);
+const grau = { 1: 'Grau I', 2: 'Grau II', 3: 'Grau III', 4: 'Grau IV', 5: 'Ápice' };
 ---
-<Base title="Classes de Mago" slug="classes" description="Oito estilos de combate, cada um com Conhecimento de classe, passiva e uma trilha de três ramos onde o mago gasta 4 Pontos de Trilha.">
+<Base title="Classes de Mago" slug="classes" description="Oito estilos de combate, cada um com Conhecimento de classe, passiva e uma árvore de 24 habilidades onde o mago gasta os Pontos de Trilha que ganha a cada Estágio.">
   <PageHero
     slug="classes"
     title="Classes <em>de Mago</em>"
-    lead="A Classe de Mago é o estilo de combate do personagem. Ela vem definida no modelo do /criar-personagem e não muda depois, a não ser por evento."
-    intro="Cada classe dá um Conhecimento que não ocupa espaço, uma passiva e uma trilha com três ramos. Com 4 pontos, dois magos da mesma classe podem lutar de jeitos bem diferentes."
+    lead="A Classe de Mago é o estilo de combate do personagem. Ela vem no modelo do /criar-personagem e só muda pelo /classe, depois de três provas com o mestre da classe."
+    intro="Cada classe dá um Conhecimento que não ocupa espaço, uma passiva (a Raiz) e uma árvore com três ramos e três Elos. São 13 pontos até o 1º Estágio para 39 de árvore: dois magos da mesma classe nunca saem iguais."
     image="classes/capa"
     imageLabel="Os oito estilos de combate"
   />
 
   <section class="sec" id="trilha">
     <div class="wrap">
-      <SectionHead num="01" label="A trilha" title="Quatro pontos, <em>três caminhos</em>." lead="A passiva é a raiz. Cada ramo tem dois nós e um Ápice, e ninguém pega tudo." />
+      <SectionHead num="01" label="A trilha" title="Treze pontos, <em>trinta e nove de árvore</em>." lead="A passiva é a Raiz. Cada ramo vai do Grau I ao Ápice, os Elos ligam dois ramos, e ninguém pega tudo." />
       <dl class="gifts">
         {trilhaRegras.map(([n, t]) => <div data-reveal><dt>{n}</dt><dd>{t}</dd></div>)}
       </dl>
@@ -39,22 +44,35 @@ const nomesNo = ['Nó I', 'Nó II', 'Ápice'];
             <div class="perk" data-reveal><span class="t-label">Raiz · Passiva</span><h4>{c.passiva[0]}</h4><p>{c.passiva[1]}</p></div>
             <div data-reveal><ImageSlot src={`classes/${slugify(c.nome)}`} label={c.nome} ratio="3 / 4" compact /></div>
           </div>
-          <div class="ramos">
-            {c.trilha.map((r) => (
-              <div class="ramo" data-reveal>
-                <p class="ramo__nome t-label">{r.ramo}</p>
-                <ol class="ramo__nos">
-                  {r.nos.map(([n, t], k) => (
-                    <li class:list={['no', k === 2 && 'no--apice']}>
-                      <span class="no__tag">{nomesNo[k]}{k === 2 ? ' · 3º Estágio' : ''}</span>
-                      <h4>{k === 2 && r.estrela ? '★ ' : ''}{n}</h4>
-                      <p>{t}</p>
-                    </li>
-                  ))}
-                </ol>
+          {arvoreDe(c.nome) && (() => {
+            const t = arvoreDe(c.nome);
+            const elos = t.nos.filter((n) => n.elo);
+            return (
+              <div class="stack" style="--s:14px">
+                <div class="ramos">
+                  {t.ramos.map((r) => {
+                    const nos = t.nos.filter((n) => !n.elo && n.ramo.includes(r.id)).sort((x, y) => x.grau - y.grau);
+                    return (
+                      <div class="ramo" data-reveal>
+                        <p class="ramo__nome t-label">{r.nome}</p>
+                        <ol class="ramo__nos">
+                          <li class="no"><span class="no__tag">O ramo</span><p>{r.tema}</p><p class="t-small">{nos.filter((n) => n.grau < 5).map((n) => n.nome).join(' · ')}</p></li>
+                          {nos.filter((n) => n.grau === 5).map((n) => (
+                            <li class="no no--apice">
+                              <span class="no__tag">Ápice · {n.estagioMin}º Estágio · {n.custo} PT</span>
+                              <h4>{r.estrela === n.id ? '★ ' : ''}{n.nome}</h4>
+                              <p>{n.texto}</p>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p class="t-small" data-reveal><b>Elos:</b> {elos.map((n) => n.nome).join(' · ')}. <a href={`/arvores/?classe=${t.slug}`}>Ver a árvore inteira e gastar os pontos →</a></p>
               </div>
-            ))}
-          </div>
+            );
+          })()}
         </article>
       ))}
     </div>

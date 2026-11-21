@@ -7,6 +7,7 @@ import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
 import Arrow from '../components/Arrow.astro';
 import { site, segundaVida, primeirosPassos, criacao, magias, conhecimentos, apoio } from '../data/canon.js';
+import { codigos } from '../data/vivo.js';
 
 const soEvento = (d) => /sorteios e eventos\)?$/i.test(d) || /Só sorteios/i.test(d);
 const pools = {
@@ -169,7 +170,7 @@ const discordExterno = site.discord !== '#';
   <section class="sec sec--line sec--raise" id="apoio">
     <div class="wrap">
       <SectionHead num="06" label="Boost" title="Quem apoia <em>ganha a bolsa</em>." lead={apoio.texto} />
-      <p class="t-body" data-reveal style="margin:-12px 0 28px;color:var(--bone-2)">Os VIPs saíram na versão 2. O que antes vinha no VIP agora sai pelos <a href="/cristais/" style="color:var(--gold);text-decoration:underline">Cristais Prismáticos</a>, a moeda da conta.</p>
+      <p class="t-body" data-reveal style="margin:-12px 0 28px;color:var(--bone-2)">O VIP saiu na versão 2. O que é pago agora sai pelos <a href="/cristais/" style="color:var(--gold);text-decoration:underline">Cristais Prismáticos</a>, a moeda da conta.</p>
       <div class="packs">
         {apoio.pacotes.filter((p) => !p.vip).map((p) => (
           <article class:list={['pack', p.vip && 'pack--vip']} data-reveal>
@@ -194,6 +195,12 @@ const discordExterno = site.discord !== '#';
           <Table head={['Como', 'O que ganha']} rows={apoio.gratuitas} />
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line" id="codigos">
+    <div class="wrap">
+      <SectionHead num="07" label="Códigos" title="Metas do servidor <em>viram presentes</em>." lead={codigos} />
     </div>
   </section>
 

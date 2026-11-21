@@ -60,7 +60,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
                       </label>
                     ))}
                   </div>
-                  <p class="al-pedra__ch" data-pedra-ch>Chances no bot: {giros[0].chances}. Até {giros[0].limite} por personagem nesta temporada.</p>
+                  <p class="al-pedra__ch" data-pedra-ch>{giros[0].sorteio ? 'Sorteado aqui, na hora' : 'Chances no bot'}: {giros[0].chances}. Até {giros[0].limite} por personagem nesta temporada.</p>
                 </fieldset>
               )}
             </div>
@@ -133,7 +133,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque }, rar
       </div>
       <div class="al-tab" role="region" aria-label="Giros da Pedra do Destino" tabindex="0">
         <table>
-          <thead><tr><th>Giro</th><th>Inscrições</th><th>Chances (no bot)</th><th>Por personagem e temporada</th></tr></thead>
+          <thead><tr><th>Giro</th><th>Inscrições</th><th>Chances</th><th>Por personagem e temporada</th></tr></thead>
           <tbody>{pedra.giros.map((g) => <tr><td>{g.nome}{g.so && <small class="al-tab__so"> · só com Inscrições ganhas jogando</small>}</td><td class="n">{g.custo}</td><td>{g.chances}</td><td class="n">{g.limite}</td></tr>)}</tbody>
         </table>
       </div>

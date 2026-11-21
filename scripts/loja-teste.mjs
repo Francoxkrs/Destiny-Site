@@ -60,9 +60,9 @@ let n = 0; const ref = () => `ref-teste-${String(++n).padStart(4, '0')}`;
 const conta = (db) => db.cols.contas.docs[0];
 const bolsa = (db) => db.cols.bolsas.docs[0];
 
-await caso('preço da Pedra: Inscrições primeiro, resto a 160 CP; Milagre só com Inscrições', () => {
+await caso('preço da Pedra: Inscrições primeiro, resto a 160 CP; Milagre também em CP', () => {
   igual([precoDe(ofertaDe('pedra', 'giroMagia'), 0), precoDe(ofertaDe('pedra', 'giroMagia'), 1), precoDe(ofertaDe('pedra', 'rerollMilagre'), 10), precoDe(ofertaDe('pedra', 'rerollMilagre'), 15)],
-    [{ insc: 0, cp: 320 }, { insc: 1, cp: 160 }, { insc: 10, cp: null, faltamInsc: 5 }, { insc: 15, cp: 0 }]);
+    [{ insc: 0, cp: 320 }, { insc: 1, cp: 160 }, { insc: 10, cp: 800 }, { insc: 15, cp: 0 }]);
 });
 await caso('Família à escolha não está mais à venda', () => igual([ofertaDe('loja', 'familia-escolha'), ofertaDe('loja', 'classe-escolha')?.chave], [null, 'classeEscolha']));
 await caso('semana vira na segunda 00h de Brasília', () => igual([semanaDe(new Date('2026-11-23T02:59:00Z')), semanaDe(new Date('2026-11-23T03:00:00Z'))], ['2026-11-16', '2026-11-23']));
@@ -84,10 +84,27 @@ await caso('Pedra: limite por personagem e temporada', async () => {
   for (let i = 0; i < 3; i++) rs.push(await comprar(db, { ...quem, tipo: 'pedra', id: 'giroGrimorio', ref: ref() }));
   igual([rs.map((r) => r.ok), rs[2].status, bolsa(db).itens.giroGrimorio], [[true, true, false], 409, 2]);
 });
-await caso('Milagre sem Inscrições bastantes: não cobra CP', async () => {
-  const db = bancoFalso({ cp: 99999, inscricoes: 3 });
-  const r = await comprar(db, { ...quem, tipo: 'pedra', id: 'rerollMilagre', ref: ref() });
-  igual([r.ok, r.status, r.falta, conta(db).cp, conta(db).inscricoes, db.cols.bolsas.docs.length], [false, 402, { insc: 12 }, 99999, 3, 0]);
+await caso('Reroll de Milagre: 80% Traço, 20% Milagre, sorteado no servidor e pago em CP', async () => {
+  const db = bancoFalso({ cp: 99999 });
+  const r1 = await comprar(db, { ...quem, tipo: 'pedra', id: 'rerollMilagre', ref: ref() }, { rng: () => 0.79 });
+  igual([r1.ok, r1.recibo.chave, r1.recibo.rar, conta(db).cp, bolsa(db).itens], [true, 'traco', 'epico', 99999 - 2400, { traco: 1 }]);
+  const db2 = bancoFalso({ cp: 99999 });
+  const r2 = await comprar(db2, { ...quem, tipo: 'pedra', id: 'rerollMilagre', ref: ref() }, { rng: () => 0.8 });
+  igual([r2.recibo.chave, r2.recibo.rar, bolsa(db2).itens], ['rerollMilagre', 'lendario', { rerollMilagre: 1 }]);
+});
+await caso('Traço repetido vira Troca de Traço (teto do bot)', async () => {
+  const db = bancoFalso({ cp: 99999 });
+  db.cols.bolsas.docs.push({ guildId: 'g', userId: 'u1', itens: {}, recebido: { traco: 1 }, historico: [] });
+  const r = await comprar(db, { ...quem, tipo: 'pedra', id: 'rerollMilagre', ref: ref() }, { rng: () => 0.1 });
+  igual([r.recibo.chave, bolsa(db).itens], ['trocaTraco', { trocaTraco: 1 }]);
+});
+await caso('chances do Reroll de Milagre batem com 80/20 (100 mil)', async () => {
+  const { sortearPeso } = await import('../src/lib/loja.js');
+  const { pedra } = await import('../src/data/altar.js');
+  const l = pedra.giros.find((g) => g.chave === 'rerollMilagre').sorteio;
+  let x = 7; const rng = () => ((x = (x * 1103515245 + 12345) % 2 ** 31) / 2 ** 31);
+  let m = 0; for (let i = 0; i < 100000; i++) if (sortearPeso(l, rng).chave === 'rerollMilagre') m++;
+  if (m < 19000 || m > 21000) throw new Error(`Milagre ${m / 1000}%`);
 });
 await caso('Loja: Skip Treino até 3 por semana', async () => {
   const db = bancoFalso({ cp: 1000 });

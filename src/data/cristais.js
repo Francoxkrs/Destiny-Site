@@ -73,7 +73,7 @@ export const loja = [
 
 /** Nunca à venda, por nenhum caminho pago. */
 export const nuncaAVenda = [
-  'Magia Rara ou acima à escolha', 'Grimório Lendário, Sem Capa ou Demoníaco', 'Milagres e Reroll de Milagre', 'Elfos e Híbridos',
+  'Magia Rara ou acima à escolha', 'Grimório Lendário, Sem Capa ou Demoníaco', 'Milagre à escolha', 'Elfos e Híbridos',
   'Famílias Raras, Sorteio e Realeza', 'PE e Treinos', 'Yuls, Cristais de Mana e Méritos', 'Espaços de feitiço',
 ];
 

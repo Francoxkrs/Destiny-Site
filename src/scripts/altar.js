@@ -24,6 +24,8 @@ function avisar(html, erro = false) {
 function aplicaEstado(e, garantiaJa = true) {
   st.pity = e.pity; st.pityE = e.pityE; st.hist = e.hist ?? [];
   st.cp = e.cp; st.insc = e.inscricoes;
+  pintaCustos();
+  if (typeof pintaPedra === 'function') pintaPedra();
   pintaSaldo(); if (garantiaJa) pintaGarantia(); // na invocação, a barra só muda ao fechar (não entrega o resultado antes da animação)
 }
 async function carregar() {
@@ -32,8 +34,9 @@ async function carregar() {
     const tipo = r.headers.get('content-type') || '';
     if (r.status === 401) { st.modo = 'visitante'; avisar('Entre com o Discord para invocar. Gasta suas Inscrições primeiro e o que faltar sai dos Cristais Prismáticos.'); return; }
     if (!r.ok || !tipo.includes('json')) { st.modo = 'fora'; avisar((tipo.includes('json') && (await r.json()).erro) || 'O Altar não está ligado neste endereço do site.', true); return; }
-    aplicaEstado(await r.json());
     st.modo = 'ok';
+    aplicaEstado(await r.json());
+    carregarLimites();
   } catch { st.modo = 'fora'; avisar('O Altar não está ligado neste endereço do site.', true); }
 }
 
@@ -57,6 +60,23 @@ $$('[data-troca]').forEach((b) => b.addEventListener('click', () => {
   $$('[data-btns]').forEach((x) => (x.hidden = x.dataset.btns !== id));
   $$('[data-aviso-banner]').forEach((x) => (x.hidden = x.dataset.avisoBanner !== id));
 }));
+
+/* ---------------------------------------------------------------- custo nos botões (Inscrições primeiro, o resto em CP) */
+function custoAltar(qtd) {
+  const insc = typeof st.insc === 'number' ? st.insc : 0;
+  const usa = Math.min(insc, qtd);
+  const cp = Math.min((qtd - usa) * D.inscricao.cp, D.inscricao.cp10);
+  return { usa, cp };
+}
+function pintaCustos() {
+  if (st.modo !== 'ok') return;
+  $$('[data-girar]').forEach((b) => {
+    const { usa, cp } = custoAltar(Number(b.dataset.girar));
+    const el = b.querySelector('[data-custo]');
+    if (el) el.textContent = [usa && `${usa} ${usa === 1 ? 'Inscrição' : 'Inscrições'}`, cp && `${new Intl.NumberFormat('pt-BR').format(cp)} CP`].filter(Boolean).join(' + ');
+    b.classList.toggle('is-falta', cp > (st.cp ?? 0));
+  });
+}
 
 /* ---------------------------------------------------------------- saldo */
 const fmt = new Intl.NumberFormat('pt-BR');
@@ -305,26 +325,83 @@ function resumo(res) {
   return `${partes.join(' · ')} · faltam ${G.lendario - st.pity} para a garantia`;
 }
 
-/* ---------------------------------------------------------------- Pedra do Destino (prévia) */
+/* ---------------------------------------------------------------- Pedra do Destino */
+// O site cobra e põe o item na /bolsa do bot (/api/loja/comprar); quem gira é o bot, com as vagas de sempre.
 const giros = D.giros;
 let giroSel = giros[0];
-const pesa = (l) => { const t = l.reduce((s, x) => s + x.peso, 0); let r = Math.random() * t; for (const x of l) { r -= x.peso; if (r <= 0) return x; } return l[l.length - 1]; };
-function escolheGiro(i) {
-  giroSel = giros[i];
-  $('[data-pedra-ch]').textContent = giroSel.pool
-    ? `Chances: ${giroSel.chances}. Até ${giroSel.limite} por personagem e temporada.`
-    : `Chances: ${giroSel.chances}. Este depende da sua família, então só gira no bot.`;
-  $('[data-pedra-custo]').textContent = `${giroSel.custo} ${giroSel.custo === 1 ? 'Inscrição' : 'Inscrições'} · ${giroSel.nome}`;
-  $('[data-girar-pedra]').disabled = !giroSel.pool;
+const usados = {}; // 'pedra:giroMagia' → quantos já pegou nesta temporada
+const rarDoGiro = (g) => (g.custo >= 15 ? 'lendario' : g.custo >= 4 ? 'epico' : 'raro');
+const plural = (n, um, varios) => `${fmt.format(n)} ${n === 1 ? um : varios}`;
+function custoPedra(g) {
+  const insc = typeof st.insc === 'number' ? st.insc : 0;
+  const usa = Math.min(insc, g.custo);
+  const faltam = g.custo - usa;
+  if (faltam && g.so) return { texto: `${plural(g.custo, 'Inscrição', 'Inscrições')} ganhas jogando`, bloqueado: st.modo === 'ok' ? `Faltam ${plural(faltam, 'Inscrição', 'Inscrições')}` : null };
+  if (!faltam) return { texto: plural(g.custo, 'Inscrição', 'Inscrições') };
+  const cp = faltam * D.inscricao.cp;
+  return { texto: usa ? `${plural(usa, 'Inscrição', 'Inscrições')} + ${fmt.format(cp)} CP` : `${fmt.format(cp)} CP` };
 }
-$$('[data-pedra] input').forEach((r) => r.addEventListener('change', () => escolheGiro(Number(r.value))));
-function girarPedra() {
+function pintaPedra() {
   const g = giroSel;
-  if (!g.pool) return;
+  const u = usados[`pedra:${g.chave}`] ?? 0;
+  const cheio = u >= g.limite;
+  const c = custoPedra(g);
+  $('[data-pedra-ch]').textContent = `Chances no bot: ${g.chances}. ${st.modo === 'ok' ? `Você já pegou ${u} de ${g.limite} nesta temporada.` : `Até ${g.limite} por personagem nesta temporada.`}`;
+  $('[data-pedra-custo]').textContent = cheio ? 'Limite da temporada' : c.bloqueado ? c.bloqueado : `${c.texto} · ${g.nome}`;
+  $('[data-girar-pedra]').disabled = cheio || Boolean(c.bloqueado);
+  $$('[data-giro]').forEach((l) => {
+    const x = giros.find((y) => y.chave === l.dataset.giro);
+    const ux = usados[`pedra:${x.chave}`] ?? 0;
+    l.classList.toggle('is-cheio', ux >= x.limite);
+    l.querySelector('[data-lim]').textContent = `${x.so ? 'Só Inscrições · ' : ''}${st.modo === 'ok' ? `${ux}/${x.limite}` : `até ${x.limite}`}`;
+  });
+}
+function escolheGiro(i) { giroSel = giros[i]; pintaPedra(); }
+$$('[data-pedra] input').forEach((r) => r.addEventListener('change', () => escolheGiro(Number(r.value))));
+async function carregarLimites() {
+  if (st.modo !== 'ok') return;
+  try {
+    const r = await fetch('/api/loja', { headers: { accept: 'application/json' }, credentials: 'same-origin' });
+    if (r.ok) Object.assign(usados, (await r.json()).usados);
+  } catch { /* sem limites: o servidor confere na hora da compra */ }
+  pintaPedra();
+}
+const avisoPedra = $('[data-al-aviso-pedra]');
+const AVISO_PEDRA = avisoPedra?.innerHTML ?? '';
+const avisarPedra = (html, erro = false) => { if (!avisoPedra) return; avisoPedra.innerHTML = html || AVISO_PEDRA; avisoPedra.classList.toggle('is-erro', erro); };
+async function girarPedra() {
+  const g = giroSel;
+  if (st.ocupado) return;
+  if (st.modo === 'carregando') await carregar();
+  if (st.modo === 'visitante') { location.href = '/api/auth/login?volta=/altar/%23pedra'; return; }
+  if (st.modo !== 'ok') { avisarPedra('A Pedra não está ligada neste endereço do site.', true); return; }
   ultima = girarPedra;
-  const grupo = pesa(g.pool);
-  const nome = grupo.lista[Math.floor(Math.random() * grupo.lista.length)];
-  sequencia([{ nome, tipo: g.nome, rar: grupo.rar, rotulo: grupo.rot, k: '石' }], `Pedra do Destino · prévia, não entrega · ${grupo.rot}`);
+  st.ocupado = true;
+  const btn = $('[data-girar-pedra]');
+  btn.setAttribute('aria-busy', 'true');
+  const ref = novaRef();
+  try {
+    let r;
+    for (let t = 0; t < 2; t++) {
+      try { r = await fetch('/api/loja/comprar', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ tipo: 'pedra', id: g.chave, ref }) }); break; } catch (e) { if (t) throw e; }
+    }
+    const corpo = await r.json().catch(() => ({}));
+    if (r.status === 401) { location.href = '/api/auth/login?volta=/altar/%23pedra'; return; }
+    if (!inv.hidden && !r.ok) fechar();
+    if (r.status === 402 && corpo.falta?.cp) { avisarPedra(`Faltam <b class="al-falta">${fmt.format(corpo.falta.cp)} CP</b> para este giro. <a href="/cristais/">Comprar Cristais</a>`, true); return; }
+    if (!r.ok) { avisarPedra(corpo.erro || 'Não deu certo. Tente de novo.', true); return; }
+    avisarPedra('');
+    st.cp = corpo.conta.cp; st.insc = corpo.conta.inscricoes; Object.assign(usados, corpo.conta.usados);
+    pintaSaldo(); pintaCustos(); pintaPedra();
+    const gasto = [corpo.recibo.insc && plural(corpo.recibo.insc, 'Inscrição', 'Inscrições'), corpo.recibo.cp && `${fmt.format(corpo.recibo.cp)} CP`].filter(Boolean).join(' + ');
+    sequencia([{ nome: g.nome, tipo: 'Pedra do Destino', rar: rarDoGiro(g), rotulo: 'Na sua /bolsa', k: '石', novo: true, ganho: 'Gire na /bolsa do bot' }], `Pedra do Destino · ${gasto} · use na /bolsa do bot`);
+  } catch {
+    if (!inv.hidden) fechar();
+    avisarPedra('Sem conexão com o site. Confira a sua /bolsa no bot antes de tentar de novo.', true);
+  } finally {
+    st.ocupado = false;
+    btn.removeAttribute('aria-busy');
+  }
 }
 $('[data-girar-pedra]')?.addEventListener('click', girarPedra);
 // /altar/#pedra abre direto na Pedra do Destino (links de Conhecimentos e Cristais)

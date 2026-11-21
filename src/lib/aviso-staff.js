@@ -10,7 +10,7 @@ export async function avisarCompra(p, { saldo, primeira }, f = fetch) {
   const linhas = [
     `💎 <@${p.userId}> comprou **${p.nomePacote}** (${p.cp.toLocaleString('pt-BR')} CP) por ${valor} no site.`,
     `-# Mercado Pago \`${p.mpId ?? '?'}\` ・ saldo agora: ${saldo.toLocaleString('pt-BR')} CP`,
-    primeira ? '🎁 **Primeira compra da conta**: entreguem o presente (Moldura Centelha Prismática, Título "Patrono de Diamond" e 1 Classe de Mago à escolha).' : null,
+    primeira ? '🎁 **Primeira compra da conta**: a Classe de Mago à escolha já caiu na /bolsa. Entreguem a Moldura Centelha Prismática e o Título "Patrono de Diamond".' : null,
   ].filter(Boolean);
   await f(u, {
     method: 'POST', headers: { 'content-type': 'application/json' },

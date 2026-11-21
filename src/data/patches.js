@@ -115,7 +115,8 @@ const PATCH_ATUAL = {
                 { titulo: "Pontos de Trilha", texto: "2 na criação e mais a cada Estágio, até 13 no 1º. Nós maiores custam mais pontos. A Staff pode dar até 2 Pontos de Feito por feitos no RP." },
                 { titulo: "Gastar pelo site", texto: "dá para gastar os pontos na árvore do site ou com `/trilha pegar`. As duas usam a mesma regra e o bot vê na hora." },
                 { titulo: "Site novo", texto: "o site foi refeito no traço do Destiny: a sua ficha como um grimório, as árvores das Classes, das Técnicas e dos Conhecimentos numa página só, a Academia do Marcado para quem está chegando, e as páginas de **Eventos** e de **Patch**." },
-                { titulo: "Altar dos Vestígios", texto: "no site, veja os banners do Altar e a Pedra do Destino com as chances de cada coisa, carta a carta. Por enquanto é uma prévia: os giros de verdade chegam depois." },
+                { titulo: "Altar dos Vestígios", texto: "no site, o gacha da temporada: cada invocação gasta 1 Inscrição (ou 160 Cristais). Sai visual para a sua ficha (capa, título, fundo, tinta), Fragmentos ou materiais, que caem direto na bolsa do personagem. As chances e a garantia ficam sempre à vista: o Lendário é certo na 60ª invocação." },
+                { titulo: "Pedra do Destino", texto: "também no site: troque Inscrições por giros e rerolls da `/bolsa` (Cápsula, Giro de Magia, Grimório, Reroll de Raça e outros). O item cai na sua `/bolsa` e você gira aqui no bot, com as chances e as vagas de sempre. Reroll de Milagre e Giro de Linhagem só saem com Inscrições ganhas jogando." },
             ],
         },
         {
@@ -192,7 +193,9 @@ const PATCH_ATUAL = {
             itens: [
                 { titulo: "O VIP saiu", texto: "o VIP não é mais vendido. Tudo o que se compra com dinheiro agora passa pelos **Cristais Prismáticos**. Quem já tinha VIP não perde nada do que ganhou." },
                 { titulo: "Como comprar", texto: "no site, na página Cristais, por Pix ou cartão, com o login do Discord (o `/site` abre já com a sua conta). O saldo é da sua conta e vale no bot na hora." },
-                { titulo: "Onde gastar", texto: "o Passe Premium sai por 600 Cristais no `/passe ver`. A loja da conta e os giros do Altar chegam aos poucos." },
+                { titulo: "Onde gastar", texto: "o Passe Premium sai por 600 Cristais no `/passe ver`. No site: o Altar, a Pedra do Destino e a loja da conta (Skip Treino, Classe de Mago e Raça à escolha), tudo caindo na sua `/bolsa`." },
+                { titulo: "Inscrições jogando", texto: "missão concluída de Rank D ou acima dá 1 Inscrição (até 3 por semana), criatura derrotada nos chats de RP dá 1 (1 por semana) e cada Estágio novo dá 5. Elas ficam na sua conta e o Altar gasta primeiro as Inscrições, depois os Cristais." },
+                { titulo: "Presente da primeira compra", texto: "a Classe de Mago à escolha cai na sua `/bolsa` na hora. A moldura e o título a Staff entrega." },
                 { titulo: "Limites", texto: "cada conta gasta no máximo R$ 150 por mês. Magias raras, Milagres, PE, Yuls e espaços de feitiço nunca estão à venda." },
             ],
         },

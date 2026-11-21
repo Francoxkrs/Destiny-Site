@@ -8,6 +8,7 @@
 import { ObjectId } from 'mongodb';
 import { pacotes } from '../data/cristais.js';
 import { avisarCompra, avisarEstorno } from './aviso-staff.js';
+import { darNaBolsa } from './loja.js';
 import { buscarPorReferencia, cancelarPix, consultarPix, criarPix, criarPreferencia, ErroMercadoPago, pagamentoValido } from './mercadopago.js';
 
 export const MINUTOS_PIX = 30;
@@ -71,11 +72,16 @@ export async function creditar(db, p, agora = new Date()) {
     { userId: p.userId, pedidosCreditados: { $ne: id } },
     { $inc: { cp: p.cp }, $push: { pedidosCreditados: id }, $set: { atualizadoEm: agora } },
   );
-  // presente da primeira compra: fica marcado na conta para a Staff (e depois o bot) entregar na /bolsa
+  // presente da primeira compra: a Classe de Mago à escolha cai na /bolsa na hora; moldura e título ficam marcados para a Staff
   const primeira = await contas(db).updateOne(
     { userId: p.userId, primeiraCompra: { $exists: false } },
-    { $set: { primeiraCompra: { pedido: id, em: agora, entregue: false } } },
+    { $set: { primeiraCompra: { pedido: id, em: agora, entregue: false, classeNaBolsa: false } } },
   );
+  if (primeira.modifiedCount && p.guildId) {
+    await darNaBolsa(db, { guildId: p.guildId, userId: p.userId }, { classeEscolha: 1 }, 'Presente da primeira compra de Cristais', agora)
+      .then(() => contas(db).updateOne({ userId: p.userId }, { $set: { 'primeiraCompra.classeNaBolsa': true } }))
+      .catch((e) => console.error('cristais (presente na bolsa):', p.userId, e?.message ?? e));
+  }
   await pedidos(db).updateOne({ _id: p._id }, { $set: { status: 'pago', pagoEm: p.pagoEm ?? agora, creditado: true }, $unset: { copiaCola: '', qrBase64: '' } });
   const saldo = (await contas(db).findOne({ userId: p.userId }, { projection: { cp: 1 } }))?.cp ?? 0;
   if (somou.modifiedCount) await avisarCompra(p, { saldo, primeira: primeira.modifiedCount > 0 });

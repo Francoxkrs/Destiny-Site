@@ -17,7 +17,7 @@ export const moeda = {
 export const primeiraCompra = {
   titulo: 'Sua primeira centelha',
   texto: 'Qualquer pacote aprovado deixa um presente na sua conta.',
-  letra: 'Válido uma única vez por conta. A Staff recebe o aviso e entrega os itens na sua /bolsa.',
+  letra: 'Válido uma única vez por conta. A Classe de Mago cai na sua /bolsa na hora; a moldura e o título a Staff entrega.',
   premios: [
     { nome: 'Moldura Centelha Prismática', texto: 'Moldura animada para a /ficha e para a ficha no site. Só se ganha assim.', icone: 'moldura' },
     { nome: 'Título "Patrono de Diamond"', texto: 'Aparece na ficha e no perfil do site.', icone: 'titulo' },
@@ -51,15 +51,20 @@ export const presente = {
   texto: 'Qualquer pacote, o Selo Mensal ou o Passe Premium pode ser comprado para outro membro do servidor, com um bilhete curto. Mesmo preço; conta no teto de gasto de quem paga.',
 };
 
-/** Loja da conta: tudo com resultado conhecido. */
+/**
+ * Loja da conta: tudo com resultado conhecido.
+ * `id` + `chave` = vende no site e entrega o item na /bolsa do bot (src/lib/loja.js, POST /api/loja/comprar).
+ * `onde` = compra em outro lugar (Altar, bot). Sem `chave` nem `onde` = ainda não vende (aparece como "Em breve").
+ * `max` + `por` ('personagem' | 'semana') = o limite que o servidor confere.
+ * Família à escolha saiu da loja (pedido do Silas, 21/11/2026).
+ */
 export const loja = [
-  { nome: 'Inscrição do Altar', cp: 160, nota: '10 por 1.440 CP', limite: null, grupo: 'Giros' },
-  { nome: 'Passe Premium da temporada', cp: 600, nota: 'Compra no botão Premium do /passe ver, no bot', limite: '1 por temporada', grupo: 'Temporada' },
+  { nome: 'Inscrição do Altar', cp: 160, nota: '10 por 1.440 CP', limite: null, grupo: 'Giros', onde: { href: '/altar/', rotulo: 'No Altar' } },
+  { nome: 'Passe Premium da temporada', cp: 600, nota: 'Compra no botão Premium do /passe ver, no bot', limite: '1 por temporada', grupo: 'Temporada', onde: { rotulo: 'No bot' } },
+  { id: 'skip-treino', chave: 'skipTreino', nome: 'Skip Treino', cp: 120, nota: 'Libera um treino do ciclo. Também sai jogando, em missões e no Passe grátis', limite: '3 por semana por personagem', max: 3, por: 'semana', grupo: 'Personagem' },
+  { id: 'classe-escolha', chave: 'classeEscolha', nome: 'Classe de Mago à escolha', cp: 900, nota: 'Na criação ou na ficha', limite: '1 por personagem', max: 1, por: 'personagem', grupo: 'Personagem' },
+  { id: 'raca-escolha', chave: 'racaEscolha', nome: 'Raça à escolha', cp: 1200, nota: 'Humanos, Anões ou Bruxas; a família é girada', limite: '1 por personagem', max: 1, por: 'personagem', grupo: 'Personagem' },
   { nome: 'Redefinir a trilha', cp: 450, nota: 'Devolve todos os Pontos de Trilha', limite: '1 a cada 30 dias', grupo: 'Personagem' },
-  { nome: 'Skip Treino', cp: 120, nota: 'Libera um treino do ciclo. Também sai jogando, em missões e no Passe grátis', limite: '3 por semana por personagem', grupo: 'Personagem' },
-  { nome: 'Família Comum à escolha', cp: 900, nota: 'Com vaga', limite: '1 por personagem', grupo: 'Personagem' },
-  { nome: 'Classe de Mago à escolha', cp: 900, nota: '', limite: '1 por personagem', grupo: 'Personagem' },
-  { nome: 'Raça à escolha', cp: 1200, nota: 'Humanos, Anões ou Bruxas', limite: '1 por personagem', grupo: 'Personagem' },
   { nome: 'Ateliê comum', cp: 150, nota: 'Título, tinta ou selo', limite: null, grupo: 'Ateliê' },
   { nome: 'Ateliê épico', cp: 450, nota: 'Fundo ou moldura', limite: null, grupo: 'Ateliê' },
   { nome: 'Ateliê lendário animado', cp: 1200, nota: 'Visual animado', limite: null, grupo: 'Ateliê' },

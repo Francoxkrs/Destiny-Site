@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "cristais:teste": "node scripts/cristais-teste.mjs",
-    "altar:teste": "node scripts/altar-teste.mjs"
+    "altar:teste": "node scripts/altar-teste.mjs",
+    "loja:teste": "node scripts/loja-teste.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "8.2.11",

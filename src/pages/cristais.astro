@@ -35,9 +35,9 @@ const metas = [
   { id: 'i10', nome: '10 Inscrições do Altar', cp: inscricao.cp10 },
   { id: 'passe', nome: 'Passe Premium da temporada', cp: loja.find((i) => i.nome.startsWith('Passe'))?.cp ?? 600 },
   { id: 'lend', nome: `Lendário garantido (${garantia.lendario} Inscrições)`, cp: Math.ceil(garantia.lendario / 10) * inscricao.cp10 },
-  { id: 'atl', nome: 'Ateliê lendário animado', cp: 1200 },
-  { id: 'redef', nome: 'Redefinir a trilha', cp: 450 },
-  { id: 'classe', nome: 'Classe de Mago à escolha', cp: 900 },
+  { id: 'classe', nome: 'Classe de Mago à escolha', cp: loja.find((i) => i.id === 'classe-escolha')?.cp ?? 900 },
+  { id: 'raca', nome: 'Raça à escolha', cp: loja.find((i) => i.id === 'raca-escolha')?.cp ?? 1200 },
+  { id: 'skip', nome: '3 Skip Treino (uma semana)', cp: 3 * (loja.find((i) => i.id === 'skip-treino')?.cp ?? 120) },
 ];
 ---
 <Base title="Cristais Prismáticos" slug="cristais" aba="cristais" description="Cristais Prismáticos: a moeda da sua conta no Black Destiny. Pacotes, Selo Mensal, presente para amigos e a loja da conta.">
@@ -99,7 +99,7 @@ const metas = [
     </section>
 
     <!-- calculadora -->
-    <section class="cp-calc wrap" aria-labelledby="cp-calc-t" data-calc data-pacotes={JSON.stringify(pacotes.map((p) => ({ nome: p.nome, cp: p.cp, preco: p.preco })))} data-selo={JSON.stringify(selo)}>
+    <section class="cp-calc wrap" aria-labelledby="cp-calc-t" data-calc data-pacotes={JSON.stringify(pacotes.map((p) => ({ nome: p.nome, cp: p.cp, preco: p.preco })))} data-selo={JSON.stringify(selo)} data-saldo={saldo ?? 0}>
       <div class="cp-calc__l">
         <span class="eyebrow"><b>算</b>Calculadora</span>
         <h2 id="cp-calc-t" class="t-h2">Do que você <em>precisa</em>?</h2>
@@ -148,20 +148,31 @@ const metas = [
         <p class="t-label">Para outro membro</p>
         <h2 class="cp-selo__t">{presente.titulo}</h2>
         <p class="t-body">{presente.texto}</p>
+        <p class="cp-pres__breve">Em breve. Hoje a compra é só para a sua própria conta.</p>
         <p class="cp-pres__bilhete"><span>Bilhete</span>“Pela primeira missão que você me tirou do Fosso.”</p>
       </article>
     </section>
 
     <!-- loja da conta -->
     <section class="cp-sec wrap" aria-labelledby="cp-loja">
-      <div class="cp-sec__h"><h2 id="cp-loja" class="t-h2">Loja da <em>conta</em></h2><p class="t-body">Tudo com resultado conhecido. O que tem vaga limitada ou define o topo do poder só se ganha jogando.</p></div>
-      <div class="cp-loja">
+      <div class="cp-sec__h"><h2 id="cp-loja" class="t-h2">Loja da <em>conta</em></h2><p class="t-body">Tudo com resultado conhecido. O item cai na sua /bolsa do bot na hora. O que tem vaga limitada ou define o topo do poder só se ganha jogando.</p></div>
+      <p class="cp-loja__msg" data-loja-msg aria-live="polite" hidden></p>
+      <div class="cp-loja" data-loja data-logado={sessao ? '1' : ''}>
         {grupos.map((g) => (
           <div class="cp-loja__g">
             <h3 class="t-label">{g}</h3>
             <ul>
               {loja.filter((i) => i.grupo === g).map((i) => (
-                <li><span><b>{i.nome}</b>{(i.nota || i.limite) && <small>{[i.nota, i.limite].filter(Boolean).join(' · ')}</small>}</span><em>{fmt.format(i.cp)} <small>CP</small></em></li>
+                <li class:list={[!i.chave && !i.onde && 'is-breve']}>
+                  <span><b>{i.nome}</b>{(i.nota || i.limite) && <small>{[i.nota, i.limite].filter(Boolean).join(' · ')}</small>}</span>
+                  <span class="cp-loja__c">
+                    <em>{fmt.format(i.cp)} <small>CP</small></em>
+                    {i.chave ? <button class="cp-loja__btn" type="button" data-comprar={i.id} data-cp={i.cp} data-nome={i.nome}>Comprar</button>
+                      : i.onde?.href ? <a class="cp-loja__btn cp-loja__btn--link" href={i.onde.href}>{i.onde.rotulo}</a>
+                      : i.onde ? <span class="cp-loja__onde">{i.onde.rotulo}</span>
+                      : <span class="cp-loja__onde">Em breve</span>}
+                  </span>
+                </li>
               ))}
             </ul>
           </div>
@@ -246,7 +257,6 @@ const metas = [
   if (c) {
     type P = { nome: string; cp: number; preco: number };
     const P = JSON.parse(c.dataset.pacotes!) as P[];
-    const S = JSON.parse(c.dataset.selo!) as { total: number; preco: number };
     const fmt = new Intl.NumberFormat('pt-BR');
     const brl = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     // o combo mais barato que alcança a meta (até 4 de cada pacote; a lista é pequena)
@@ -266,19 +276,68 @@ const metas = [
     const plano = c.querySelector<HTMLElement>('[data-plano]')!;
     const tot = c.querySelector<HTMLElement>('[data-total]')!;
     const roda = () => {
-      const meta = [...c.querySelectorAll<HTMLInputElement>('[data-meta]:checked')].reduce((s, i) => s + Number(i.value), 0);
+      const soma = [...c.querySelectorAll<HTMLInputElement>('[data-meta]:checked')].reduce((s, i) => s + Number(i.value), 0);
+      // quem já tem saldo só precisa da diferença
+      const tem = Math.max(0, Number(c.dataset.saldo) || 0);
+      const meta = Math.max(0, soma - tem);
       tot.textContent = fmt.format(meta);
-      if (!meta) { plano.innerHTML = '<p class="cp-calc__vazio">Marque pelo menos um item.</p>'; return; }
+      if (!soma) { plano.innerHTML = '<p class="cp-calc__vazio">Marque pelo menos um item.</p>'; return; }
+      if (!meta) { plano.innerHTML = `<p class="cp-calc__vazio">Seu saldo de ${fmt.format(tem)} CP já cobre tudo isso.</p>`; return; }
       const b = melhor(meta);
       if (!b) { plano.innerHTML = '<p class="cp-calc__vazio">Passa do que dá para comprar de uma vez.</p>'; return; }
       const itens = b.q.map((n, i) => (n ? `<li><b>${n}×</b> ${P[i].nome}<span>${brl(n * P[i].preco)}</span></li>` : '')).join('');
       const sobra = b.cp - meta;
       const teto = b.preco > 150 ? '<p class="cp-calc__nota">Passa do teto de R$ 150 por mês: dá para dividir em dois meses.</p>' : '';
-      const seloDica = meta <= S.total ? `<p class="cp-calc__nota">Sem pressa? O Selo Mensal (${brl(S.preco)}) junta ${fmt.format(S.total)} CP em 30 dias.</p>` : '';
-      plano.innerHTML = `<ul>${itens}</ul><p class="cp-calc__preco"><span>Total</span><b>${brl(b.preco)}</b></p><p class="cp-calc__sobra">${sobra ? `Sobram ${fmt.format(sobra)} CP na conta.` : 'Sem sobra.'}</p>${teto}${seloDica}`;
+      const jaTem = tem ? `<p class="cp-calc__nota">Já descontei os ${fmt.format(tem)} CP que você tem.</p>` : '';
+      plano.innerHTML = `<ul>${itens}</ul><p class="cp-calc__preco"><span>Total</span><b>${brl(b.preco)}</b></p><p class="cp-calc__sobra">${sobra ? `Sobram ${fmt.format(sobra)} CP na conta.` : 'Sem sobra.'}</p>${teto}${jaTem}`;
     };
     c.addEventListener('change', roda);
     roda();
+  }
+</script>
+
+<script>
+  // Loja da conta: dois toques (Comprar → Confirmar) e o item cai na /bolsa do bot. O servidor confere saldo e limites.
+  const raiz = document.querySelector<HTMLElement>('[data-loja]');
+  const msg = document.querySelector<HTMLElement>('[data-loja-msg]');
+  if (raiz && msg) {
+    const fmt = new Intl.NumberFormat('pt-BR');
+    const novaRef = () => (crypto.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`);
+    const dizer = (html: string, erro = false) => { msg.hidden = false; msg.innerHTML = html; msg.classList.toggle('is-erro', erro); };
+    let armado: HTMLButtonElement | null = null;
+    let tempo = 0;
+    const desarmar = () => { if (armado) { armado.textContent = 'Comprar'; armado.classList.remove('is-armado'); } armado = null; clearTimeout(tempo); };
+    raiz.addEventListener('click', async (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-comprar]');
+      if (!b || b.getAttribute('aria-busy') === 'true') return;
+      if (!raiz.dataset.logado) { location.href = '/api/auth/login?volta=/cristais/%23cp-loja'; return; }
+      if (armado !== b) {
+        desarmar();
+        armado = b;
+        b.textContent = `Confirmar ${fmt.format(Number(b.dataset.cp))} CP`;
+        b.classList.add('is-armado');
+        tempo = window.setTimeout(desarmar, 5000);
+        return;
+      }
+      desarmar();
+      b.setAttribute('aria-busy', 'true');
+      b.textContent = '...';
+      try {
+        const r = await fetch('/api/loja/comprar', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ tipo: 'loja', id: b.dataset.comprar, ref: novaRef() }) });
+        const c = await r.json().catch(() => ({}));
+        if (r.status === 401) { location.href = '/api/auth/login?volta=/cristais/%23cp-loja'; return; }
+        if (r.status === 402 && c.falta?.cp) { dizer(`Faltam <b>${fmt.format(c.falta.cp)} CP</b> para ${b.dataset.nome}. Os pacotes estão no topo da página.`, true); return; }
+        if (!r.ok) { dizer(c.erro || 'Não deu certo. Tente de novo.', true); return; }
+        dizer(`<b>${b.dataset.nome}</b> está na sua /bolsa no bot. Saldo: ${fmt.format(c.conta.cp)} CP.`);
+        const sd = document.querySelector('[data-saldo]'); if (sd) sd.innerHTML = `${fmt.format(c.conta.cp)} <small>CP</small>`;
+        document.querySelectorAll('[data-sessao-cp-n]').forEach((el) => (el.textContent = fmt.format(c.conta.cp)));
+      } catch {
+        dizer('Sem conexão com o site. Confira a sua /bolsa no bot antes de tentar de novo.', true);
+      } finally {
+        b.removeAttribute('aria-busy');
+        if (!b.classList.contains('is-armado')) b.textContent = 'Comprar';
+      }
+    });
   }
 </script>
 

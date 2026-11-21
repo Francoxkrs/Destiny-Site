@@ -2,10 +2,11 @@
  * Cristais Prismáticos (CP): a moeda da CONTA no Discord, não do personagem.
  * Números da proposta de monetização v2 (Claude Doc "Monetização com Cristais Prismáticos", 17/11/2026).
  * Decidido pelo Silas: gacha pago aberto (Inscrições a 160 CP), presente para amigo, sem VIP, teto R$ 149,99.
- * O resto ainda é proposta: a página mostra o selo "Proposta" enquanto `aprovado` for false.
- * Nada aqui cobra: o pagamento (Pix pelo Mercado Pago) só entra depois do ok do Silas.
+ * Pacotes liberados para venda pelo Silas em 21/11/2026: o Pix (Mercado Pago) liga quando a Vercel tem
+ * MP_ACCESS_TOKEN e MP_PAYER_EMAIL (ver docs/pagamento.md). Mudou um preço ou um total de CP aqui, muda na compra também.
+ * `aprovado = false` volta a mostrar o selo "Proposta" no topo da página.
  */
-export const aprovado = false;
+export const aprovado = true;
 
 export const moeda = {
   nome: 'Cristal Prismático',
@@ -16,7 +17,7 @@ export const moeda = {
 export const primeiraCompra = {
   titulo: 'Sua primeira centelha',
   texto: 'Qualquer pacote aprovado deixa um presente na sua conta.',
-  letra: 'Válido uma única vez por conta. Os itens vão para a sua /bolsa.',
+  letra: 'Válido uma única vez por conta. A Staff recebe o aviso e entrega os itens na sua /bolsa.',
   premios: [
     { nome: 'Moldura Centelha Prismática', texto: 'Moldura animada para a /ficha e para a ficha no site. Só se ganha assim.', icone: 'moldura' },
     { nome: 'Título "Patrono de Diamond"', texto: 'Aparece na ficha e no perfil do site.', icone: 'titulo' },

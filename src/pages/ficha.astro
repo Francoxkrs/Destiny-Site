@@ -8,6 +8,9 @@ import Icon from '../components/Icon.astro';
 import Aviso from '../components/portal/Aviso.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { carregarFicha, imagemUrl } from '../lib/ficha.js';
+import { vestigiosDaConta } from '../lib/altar.js';
+import { altar } from '../data/altar.js';
+import { banco } from '../lib/db.js';
 import { classificacoes, romanos, slugify, estagios, ranks } from '../data/canon.js';
 import { arvorePorClasse, migrarIds } from '../data/arvores.js';
 import fs from 'node:fs';
@@ -18,6 +21,12 @@ export const prerender = false;
 const sessao = lerSessao(Astro.cookies);
 const { estado, ficha: f, aviso } = await carregarFicha(sessao);
 Astro.response.headers.set('cache-control', 'private, no-store');
+// Vestígios do Altar: moram na conta (não na foto do bot), então vêm direto do banco
+let vest = { lista: [], fragmentos: 0 };
+if (sessao && estado === 'ok') { try { const db = await banco(); if (db) vest = await vestigiosDaConta(db, sessao.id); } catch { /* sem Vestígios agora */ } }
+// a ficha de exemplo mostra dois Vestígios para quem ainda não entrou ver como fica
+if (estado !== 'ok') vest = { lista: [{ ...altar.premios.lendario[0], rar: 'lendario', n: 1 }, { ...altar.premios.epico[0], rar: 'epico', n: 1 }], fragmentos: 40 };
+const vestigiosVisuais = vest.lista.filter((v) => v.rar !== 'raro');
 
 const fmt = new Intl.NumberFormat('pt-BR');
 const exemplo = estado !== 'ok';
@@ -158,6 +167,18 @@ const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t
             {f.moedas.cristais.dourado > 0 && <li><b>{f.moedas.cristais.dourado}</b>Cristais Dourados</li>}
           </ul>
           <a class="gv-link" href="/cristais/">Cristais Prismáticos <Icon name="seta" size={13} /></a>
+          <p class="gv-h5">Vestígios{vest.fragmentos > 0 && ` · ${fmt.format(vest.fragmentos)} Fragmentos`}</p>
+          {vestigiosVisuais.length ? (
+            <ul class="gv-vest">
+              {vestigiosVisuais.map((v) => (
+                <li data-r={v.rar}>
+                  <span class="gv-vest__a" aria-hidden="true">{v.img ? <img src={v.img} alt="" /> : v.k}</span>
+                  <span><b>{v.nome}</b><small>{v.rar === 'lendario' ? 'Lendário' : 'Épico'} · {v.tipo}{v.n > 1 && ` · ×${v.n}`}</small></span>
+                </li>
+              ))}
+            </ul>
+          ) : <ul class="gv-tags"><li class="is-vaga">{exemplo ? 'Os Vestígios do Altar aparecem aqui' : 'Nenhum ainda'}</li></ul>}
+          <a class="gv-link" href="/altar/">Altar dos Vestígios <Icon name="seta" size={13} /></a>
         </section>
 
         <!-- II · poder -->

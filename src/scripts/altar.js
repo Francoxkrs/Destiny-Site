@@ -1,6 +1,6 @@
 // Altar dos Vestígios: troca de banner, garantia e a invocação de tela cheia.
-// PRÉVIA: o sorteio roda no navegador, não gasta nem entrega nada. Quando o Altar abrir no bot,
-// o sorteio passa para o servidor (/api/altar) e esta tela só toca a animação do resultado.
+// O sorteio do Altar dos Vestígios roda no servidor (/api/altar/invocar): gasta, entrega e devolve o resultado;
+// esta tela só toca a animação. A Pedra do Destino ainda é prévia (sorteia aqui e não entrega nada).
 import gsap from 'gsap';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -10,31 +10,31 @@ const G = D.garantia;
 const R = D.raridades;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ORDEM = { raro: 0, epico: 1, lendario: 2 };
-const CHAVE = 'bd-altar-previa';
 
-/* ---------------------------------------------------------------- estado da prévia */
-const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE)) || null; } catch { return null; } };
-const st = Object.assign({ pity: 0, pityE: 0, hist: [] }, ler());
-const salvar = () => { try { localStorage.setItem(CHAVE, JSON.stringify({ ...st, hist: st.hist.slice(0, 90) })); } catch { /* sem storage */ } };
-
-function chanceLendario(n) {
-  if (n >= G.lendario) return 100;
-  if (n >= G.sobeDe) return R.lendario.chance + G.passo * (n - G.sobeDe + 1);
-  return R.lendario.chance;
+/* ---------------------------------------------------------------- estado (vem do servidor) */
+// modo: 'carregando' | 'ok' (logado, banco ligado) | 'visitante' (não entrou) | 'fora' (banco desligado ou erro)
+const st = { modo: 'carregando', pity: 0, pityE: 0, hist: [], cp: null, insc: null, ocupado: false };
+const aviso = $('[data-al-aviso]');
+const AVISO_PADRAO = aviso?.innerHTML ?? '';
+function avisar(html, erro = false) {
+  if (!aviso) return;
+  aviso.innerHTML = html || AVISO_PADRAO;
+  aviso.classList.toggle('is-erro', erro);
 }
-
-function sortear() {
-  st.pity += 1; st.pityE += 1;
-  const r = Math.random() * 100;
-  const cl = chanceLendario(st.pity);
-  let rar = 'raro';
-  if (r < cl) rar = 'lendario';
-  else if (r < cl + R.epico.chance || st.pityE >= G.epico) rar = 'epico';
-  if (rar === 'lendario') { st.pity = 0; st.pityE = 0; }
-  if (rar === 'epico') st.pityE = 0;
-  const pool = D.altar.premios[rar];
-  const p = pool[Math.floor(Math.random() * pool.length)];
-  return { ...p, rar, n: st.hist.length + 1 };
+function aplicaEstado(e, garantiaJa = true) {
+  st.pity = e.pity; st.pityE = e.pityE; st.hist = e.hist ?? [];
+  st.cp = e.cp; st.insc = e.inscricoes;
+  pintaSaldo(); if (garantiaJa) pintaGarantia(); // na invocação, a barra só muda ao fechar (não entrega o resultado antes da animação)
+}
+async function carregar() {
+  try {
+    const r = await fetch('/api/altar', { headers: { accept: 'application/json' }, credentials: 'same-origin' });
+    const tipo = r.headers.get('content-type') || '';
+    if (r.status === 401) { st.modo = 'visitante'; avisar('Entre com o Discord para invocar. Gasta suas Inscrições primeiro e o que faltar sai dos Cristais Prismáticos.'); return; }
+    if (!r.ok || !tipo.includes('json')) { st.modo = 'fora'; avisar((tipo.includes('json') && (await r.json()).erro) || 'O Altar não está ligado neste endereço do site.', true); return; }
+    aplicaEstado(await r.json());
+    st.modo = 'ok';
+  } catch { st.modo = 'fora'; avisar('O Altar não está ligado neste endereço do site.', true); }
 }
 
 function pintaGarantia() {
@@ -55,16 +55,26 @@ $$('[data-troca]').forEach((b) => b.addEventListener('click', () => {
     if (on && !reduce) gsap.fromTo(x, { clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)' }, { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', duration: 0.9, ease: 'expo.inOut', clearProps: 'clipPath' });
   });
   $$('[data-btns]').forEach((x) => (x.hidden = x.dataset.btns !== id));
+  $$('[data-aviso-banner]').forEach((x) => (x.hidden = x.dataset.avisoBanner !== id));
 }));
 
 /* ---------------------------------------------------------------- saldo */
 const fmt = new Intl.NumberFormat('pt-BR');
+function pintaSaldo() {
+  if (typeof st.cp === 'number') $('[data-cp]').textContent = fmt.format(st.cp);
+  if (typeof st.insc === 'number') $('[data-insc]').textContent = fmt.format(st.insc);
+  // o CP do cabeçalho acompanha o gasto
+  const n = $('[data-sessao-cp-n]');
+  if (n && typeof st.cp === 'number') n.textContent = fmt.format(st.cp);
+}
 document.addEventListener('bd:sessao', (e) => {
   const s = e.detail;
+  if (st.modo === 'ok') return; // o Altar já tem o saldo mais novo
   if (s && typeof s.cp === 'number') $('[data-cp]').textContent = fmt.format(s.cp);
   if (s && typeof s.inscricoes === 'number') $('[data-insc]').textContent = fmt.format(s.inscricoes);
 });
 if (window.__bdSessao) document.dispatchEvent(new CustomEvent('bd:sessao', { detail: window.__bdSessao }));
+carregar();
 
 /* ---------------------------------------------------------------- céu de nanquim (canvas) */
 const inv = $('[data-inv]');
@@ -121,6 +131,7 @@ function carta(p, grande = false) {
   el.querySelector('.inv-card__d').setAttribute('aria-label', p.rotulo ?? nomeR[p.rar]);
   el.querySelector('.inv-card__n').textContent = p.nome;
   el.querySelector('.inv-card__t').textContent = `${p.rotulo ?? nomeR[p.rar]} · ${p.tipo}`;
+  if (p.ganho) { const g = document.createElement('p'); g.className = `inv-card__g${p.novo ? ' is-novo' : ''}`; g.textContent = p.ganho; el.querySelector('.inv-card__txt').append(g); }
   return el;
 }
 
@@ -250,12 +261,41 @@ async function sequencia(res, titulo) {
   if (!reduce) gsap.from(fim, { opacity: 0, y: 16, duration: 0.5, delay: 0.3 });
 }
 
-function invocar(qtd) {
+const novaRef = () => (crypto.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`);
+const btnsInv = $$('[data-girar]');
+async function invocar(qtd) {
+  if (st.ocupado) return;
+  if (st.modo === 'carregando') await carregar();
+  if (st.modo === 'visitante') { location.href = '/api/auth/login?volta=/altar/'; return; }
+  if (st.modo !== 'ok') { avisar('O Altar não está ligado neste endereço do site.', true); return; }
   ultima = () => invocar(qtd);
-  const res = Array.from({ length: qtd }, sortear);
-  st.hist.unshift(...res.slice().reverse().map((p) => ({ nome: p.nome, rar: p.rar, em: Date.now() })));
-  salvar();
-  sequencia(res, resumo(res));
+  st.ocupado = true;
+  btnsInv.forEach((b) => b.setAttribute('aria-busy', 'true'));
+  const ref = novaRef();
+  try {
+    let r;
+    // uma segunda tentativa com a MESMA ref, se a rede cair: o servidor nunca cobra duas vezes
+    for (let t = 0; t < 2; t++) {
+      try { r = await fetch('/api/altar/invocar', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ qtd, ref }) }); break; } catch (e) { if (t) throw e; }
+    }
+    const corpo = await r.json().catch(() => ({}));
+    if (r.status === 401) { location.href = '/api/auth/login?volta=/altar/'; return; }
+    if (r.status === 402) {
+      if (!inv.hidden) fechar();
+      avisar(`Faltam <b class="al-falta">${fmt.format(corpo.falta?.cp ?? 0)} CP</b> para esta invocação. <a href="/cristais/">Comprar Cristais</a>`, true);
+      return;
+    }
+    if (!r.ok) { if (!inv.hidden) fechar(); avisar(corpo.erro || 'A invocação não deu certo. Tente de novo.', true); return; }
+    avisar('');
+    aplicaEstado(corpo.estado, false);
+    sequencia(corpo.res, resumo(corpo.res));
+  } catch {
+    if (!inv.hidden) fechar();
+    avisar('Sem conexão com o site. Abra o histórico antes de tentar de novo: se o giro entrou, ele aparece lá.', true);
+  } finally {
+    st.ocupado = false;
+    btnsInv.forEach((b) => b.removeAttribute('aria-busy'));
+  }
 }
 
 function resumo(res) {
@@ -284,7 +324,7 @@ function girarPedra() {
   ultima = girarPedra;
   const grupo = pesa(g.pool);
   const nome = grupo.lista[Math.floor(Math.random() * grupo.lista.length)];
-  sequencia([{ nome, tipo: g.nome, rar: grupo.rar, rotulo: grupo.rot, k: '石' }], `Pedra do Destino · prévia · ${grupo.rot}`);
+  sequencia([{ nome, tipo: g.nome, rar: grupo.rar, rotulo: grupo.rot, k: '石' }], `Pedra do Destino · prévia, não entrega · ${grupo.rot}`);
 }
 $('[data-girar-pedra]')?.addEventListener('click', girarPedra);
 // /altar/#pedra abre direto na Pedra do Destino (links de Conhecimentos e Cristais)
@@ -299,10 +339,12 @@ addEventListener('resize', () => { if (!inv.hidden) ceuInicia(); });
 
 /* ---------------------------------------------------------------- histórico */
 const hist = $('[data-hist]');
-$('[data-historico]').addEventListener('click', () => {
+$('[data-historico]').addEventListener('click', async () => {
+  if (st.modo === 'ok') await carregar();
+  $('[data-hist-nota]').textContent = st.modo === 'ok' ? 'Suas últimas invocações no Altar dos Vestígios.' : 'Entre com o Discord para ver as suas invocações.';
   const ol = $('[data-hist-lista]');
   ol.innerHTML = '';
-  if (!st.hist.length) { const li = document.createElement('li'); li.textContent = 'Nenhum giro ainda.'; ol.append(li); }
+  if (!st.hist.length) { const li = document.createElement('li'); li.textContent = 'Nenhuma invocação ainda.'; ol.append(li); }
   st.hist.slice(0, 60).forEach((h) => { const li = document.createElement('li'); li.dataset.r = h.rar; li.textContent = `${nomeR[h.rar]} · ${h.nome}`; ol.append(li); });
   hist.showModal();
 });

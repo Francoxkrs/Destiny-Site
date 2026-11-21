@@ -27,8 +27,9 @@ O site pede só o escopo `identify` (nome e avatar).
 ### Usuário do MongoDB para o site
 O site lê a ficha e grava só o que ele muda. Crie no Atlas (Database Access → Custom Roles) uma função `site-portal` com:
 
-- `find` em `personagens`, `fichasWeb`, `assets`, `contas`, `acessosWeb`
+- `find` em `personagens`, `fichasWeb`, `assets`, `contas`, `acessosWeb`, `comprasCristais`
 - `update` em `personagens` (só para a trilha; o site valida as regras antes), `fichasWeb` e `acessosWeb` (marcar o link do /site como usado)
+- `insert`, `update` e `createIndex` em `contas` e `comprasCristais` (compra de Cristais pelo Pix, ver [pagamento.md](pagamento.md))
 
 e um usuário com essa função. Em Network Access, a Vercel não tem IP fixo, então é preciso liberar `0.0.0.0/0`; por isso o usuário do site deve ter senha forte e só essa função.
 
@@ -51,7 +52,7 @@ Quando o site gasta Pontos de Trilha (só com `trilha.versao === 2`), ele conta 
 - `SITE_URL`: o endereço público do site, sem barra no fim (ex.: `https://black-destiny.vercel.app`). É para onde o `/site` manda; sem ele, o bot usa esse mesmo endereço.
 - O usuário do MongoDB do bot já pode tudo; a escuta (change stream) precisa de um cluster com replica set, que é o padrão do Atlas (inclusive o gratuito). Sem isso, o bot cai sozinho para a conferência de 2 em 2 minutos.
 
-Saldo de Cristais Prismáticos: coleção `contas` `{ userId, cp }` (por conta do Discord, não por personagem). Formato final depende da monetização aprovada.
+Saldo de Cristais Prismáticos: coleção `contas` `{ userId, cp, pedidosCreditados[], primeiraCompra? }` (por conta do Discord, não por personagem). Quem soma é a compra pelo Pix do site: ver [pagamento.md](pagamento.md).
 
 ## De onde vem cada tela
 

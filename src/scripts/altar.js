@@ -346,7 +346,7 @@ function pintaPedra() {
   const u = usados[`pedra:${g.chave}`] ?? 0;
   const cheio = u >= g.limite;
   const c = custoPedra(g);
-  $('[data-pedra-ch]').textContent = `Chances no bot: ${g.chances}. ${st.modo === 'ok' ? `Você já pegou ${u} de ${g.limite} nesta temporada.` : `Até ${g.limite} por personagem nesta temporada.`}`;
+  $('[data-pedra-ch]').textContent = `${g.sorteio ? 'Sorteado aqui, na hora' : 'Chances no bot'}: ${g.chances}. ${st.modo === 'ok' ? `Você já pegou ${u} de ${g.limite} nesta temporada.` : `Até ${g.limite} por personagem nesta temporada.`}`;
   $('[data-pedra-custo]').textContent = cheio ? 'Limite da temporada' : c.bloqueado ? c.bloqueado : `${c.texto} · ${g.nome}`;
   $('[data-girar-pedra]').disabled = cheio || Boolean(c.bloqueado);
   $$('[data-giro]').forEach((l) => {
@@ -394,7 +394,11 @@ async function girarPedra() {
     st.cp = corpo.conta.cp; st.insc = corpo.conta.inscricoes; Object.assign(usados, corpo.conta.usados);
     pintaSaldo(); pintaCustos(); pintaPedra();
     const gasto = [corpo.recibo.insc && plural(corpo.recibo.insc, 'Inscrição', 'Inscrições'), corpo.recibo.cp && `${fmt.format(corpo.recibo.cp)} CP`].filter(Boolean).join(' + ');
-    sequencia([{ nome: g.nome, tipo: 'Pedra do Destino', rar: rarDoGiro(g), rotulo: 'Na sua /bolsa', k: '石', novo: true, ganho: 'Gire na /bolsa do bot' }], `Pedra do Destino · ${gasto} · use na /bolsa do bot`);
+    const rc = corpo.recibo;
+    const carta = rc.sorteio
+      ? { nome: rc.nome, tipo: g.nome, rar: rc.rar || 'epico', rotulo: rc.rar === 'lendario' ? 'Lendário' : 'Épico', k: rc.k || '石', novo: true, ganho: rc.nota || 'Na sua /bolsa do bot' }
+      : { nome: g.nome, tipo: 'Pedra do Destino', rar: rarDoGiro(g), rotulo: 'Na sua /bolsa', k: '石', novo: true, ganho: 'Gire na /bolsa do bot' };
+    sequencia([carta], `Pedra do Destino · ${gasto} · ${rc.sorteio ? `saiu ${rc.nome}` : 'use na /bolsa do bot'}`);
   } catch {
     if (!inv.hidden) fechar();
     avisarPedra('Sem conexão com o site. Confira a sua /bolsa no bot antes de tentar de novo.', true);

@@ -6,7 +6,8 @@
  *
  * Cobrança na conta (`contas`, a mesma dos Cristais e do Altar):
  *   - Pedra: gasta Inscrições primeiro; o que faltar sai em CP (160 por Inscrição). Itens com `so: 'inscricao'`
- *     só saem com Inscrições (Milagre e Linhagem estão no muro do "nunca à venda").
+ *     só saem com Inscrições. Itens com `sorteio` são sorteados aqui na hora (Reroll de Milagre: 80% Traço à escolha,
+ *     20% Reroll de Milagre) e o que saiu vai para a bolsa.
  *   - Loja: só CP.
  *   - `altarV` é a mesma trava otimista do Altar: dois gastos ao mesmo tempo nunca leem o mesmo saldo.
  *   - `limites` conta o que já foi comprado por personagem (e por temporada ou semana).
@@ -31,7 +32,7 @@ export function semanaDe(agora = new Date()) {
 export function ofertaDe(tipo, id) {
   if (tipo === 'pedra') {
     const g = pedra.giros.find((x) => x.chave === id);
-    return g ? { tipo, id: g.chave, chave: g.chave, nome: g.nome, insc: g.custo, so: g.so ?? null, max: g.limite, por: 'temporada' } : null;
+    return g ? { tipo, id: g.chave, chave: g.chave, nome: g.nome, insc: g.custo, so: g.so ?? null, max: g.limite, por: 'temporada', sorteio: g.sorteio ?? null } : null;
   }
   if (tipo === 'loja') {
     const i = loja.find((x) => x.id === id && x.chave);
@@ -68,6 +69,21 @@ export async function limitesDaConta(db, { userId, guildId }, agora = new Date()
   for (const g of pedra.giros) usados[`pedra:${g.chave}`] = conta.limites[chaveLimite(ofertaDe('pedra', g.chave), persId, agora)] ?? 0;
   for (const i of loja.filter((x) => x.chave)) { const o = ofertaDe('loja', i.id); if (o.max) usados[`loja:${i.id}`] = conta.limites[chaveLimite(o, persId, agora)] ?? 0; }
   return { cp: conta.cp, inscricoes: conta.insc, usados };
+}
+
+/** Sorteia pelo peso. `rng` 0 ≤ x < 1. */
+export function sortearPeso(lista, rng = Math.random) {
+  const total = lista.reduce((s, x) => s + x.peso, 0);
+  let r = rng() * total;
+  for (const x of lista) { r -= x.peso; if (r < 0) return x; }
+  return lista[lista.length - 1];
+}
+
+/** Traço de recompensa tem teto de 1 por jogador no bot (canon/recompensas.ts TETOS): o segundo vira Troca de Traço. */
+async function respeitaTeto(db, { guildId, userId }, item) {
+  if (item.chave !== 'traco') return item;
+  const b = await db.collection('bolsas').findOne({ guildId, userId }, { projection: { 'recebido.traco': 1 } });
+  return (b?.recebido?.traco ?? 0) >= 1 ? { ...item, chave: 'trocaTraco', nome: 'Troca de Traço', nota: 'Você já ganhou um Traço de recompensa: virou Troca de Traço (a Staff troca um Traço seu).' } : item;
 }
 
 /** Põe itens na bolsa do jogador no bot (cria a bolsa se ainda não existe). */
@@ -129,8 +145,13 @@ export async function comprar(db, { userId, guildId, tipo, id, ref }, o = {}) {
       if (!(await contas.findOne({ userId }))) return { ok: false, status: 402, erro: 'Cristais insuficientes.', falta: { cp: preco.cp } };
       continue; // outro gasto entrou antes: confere de novo com o saldo novo
     }
+    let saiu = { chave: of.chave, nome: of.nome };
     try {
-      await darNaBolsa(db, { guildId, userId }, { [of.chave]: 1 }, `${motivo} (site)`, agora);
+      if (of.sorteio) {
+        const s = sortearPeso(of.sorteio, o.rng);
+        saiu = await respeitaTeto(db, { guildId, userId }, { chave: s.chave, nome: s.nome, rar: s.rar, k: s.k });
+      }
+      await darNaBolsa(db, { guildId, userId }, { [saiu.chave]: 1 }, `${motivo}${of.sorteio ? ` → ${saiu.nome}` : ''} (site)`, agora);
     } catch (e) {
       // não entregou: devolve tudo (CP, Inscrições, limite) e tira a ref, para poder tentar de novo
       const volta = { altarV: 1 };
@@ -141,7 +162,7 @@ export async function comprar(db, { userId, guildId, tipo, id, ref }, o = {}) {
       console.error('loja (bolsa):', userId, of.chave, e?.message ?? e);
       return { ok: false, status: 503, erro: 'Não consegui pôr o item na sua /bolsa agora. Nada foi cobrado. Tente de novo.' };
     }
-    const recibo = { userId, guildId, ref: chave, tipo, id: of.id, chave: of.chave, nome: of.nome, cp: preco.cp, insc: preco.insc, em: agora };
+    const recibo = { userId, guildId, ref: chave, tipo, id: of.id, chave: saiu.chave, nome: saiu.nome, ...(of.sorteio ? { sorteio: true, rar: saiu.rar ?? null, k: saiu.k ?? null, nota: saiu.nota ?? null } : {}), cp: preco.cp, insc: preco.insc, em: agora };
     await recibos.insertOne(recibo).catch((e) => console.error('loja (recibo):', e?.message ?? e));
     return { ok: true, recibo, conta: await limitesDaConta(db, { userId, guildId }, agora) };
   }

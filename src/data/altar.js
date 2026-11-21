@@ -67,7 +67,8 @@ export const altar = {
 /**
  * Pedra do Destino: Inscrições viram itens da /bolsa do bot (src/lib/loja.js). O site NÃO gira: entrega o item e o
  * jogador gira no bot, com as chances e as vagas de sempre. `chave` = chave do item no bot (canon/recompensas.ts).
- * `so: 'inscricao'` = só com Inscrições ganhas jogando, nunca com CP (Milagre e Linhagem estão no muro do "nunca à venda").
+ * `sorteio` = o site sorteia na hora entre esses itens (pesos) e entrega o que saiu. Liberados em CP pelo Silas em 21/11/2026,
+ * com o Reroll de Milagre virando 80% Traço à escolha e 20% Reroll de Milagre.
  * O limite é por personagem e por temporada.
  */
 export const pedra = {
@@ -83,8 +84,15 @@ export const pedra = {
     { chave: 'rerollRaca', nome: 'Reroll de Raça', custo: 3, chances: 'Humanos 85%, Anões 8%, Bruxas 7%', limite: 2 },
     { chave: 'giroMagiaSemComum', nome: 'Giro de Magia sem Comum', custo: 4, chances: 'As mesmas, sem Comum', limite: 3 },
     { chave: 'giroGrimorio', nome: 'Giro de Grimório', custo: 4, chances: 'Comum 92%, Lendário 8%', limite: 2 },
-    { chave: 'giroLinhagem', nome: 'Giro de Linhagem', custo: 6, chances: 'O da família', limite: 1, so: 'inscricao' },
-    { chave: 'rerollMilagre', nome: 'Reroll de Milagre de família', custo: 15, chances: 'O da família, se houver vaga', limite: 1, so: 'inscricao' },
+    { chave: 'giroLinhagem', nome: 'Giro de Linhagem', custo: 6, chances: 'O da família', limite: 1 },
+    {
+      chave: 'rerollMilagre', nome: 'Reroll de Milagre de família', custo: 15, limite: 1,
+      chances: '80% Traço à escolha, 20% Reroll de Milagre (o da família, se houver vaga)',
+      sorteio: [
+        { chave: 'traco', nome: 'Traço à escolha', peso: 80, rar: 'epico', k: '徴' },
+        { chave: 'rerollMilagre', nome: 'Reroll de Milagre de família', peso: 20, rar: 'lendario', k: '奇' },
+      ],
+    },
   ],
 };
 

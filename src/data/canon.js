@@ -887,13 +887,16 @@ export const familias = [
   { nome: 'Licht', classe: 'Plebe', origem: 'Elfos', raca: 'Elfos', raridade: 'Sorteio', lema: 'Almas élficas que voltam escondidas em corpos novos.', magias: 'Luz, Espadas', heranca: ['+3 feitiços iniciais', 'Poder Mágico +1 nível', 'Forma Mágica um Estágio antes'], giro: '45% de Terceiro Olho', marco: '6º Estágio: Conhecimento em Arcanologia' },
 ];
 
+// Trilhas v2 (2026-11-18): as mesmas regras de src/data/trilhas/regras.json e do bot (trilha/regras.ts).
 export const trilhaRegras = [
-  ['Raiz', 'A passiva da classe. Todo mago da classe tem desde a criação.'],
-  ['Três ramos', 'Cada ramo tem três nós em ordem: Nó I, Nó II e Ápice. Só se pega um nó depois do anterior do mesmo ramo.'],
-  ['4 Pontos de Trilha', '1 na criação, 1 no 7º Estágio, 1 no 5º e 1 no 3º. Pontos não gastos ficam guardados.'],
-  ['Ápice', 'Exige o 3º Estágio e os dois nós anteriores do ramo. Na prática, o mago fecha um ramo e abre o primeiro nó de outro, ou abre dois ramos até o Nó II e fica sem Ápice.'],
-  ['Teto de Acréscimos', 'Nenhum nó dá mais de 1 Acréscimo por aplicação, como toda Classe.'],
-  ['Quem já jogava', 'Quem já tinha a Classe Avançada mantém o efeito: ela virou o Ápice marcado com ★, e o personagem recebe os nós anteriores desse ramo.'],
+  ['Raiz', 'A passiva da classe. Todo mago da classe tem desde a criação, de graça.'],
+  ['Três ramos e três Elos', 'Cada ramo tem 7 nós: 2 entradas no Grau I, 2 nós no Grau II, um Grau III, um Grau IV e o Ápice. Os 3 Elos ligam dois ramos e pedem o Grau III dos dois. São 24 habilidades por classe.'],
+  ['Custo e Estágio', 'Grau I e II custam 1 Ponto de Trilha; Grau III e IV, 2; Ápice, 3; Elo, 2. O Grau II abre no 7º Estágio, o III no 5º, o IV no 4º, e o Ápice e os Elos no 3º.'],
+  ['Pontos de Trilha', '2 na criação e mais a cada Estágio (2 no 7º, 5º e 3º; 1 nos outros): 13 no 1º Estágio. A Staff pode dar até 2 Pontos de Feito por feitos de RP, que não se compram. Pontos não gastos ficam guardados.'],
+  ['Ápice', 'Pede o Grau IV e os dois nós de Grau II do ramo: quem chega lá pagou o ramo inteiro (11 PT). A árvore toda custa 39, então ninguém fecha tudo.'],
+  ['Teto de Acréscimos', 'Nenhum nó dá mais de 1 Acréscimo por aplicação, e tudo o que vem da trilha soma no máximo +2 no mesmo teste, golpe ou feitiço.'],
+  ['Redefinir', 'No lançamento da v2 todo mundo remonta a árvore de graça. Depois, só com Cristais Prismáticos (Redefinir a trilha, na loja da conta).'],
+  ['Trocar de Classe', 'O /classe leva ao mestre da classe nova, num lugar de Diamond. Ele passa 3 provas (missões Rank D, C e B); feitas as 3, a troca custa 5.000 Yuls. A trilha zera e os pontos voltam. Uma troca a cada 30 dias.'],
 ];
 
 const C = (nome, papel, conhecimento, passiva, trilha) => ({ nome, papel, conhecimento, passiva, trilha });
@@ -948,7 +951,7 @@ export const milagres = [
   { nome: 'Dupla Alma', texto: 'Duas almas dividem o mesmo corpo, acorrentadas uma à outra.', efeitos: ['Alma Forte e Alma Fraca, cada uma com magia e grimório.', 'A troca custa o turno e troca feitiços e personalidade.', 'A Alma Forte pode se disfarçar da outra.'] },
   { nome: 'Insignificância', restricao: 'Só Plebe', texto: 'Nasceu quase sem mana num mundo onde a magia é tudo. No lugar da força, engenho.', efeitos: ['Mana um nível abaixo da classe (mínimo 50).', 'Matriz Rúnica sem requisito e sem limite de runas.', 'Percepção de Mana desde o início.', 'Nobres subestimam suas armadilhas.'] },
   { nome: 'Vaso Defeituoso', texto: 'Correntes enferrujadas: falta controle e sobra potência.', efeitos: ['Cada nível de Mana vale o dobro.', 'Poder Mágico +1 nível.', 'Começa com -10% de Controle (mínimo 0%) e nunca passa de 70%.', 'Treinos de Controle rendem metade.'] },
-  { nome: 'Amado pela Mana', texto: 'A mana reconhece o personagem e flui com mais naturalidade ao seu redor.', efeitos: ['Mana e Poder Mágico +1 nível.', 'Treinos mágicos e de Controle contam em dobro.', 'Pode receber um Grimório Lendário.'] },
+  { nome: 'Amado pela Mana', texto: 'A mana reconhece o personagem e flui com mais naturalidade ao seu redor. É o único Milagre com seis vagas.', efeitos: ['Mana e Poder Mágico +1 nível.', 'Treinos mágicos e de Controle contam em dobro.', 'Pode receber um Grimório Lendário.'] },
   { nome: 'Tengentsu', texto: 'Técnica ocular do País do Sol que lê o Ki. O preço é a própria magia.', efeitos: ['Vê com precisão tudo ao redor no presente.', 'Lê intenções; nunca é pego desprevenido.', 'Renuncia à mana: sem feitiços nem Técnicas.'] },
   { nome: 'Corpo Amaldiçoado', restricao: 'Roselei, Boost ou sorteio', texto: 'Uma bênção de nascença paga com uma perda do mesmo tamanho. O corpo é mais forte num ponto e amaldiçoado nesse mesmo ponto.', efeitos: ['+1 Acréscimo permanente num atributo à escolha, físico ou mágico.', 'O jogador escreve a maldição ligada a esse atributo, maior que a bênção, e o Conselho Mágico aprova.', 'A família Agrippa anula a parte ruim.'] },
   { nome: 'Fúria de Batalha', restricao: 'Voltia (7º Estágio), Boost ou sorteio', texto: 'O corpo pede luta. A adrenalina cresce quando o combate fica sério e explode quando a morte chega perto.', efeitos: ['Em combate: +1 Acréscimo em Força, Velocidade e Poder Mágico.', 'Imune a Presença Impactante.', 'Com Ferimento III ou pior, entra em Fúria: +1 classificação em todos os atributos por 4 turnos. Depois desmaia.'] },
@@ -963,7 +966,8 @@ export const milagres = [
 // Limites dos Milagres (Silas, 2026-11-07 e 2026-11-08), iguais aos do bot.
 export const milagresRegras = [
   ['Dois por Marcado', 'No máximo dois Milagres: um da linhagem (Giro de Linhagem ou herança da família) e um do Despertar no 1º Estágio, de sorteios ou de eventos.'],
-  ['Três portadores', 'Cada Milagre existe em no máximo três Marcados ao mesmo tempo. Com as três vagas ocupadas, ele sai dos giros até uma vaga abrir.'],
+  ['Três portadores', 'Cada Milagre existe em no máximo três Marcados ao mesmo tempo. Com as vagas ocupadas, ele sai dos giros até uma vaga abrir. O /vagas mostra quem ocupa cada uma.'],
+  ['Amado pela Mana: seis', 'A exceção é o Amado pela Mana, que tem seis portadores. Na Boismortier ele sai por chance no giro, não vem garantido.'],
   ['Herança ocupa vaga', 'Quem herda um Milagre da família, como a Grinberryal, também ocupa uma das três vagas. Ninguém perde o Milagre que já tem, mas ele para de sair para os outros.'],
   ['Maldição não conta', 'O Corpo Amaldiçoado da Roselei é a maldição da família: não ocupa vaga nem conta no limite de dois.'],
   ['Quem já passou do limite', 'Fichas antigas com Milagre a mais não perdem nada. A Staff vê a lista no bot e decide caso a caso.'],
@@ -1047,15 +1051,15 @@ export const grimorios = [
 ];
 
 export const estagios = [
-  { n: '9º', req: 'Inicial', ganhos: 'Ponto de Trilha da criação; feitiços do 9º Estágio', teto: 'Sobre-Humana' },
-  { n: '8º', req: '3 PE', ganhos: 'Percepção de Mana; feitiços sobem para o 8º', teto: 'Sobre-Humana' },
-  { n: '7º', req: '7 PE · 1 Cristal Branco', ganhos: 'Ponto de Trilha; Pele de Mana; Despertar de Traço', teto: 'Extrema' },
-  { n: '6º', req: '12 PE · 3 Brancos · Controle 20%', ganhos: 'Matriz Rúnica; +1 Encaixe de Disco; +1 criatura; Profissão secundária', teto: 'Extrema' },
-  { n: '5º', req: '17 PE · 5 Brancos', ganhos: 'Ponto de Trilha; Método de Mana; Despertar de Traço', teto: 'Colossal' },
-  { n: '4º', req: '23 PE · 12 Brancos · Controle 40%', ganhos: 'Zona de Mana; disputa de General', teto: 'Colossal' },
-  { n: '3º', req: '30 PE · 4 Cristais Negros', ganhos: 'Ponto de Trilha e Ápice; Despertar de Traço; +1 Encaixe; +1 criatura', teto: 'Monstruosa' },
-  { n: '2º', req: '37 PE · 8 Negros · Controle 60%', ganhos: 'Forma Mágica', teto: 'Monstruosa' },
-  { n: '1º', req: '44 PE · 2 Cristais Dourados', ganhos: 'Despertar: escolhe um Milagre, se houver vaga', teto: 'Titânica' },
+  { n: '9º', req: 'Inicial', ganhos: '2 Pontos de Trilha da criação; feitiços do 9º Estágio', teto: 'Sobre-Humana' },
+  { n: '8º', req: '3 PE', ganhos: '+1 Ponto de Trilha; Percepção de Mana; feitiços sobem para o 8º', teto: 'Sobre-Humana' },
+  { n: '7º', req: '7 PE · 1 Cristal Branco', ganhos: '+2 Pontos de Trilha (Grau II); Pele de Mana; Despertar de Traço', teto: 'Extrema' },
+  { n: '6º', req: '12 PE · 3 Brancos · Controle 20%', ganhos: '+1 Ponto de Trilha; Matriz Rúnica; +1 Encaixe de Disco; +1 criatura; Profissão secundária', teto: 'Extrema' },
+  { n: '5º', req: '17 PE · 5 Brancos', ganhos: '+2 Pontos de Trilha (Grau III); Método de Mana; Despertar de Traço', teto: 'Colossal' },
+  { n: '4º', req: '23 PE · 12 Brancos · Controle 40%', ganhos: '+1 Ponto de Trilha (Grau IV); Zona de Mana; disputa de General', teto: 'Colossal' },
+  { n: '3º', req: '30 PE · 4 Cristais Negros', ganhos: '+2 Pontos de Trilha (Ápice e Elos); Despertar de Traço; +1 Encaixe; +1 criatura', teto: 'Monstruosa' },
+  { n: '2º', req: '37 PE · 8 Negros · Controle 60%', ganhos: '+1 Ponto de Trilha; Forma Mágica', teto: 'Monstruosa' },
+  { n: '1º', req: '44 PE · 2 Cristais Dourados', ganhos: '+1 Ponto de Trilha (13 no total); Despertar: escolhe um Milagre, se houver vaga', teto: 'Titânica' },
 ];
 
 // Teto de classificação física por Estágio (bot: limiteFisicoPorEstagio). Com um Ápice da trilha, o teto vira Transcendental.
@@ -1090,15 +1094,15 @@ export const nivelRegras = [
 
 // O que cada Estágio destrava, juntando todas as páginas.
 export const destravaEstagio = [
-  { n: '9º', itens: [['Classes', '1 Ponto de Trilha (criação)'], ['Grimório', 'Feitiços iniciais do Grimório'], ['Mana', 'Respiração de Mana e Corpo Seco'], ['Discos', '2 Encaixes'], ['Criaturas', '1 criatura vinculada; doma Rank F e E'], ['Missões', 'Ranks F e E']] },
-  { n: '8º', itens: [['Mana', 'Percepção de Mana e Leitura Rúnica'], ['Criaturas', 'Doma Rank D'], ['Missões', 'Ranks E e D']] },
-  { n: '7º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Pele de Mana'], ['Traços', 'Despertar de Traço'], ['Missões', 'Rank D']] },
-  { n: '6º', itens: [['Mana', 'Matriz Rúnica, Runa Condicional, Eco de Veio e Passo Cintilante'], ['Milagres', 'Requisito do Feitiço de Alma'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank C; Assimilação Parcial'], ['Profissões', 'Profissão secundária; pode virar Mestre'], ['Carreiras', 'Tenente Brilhante ou Lapidador'], ['Missões', 'Rank C']] },
-  { n: '5º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Método de Mana, Couraça de Pó, Inscrição e Runa em Cadeia'], ['Traços', 'Despertar de Traço'], ['Criaturas', 'Doma Rank B'], ['Missões', 'Rank B']] },
-  { n: '4º', itens: [['Mana', 'Zona de Mana, Selo Rúnico e Voto de Cristal'], ['Carreiras', 'General Brilhante ou Quilate, se houver posto'], ['Missões', 'Rank B']] },
-  { n: '3º', itens: [['Classes', '+1 Ponto de Trilha e o Ápice'], ['Traços', 'Despertar de Traço'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank A; Assimilação Total'], ['Missões', 'Rank A']] },
-  { n: '2º', itens: [['Mana', 'Forma Mágica'], ['Missões', 'Rank A']] },
-  { n: '1º', itens: [['Milagres', 'Despertar: o segundo Milagre, se ainda não tiver um do Despertar e houver vaga'], ['Missões', 'Rank S']] },
+  { n: '9º', itens: [['Classes', '2 Pontos de Trilha (criação)'], ['Grimório', 'Feitiços iniciais do Grimório'], ['Mana', 'Respiração de Mana e Corpo Seco'], ['Discos', '2 Encaixes'], ['Criaturas', '1 criatura vinculada; doma Rank F e E'], ['Missões', 'Ranks F e E']] },
+  { n: '8º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Percepção de Mana e Leitura Rúnica'], ['Criaturas', 'Doma Rank D'], ['Missões', 'Ranks E e D']] },
+  { n: '7º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau II'], ['Mana', 'Pele de Mana'], ['Traços', 'Despertar de Traço'], ['Missões', 'Rank D']] },
+  { n: '6º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Matriz Rúnica, Runa Condicional, Eco de Veio e Passo Cintilante'], ['Milagres', 'Requisito do Feitiço de Alma'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank C; Assimilação Parcial'], ['Profissões', 'Profissão secundária; pode virar Mestre'], ['Carreiras', 'Tenente Brilhante ou Lapidador'], ['Missões', 'Rank C']] },
+  { n: '5º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau III'], ['Mana', 'Método de Mana, Couraça de Pó, Inscrição e Runa em Cadeia'], ['Traços', 'Despertar de Traço'], ['Criaturas', 'Doma Rank B'], ['Missões', 'Rank B']] },
+  { n: '4º', itens: [['Classes', '+1 Ponto de Trilha; abre o Grau IV'], ['Mana', 'Zona de Mana, Selo Rúnico e Voto de Cristal'], ['Carreiras', 'General Brilhante ou Quilate, se houver posto'], ['Missões', 'Rank B']] },
+  { n: '3º', itens: [['Classes', '+2 Pontos de Trilha; abre o Ápice e os Elos'], ['Traços', 'Despertar de Traço'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank A; Assimilação Total'], ['Missões', 'Rank A']] },
+  { n: '2º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Forma Mágica'], ['Missões', 'Rank A']] },
+  { n: '1º', itens: [['Classes', '+1 Ponto de Trilha (13 no total)'], ['Milagres', 'Despertar: o segundo Milagre, se ainda não tiver um do Despertar e houver vaga'], ['Missões', 'Rank S']] },
 ];
 
 export const treinos = [
@@ -1176,7 +1180,8 @@ export const segundaVida = {
 export const primeirosPassos = [
   ['Entre no servidor', 'Leia as regras de RP e apresente-se.'],
   ['Use /criar-personagem', 'O bot gera três modelos com Raça, Família e Classe de Mago definidas. Você gira Magias, Conhecimentos e Grimório e distribui os resultados entre os três. No fim, escolhe um.'],
-  ['Escreva a história', 'Nome, aparência (imagem), a vida passada e o renascimento. O Conselho Mágico aprova.'],
+  ['Na câmara de criação', 'O /criar-personagem abre um canal só seu (a Staff também vê). Um passo por vez: os Três Destinos, o nome, idade, gênero e epíteto (esses três dá para pular), a imagem e a revisão. Você responde escrevendo no canal. Ao enviar, o canal fecha e a ficha vai para o Conselho Mágico; se pedirem ajustes, ele abre de novo.'],
+  ['A história fica para depois', 'A vida passada e o renascimento vão para a aba Pessoal da /ficha, onde a Staff também registra os Impactos de Eventos. Mudar nome, imagem ou história depois: Pedir alteração, na mesma aba.'],
   ['Receba a ficha', 'O bot gera a ficha em imagem com /ficha.'],
   ['Comece em Diamond', 'Almas da Realeza renascem na Coroa, da Nobreza no Lapidário e da Plebe nos Veios.'],
   ['Escolha um caminho', 'Treine, estude no Grande Arquivo, faça Missões de Rank F e prepare-se para o Exame da Forja, ou desça ao Fosso e ao Veio Negro.'],
@@ -1307,7 +1312,7 @@ export const criacao = {
   ],
   escolha: [
     'O jogador escolhe um dos três modelos; os outros dois são descartados.',
-    'Escreve nome, aparência (com imagem), a vida passada e o renascimento em Diamond.',
+    'Na câmara de criação, um passo por vez: nome, idade, gênero e epíteto (os três últimos são opcionais) e a imagem, por arquivo, link ou no chat; o bot tira o fundo se precisar. A vida passada e o renascimento vão depois para a aba Pessoal da ficha.',
     'O Conselho Mágico aprova, e a ficha é criada.',
     'O /criar-personagem só pode ser usado uma vez por conta; refazer exige liberação da Staff.',
   ],
@@ -1817,7 +1822,7 @@ export const glossario = [
   ['Ferimento', 'Dano de I (Leve) a IV (Crítico), marcado na Trilha.', 'ferimentos'],
   ['Ápice', 'O último nó de um ramo da trilha de Classe; um por personagem, no 3º Estágio.', 'classes#trilha'],
   ['Alcance', 'Até onde a magia chega depois de sair. Cresce a cada Estágio.', 'estagios'],
-  ['Ponto de Trilha', 'Ponto para abrir um nó da trilha de Classe: 4 no total.', 'classes#trilha'],
+  ['Ponto de Trilha', 'Ponto para abrir um nó da árvore da Classe: 13 até o 1º Estágio, mais até 2 de Feito.', 'classes#trilha'],
   ['Grimório', 'O livro que guarda os feitiços.', 'magia'],
   ['Jazida', 'Mina com grau e Reserva; rende Recursos por Jornada.', 'mineracao#jazidas'],
   ['Jornada de Trabalho', 'Post de 500 caracteres por ciclo que paga o salário do ofício.', 'profissoes#regras'],

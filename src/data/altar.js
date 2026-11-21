@@ -64,32 +64,38 @@ export const altar = {
   },
 };
 
-/** Pedra do Destino: Inscrições viram os giros da /bolsa, com as chances do cânone (já no bot) e respeitando as vagas. */
+/**
+ * Pedra do Destino: Inscrições viram itens da /bolsa do bot (src/lib/loja.js). O site NÃO gira: entrega o item e o
+ * jogador gira no bot, com as chances e as vagas de sempre. `chave` = chave do item no bot (canon/recompensas.ts).
+ * `so: 'inscricao'` = só com Inscrições ganhas jogando, nunca com CP (Milagre e Linhagem estão no muro do "nunca à venda").
+ * O limite é por personagem e por temporada.
+ */
 export const pedra = {
   id: 'pedra',
   nome: 'Pedra do Destino',
   kanji: '石',
-  texto: 'Aqui as Inscrições viram os giros e rerolls que já existem, com as chances de sempre. Nada nas chances muda, e as vagas continuam valendo.',
+  texto: 'Aqui as Inscrições viram giros e rerolls da sua /bolsa no bot. Você gira lá, quando quiser, com as chances de sempre e respeitando as vagas.',
   giros: [
-    { nome: 'Cápsula de Conhecimento', custo: 1, chances: 'Comum 80%, Incomum 20%', limite: 6 },
-    { nome: 'Reroll de Família', custo: 2, chances: 'Peso Comum 6, Rara 1', limite: 4 },
-    { nome: 'Reroll de Classe de Mago', custo: 2, chances: 'Pesa a herança da família', limite: 2 },
-    { nome: 'Giro de Magia', custo: 2, chances: 'Comum 45%, Incomum 27%, Rara 15%, Épica 9%, Lendária 4%', limite: 6 },
-    { nome: 'Reroll de Raça', custo: 3, chances: 'Humanos 85%, Anões 8%, Bruxas 7%', limite: 2 },
-    { nome: 'Giro de Magia sem Comum', custo: 4, chances: 'As mesmas, sem Comum', limite: 3 },
-    { nome: 'Giro de Grimório', custo: 4, chances: 'Comum 92%, Lendário 8%', limite: 2 },
-    { nome: 'Giro de Linhagem', custo: 6, chances: 'O da família', limite: 1 },
-    { nome: 'Reroll de Milagre de família', custo: 15, chances: 'O da família, se houver vaga', limite: 1 },
+    { chave: 'giroConhecimento', nome: 'Cápsula de Conhecimento', custo: 1, chances: 'Comum 80%, Incomum 20%', limite: 6 },
+    { chave: 'rerollFamilia', nome: 'Reroll de Família', custo: 2, chances: 'Peso Comum 6, Rara 1', limite: 4 },
+    { chave: 'rerollClasse', nome: 'Reroll de Classe de Mago', custo: 2, chances: 'Pesa a herança da família', limite: 2 },
+    { chave: 'giroMagia', nome: 'Giro de Magia', custo: 2, chances: 'Comum 45%, Incomum 27%, Rara 15%, Épica 9%, Lendária 4%', limite: 6 },
+    { chave: 'rerollRaca', nome: 'Reroll de Raça', custo: 3, chances: 'Humanos 85%, Anões 8%, Bruxas 7%', limite: 2 },
+    { chave: 'giroMagiaSemComum', nome: 'Giro de Magia sem Comum', custo: 4, chances: 'As mesmas, sem Comum', limite: 3 },
+    { chave: 'giroGrimorio', nome: 'Giro de Grimório', custo: 4, chances: 'Comum 92%, Lendário 8%', limite: 2 },
+    { chave: 'giroLinhagem', nome: 'Giro de Linhagem', custo: 6, chances: 'O da família', limite: 1, so: 'inscricao' },
+    { chave: 'rerollMilagre', nome: 'Reroll de Milagre de família', custo: 15, chances: 'O da família, se houver vaga', limite: 1, so: 'inscricao' },
   ],
 };
 
 /** Como se ganham Inscrições (igual para quem paga e quem não paga). */
 export const fontes = [
-  ['Missão concluída (Rank D ou acima)', '1', '3 por semana'],
-  ['Semana de RP (500+ caracteres em 5 dias)', '2', '1 por semana'],
-  ['Criatura derrotada nos chats de RP', '1', '1 por semana'],
-  ['Voto no bot e tag do servidor no perfil', '1', '1 por semana'],
-  ['Subir de Estágio', '5', 'Por Estágio'],
-  ['Evento da Staff', '3 a 5', 'Por evento'],
-  ['Passe de Temporada, faixa grátis', '10', 'Por temporada'],
+  // [fonte, quantas, limite, já soma no bot?]: o bot soma em contas.inscricoes (functions/cristais/inscricoes.ts)
+  ['Missão concluída (Rank D ou acima)', '1', '3 por semana', true],
+  ['Criatura derrotada nos chats de RP', '1', '1 por semana', true],
+  ['Subir de Estágio', '5', 'Por Estágio', true],
+  ['Semana de RP (500+ caracteres em 5 dias)', '2', '1 por semana', false],
+  ['Voto no bot e tag do servidor no perfil', '1', '1 por semana', false],
+  ['Evento da Staff', '3 a 5', 'Por evento', false],
+  ['Passe de Temporada, faixa grátis', '10', 'Por temporada', false],
 ];

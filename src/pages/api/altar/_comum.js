@@ -9,7 +9,7 @@ export const json = (status, corpo) => new Response(JSON.stringify(corpo), { sta
 export async function preparar({ request, url, cookies }, altera) {
   if (altera && !mesmaOrigem(request, url)) return { erro: json(403, { erro: 'Pedido de fora do site.' }) };
   const s = lerSessao(cookies);
-  if (!s) return { erro: json(401, { erro: 'Entre com o Discord para invocar.' }) };
+  if (!s) return { erro: json(401, { erro: 'Entre com o Discord para continuar.' }) };
   if (!bancoPronto()) return { erro: json(503, { erro: 'O Altar ainda não está ligado neste endereço do site.' }) };
   const db = await banco().catch((e) => { console.error('altar (banco):', e?.message ?? e); return null; });
   if (!db) return { erro: json(503, { erro: 'O site não conseguiu falar com o banco agora. Tente de novo.' }) };

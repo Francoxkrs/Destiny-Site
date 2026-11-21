@@ -28,8 +28,22 @@ O Altar está de verdade desde 21/11/2026. O sorteio roda no servidor (`src/lib/
 
 ## Ainda falta
 
-- **Pedra do Destino:** continua prévia. Os giros dela vão para a /bolsa do bot, que ainda não recebe do site.
-- **Inscrições ganhas jogando:** a tabela "Como ganhar Inscrições" ainda não soma nada. Quando o bot passar a dar Inscrições, ele soma em `contas.inscricoes`.
 - **Fragmentos:** acumulam, mas ainda não compram nada. A troca por um Lendário de temporada passada só faz sentido a partir da Temporada II.
 
 Testes: `npm run altar:teste` (sem Mongo, banco falso em memória).
+
+## Pedra do Destino e Loja da conta (21/11/2026)
+
+`src/lib/loja.js`, rotas `GET /api/loja` (limites usados) e `POST /api/loja/comprar` com `{ tipo: 'pedra' | 'loja', id, ref }`.
+
+- **O site não gira.** Ele cobra e põe o item na `/bolsa` do bot (coleção `bolsas`, `itens.<chave>` e `recebido.<chave>`, igual ao `darItens` do bot). Quem gira é o bot, com as chances e as vagas de sempre.
+- **Pedra:** gasta Inscrições primeiro e o resto a 160 CP. Giro de Linhagem e Reroll de Milagre só saem com Inscrições, porque Milagre está no "nunca à venda". O limite é por personagem e por temporada (`contas.limites`).
+- **Loja:** só CP. Skip Treino (3 por semana), Classe de Mago à escolha e Raça à escolha (1 por personagem). O que o bot ainda não entrega sozinho (Ateliê, Redefinir a trilha) aparece como "Em breve".
+- **Falha na entrega:** se a bolsa falhar, devolve CP, Inscrições e limite e tira a ref.
+- **Primeira compra de Cristais:** a Classe de Mago à escolha cai na bolsa na hora.
+- **Inscrições ganhas jogando:** o bot soma em `contas.inscricoes` (`functions/cristais/inscricoes.ts`).
+  - Missão de Rank D ou acima: +1, até 3 por semana.
+  - Criatura: +1, 1 por semana.
+  - Estágio novo: +5.
+
+Testes: `npm run loja:teste`.

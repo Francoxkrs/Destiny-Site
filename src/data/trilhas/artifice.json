@@ -1,0 +1,548 @@
+{
+ "versao": 2,
+ "classe": "Mago Artífice",
+ "slug": "artifice",
+ "papel": "Forja, engenharia, Discos e itens mágicos",
+ "raiz": {
+  "id": "artifice.raiz",
+  "nome": "Oficina Ambulante",
+  "texto": "Itens que ele equipa contam como uma qualidade acima para o bônus (até Épica). Forja, encanta e engasta sem Profissão, e essas Jornadas levam 20% menos (soma com a Oficina). Reparo de Campo: 1 vez por cena, conserta na hora um item rachado, dele ou de um aliado ao lado."
+ },
+ "ramos": [
+  {
+   "id": "forja",
+   "nome": "Forja",
+   "tema": "A forja: armas e armaduras melhores que as de qualquer um.",
+   "estrela": "artifice.forja.arma-assinatura"
+  },
+  {
+   "id": "engenharia",
+   "nome": "Engenharia",
+   "tema": "Discos, engenhocas e a armadura de guerra."
+  },
+  {
+   "id": "nucleo",
+   "nome": "Núcleo",
+   "tema": "Runas, serviços e o golem."
+  }
+ ],
+ "nos": [
+  {
+   "id": "artifice.forja.mao-de-mestre",
+   "nome": "Mão de Mestre",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Forja itens uma qualidade acima do que o grau da Profissão permite (sem Profissão conta como Aprendiz). Todo item que forja gasta metade do material e sai com 1 encantamento sem gastar Pó de Cristal.",
+   "legado": "Forja/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "artifice.forja.fole-arcano",
+   "nome": "Fole Arcano",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Itens que você forja saem com +10% de durabilidade e nunca racham na primeira luta.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "artifice.forja.tempera-de-batalha",
+   "nome": "Têmpera de Batalha",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "artifice.forja.mao-de-mestre"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "2 vezes por cena, reforja no meio da luta a arma ou a armadura dele ou de um aliado: +1 Acréscimo naquele item até o fim da cena (Item Mágico, passa o teto), e o item ganha o Traço de uma Parte de Criatura que ele carregue.",
+   "legado": "Forja/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "artifice.forja.selo-do-ferreiro",
+   "nome": "Selo do Ferreiro",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "artifice.forja.fole-arcano"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Itens com o seu selo valem 30% mais no mercado e você recebe 5% de cada revenda.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "artifice.forja.forja-de-campo",
+   "nome": "Forja de Campo",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "artifice.forja.tempera-de-batalha"
+    ],
+    [
+     "artifice.forja.selo-do-ferreiro"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Monta uma bigorna em qualquer lugar e forja uma arma Comum em 1 turno.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "artifice.forja.liga-rara",
+   "nome": "Liga Rara",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "artifice.forja.forja-de-campo"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Combina dois materiais de criatura num mesmo item, somando os Traços dos dois.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "artifice.forja.arma-assinatura",
+   "nome": "Arma-Assinatura",
+   "ramo": [
+    "forja"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "artifice.forja.liga-rara",
+     "artifice.forja.tempera-de-batalha",
+     "artifice.forja.selo-do-ferreiro"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Forja a arma da vida dele: nasce no Despertar da Ressonância, tem duas formas (golpe e disparo, troca sem gastar ação), +1 Acréscimo nas duas, e o Despertar dela dura a cena toda. 1 vez por mês forja uma Obra-Prima sem ser Mestre, e 1 vez na vida transforma uma Obra-Prima dele numa Relíquia.",
+   "estrela": true,
+   "legado": "Forja/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "artifice.engenharia.bancada-de-discos",
+   "nome": "Bancada de Discos",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "+1 Encaixe de Disco, e cada disco nele tem 1 de Rejeição a menos. Engasta discos em qualquer um sem Cirurgia Arcana e lapida discos até Facetado numa Jornada. Leva 3 engenhocas por cena (fumaça, gancho, clarão), usadas sem gastar a ação.",
+   "legado": "Engenharia/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "artifice.engenharia.engenhoca-extra",
+   "nome": "Engenhoca Extra",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Leva 2 engenhocas a mais por cena.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "artifice.engenharia.disco-autoral",
+   "nome": "Disco Autoral",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "artifice.engenharia.bancada-de-discos"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Inventa discos que não estão na lista, 1 por Estágio, escritos com a Staff. Só os discos dele podem dar Acréscimo (até +1 cada, num atributo físico) e marcam metade da Instabilidade. Pode vender ou engastar esses discos em outros jogadores.",
+   "legado": "Engenharia/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "artifice.engenharia.oficina-de-discos",
+   "nome": "Oficina de Discos",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "artifice.engenharia.engenhoca-extra"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Lapida discos de outros jogadores como Jornada e recebe salário de Mestre.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "artifice.engenharia.calibrar",
+   "nome": "Calibrar",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "artifice.engenharia.disco-autoral"
+    ],
+    [
+     "artifice.engenharia.oficina-de-discos"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Zera a Instabilidade de um disco seu ou de um aliado.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "artifice.engenharia.placa-reativa",
+   "nome": "Placa Reativa",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "artifice.engenharia.calibrar"
+    ]
+   ],
+   "tipo": "reacao",
+   "texto": "A armadura que você forjou anula 1 Acréscimo do primeiro golpe de cada cena.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "artifice.engenharia.arsenal-vivo",
+   "nome": "Arsenal Vivo",
+   "ramo": [
+    "engenharia"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "artifice.engenharia.placa-reativa",
+     "artifice.engenharia.disco-autoral",
+     "artifice.engenharia.oficina-de-discos"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Veste uma Armadura Arcana com 3 feitiços gravados (um por peça, cada um solto 1 vez por cena sem gastar ação), +1 Acréscimo de Resistência e 3 encaixes de disco próprios que não contam Rejeição. Lapida discos Brilhantes. 1 vez por cena, Sobrecarga Total: por 3 turnos todos os discos dele têm efeito dobrado e não marcam Instabilidade.",
+   "legado": "Engenharia/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "artifice.nucleo.runa-de-gatilho",
+   "nome": "Runa de Gatilho",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Grava até 2 feitiços em objetos, e cada um dispara sozinho numa condição que ele escolhe. Paga o custo do feitiço ao gravar; o disparo sai de graça. A Mana fica presa na runa até ela disparar ou até o fim do dia.",
+   "legado": "Núcleo/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "artifice.nucleo.gatilho-duplo",
+   "nome": "Gatilho Duplo",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "A Runa de Gatilho grava até 3 feitiços.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "artifice.nucleo.forja-ressonante",
+   "nome": "Forja Ressonante",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "artifice.nucleo.runa-de-gatilho"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Abre o Despertar de itens de outros jogadores e tira Cristais engastados sem perder. Cada serviço conta como Jornada e paga salário de Mestre, além do que ele cobrar.",
+   "legado": "Núcleo/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "artifice.nucleo.assistencia-tecnica",
+   "nome": "Assistência Técnica",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "artifice.nucleo.gatilho-duplo"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Conserta itens rachados de qualquer jogador fora da luta, sem material, e cobra o que quiser.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "artifice.nucleo.nucleo-de-mana",
+   "nome": "Núcleo de Mana",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "artifice.nucleo.forja-ressonante"
+    ],
+    [
+     "artifice.nucleo.assistencia-tecnica"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O Autômato e as runas usam uma reserva própria de 20% da sua Mana, que enche a cada dia.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "artifice.nucleo.automato-aprimorado",
+   "nome": "Autômato Aprimorado",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "artifice.nucleo.nucleo-de-mana"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O Autômato ganha +1 encaixe de disco e aprende até 8 Traços.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "artifice.nucleo.automato-de-forja",
+   "nome": "Autômato de Forja",
+   "ramo": [
+    "nucleo"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "artifice.nucleo.automato-aprimorado",
+     "artifice.nucleo.forja-ressonante",
+     "artifice.nucleo.assistencia-tecnica"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Constrói um golem que luta ao lado dele, com a arma e a armadura que ele forjar e 2 encaixes de disco. A cada item que desmonta no golem, ele aprende 1 Traço ou encantamento desse item (até 5). Destruído, volta em 1 Jornada. Não conta no limite de conjurados.",
+   "legado": "Núcleo/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "artifice.elo.arma-de-discos",
+   "nome": "Arma de Discos",
+   "ramo": [
+    "forja",
+    "engenharia"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "artifice.forja.forja-de-campo",
+     "artifice.engenharia.calibrar"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "A Arma-Assinatura ganha 2 encaixes de disco próprios que não contam Rejeição.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "artifice.elo.rede-de-runas",
+   "nome": "Rede de Runas",
+   "ramo": [
+    "engenharia",
+    "nucleo"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "artifice.engenharia.calibrar",
+     "artifice.nucleo.nucleo-de-mana"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Liga runas e engenhocas: uma engenhoca pode disparar uma runa sem gastar ação.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "artifice.elo.golem-de-guerra",
+   "nome": "Golem de Guerra",
+   "ramo": [
+    "forja",
+    "nucleo"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "artifice.forja.forja-de-campo",
+     "artifice.nucleo.nucleo-de-mana"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O Autômato usa a arma e a armadura que você forjou com +1 Acréscimo.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

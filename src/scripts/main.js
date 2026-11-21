@@ -271,7 +271,7 @@ if (menu && toggle) {
   const open = (v) => {
     html.classList.toggle('menu-open', v);
     toggle.setAttribute('aria-expanded', String(v));
-    if (label) label.textContent = v ? 'Fechar' : 'Capítulos';
+    if (label) label.textContent = v ? 'Fechar' : 'Menu';
     hdr?.classList.remove('is-hidden');
     if (v) { lenis?.stop(); menuTl.timeScale(1).play(); }
     else { lenis?.start(); menuTl.timeScale(1.6).reverse(); }
@@ -281,7 +281,7 @@ if (menu && toggle) {
 }
 
 /* ---------------------------------------------------------------- cursor */
-if (fine && !reduce) {
+if (fine && !reduce && $('.cursor')) {
   html.classList.add('has-cursor');
   const c = $('.cursor');
   const dot = $('.cursor__dot', c);

@@ -9,39 +9,40 @@ export const site = {
 
 // Ordem e metadados das páginas de sistema (usados no menu, índice e "próxima página").
 export const capitulos = [
-  { id: 'I', kanji: '目覚', nome: 'Onde você acorda', texto: 'Diamond, o reino que esgotou a própria terra.' },
-  { id: 'II', kanji: '前世', nome: 'Quem você foi', texto: 'A família e a raça que a sua alma carrega de outra vida.' },
-  { id: 'III', kanji: '魔導', nome: 'O Grimório', texto: 'O que a sua alma sabe fazer, como isso se mede sem dados e o quanto o corpo aguenta.' },
-  { id: 'IV', kanji: '道', nome: 'O Caminho', texto: 'Como crescer, o que domar, a quem servir e o que caçar.' },
-  { id: 'V', kanji: '生業', nome: 'O Sustento', texto: 'Ofício, minas, forja, terra e Yuls num reino que está acabando.' },
-  { id: 'VI', kanji: '始', nome: 'O Despertar', texto: 'Criar o personagem e abrir os olhos.' },
+  { id: 'comecar', kanji: '始', nome: 'Começar', texto: 'Criar o Marcado, entender a ficha e dar os primeiros passos.' },
+  { id: 'mundo', kanji: '目覚', nome: 'O Mundo', texto: 'Diamond, o reino que esgotou a própria terra, seus lugares e quem manda nele.' },
+  { id: 'personagem', kanji: '前世', nome: 'Personagem', texto: 'Família, raça, Milagres, atributos e o quanto o corpo aguenta.' },
+  { id: 'magia', kanji: '魔導', nome: 'Magia', texto: 'Grimório, feitiços, Classes de Mago, Mana e Discos.' },
+  { id: 'progressao', kanji: '道', nome: 'Progressão', texto: 'Treinos, Estudos, Pontos de Estágio e o caminho do 9º ao 1º Estágio.' },
+  { id: 'aventura', kanji: '狩', nome: 'Aventura', texto: 'Missões, caçadas e as criaturas de Diamond.' },
+  { id: 'sustento', kanji: '生業', nome: 'Sustento', texto: 'Ofício, minas, forja, terra e Yuls num reino que está acabando.' },
 ];
 
 // essencial = "Em 30 segundos": três linhas com o que importa de cada página.
 export const paginas = [
-  { slug: 'mundo', cap: 'I', num: '01', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos', essencial: ['Todo personagem renasce em Diamond, o reino que esgotou a própria terra.', 'A Coroa, o Lapidário e os Veios separam Realeza, Nobreza e Plebe; o Fosso é o mercado negro.', 'Clover, Spades e Heart são os reinos de onde as almas vieram.'] },
-  { slug: 'mapa', cap: 'I', num: '02', titulo: 'Mapa de Diamond', resumo: 'Os 31 lugares, a mana de cada um e as viagens', essencial: ['Cada região é uma categoria do Discord, e cada lugar tem uma placa com o que vale ali.', 'A mana muda de lugar para lugar: Forte nas Câmaras e na Fenda de Clover, Rala no Fosso, Morta nas Valas e nos Planaltos.', 'Viajar entre regiões leva de 2 a 70 minutos reais, conforme a estrada e o jeito de ir.'] },
-  { slug: 'familias', cap: 'II', num: '03', titulo: 'Famílias', resumo: 'Classes sociais e as 25 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
-  { slug: 'racas', cap: 'II', num: '04', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas, Elfos e Híbridos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
-  { slug: 'classes', cap: 'III', num: '05', titulo: 'Classes de Mago', resumo: 'Oito estilos e as trilhas de cada um', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma tem uma passiva e uma trilha de três ramos; você gasta 4 pontos nela.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
-  { slug: 'milagres', cap: 'III', num: '06', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras: no máximo dois por Marcado e três Marcados por Milagre.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
-  { slug: 'magia', cap: 'III', num: '07', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
-  { slug: 'mana', cap: 'III', num: '08', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
-  { slug: 'atributos', cap: 'III', num: '09', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
-  { slug: 'ferimentos', cap: 'III', num: '10', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
-  { slug: 'discos', cap: 'III', num: '11', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Só os Discos Autorais do Mago Artífice dão Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
-  { slug: 'progressao', cap: 'IV', num: '12', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 5º Estágio é preciso Cristal de Mana.'] },
-  { slug: 'estagios', cap: 'IV', num: '13', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
-  { slug: 'conhecimentos', cap: 'IV', num: '14', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
-  { slug: 'criaturas', cap: 'IV', num: '15', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
-  { slug: 'missoes', cap: 'IV', num: '16', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
-  { slug: 'generais', cap: 'IV', num: '17', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
-  { slug: 'profissoes', cap: 'V', num: '18', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
-  { slug: 'mineracao', cap: 'V', num: '19', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
-  { slug: 'itens', cap: 'V', num: '20', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
-  { slug: 'terras', cap: 'V', num: '21', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
-  { slug: 'economia', cap: 'V', num: '22', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
-  { slug: 'comecar', cap: 'VI', num: '23', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
+  { slug: 'comecar', cap: 'comecar', num: '01', titulo: 'Começar', resumo: 'Criação de personagem e Ficha', essencial: ['Entre no Discord e use /criar-personagem.', 'O bot gera três modelos; você gira Magias, Conhecimentos e Grimório e escolhe um.', 'Escreva a história, receba a ficha e acorde em Diamond.'] },
+  { slug: 'mundo', cap: 'mundo', num: '02', titulo: 'O Mundo', resumo: 'Diamond, suas regiões e os quatro reinos', essencial: ['Todo personagem renasce em Diamond, o reino que esgotou a própria terra.', 'A Coroa, o Lapidário e os Veios separam Realeza, Nobreza e Plebe; o Fosso é o mercado negro.', 'Clover, Spades e Heart são os reinos de onde as almas vieram.'] },
+  { slug: 'mapa', cap: 'mundo', num: '03', titulo: 'Mapa de Diamond', resumo: 'Os 31 lugares, a mana de cada um e as viagens', essencial: ['Cada região é uma categoria do Discord, e cada lugar tem uma placa com o que vale ali.', 'A mana muda de lugar para lugar: Forte nas Câmaras e na Fenda de Clover, Rala no Fosso, Morta nas Valas e nos Planaltos.', 'Viajar entre regiões leva de 2 a 70 minutos reais, conforme a estrada e o jeito de ir.'] },
+  { slug: 'generais', cap: 'mundo', num: '04', titulo: 'Carreiras', resumo: 'Generais Brilhantes e Veio Negro', essencial: ['Servir ao Rei como General Brilhante ou lucrar no Veio Negro.', 'Cada lado tem três patentes e sua moeda de honra.', 'O posto de General pode ser tomado em desafio.'] },
+  { slug: 'familias', cap: 'personagem', num: '05', titulo: 'Famílias', resumo: 'Classes sociais e as 25 linhagens', essencial: ['A família da vida passada define a Classe Social, a região onde você renasce e o dinheiro inicial.', 'Cada família tem magias típicas, heranças e às vezes um Marco num Estágio.', 'Na criação, a família vem sorteada no modelo: Comuns pesam 6, Raras pesam 1.'] },
+  { slug: 'racas', cap: 'personagem', num: '06', titulo: 'Raças', resumo: 'Humanos, Anões, Bruxas, Elfos e Híbridos', essencial: ['Humanos são a maioria; Anões e Bruxas são raros na criação.', 'Cada raça tem traços próprios; Bruxas já nascem sob a Maldição da Rainha.', 'Elfos só aparecem pela família Licht ou por Reencarnação Élfica.'] },
+  { slug: 'milagres', cap: 'personagem', num: '07', titulo: 'Milagres e Traços', resumo: 'As bênçãos raras da mana e o Feitiço de Alma', essencial: ['Milagres são bênçãos raras: no máximo dois por Marcado e três Marcados por Milagre.', 'Traços são talentos menores: até 3, nenhum com mais de 1 Acréscimo.', 'O Traço Alma Indomável abre o Feitiço de Alma, uma técnica única por personagem.'] },
+  { slug: 'atributos', cap: 'personagem', num: '08', titulo: 'Atributos', resumo: 'Acréscimos e confronto sem dados', essencial: ['Três atributos do corpo (Força, Resistência, Velocidade) e três da mana.', 'Classificações são patamares; Acréscimos marcam a diferença dentro deles.', 'Num confronto não se rola nada: compara-se classificação, depois Acréscimos.'] },
+  { slug: 'ferimentos', cap: 'personagem', num: '09', titulo: 'Ferimentos', resumo: 'A trilha de vida, curas e curadores', essencial: ['Cada golpe que passa a Resistência ocupa uma casa da Trilha de Ferimentos: 3 Leves, 2 Moderados, 1 Grave, 1 Crítico.', 'Ferimentos acumulam, sobem de grau e pioram sem tratamento.', 'Curar exige Conhecimento, feitiço ou um Mago Curandeiro.'] },
+  { slug: 'magia', cap: 'magia', num: '10', titulo: 'Magia', resumo: 'Magias, Grimórios e Feitiços', essencial: ['Cada personagem tem uma magia, e cada magia tem vagas limitadas.', 'O Grimório guarda os feitiços; existem cinco tipos.', 'Você escreve o feitiço e o Conselho Mágico aprova pelo bot.'] },
+  { slug: 'classes', cap: 'magia', num: '11', titulo: 'Classes de Mago', resumo: 'Oito estilos e as trilhas de cada um', essencial: ['A Classe de Mago é o seu estilo de luta: oito no total.', 'Cada uma tem uma passiva e uma trilha de três ramos; você gasta 4 pontos nela.', 'O Mago Curandeiro é a classe dos curadores (ver Ferimentos).'] },
+  { slug: 'mana', cap: 'magia', num: '12', titulo: 'Mana', resumo: 'Reserva, custo, Técnicas de Mana e Runas', essencial: ['A Mana é a reserva que paga os feitiços; o Controle dá desconto de até 50%.', 'Com Mana zero vem a Exaustão Mágica.', 'Técnicas de Mana se aprendem fora do Grimório, por Estágio e Controle.', 'Diamond tem técnicas próprias, como a Respiração de Mana, e leva as Runas mais longe que qualquer reino.'] },
+  { slug: 'discos', cap: 'magia', num: '13', titulo: 'Discos', resumo: 'Discos de Engaste: os chips de Diamond', essencial: ['Discos são runas gravadas em cristal e engastadas no corpo: cada um faz uma coisa só, sem gastar Mana.', 'O corpo aguenta 2 discos (mais 1 no 6º e no 3º Estágio) e uma Rejeição limitada.', 'Só os Discos Autorais do Mago Artífice dão Acréscimo, e os mais fortes têm Instabilidade: no limite, o efeito colateral acontece.'] },
+  { slug: 'progressao', cap: 'progressao', num: '14', titulo: 'Progressão', resumo: 'Treinos, Estudos e Estágios', essencial: ['Treinos sobem atributos; Estudos dão Conhecimentos.', 'Pontos de Estágio levam do 9º ao 1º Estágio.', 'A partir do 7º Estágio cada Estágio pede Cristais de Mana, e cada Estágio tem um teto de atributo físico.'] },
+  { slug: 'estagios', cap: 'progressao', num: '15', titulo: 'Estágios', resumo: 'Alcance, destruição, custo e o que cada Estágio destrava', essencial: ['O Estágio é o nível do feitiço: tudo sobe junto a cada Estágio.', 'Cada Estágio tem alcance, destruição, temperatura, cura e custo.', 'Com +10 Acréscimos, o feitiço vale como o do Estágio seguinte.'] },
+  { slug: 'conhecimentos', cap: 'progressao', num: '16', titulo: 'Conhecimentos', resumo: 'Comuns, Incomuns e Perdidos', essencial: ['Conhecimentos são o que o personagem sabe fazer fora da magia.', 'Comuns se estudam em Bibliotecas; Incomuns e Perdidos vêm de giros, Cápsulas e eventos.', 'Eles abrem Profissões e a cura de Ferimentos.'] },
+  { slug: 'missoes', cap: 'aventura', num: '17', titulo: 'Missões', resumo: 'Do Rank F ao Rank S, pelo bot', essencial: ['O bot publica as missões por Rank, de F a S.', 'Cada jogador faz até 2 missões a cada 24 horas.', 'Missões pagam Méritos ou Antiméritos, Yuls e Cristais.'] },
+  { slug: 'criaturas', cap: 'aventura', num: '18', titulo: 'Criaturas', resumo: 'Domação, Assimilação e Familiares', essencial: ['Toda criatura tem um Rank, como as missões.', 'Domar exige cenas escritas, não sorte.', 'Assimilação e Familiar das Bruxas são vínculos mais fundos.'] },
+  { slug: 'profissoes', cap: 'sustento', num: '19', titulo: 'Profissões', resumo: 'Doze ofícios, licenças e salário', essencial: ['Uma Profissão principal (e uma secundária no 6º Estágio), aberta por um Conhecimento e uma licença.', 'Cada Jornada de Trabalho (um post de 500 caracteres por ciclo) paga o salário do grau.', 'Aprendiz, Oficial e Mestre: só o Mestre faz Obras-Primas e abre Corporação.'] },
+  { slug: 'mineracao', cap: 'sustento', num: '20', titulo: 'Mineração', resumo: 'Jazidas, Minas Profundas e refino', essencial: ['Cada Jornada numa jazida rende uma quantidade fixa de Recursos, sem dados.', 'Toda jazida tem uma Reserva e se esgota; o Achado vem a cada 10 Jornadas.', 'As Minas Profundas pagam mais e cobram em Ferimentos.'] },
+  { slug: 'itens', cap: 'sustento', num: '21', titulo: 'Itens Mágicos', resumo: 'Qualidade, forja e encantamentos', essencial: ['Material, artesão e encantamentos definem um item.', 'A qualidade vai de Comum (+0) a Obra-Prima (+2 Acréscimos).', 'Encantamentos são gravados com Pó de Cristal, que vem das minas.'] },
+  { slug: 'terras', cap: 'sustento', num: '22', titulo: 'Terras', resumo: 'Lotes, minas, estufas e feudos', essencial: ['Quase toda a terra de Diamond morreu: o Vigor do solo decide o que ela produz.', 'Compre um lote, construa Oficina, Loja ou Estufa e dê bônus ao seu ofício.', 'Toda terra paga 2% do valor por semana ao Tesouro.'] },
+  { slug: 'economia', cap: 'sustento', num: '23', titulo: 'Economia', resumo: 'Yuls, mercado, impostos e contratos', essencial: ['Tudo é contado em Yuls; Cristais valem como ouro.', 'O preço muda por região e por evento; o Fosso não cobra imposto.', 'Contratos registrados no bot valem como lei, e quebrá-los custa caro.'] },
 ];
 
 export const regioes = [
@@ -947,16 +948,22 @@ export const grimorios = [
 ];
 
 export const estagios = [
-  { n: '9º', req: 'Inicial', ganhos: 'Ponto de Trilha da criação; feitiços do 9º Estágio' },
-  { n: '8º', req: '3 PE', ganhos: 'Percepção de Mana; feitiços sobem para o 8º' },
-  { n: '7º', req: '7 PE', ganhos: 'Ponto de Trilha; Pele de Mana; Despertar de Traço' },
-  { n: '6º', req: '12 PE · Controle 20%', ganhos: 'Matriz Rúnica; +1 Encaixe de Disco; +1 criatura; Profissão secundária' },
-  { n: '5º', req: '17 PE · 3 Cristais Brancos', ganhos: 'Ponto de Trilha; Método de Mana; Despertar de Traço' },
-  { n: '4º', req: '23 PE · 8 Brancos · Controle 40%', ganhos: 'Zona de Mana; disputa de General' },
-  { n: '3º', req: '30 PE · 2 Cristais Negros', ganhos: 'Ponto de Trilha e Ápice; Despertar de Traço; +1 Encaixe; +1 criatura' },
-  { n: '2º', req: '37 PE · 5 Negros · Controle 60%', ganhos: 'Forma Mágica' },
-  { n: '1º', req: '44 PE · 1 Cristal Dourado', ganhos: 'Despertar: escolhe um Milagre, se houver vaga' },
+  { n: '9º', req: 'Inicial', ganhos: 'Ponto de Trilha da criação; feitiços do 9º Estágio', teto: 'Sobre-Humana' },
+  { n: '8º', req: '3 PE', ganhos: 'Percepção de Mana; feitiços sobem para o 8º', teto: 'Sobre-Humana' },
+  { n: '7º', req: '7 PE · 1 Cristal Branco', ganhos: 'Ponto de Trilha; Pele de Mana; Despertar de Traço', teto: 'Extrema' },
+  { n: '6º', req: '12 PE · 3 Brancos · Controle 20%', ganhos: 'Matriz Rúnica; +1 Encaixe de Disco; +1 criatura; Profissão secundária', teto: 'Extrema' },
+  { n: '5º', req: '17 PE · 5 Brancos', ganhos: 'Ponto de Trilha; Método de Mana; Despertar de Traço', teto: 'Colossal' },
+  { n: '4º', req: '23 PE · 12 Brancos · Controle 40%', ganhos: 'Zona de Mana; disputa de General', teto: 'Colossal' },
+  { n: '3º', req: '30 PE · 4 Cristais Negros', ganhos: 'Ponto de Trilha e Ápice; Despertar de Traço; +1 Encaixe; +1 criatura', teto: 'Monstruosa' },
+  { n: '2º', req: '37 PE · 8 Negros · Controle 60%', ganhos: 'Forma Mágica', teto: 'Monstruosa' },
+  { n: '1º', req: '44 PE · 2 Cristais Dourados', ganhos: 'Despertar: escolhe um Milagre, se houver vaga', teto: 'Titânica' },
 ];
+
+// Teto de classificação física por Estágio (bot: limiteFisicoPorEstagio). Com um Ápice da trilha, o teto vira Transcendental.
+export const tetoFisico = {
+  texto: 'Cada Estágio tem um teto de classificação física. Treinos além do teto não sobem Força, Resistência nem Velocidade até o próximo Estágio. Quem já passou do teto mantém o que conquistou.',
+  apice: 'Com um Ápice da trilha, o teto vira Transcendental.',
+};
 
 // O Estágio é o nível do feitiço (o Grau saiu em 2026-11-05).
 export const nivelFeitico = [
@@ -1077,7 +1084,7 @@ export const primeirosPassos = [
 ];
 
 export const cristais = [
-  { nome: 'Cristal Branco', raridade: 'Raro', uso: '5º e 4º Estágio', texto: 'Brota nas últimas jazidas. Move a economia legal do reino.' },
+  { nome: 'Cristal Branco', raridade: 'Raro', uso: '7º ao 4º Estágio', texto: 'Brota nas últimas jazidas. Move a economia legal do reino.' },
   { nome: 'Cristal Negro', raridade: 'Raríssimo', uso: '3º e 2º Estágio', texto: 'Formado onde a mana morreu. Vale mais que uma vida nos Veios.' },
   { nome: 'Cristal Dourado', raridade: 'Lenda', uso: '1º Estágio', texto: 'Ninguém vivo admite ter visto um. Todos os reis o procuram.' },
 ];

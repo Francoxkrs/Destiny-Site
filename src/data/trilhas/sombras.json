@@ -1,0 +1,548 @@
+{
+ "versao": 2,
+ "classe": "Mago das Sombras",
+ "slug": "sombras",
+ "papel": "Espionagem, infiltração e assassinato",
+ "raiz": {
+  "id": "sombras.raiz",
+  "nome": "Passo Silencioso",
+  "texto": "Só é percebido por quem tem Controle maior que o seu; enquanto ninguém na cena o percebeu, +1 Acréscimo de Velocidade. Rotas do Submundo: viagem a pé leva metade do tempo. Contratos Ocultos: vê no quadro de missões os contratos de espionagem e assassinato, que pagam 50% a mais."
+ },
+ "ramos": [
+  {
+   "id": "infiltracao",
+   "nome": "Infiltração",
+   "tema": "Ser outra pessoa e entrar onde ninguém entra."
+  },
+  {
+   "id": "assassinato",
+   "nome": "Assassinato",
+   "tema": "Matar sem ser visto.",
+   "estrela": "sombras.assassinato.lamina-oculta"
+  },
+  {
+   "id": "rede",
+   "nome": "Rede",
+   "tema": "Saber de tudo antes de todos."
+  }
+ ],
+ "nos": [
+  {
+   "id": "sombras.infiltracao.mil-rostos",
+   "nome": "Mil Rostos",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Copia rosto, voz e jeito de alguém que observou por uma cena, e quem sente a sua mana acha que ela está um nível abaixo. Ganha uma Identidade Falsa: nome, família e Classe Social de fachada, que é o que os outros veem na /ficha.",
+   "legado": "Infiltração/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "sombras.infiltracao.sombra-de-ninguem",
+   "nome": "Sombra de Ninguém",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Sua presença não fica na memória: quem não te percebeu na cena não lembra do seu rosto depois.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "sombras.infiltracao.passe-livre",
+   "nome": "Passe Livre",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "sombras.infiltracao.mil-rostos"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Entra em qualquer região e lugar fechado (a Coroa, as academias do Lapidário, as Tocas) sem convite, Riqueza ou patente. 1 vez por cena, se sair da vista de todos por 1 turno, volta a ser imperceptível.",
+   "legado": "Infiltração/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "sombras.infiltracao.falsario",
+   "nome": "Falsário",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "sombras.infiltracao.sombra-de-ninguem"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Falsifica cartas, selos e autorizações. Com elas, a Staff trata você como quem assinou em missões e lugares fechados.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "sombras.infiltracao.troca-de-pele",
+   "nome": "Troca de Pele",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "sombras.infiltracao.passe-livre"
+    ],
+    [
+     "sombras.infiltracao.falsario"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Muda de identidade no meio da cena, sem ser visto, e quem te procurava perde o rastro.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "sombras.infiltracao.rosto-perfeito",
+   "nome": "Rosto Perfeito",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "sombras.infiltracao.troca-de-pele"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Com Mil Rostos, nem Percepção de Mana nem Leitura percebem que é você.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "sombras.infiltracao.ninguem",
+   "nome": "Ninguém",
+   "ramo": [
+    "infiltracao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "sombras.infiltracao.rosto-perfeito",
+     "sombras.infiltracao.passe-livre",
+     "sombras.infiltracao.falsario"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "2 vezes por cena, apaga a própria mana e some por 1 turno até para quem tem Controle maior, e pode levar 1 aliado junto. O ataque seguinte conta como contra alvo desprevenido. Fora da luta não pode ser rastreado: Rastro, Registrador, Sentinela e marcas não pegam ele.",
+   "legado": "Infiltração/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "sombras.assassinato.ponto-fraco",
+   "nome": "Ponto Fraco",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Depois de observar o alvo por 1 turno, o ataque ignora 1 Acréscimo de Resistência.",
+   "legado": "Assassinato/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "sombras.assassinato.observar",
+   "nome": "Observar",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Depois de observar um alvo por 1 turno, sabe o Ferimento mais grave e o Estágio dele.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "sombras.assassinato.veneno-de-mana",
+   "nome": "Veneno de Mana",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "sombras.assassinato.ponto-fraco"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Prepara 2 doses por Jornada sem ser Boticário. 1 vez por cena, a lâmina envenenada faz o alvo gastar 20% a mais de Mana e perder 1 Acréscimo de Velocidade por 2 turnos.",
+   "legado": "Assassinato/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "sombras.assassinato.contrato-de-sangue",
+   "nome": "Contrato de Sangue",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "sombras.assassinato.observar"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Contratos de assassinato concluídos sem ser visto pagam o dobro e dão 1 Bounty a mais.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "sombras.assassinato.golpe-duplo",
+   "nome": "Golpe Duplo",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "sombras.assassinato.veneno-de-mana"
+    ],
+    [
+     "sombras.assassinato.contrato-de-sangue"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Contra alvo desprevenido, ataca duas vezes no mesmo turno.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "sombras.assassinato.execucao",
+   "nome": "Execução",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "sombras.assassinato.golpe-duplo"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Um alvo com Ferimento III que você acerta desprevenido cai na hora.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "sombras.assassinato.lamina-oculta",
+   "nome": "Lâmina Oculta",
+   "ramo": [
+    "assassinato"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "sombras.assassinato.execucao",
+     "sombras.assassinato.veneno-de-mana",
+     "sombras.assassinato.contrato-de-sangue"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "O primeiro ataque contra um alvo desprevenido tem +1 Acréscimo, não permite reação e causa um Ferimento um grau acima. Ao derrubar alguém, volta a ser imperceptível.",
+   "estrela": true,
+   "legado": "Assassinato/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "sombras.rede.rastro",
+   "nome": "Rastro",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Ouve conversas até o alcance do seu Estágio e segue o rastro de quem tocou por um dia. Pode seguir uma criatura que fugiu há menos de 2 h e reabrir a cena. Vê o quadro de missões do dia seguinte 1 h antes dos outros.",
+   "legado": "Rede/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "sombras.rede.ouvidos-em-tudo",
+   "nome": "Ouvidos em Tudo",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Escuta conversas sussurradas no dobro do alcance do Rastro.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "sombras.rede.mercado-negro",
+   "nome": "Mercado Negro",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "sombras.rede.rastro"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Compra e vende pelo preço do Fosso em qualquer região, sem Taxa de Cristal nem Dízimo, vende itens proibidos e compra Discos Ilegais e Brutos com 30% de desconto. Pode fazer a Jornada de Informante, que paga salário de Oficial sem Profissão.",
+   "legado": "Rede/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "sombras.rede.dossie",
+   "nome": "Dossiê",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "sombras.rede.ouvidos-em-tudo"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "1 vez por ciclo, pede à Staff a ficha completa de um Marcado ou NPC: Magia, Estágio, Milagres e onde ele estava no último dia.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "sombras.rede.chantagem",
+   "nome": "Chantagem",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "sombras.rede.mercado-negro"
+    ],
+    [
+     "sombras.rede.dossie"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Com um segredo em mãos, obriga um NPC a uma tarefa ou a um preço 50% menor, 1 vez por ciclo.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "sombras.rede.mestre-da-rede",
+   "nome": "Mestre da Rede",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "sombras.rede.chantagem"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "A Rede de Informantes passa a 10 marcas e avisa também quando a pessoa entra em luta.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "sombras.rede.rede-de-informantes",
+   "nome": "Rede de Informantes",
+   "ramo": [
+    "rede"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "sombras.rede.mestre-da-rede",
+     "sombras.rede.mercado-negro",
+     "sombras.rede.dossie"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Mantém até 5 marcas (informantes) que dizem onde cada pessoa está e avisam no privado quando ela viaja, e para onde. Aviso 15 min antes de cada criatura aparecer, com o canal. 1 vez por ciclo, pede à Staff um segredo de um NPC ou de uma missão.",
+   "legado": "Rede/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "sombras.elo.morte-silenciosa",
+   "nome": "Morte Silenciosa",
+   "ramo": [
+    "infiltracao",
+    "assassinato"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "sombras.infiltracao.troca-de-pele",
+     "sombras.assassinato.golpe-duplo"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Ao derrubar alguém com outra identidade, ninguém na cena sabe que foi você.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "sombras.elo.alvo-marcado",
+   "nome": "Alvo Marcado",
+   "ramo": [
+    "assassinato",
+    "rede"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "sombras.assassinato.golpe-duplo",
+     "sombras.rede.chantagem"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Contra quem tem uma das suas marcas, o primeiro ataque da cena conta como desprevenido.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "sombras.elo.agente-duplo",
+   "nome": "Agente Duplo",
+   "ramo": [
+    "infiltracao",
+    "rede"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "sombras.infiltracao.troca-de-pele",
+     "sombras.rede.chantagem"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Entra num grupo ou facção com identidade falsa e recebe as missões e o quadro deles.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

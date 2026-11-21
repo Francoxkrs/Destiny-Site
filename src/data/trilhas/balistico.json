@@ -1,0 +1,554 @@
+{
+ "versao": 2,
+ "classe": "Mago Balístico",
+ "slug": "balistico",
+ "papel": "Projéteis e longo alcance",
+ "raiz": {
+  "id": "balistico.raiz",
+  "nome": "Trajetória",
+  "texto": "Projéteis com alcance dobrado e +1 Acréscimo de Velocidade."
+ },
+ "ramos": [
+  {
+   "id": "precisao",
+   "nome": "Precisão",
+   "tema": "Um disparo, no lugar certo.",
+   "estrela": "balistico.precisao.artilheiro-arcano"
+  },
+  {
+   "id": "volume",
+   "nome": "Volume",
+   "tema": "Muitos projéteis ao mesmo tempo."
+  },
+  {
+   "id": "supressao",
+   "nome": "Supressão",
+   "tema": "Prender, empurrar e negar espaço."
+  }
+ ],
+ "nos": [
+  {
+   "id": "balistico.precisao.mira",
+   "nome": "Mira",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Parado por 1 turno, o próximo disparo tem +1 Acréscimo de Velocidade.",
+   "legado": "Precisão/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "balistico.precisao.olho-de-aguia",
+   "nome": "Olho de Águia",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Enxerga com clareza até o triplo do alcance do seu Estágio, e escuridão e neblina não atrapalham a mira.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "balistico.precisao.ricochete",
+   "nome": "Ricochete",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "balistico.precisao.mira"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "O projétil muda de direção uma vez e passa por cobertura.",
+   "legado": "Precisão/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "balistico.precisao.rastreador",
+   "nome": "Rastreador",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "balistico.precisao.olho-de-aguia"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Segue o rastro de uma criatura ou de um alvo de bounty até 1 dia depois. Em caçadas e bounties, a recompensa sobe 20%.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "balistico.precisao.ponto-cego",
+   "nome": "Ponto Cego",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "balistico.precisao.ricochete"
+    ],
+    [
+     "balistico.precisao.rastreador"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "O disparo acerta um ponto fraco: ignora 1 Acréscimo de Resistência.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "balistico.precisao.projetil-marcado",
+   "nome": "Projétil Marcado",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "balistico.precisao.ponto-cego"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Um alvo atingido fica marcado até o fim da cena: seus disparos contra ele não erram por cobertura nem por distância.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "balistico.precisao.artilheiro-arcano",
+   "nome": "Artilheiro Arcano",
+   "ramo": [
+    "precisao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "balistico.precisao.projetil-marcado",
+     "balistico.precisao.ricochete",
+     "balistico.precisao.rastreador"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "O disparo carregado tem +1 Acréscimo de Força e alcance triplicado.",
+   "estrela": true,
+   "legado": "Precisão/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "balistico.volume.rajada",
+   "nome": "Rajada",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Divide o feitiço em até 3 projéteis, cada um com 1 Acréscimo a menos.",
+   "legado": "Volume/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "balistico.volume.municao-economica",
+   "nome": "Munição Econômica",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Feitiços de projétil custam 10% menos Mana.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "balistico.volume.chuva",
+   "nome": "Chuva",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "balistico.volume.rajada"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Os projéteis cobrem uma área com metade do alcance do seu Estágio.",
+   "legado": "Volume/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "balistico.volume.municao-de-fera",
+   "nome": "Munição de Fera",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "balistico.volume.municao-economica"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Transforma Partes de Criatura em munição: o projétil ganha o Traço daquela criatura por uma cena. Cada Parte vira 5 disparos.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "balistico.volume.saraivada",
+   "nome": "Saraivada",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "balistico.volume.chuva"
+    ],
+    [
+     "balistico.volume.municao-de-fera"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "A Rajada pode dividir em até 5 projéteis.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "balistico.volume.fogo-continuo",
+   "nome": "Fogo Contínuo",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "balistico.volume.saraivada"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Por 2 turnos, dispara uma Rajada como ação livre, além da ação normal.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "balistico.volume.bombardeio",
+   "nome": "Bombardeio",
+   "ramo": [
+    "volume"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "balistico.volume.fogo-continuo",
+     "balistico.volume.chuva",
+     "balistico.volume.municao-de-fera"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma vez por cena, a Rajada sai sem perder Acréscimos.",
+   "legado": "Volume/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "balistico.supressao.tiro-de-aviso",
+   "nome": "Tiro de Aviso",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "O alvo atingido que não reagir perde o movimento no próximo turno.",
+   "legado": "Supressão/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "balistico.supressao.recuo",
+   "nome": "Recuo",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "reacao",
+   "usos": "1 vez por turno",
+   "texto": "Ao ser atacado corpo a corpo, dispara e se afasta até metade do alcance do seu Estágio.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "balistico.supressao.cravar",
+   "nome": "Cravar",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "balistico.supressao.tiro-de-aviso"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por alvo por cena",
+   "texto": "Um acerto prende um membro e causa Ferimento I.",
+   "legado": "Supressão/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "balistico.supressao.vigia",
+   "nome": "Vigia",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "balistico.supressao.recuo"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Em missões de defesa ou de patrulha, avisa a Staff de uma emboscada antes dela começar; o grupo não é pego desprevenido.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "balistico.supressao.campo-minado",
+   "nome": "Campo Minado",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "balistico.supressao.cravar"
+    ],
+    [
+     "balistico.supressao.vigia"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Deixa até 3 projéteis parados no chão; disparam quando alguém passa.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "balistico.supressao.cerco",
+   "nome": "Cerco",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "balistico.supressao.campo-minado"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Inimigos presos por Cravar ou parados pelo Tiro de Aviso perdem também a reação.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "balistico.supressao.zona-morta",
+   "nome": "Zona Morta",
+   "ramo": [
+    "supressao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "balistico.supressao.cerco",
+     "balistico.supressao.cravar",
+     "balistico.supressao.vigia"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Por 2 turnos, qualquer inimigo que se mover na área leva um disparo automático.",
+   "legado": "Supressão/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "balistico.elo.chuva-guiada",
+   "nome": "Chuva Guiada",
+   "ramo": [
+    "precisao",
+    "volume"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "balistico.precisao.ponto-cego",
+     "balistico.volume.saraivada"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Cada projétil da Rajada pode ter um alvo diferente, e a Mira vale para todos.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "balistico.elo.barragem",
+   "nome": "Barragem",
+   "ramo": [
+    "volume",
+    "supressao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "balistico.volume.saraivada",
+     "balistico.supressao.campo-minado"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma Chuva que faz quem está na área perder o movimento no próximo turno.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "balistico.elo.tiro-executor",
+   "nome": "Tiro Executor",
+   "ramo": [
+    "precisao",
+    "supressao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "balistico.precisao.ponto-cego",
+     "balistico.supressao.campo-minado"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Contra um alvo preso por Cravar, o disparo causa um Ferimento um grau acima.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

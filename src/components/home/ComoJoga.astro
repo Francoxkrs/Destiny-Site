@@ -1,0 +1,50 @@
+---
+/** "Como se joga": o básico em quatro quadros e a escada dos Estágios. Sem regra detalhada aqui; cada quadro leva à página certa. */
+import { estagios } from '../../data/canon.js';
+const passos = [
+  { k: '生', t: 'Nasça', d: 'Use /criar-personagem no Discord. O bot sorteia três modelos, você escolhe um e escreve quem ele foi.', l: '/comecar/', a: 'Criar personagem' },
+  { k: '書', t: 'Escreva', d: 'O RP é por texto, nos canais de cada região de Diamond. Sem dados: quem decide é a ficha e a escrita.', l: '/mundo/', a: 'Ver o mapa' },
+  { k: '鍛', t: 'Treine e cumpra missões', d: 'Cenas de treino sobem seus atributos e dão Pontos de Estágio. Missões pagam Méritos, Yuls e Cristais.', l: '/missoes/', a: 'Missões' },
+  { k: '昇', t: 'Ascenda', d: 'Com PE e Cristais você sobe do 9º ao 1º Estágio. Cada degrau destrava habilidades, técnicas e feitiços mais fortes.', l: '/estagios/', a: 'Os Estágios' },
+];
+const curto = (g) => g.split(';')[0].trim();
+---
+<section class="cj" aria-labelledby="cj-t">
+  <div class="wrap">
+    <span class="eyebrow" data-reveal><b>道</b>O básico</span>
+    <h2 id="cj-t" class="cj__t" data-split>Como se joga, em <em>quatro quadros</em>.</h2>
+    <ol class="cj__q">
+      {passos.map((p, i) => (
+        <li class="cj-p" data-reveal style={`--i:${i}`}>
+          <a href={p.l}>
+            <span class="cj-p__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="cj-p__k" aria-hidden="true">{p.k}</span>
+            <b class="cj-p__t">{p.t}</b>
+            <span class="cj-p__d">{p.d}</span>
+            <span class="cj-p__a">{p.a} →</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <div class="cj-esc" data-escada>
+      <p class="t-label cj-esc__l">A escada do Marcado · passe o mouse ou toque num degrau</p>
+      <ol>
+        {estagios.map((e, i) => (
+          <li style={`--i:${i}`} tabindex="0">
+            <span class="cj-esc__n">{e.n}</span>
+            <span class="cj-esc__g"><b>{e.n} Estágio</b><small>{e.req === 'Inicial' ? 'Onde todo Marcado começa' : `Pede ${e.req}`}</small><small>Ganha: {curto(e.ganhos)}</small></span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  const esc = document.querySelector<HTMLElement>('[data-escada]');
+  if (esc) {
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { esc.classList.add('is-in'); io.disconnect(); } }, { threshold: 0.3 });
+    io.observe(esc);
+  }
+</script>

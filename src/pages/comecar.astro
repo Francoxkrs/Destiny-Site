@@ -168,9 +168,10 @@ const discordExterno = site.discord !== '#';
 
   <section class="sec sec--line sec--raise" id="apoio">
     <div class="wrap">
-      <SectionHead num="06" label="Boost e VIP" title="Quem apoia <em>ganha a bolsa</em>." lead={apoio.texto} />
+      <SectionHead num="06" label="Boost" title="Quem apoia <em>ganha a bolsa</em>." lead={apoio.texto} />
+      <p class="t-body" data-reveal style="margin:-12px 0 28px;color:var(--bone-2)">Os VIPs saíram na versão 2. O que antes vinha no VIP agora sai pelos <a href="/cristais/" style="color:var(--gold);text-decoration:underline">Cristais Prismáticos</a>, a moeda da conta.</p>
       <div class="packs">
-        {apoio.pacotes.map((p) => (
+        {apoio.pacotes.filter((p) => !p.vip).map((p) => (
           <article class:list={['pack', p.vip && 'pack--vip']} data-reveal>
             <span class="pack__price">{p.preco}</span>
             <h3 class="t-h3">{p.nome}</h3>

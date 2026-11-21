@@ -2,18 +2,33 @@
 import '../styles/global.css';
 import '../styles/v2.css';
 import '../styles/sistemas.css';
+import '../styles/portal.css';
 import Gem from '../components/Gem.astro';
 import Arrow from '../components/Arrow.astro';
 import { site, paginas, capitulos, glossario } from '../data/canon.js';
+import { portal } from '../data/portal.js';
 
-const { title, description = 'Servidor de RP de texto no Discord inspirado em Black Clover. Toda alma volta, e toda alma volta em Diamond.', slug = 'inicio' } = Astro.props;
+/**
+ * Casca do site: o mangá em preto (pré-carregamento, cortes entre páginas, cursor) com o Portal do Marcado no cabeçalho.
+ * aba: qual item do Portal fica aceso (ficha, arvores, altar, cristais, eventos, patch). Nas páginas do Guia, 'guia'.
+ */
+const { title, description = 'Servidor de RP de texto no Discord. Toda alma volta, e toda alma volta em Diamond.', slug = 'inicio' } = Astro.props;
 const atual = paginas.find((p) => p.slug === slug);
-const fullTitle = title ? `${title} · ${site.nome}` : `${site.nome} · RP de Black Clover no Discord`;
+const aba = Astro.props.aba ?? (atual || slug === 'indice' || slug === 'guia' ? 'guia' : slug);
+const fullTitle = title ? `${title} · ${site.nome}` : `${site.nome} · RP de texto no Discord`;
 const discordExterno = site.discord !== '#';
 const cap = atual ? capitulos.find((c) => c.id === atual.cap) : null;
-const titulos = Object.fromEntries([['/', 'Black Destiny'], ['/indice/', 'Índice'], ...paginas.map((p) => [`/${p.slug}/`, p.titulo])]);
+const capN = (c) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'][capitulos.indexOf(c)];
+const titulos = Object.fromEntries([
+  ['/', 'Black Destiny'], ['/indice/', 'Índice'], ['/guia/', 'Guia'],
+  ...portal.map((p) => [p.href, p.nome]),
+  ...paginas.map((p) => [`/${p.slug}/`, p.titulo]),
+]);
 const busca = {
-  paginas: paginas.map((p) => ({ t: p.titulo, d: p.resumo, u: `/${p.slug}/`, c: `Cap. ${p.cap}`, e: (p.essencial || []).join(' ') })),
+  paginas: [
+    ...paginas.map((p) => ({ t: p.titulo, d: p.resumo, u: `/${p.slug}/`, c: capitulos.find((c) => c.id === p.cap)?.nome ?? '', e: (p.essencial || []).join(' ') })),
+    ...portal.map((p) => ({ t: p.nome, d: p.texto, u: p.href, c: 'Portal', e: '' })),
+  ],
   termos: glossario.map(([t, d, u]) => ({ t, d, u: `/${u.replace('#', '/#')}`.replace(/\/?$/, (m) => (u.includes('#') ? '' : '/')) })),
 };
 ---
@@ -28,12 +43,16 @@ const busca = {
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/img/og.jpg" />
+    <meta property="og:image" content={new URL('/img/og.jpg', Astro.site ?? Astro.url).href} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
+    <meta property="og:site_name" content="Black Destiny" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Shippori+Mincho+B1:wght@800&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Grenze+Gotisch:wght@400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Shippori+Mincho+B1:wght@800&display=swap" />
     <script is:inline>
       (function () {
         var d = document.documentElement;
@@ -48,7 +67,7 @@ const busca = {
       })();
     </script>
   </head>
-  <body data-page={slug}>
+  <body data-page={slug} data-aba={aba}>
     <a class="skip" href="#main">Pular para o conteúdo</a>
     <div class="guides" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 
@@ -81,25 +100,44 @@ const busca = {
     <header class="hdr">
       <div class="wrap hdr__in">
         <a href="/" class="brand" aria-label="Black Destiny, início"><Gem /><span>Black Destiny</span></a>
-        <p class="hdr__where">{atual && cap ? <><b>Cap. {cap.id}</b> {cap.nome} <i>/</i> {atual.titulo}</> : <><b>黒</b> Reino de Diamond</>}</p>
+
+        <nav class="pnav" aria-label="Portal do Marcado">
+          <a href="/guia/" aria-current={aba === 'guia' ? 'page' : undefined}><span class="pnav__k" aria-hidden="true">書</span>Guia</a>
+          {portal.filter((p) => p.cabecalho).map((p) => (
+            <a href={p.href} aria-current={aba === p.id ? 'page' : undefined}><span class="pnav__k" aria-hidden="true">{p.kanji}</span>{p.curto ?? p.nome}</a>
+          ))}
+        </nav>
+
         <div class="hdr__actions">
           <button class="hdr__search" type="button" data-search-open aria-label="Buscar no site (Ctrl+K)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg><span>Buscar</span><kbd>Ctrl K</kbd></button>
-          <a class="hdr__idx" href="/indice/" aria-current={slug === 'indice' ? 'page' : undefined}>Índice</a>
-          <a class="btn hdr__discord" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Discord</a>
+          <a class="hcp" href="/cristais/" data-sessao-cp aria-current={aba === 'cristais' ? 'page' : undefined} aria-label="Cristais Prismáticos"><span class="hcp__gem" aria-hidden="true"></span><b data-sessao-cp-n>Cristais</b><small data-sessao-cp-u hidden>CP</small></a>
+          <a class="hlogin" href="/entrar/" data-sessao-entrar><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7.3c1.1-.4 2.3-.6 3.5-.6s2.4.2 3.5.6M7.4 16.8c1.4.6 3 .9 4.6.9s3.2-.3 4.6-.9M9.7 13.3a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8Zm4.6 0a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8ZM7.6 6.8 6 5.6c-1.6 2.4-2.5 5.3-2.6 8.3 1.3 1.6 3 2.7 4.9 3.3l1-1.5m6.9-9 1.7-1.1c1.6 2.4 2.5 5.3 2.6 8.3-1.3 1.6-3 2.7-4.9 3.3l-1-1.5" /></svg><span>Entrar</span></a>
+          <a class="huser" href="/ficha/" data-sessao-user hidden>
+            <img class="huser__av" data-sessao-av alt="" width="34" height="34" />
+            <span class="huser__txt"><b data-sessao-nome>Marcado</b><small data-sessao-sub>9º Estágio</small></span>
+          </a>
           <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
-            <span class="menu-btn__label" data-menu-label>Capítulos</span>
+            <span class="menu-btn__label" data-menu-label>Menu</span>
             <span class="menu-btn__icon"><span></span></span>
           </button>
         </div>
       </div>
     </header>
 
-    <nav class="menu" id="menu" aria-label="Sistemas" data-lenis-prevent>
+    <nav class="menu" id="menu" aria-label="Menu" data-lenis-prevent>
       <div class="wrap menu__in">
+        <div class="menu__portal" data-menu-item>
+          <p class="menu__chap-h"><span class="k">門</span><b>Portal</b>do Marcado</p>
+          <ul class="menu__doors">
+            {portal.map((p) => (
+              <li><a href={p.href} aria-current={aba === p.id ? 'page' : undefined}><span class="k" aria-hidden="true">{p.kanji}</span><span class="t">{p.nome}</span><small>{p.texto}</small></a></li>
+            ))}
+          </ul>
+        </div>
         <div class="menu__chapters">
           {capitulos.map((c) => (
             <div class="menu__chap" data-menu-item>
-              <p class="menu__chap-h"><span class="k">{c.kanji}</span><b>Cap. {c.id}</b>{c.nome}</p>
+              <p class="menu__chap-h"><span class="k">{c.kanji}</span><b>{capN(c)}</b>{c.nome}</p>
               <ul class="menu__list">
                 {paginas.filter((p) => p.cap === c.id).map((p) => (
                   <li>
@@ -114,7 +152,6 @@ const busca = {
         </div>
         <div class="menu__side" data-menu-item>
           <p class="menu__quote">Toda alma volta. <em>Nenhuma volta igual.</em></p>
-          <p>Um RP de texto no Discord inspirado em Black Clover. Você foi alguém em outro reino; agora renasce em Diamond, um reino que esgotou a própria terra.</p>
           <div class="btns">
             <a class="btn btn--solid" href="/comecar/">Criar personagem <Arrow /></a>
             <a class="btn" href="/indice/">Índice e glossário</a>
@@ -144,38 +181,40 @@ const busca = {
 
     <footer class="footer">
       <div class="wrap">
-        <div class="footer__cols">
+        <div class="footer__cols footer__cols--v2">
           <div>
             <p class="t-h2">Sua alma <em>já voltou</em>.<br />Falta você.</p>
             <div class="btns" style="margin-top:28px">
               <a class="btn btn--solid" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener" data-magnetic>Entrar no servidor <Arrow /></a>
             </div>
           </div>
-          {[['I', 'II', 'III'], ['IV'], ['V', 'VI']].map((ids) => (
+          <div>
+            <h4 class="t-label">門 Portal do Marcado</h4>
+            <ul>{portal.map((p) => <li><a href={p.href}>{p.nome}</a></li>)}</ul>
+          </div>
+          {[capitulos.slice(0, 3), capitulos.slice(3, 5), capitulos.slice(5)].map((grupo) => (
             <div>
-              {ids.map((id) => {
-                const c = capitulos.find((x) => x.id === id);
-                return (
-                  <>
-                    <h4 class="t-label">Cap. {c.id} · {c.nome}</h4>
-                    <ul>{paginas.filter((p) => p.cap === id).map((p) => <li><a href={`/${p.slug}/`}>{p.titulo}</a></li>)}</ul>
-                  </>
-                );
-              })}
+              {grupo.map((c) => (
+                <>
+                  <h4 class="t-label">{capN(c)} · {c.nome}</h4>
+                  <ul>{paginas.filter((p) => p.cap === c.id).map((p) => <li><a href={`/${p.slug}/`}>{p.titulo}</a></li>)}</ul>
+                </>
+              ))}
             </div>
           ))}
         </div>
         <p class="footer__idx"><a href="/indice/">Índice, glossário e busca <Arrow /></a></p>
         <p class="footer__big" aria-hidden="true"><span>Black</span> <em>Destiny</em></p>
         <div class="footer__bottom">
-          <span class="t-label">© {new Date().getFullYear()} Black Destiny · Servidor de fãs, sem fins lucrativos</span>
-          <span class="t-label">Black Clover © Yūki Tabata / Shueisha</span>
+          <span class="t-label">© {new Date().getFullYear()} Black Destiny · Servidor de fãs</span>
+          <span class="t-label">Toda alma volta</span>
         </div>
       </div>
     </footer>
 
     <script>
       import '../scripts/main.js';
+      import '../scripts/sessao.js';
     </script>
   </body>
 </html>

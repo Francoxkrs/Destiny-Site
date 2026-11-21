@@ -2,6 +2,10 @@
 import Base from '../layouts/Base.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import Arrow from '../components/Arrow.astro';
+import PortalHome from '../components/portal/PortalHome.astro';
+import Destino from '../components/home/Destino.astro';
+import ComoJoga from '../components/home/ComoJoga.astro';
+import '../styles/home.css';
 import {
   site, paginas, capitulos, regioes, segundaVida, classesSociais, familias, classesMago, milagres, magias, estagios,
   confronto, primeirosPassos, generais, veioNegro, comecePorAqui, slugify,
@@ -18,7 +22,7 @@ const stats = [
 ];
 const discordExterno = site.discord !== '#';
 const cap = Object.fromEntries(capitulos.map((c) => [c.id, c]));
-const pags = (id) => paginas.filter((p) => p.cap === id);
+const pags = (...ids) => paginas.filter((p) => ids.includes(p.cap));
 const porSlug = Object.fromEntries(paginas.map((p) => [p.slug, p]));
 
 const prologo = [
@@ -37,7 +41,7 @@ const origens = [
   { nome: 'Outras terras', sim: '✦', img: 'racas/bruxas', fams: familias.filter((f) => outras.includes(f.origem)) },
 ];
 
-const painel = (n) => `/img/inicio/${n}.jpg`;
+const painel = (n) => `/img/inicio/${n}.webp`;
 ---
 <Base slug="inicio">
   <!-- CAPA: uma página de mangá -->
@@ -63,7 +67,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <div class="cover__content">
       <div class="wrap cover__top">
         <span class="eyebrow" data-hero-fade><b>RP</b>de texto no Discord</span>
-        <span class="t-label" data-hero-fade>Inspirado em Black Clover</span>
+        <span class="t-label" data-hero-fade>Reino de Diamond</span>
       </div>
       <div class="wrap">
         <h1 class="cover__title" data-cover-title>
@@ -87,7 +91,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <div class="prologue__stage">
       {prologo.map((p, i) => (
         <div class="prologue__bg" data-pro-bg style={`--i:${i}`}>
-          <img src={`/img/${p.img}.jpg`} alt="" loading={i ? 'lazy' : 'eager'} />
+          <img src={`/img/${p.img}.webp`} alt="" loading={i ? 'lazy' : 'eager'} />
         </div>
       ))}
       <div class="prologue__shade" aria-hidden="true"></div>
@@ -112,35 +116,22 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <!-- COMECE POR AQUI -->
-  <section class="sec sec--tight start-sec">
-    <div class="wrap">
-      <div class="start-sec__head">
-        <span class="eyebrow" data-reveal><b>Novo aqui?</b>Comece por aqui</span>
-        <a class="btn" href="/indice/" data-reveal>Índice e glossário <Arrow /></a>
-      </div>
-      <ol class="start">
-        {comecePorAqui.map(([s, por], i) => (
-          <li data-reveal>
-            <a href={`/${s}/`}>
-              <span class="start__n">0{i + 1}</span>
-              <b>{porSlug[s].titulo}</b>
-              <span class="t-small">{por}</span>
-              <Arrow class="start__a" />
-            </a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
+  <!-- GIRE O SEU DESTINO: a criação em 30 segundos -->
+  <Destino />
+
+  <!-- O BÁSICO -->
+  <ComoJoga />
+
+  <!-- PORTAL DO MARCADO -->
+  <PortalHome />
 
   <!-- CAPÍTULO I -->
   <section class="chap" data-chap>
     <span class="chap__num" aria-hidden="true" data-chap-num>I</span>
     <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.I.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo I</b>{pags('I').map((p) => p.titulo).join(' · ')}</span>
-      <h2 class="chap__title" data-split>{cap.I.nome}</h2>
+      <span class="chap__kanji" aria-hidden="true">{cap.mundo.kanji}</span>
+      <span class="eyebrow" data-reveal><b>Capítulo I</b>{pags('mundo').map((p) => p.titulo).join(' · ')}</span>
+      <h2 class="chap__title" data-split>Onde você acorda</h2>
       <p class="chap__text" data-reveal>{segundaVida.texto}</p>
     </div>
   </section>
@@ -191,9 +182,9 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
   <section class="chap chap--paper" data-chap>
     <span class="chap__num" aria-hidden="true" data-chap-num>II</span>
     <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.II.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo II</b>{pags('II').map((p) => p.titulo).join(' · ')}</span>
-      <h2 class="chap__title" data-split>{cap.II.nome}</h2>
+      <span class="chap__kanji" aria-hidden="true">{cap.personagem.kanji}</span>
+      <span class="eyebrow" data-reveal><b>Capítulo II</b>{pags('personagem').map((p) => p.titulo).join(' · ')}</span>
+      <h2 class="chap__title" data-split>Quem você foi</h2>
       <p class="chap__text" data-reveal>Antes de Diamond, você teve um nome. Vinte e cinco famílias, de Clover às terras dos Elfos. A sua define atributos, dons, magias possíveis e a classe social em que você renasce.</p>
     </div>
   </section>
@@ -202,7 +193,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     <div class="origins__row" data-origins>
       {origens.map((o, i) => (
         <a class="origin" href="/familias/" data-origin data-cursor="Ver famílias">
-          <div class="origin__img"><img src={`/img/${o.img}.jpg`} alt="" loading="lazy" /></div>
+          <div class="origin__img"><img src={`/img/${o.img}.webp`} alt="" loading="lazy" /></div>
           <div class="origin__body">
             <span class="origin__sym" aria-hidden="true">{o.sim}</span>
             <span class="t-label">0{i + 1} · {o.fams.length} {o.fams.length === 1 ? 'família' : 'famílias'}</span>
@@ -223,10 +214,10 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
   <section class="chap" data-chap>
     <span class="chap__num" aria-hidden="true" data-chap-num>III</span>
     <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.III.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo III</b>{pags('III').map((p) => p.titulo).join(' · ')}</span>
-      <h2 class="chap__title" data-split>{cap.III.nome}</h2>
-      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {['zero','uma','duas','três','quatro','cinco','seis','sete','oito','nove','dez'][pags('III').length] ?? pags('III').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
+      <span class="chap__kanji" aria-hidden="true">{cap.magia.kanji}</span>
+      <span class="eyebrow" data-reveal><b>Capítulo III</b>{pags('magia').map((p) => p.titulo).join(' · ')}</span>
+      <h2 class="chap__title" data-split>O Grimório</h2>
+      <p class="chap__text" data-reveal>Tudo o que a sua alma sabe fazer cabe em {['zero','uma','duas','três','quatro','cinco','seis','sete','oito','nove','dez'][pags('magia').length] ?? pags('magia').length} páginas. E nenhuma delas tem dados: quem decide uma luta é a ficha e a escrita.</p>
     </div>
   </section>
 
@@ -244,7 +235,7 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
   </section>
 
   <section class="impact" data-impact>
-    <div class="impact__img"><img src="/img/inicio/sfx.jpg" alt="" loading="lazy" /></div>
+    <div class="impact__img"><img src="/img/inicio/sfx.webp" alt="" loading="lazy" /></div>
     <span class="impact__sfx" aria-hidden="true" data-sfx>ドン</span>
     <div class="wrap impact__in">
       <span class="eyebrow" data-reveal><b>×</b>Confronto sem dados</span>
@@ -252,52 +243,18 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <section class="sec sec--tight">
-    <div class="wrap">
-      <div class="grid" style="margin-bottom:clamp(32px,5vw,64px);align-items:end">
-        <p class="t-body c-1-7" data-reveal>Quando duas ações se encontram, o narrador compara nesta ordem e para no primeiro passo que decide. Sorteios só existem na criação de personagem.</p>
-        <div class="c-9-12" data-reveal><a class="btn" href="/atributos/">Testar o confronto <Arrow /></a></div>
-      </div>
-      <div class="nodice">
-        {confronto.map(([t, d], i) => (
-          <div data-reveal>
-            <b>Passo 0{i + 1}</b>
-            <div><h3>{t}</h3><p>{d}</p></div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
 
-  <section class="sec sec--tight idx" data-index-wrap>
-    <div class="wrap">
-      <ul class="index-list" data-index>
-        {pags('III').map((p) => (
-          <li>
-            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
-              <span class="index-item__n">{p.num}</span>
-              <span class="index-item__t">{p.titulo}</span>
-              <span class="index-item__d">{p.resumo}</span>
-              <Arrow class="index-item__a" />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="index-preview" aria-hidden="true">
-      <div class="index-preview__frame">
-        {pags('III').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
-      </div>
-    </div>
-  </section>
+  <nav class="sec sec--tight chap-links" aria-label="Páginas deste capítulo">
+    <div class="wrap"><ul>{pags('magia').map((p) => <li data-reveal><a href={`/${p.slug}/`}><span>{p.num}</span>{p.titulo}<Arrow /></a></li>)}</ul></div>
+  </nav>
 
   <!-- CAPÍTULO IV -->
   <section class="chap chap--paper" data-chap>
     <span class="chap__num" aria-hidden="true" data-chap-num>IV</span>
     <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.IV.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo IV</b>{pags('IV').map((p) => p.titulo).join(' · ')}</span>
-      <h2 class="chap__title" data-split>{cap.IV.nome}</h2>
+      <span class="chap__kanji" aria-hidden="true">{cap.progressao.kanji}</span>
+      <span class="eyebrow" data-reveal><b>Capítulo IV</b>{pags('progressao', 'aventura').map((p) => p.titulo).join(' · ')}</span>
+      <h2 class="chap__title" data-split>O Caminho</h2>
       <p class="chap__text" data-reveal>Do 9º ao 1º Estágio, de missão em missão. No meio do caminho, uma escolha: servir ao Rei ou lucrar com o cadáver do reino.</p>
     </div>
   </section>
@@ -324,86 +281,27 @@ const painel = (n) => `/img/inicio/${n}.jpg`;
     </div>
   </section>
 
-  <section class="sec sec--tight idx chap--paper" data-index-wrap>
-    <div class="wrap">
-      <ul class="index-list" data-index>
-        {pags('IV').map((p) => (
-          <li>
-            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
-              <span class="index-item__n">{p.num}</span>
-              <span class="index-item__t">{p.titulo}</span>
-              <span class="index-item__d">{p.resumo}</span>
-              <Arrow class="index-item__a" />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="index-preview" aria-hidden="true">
-      <div class="index-preview__frame">
-        {pags('IV').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
-      </div>
-    </div>
-  </section>
+  <nav class="sec sec--tight chap-links chap--paper" aria-label="Páginas deste capítulo">
+    <div class="wrap"><ul>{pags('progressao', 'aventura').map((p) => <li data-reveal><a href={`/${p.slug}/`}><span>{p.num}</span>{p.titulo}<Arrow /></a></li>)}</ul></div>
+  </nav>
 
   <!-- CAPÍTULO V -->
   <section class="chap" data-chap>
     <span class="chap__num" aria-hidden="true" data-chap-num>V</span>
     <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.V.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo V</b>{pags('V').map((p) => p.titulo).join(' · ')}</span>
-      <h2 class="chap__title" data-split>{cap.V.nome}</h2>
+      <span class="chap__kanji" aria-hidden="true">{cap.sustento.kanji}</span>
+      <span class="eyebrow" data-reveal><b>Capítulo V</b>{pags('sustento').map((p) => p.titulo).join(' · ')}</span>
+      <h2 class="chap__title" data-split>O Sustento</h2>
       <p class="chap__text" data-reveal>A terra secou, o Tesouro esvazia e o Cristal vale mais que uma vida nos Veios. Entre uma missão e outra, alguém tem que minerar, forjar, curar e cobrar.</p>
     </div>
   </section>
 
-  <section class="sec sec--tight idx" data-index-wrap>
-    <div class="wrap">
-      <ul class="index-list" data-index>
-        {pags('V').map((p) => (
-          <li>
-            <a class="index-item" href={`/${p.slug}/`} data-index-item data-cursor="Abrir">
-              <span class="index-item__n">{p.num}</span>
-              <span class="index-item__t">{p.titulo}</span>
-              <span class="index-item__d">{p.resumo}</span>
-              <Arrow class="index-item__a" />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="index-preview" aria-hidden="true">
-      <div class="index-preview__frame">
-        {pags('V').map((p) => <ImageSlot src={`${p.slug}/capa`} label={p.titulo} ratio="4 / 5" compact parallax={false} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- CAPÍTULO VI -->
-  <section class="chap chap--paper" data-chap>
-    <span class="chap__num" aria-hidden="true" data-chap-num>VI</span>
-    <div class="wrap chap__in">
-      <span class="chap__kanji" aria-hidden="true">{cap.VI.kanji}</span>
-      <span class="eyebrow" data-reveal><b>Capítulo VI</b>Começar</span>
-      <h2 class="chap__title" data-split>{cap.VI.nome}</h2>
-      <p class="chap__text" data-reveal>O bot cuida da criação, da ficha e das missões. Você cuida da história.</p>
-    </div>
-  </section>
-
-  <section class="sec sec--tight chap--paper">
-    <div class="wrap grid">
-      <div class="c-1-5 stack" style="--s:1.6rem">
-        <h3 class="t-h2" data-split>Do Discord à <em>primeira missão</em>.</h3>
-        <div data-reveal><a class="btn btn--solid" href="/comecar/" data-magnetic>Como criar <Arrow /></a></div>
-      </div>
-      <ol class="steps c-7-12">
-        {primeirosPassos.map(([t, d]) => <li data-reveal><div><h3>{t}</h3><p set:html={d.replace(/(\/[a-z-]+)/g, '<code>$1</code>')} /></div></li>)}
-      </ol>
-    </div>
-  </section>
+  <nav class="sec sec--tight chap-links" aria-label="Páginas deste capítulo">
+    <div class="wrap"><ul>{pags('sustento').map((p) => <li data-reveal><a href={`/${p.slug}/`}><span>{p.num}</span>{p.titulo}<Arrow /></a></li>)}</ul></div>
+  </nav>
 
   <section class="awaken" data-awaken>
-    <div class="awaken__img" data-awaken-img><img src="/img/comecar/capa.jpg" alt="" loading="lazy" /></div>
+    <div class="awaken__img" data-awaken-img><img src="/img/comecar/capa.webp" alt="" loading="lazy" /></div>
     <div class="awaken__lids" aria-hidden="true"><span data-lid></span><span data-lid></span></div>
     <div class="wrap awaken__in">
       <span class="eyebrow" data-reveal><b>黒</b>A Marca começa no Discord</span>

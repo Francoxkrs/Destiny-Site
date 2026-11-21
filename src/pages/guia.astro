@@ -1,0 +1,147 @@
+---
+import Base from '../layouts/Base.astro';
+import GuiaSecoes from '../components/GuiaSecoes.astro';
+import { licoes } from '../data/academia.js';
+import { paginas, site } from '../data/canon.js';
+import '../styles/academia.css';
+const titulo = Object.fromEntries(paginas.map((p) => [p.slug, p.titulo]));
+const romano = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+---
+<Base title="Guia" slug="guia" description="Academia do Marcado: as regras do Black Destiny em sete lições curtas, com exemplo e uma pergunta em cada. Depois, todas as páginas por assunto.">
+  <div class="ac" data-academia data-total={licoes.length}>
+    <!-- abertura -->
+    <header class="ac-hero">
+      <span class="ac-hero__k" aria-hidden="true">学</span>
+      <div class="wrap">
+        <span class="eyebrow"><b>学</b>Academia do Marcado</span>
+        <h1 class="ac-hero__t" data-split>Aprenda o jogo em <em>sete lições</em>.</h1>
+        <p class="ac-hero__p" data-reveal>Cada lição leva uns dois minutos: três ideias, um exemplo com um Marcado de verdade e uma pergunta. Acertou, ganha o selo. Junte os sete e você já sabe jogar.</p>
+        <div class="ac-selos" aria-label="Seus selos" data-reveal>
+          {licoes.map((l, i) => <a href={`#${l.id}`} class="ac-selo" data-selo={l.id} title={l.titulo}><span aria-hidden="true">{l.k}</span><small>{romano[i]}</small></a>)}
+          <p class="ac-selos__n" aria-live="polite"><b data-feitos>0</b> de {licoes.length} selos</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap ac-corpo">
+      <!-- sumário fixo -->
+      <nav class="ac-sum" aria-label="Lições">
+        <p class="t-label">Lições</p>
+        <ol>
+          {licoes.map((l, i) => (
+            <li><a href={`#${l.id}`} data-sum={l.id}><span class="ac-sum__n">{romano[i]}</span><span><b>{l.titulo}</b><small>{l.curto}</small></span><i aria-hidden="true">{l.k}</i></a></li>
+          ))}
+        </ol>
+      </nav>
+
+      <div class="ac-lics">
+        {licoes.map((l, i) => (
+          <article class="ac-l" id={l.id} data-licao={l.id} aria-labelledby={`${l.id}-t`}>
+            <header class="ac-l__h">
+              <span class="ac-l__n">Lição {romano[i]}</span>
+              <h2 id={`${l.id}-t`} class="ac-l__t">{l.titulo}</h2>
+              <span class="ac-l__k" aria-hidden="true">{l.k}</span>
+            </header>
+            <ol class="ac-ideias">
+              {l.blocos.map(([t, d], j) => (
+                <li data-reveal><span class="ac-ideias__n">{j + 1}</span><div><h3>{t}</h3><p>{d}</p></div></li>
+              ))}
+            </ol>
+            <aside class="ac-ex" data-reveal><p class="t-label">Na prática</p><p>{l.exemplo}</p></aside>
+
+            <div class="ac-q" data-q={l.id} data-certa={l.pergunta.certa}>
+              <p class="ac-q__h"><span aria-hidden="true">問</span>{l.pergunta.q}</p>
+              <div class="ac-q__ops">
+                {l.pergunta.opcoes.map((o, j) => <button type="button" class="ac-q__op" data-op={j}>{o}</button>)}
+              </div>
+              <p class="ac-q__r" data-r aria-live="polite" hidden><b data-r-t></b> {l.pergunta.porque}</p>
+              <span class="ac-q__carimbo" aria-hidden="true">合格</span>
+            </div>
+
+            <p class="ac-l__mais"><span class="t-label">Para ler a regra inteira</span>{l.links.map(([s, t]) => <a href={`/${s}/`}>{titulo[s] ?? t} →</a>)}</p>
+          </article>
+        ))}
+
+        <!-- diploma -->
+        <section class="ac-dip" data-diploma aria-labelledby="ac-dip-t">
+          <div class="ac-dip__p">
+            <span class="ac-dip__k" aria-hidden="true">証</span>
+            <p class="t-label">Diploma do Marcado</p>
+            <h2 id="ac-dip-t" class="ac-dip__t" data-dip-t>Faltam selos.</h2>
+            <p class="ac-dip__s" data-dip-s>Responda as perguntas das lições para completar o diploma.</p>
+            <div class="ac-dip__selos">{licoes.map((l) => <span data-dip-selo={l.id}>{l.k}</span>)}</div>
+            <div class="ac-dip__cta">
+              <a class="btn btn--solid" href={site.discord} target="_blank" rel="noopener">Criar meu Marcado</a>
+              <a class="btn" href="/ficha/">Ver a ficha</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- referência -->
+    <section class="ac-ref" id="regras">
+      <div class="wrap">
+        <span class="eyebrow" data-reveal><b>書</b>Consulta</span>
+        <h2 class="ac-ref__t" data-split>Todas as regras, <em>por assunto</em>.</h2>
+        <p class="ac-ref__p" data-reveal>Depois das lições, use as páginas para os detalhes. A busca (Ctrl K) acha qualquer termo pelo nome.</p>
+        <GuiaSecoes />
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>('[data-academia]');
+  if (raiz) {
+    const total = Number(raiz.dataset.total);
+    const CHAVE = 'bd-academia';
+    let selos: string[] = [];
+    try { selos = JSON.parse(localStorage.getItem(CHAVE) ?? '[]'); } catch { /* sem armazenamento */ }
+    const salva = () => { try { localStorage.setItem(CHAVE, JSON.stringify(selos)); } catch { /* sem armazenamento */ } };
+
+    function pinta() {
+      raiz!.querySelector('[data-feitos]')!.textContent = String(selos.length);
+      raiz!.querySelectorAll<HTMLElement>('[data-selo]').forEach((s) => s.classList.toggle('is-on', selos.includes(s.dataset.selo!)));
+      raiz!.querySelectorAll<HTMLElement>('[data-sum]').forEach((s) => s.classList.toggle('is-on', selos.includes(s.dataset.sum!)));
+      raiz!.querySelectorAll<HTMLElement>('[data-dip-selo]').forEach((s) => s.classList.toggle('is-on', selos.includes(s.dataset.dipSelo!)));
+      const fim = selos.length >= total;
+      raiz!.querySelector<HTMLElement>('[data-diploma]')!.classList.toggle('is-ok', fim);
+      raiz!.querySelector('[data-dip-t]')!.textContent = fim ? 'Você sabe jogar.' : `Faltam ${total - selos.length} ${total - selos.length === 1 ? 'selo' : 'selos'}.`;
+      raiz!.querySelector('[data-dip-s]')!.textContent = fim ? 'Sete selos, sete lições. Agora é com a sua história: crie o Marcado e escreva a primeira cena.' : 'Responda as perguntas das lições para completar o diploma.';
+    }
+
+    // perguntas
+    raiz.querySelectorAll<HTMLElement>('[data-q]').forEach((q) => {
+      const id = q.dataset.q!;
+      const certa = Number(q.dataset.certa);
+      const r = q.querySelector<HTMLElement>('[data-r]')!;
+      if (selos.includes(id)) { q.classList.add('is-ok'); q.querySelectorAll<HTMLButtonElement>('[data-op]')[certa]?.classList.add('is-certa'); r.hidden = false; r.querySelector('[data-r-t]')!.textContent = 'Certo.'; }
+      q.addEventListener('click', (e) => {
+        const b = (e.target as Element).closest<HTMLButtonElement>('[data-op]');
+        if (!b || q.classList.contains('is-ok')) return;
+        const ok = Number(b.dataset.op) === certa;
+        r.hidden = false;
+        r.querySelector('[data-r-t]')!.textContent = ok ? 'Certo.' : 'Quase.';
+        if (ok) {
+          b.classList.add('is-certa');
+          q.classList.add('is-ok');
+          if (!selos.includes(id)) { selos.push(id); salva(); }
+          const selo = raiz.querySelector<HTMLElement>(`[data-selo="${id}"]`);
+          selo?.classList.remove('is-novo'); void selo?.offsetWidth; selo?.classList.add('is-novo');
+          pinta();
+        } else {
+          b.classList.add('is-errada');
+          b.disabled = true;
+          q.classList.remove('is-treme'); void q.offsetWidth; q.classList.add('is-treme');
+        }
+      });
+    });
+
+    // sumário acompanha a lição na tela
+    const links = new Map([...raiz.querySelectorAll<HTMLElement>('[data-sum]')].map((a) => [a.dataset.sum!, a]));
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { links.forEach((a) => a.classList.remove('is-aqui')); links.get((e.target as HTMLElement).dataset.licao!)?.classList.add('is-aqui'); } }), { rootMargin: '-45% 0px -50% 0px' });
+    raiz.querySelectorAll('[data-licao]').forEach((l) => io.observe(l));
+    pinta();
+  }
+</script>

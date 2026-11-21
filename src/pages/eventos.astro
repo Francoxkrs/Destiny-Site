@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import { eventos, estadoNome, estadoKanji } from '../data/eventos.js';
+
+const vivos = eventos.filter((e) => e.estado !== 'breve').length;
+const breve = eventos.length - vivos;
+const md = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>');
+const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
+---
+<Base title="Eventos" slug="eventos" aba="eventos" description="Os eventos do Black Destiny: o que está valendo agora no servidor, o que é para sempre e o que vem por aí.">
+  <div class="ev" data-eventos>
+    <header class="ev-hd wrap">
+      <span class="eyebrow"><b>祭</b>Mural de Diamond</span>
+      <h1 class="ev-hd__t">Eventos</h1>
+      <p class="ev-hd__c"><span><b>{vivos}</b> valendo</span><span><b>{breve}</b> em breve</span></p>
+    </header>
+
+    <div class="ev-corpo wrap">
+      <!-- sumário: lista de capítulos -->
+      <nav class="ev-lista" aria-label="Eventos" data-lenis-prevent>
+        <p class="ev-lista__h t-label">目次 · Sumário</p>
+        {eventos.map((e, i) => (
+          <a href={`#${e.id}`} class="ev-item" data-ev={e.id} data-estado={e.estado} aria-current={i === 0 ? 'true' : undefined}>
+            <span class="ev-item__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="ev-item__b">
+              <small>{e.tipo}</small>
+              <b>{e.nome}</b>
+              <span class="ev-item__q">{e.quando}</span>
+            </span>
+            <span class="ev-item__selo" title={estadoNome[e.estado]}>{estadoKanji[e.estado]}</span>
+          </a>
+        ))}
+      </nav>
+
+      <!-- painéis -->
+      <div class="ev-paineis">
+        {eventos.map((e, i) => (
+          <article class="ev-p" id={e.id} data-painel={e.id} data-estado={e.estado}>
+            <div class="ev-p__arte">
+              <img src={e.img} alt="" loading={i ? 'lazy' : 'eager'} />
+              <span class="ev-p__k" aria-hidden="true">{e.kanji}</span>
+              <span class="ev-p__estado">{estadoNome[e.estado]}</span>
+            </div>
+            <div class="ev-p__txt">
+              <p class="ev-p__tipo t-label">{e.tipo} · {e.quando}</p>
+              <h2 class="ev-p__t">{e.nome}</h2>
+              <p class="ev-p__res">{e.resumo}</p>
+              <p class="ev-p__body">{e.texto}</p>
+              {e.passos.length > 0 && (
+                <div class="ev-p__bloco">
+                  <h3 class="t-label">Como participar</h3>
+                  <ol class="ev-passos">{e.passos.map((p) => <li set:html={md(p)} />)}</ol>
+                </div>
+              )}
+              {e.premios.length > 0 && (
+                <div class="ev-p__bloco">
+                  <h3 class="t-label">Recompensas</h3>
+                  <ul class="ev-premios">
+                    {e.premios.map((p) => <li data-r={p.raro}><span class="ev-premios__d" aria-label={nomeR[p.raro]}>{p.raro === 'lendario' ? '◆◆◆' : p.raro === 'epico' ? '◆◆' : '◆'}</span><b>{p.nome}</b><small>{p.nota}</small></li>)}
+                  </ul>
+                </div>
+              )}
+              {(e.comandos || e.link) && (
+                <div class="ev-p__pe">
+                  {e.comandos && <p class="ev-cmds">{e.comandos.map((c) => <code>{c}</code>)}</p>}
+                  {e.link && <a class="btn" href={e.link.href}>{e.link.texto} <Arrow /></a>}
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  // Um painel por vez no computador; no celular, todos em coluna (sem JavaScript também).
+  const raiz = document.querySelector<HTMLElement>('[data-eventos]')!;
+  const itens = Array.from(raiz.querySelectorAll<HTMLAnchorElement>('[data-ev]'));
+  const paineis = Array.from(raiz.querySelectorAll<HTMLElement>('[data-painel]'));
+  const larga = matchMedia('(min-width: 1000px)');
+  function mostra(id: string, anima = true) {
+    if (!larga.matches) return;
+    itens.forEach((a) => (a.dataset.ev === id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    paineis.forEach((p) => {
+      const on = p.dataset.painel === id;
+      p.hidden = !on;
+      if (on && anima && !matchMedia('(prefers-reduced-motion: reduce)').matches) p.animate([{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 650, easing: 'cubic-bezier(.76,0,.24,1)' });
+    });
+  }
+  itens.forEach((a) => a.addEventListener('click', (e) => {
+    if (!larga.matches) return;
+    e.preventDefault(); e.stopPropagation();
+    mostra(a.dataset.ev!);
+    try { history.replaceState(null, '', `#${a.dataset.ev}`); } catch { /* sem histórico */ }
+  }, true));
+  const inicial = location.hash.slice(1);
+  mostra(paineis.some((p) => p.dataset.painel === inicial) ? inicial : paineis[0].dataset.painel!, false);
+  larga.addEventListener('change', () => { if (!larga.matches) paineis.forEach((p) => (p.hidden = false)); else mostra(paineis[0].dataset.painel!, false); });
+</script>

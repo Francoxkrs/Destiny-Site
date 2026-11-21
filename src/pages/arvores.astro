@@ -1,0 +1,443 @@
+---
+import Base from '../layouts/Base.astro';
+import TecnicasLeque from '../components/TecnicasLeque.astro';
+import ConhecimentosLivro from '../components/ConhecimentosLivro.astro';
+import { lerSessao } from '../lib/sessao.js';
+import { carregarFicha } from '../lib/ficha.js';
+import { arvores, arvorePorClasse, migrarIds, graus, regras } from '../data/arvores.js';
+import { pontosDeTrilha, proximoPonto, gastos } from '../lib/arvore-regras.js';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+const { estado, ficha: f } = await carregarFicha(sessao);
+Astro.response.headers.set('cache-control', 'private, no-store');
+
+const real = estado === 'ok';
+const minha = arvorePorClasse(f.classeMago) ?? arvores[0];
+const pedida = arvores.find((a) => a.id === Astro.url.searchParams.get('classe'));
+const ativa = pedida ?? minha;
+const pontos = f.trilha.pontos ?? pontosDeTrilha(f.estagio);
+const tem = migrarIds(minha, f.trilha.nos);
+const livres = Math.max(0, pontos - gastos(minha, tem));
+const prox = proximoPonto(f.estagio);
+// O site só grava quando o bot já usa as árvores v2 (ids novos), senão os dois brigariam pelo mesmo campo.
+const podeGravar = real && f.trilha.versao === 2;
+
+const ROMANO = { 1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'Ápice' };
+const TIPO = { passiva: 'Passiva', ativa: 'Ativa', reacao: 'Reação', mundo: 'Mundo' };
+const curto = (nome) => nome.replace('Mago ', '').replace(/^(de|do|das) /, '');
+
+// Geometria radial ("Selo da Classe"): a Raiz no centro, cada ramo sai numa direção (cima, baixo à direita,
+// baixo à esquerda) e cada Grau é um anel mais longe do centro. Os Elos ficam no vão entre os dois ramos que ligam.
+// Coordenadas de -100 a 100; viram % do palco quadrado.
+const RAIO = { 1: 31, 2: 45, 3: 59, 4: 73, 5: 87 };
+const ANG = [-90, 30, 150];
+const LADO = 11;
+const geo = (a) => {
+  const rad = (g) => (g * Math.PI) / 180;
+  const ang = Object.fromEntries(a.ramos.map((r, i) => [r.id, ANG[i] ?? 0]));
+  const pt = (u, v) => ({ x: 50 + u / 2, y: 50 + v / 2, u, v });
+  const pos = { raiz: pt(0, 0) };
+  for (const r of a.ramos) {
+    const nos = a.nos.filter((n) => !n.elo && n.ramo[0] === r.id);
+    const meio = Math.min(...nos.map((n) => n.pos[0])) + 0.5;
+    const t = rad(ang[r.id]);
+    const dir = [Math.cos(t), Math.sin(t)];
+    const perp = [-Math.sin(t), Math.cos(t)];
+    for (const n of nos) {
+      const lat = (n.pos[0] - meio) * 2 * LADO * (ang[r.id] === -90 ? 1 : -1);
+      const R = RAIO[n.grau];
+      pos[n.id] = pt(dir[0] * R + perp[0] * lat, dir[1] * R + perp[1] * lat);
+    }
+  }
+  for (const n of a.nos.filter((x) => x.elo)) {
+    const [p, q] = n.ramo.map((r) => ang[r]);
+    let d = ((q - p + 540) % 360) - 180;
+    const m = rad(p + d / 2);
+    pos[n.id] = pt(Math.cos(m) * 76, Math.sin(m) * 76);
+  }
+  const arestas = [];
+  for (const n of a.nos) {
+    const de = n.requer.length ? [...new Set(n.requer.flat())] : ['raiz'];
+    // Ápice: liga só ao Grau IV (os outros requisitos ficam no texto) para o desenho não virar novelo.
+    const usar = n.grau === 5 && !n.elo ? de.filter((r) => a.nos.find((m) => m.id === r)?.grau === 4) : de;
+    for (const r of usar) arestas.push([r, n.id, n.requer.length > 1]);
+  }
+  const ramos = a.ramos.map((r) => { const t = rad(ang[r.id]); return { ...r, ...pt(Math.cos(t) * 19.5, Math.sin(t) * 19.5) }; });
+  const aneis = [1, 2, 3, 4, 5].map((g) => ({ g, r: RAIO[g] / 2 }));
+  return { pos, arestas, ramos, aneis };
+};
+
+const dados = {
+  estagio: f.estagio, pontos, tem, minha: minha.id, real, podeGravar, logado: Boolean(sessao),
+  arvores: arvores.map((a) => ({ id: a.id, nome: a.nome, papel: a.papel, raiz: a.raiz, ramos: a.ramos, nos: a.nos })),
+};
+---
+<Base title="Árvores" slug="arvores" aba="arvores" description="Uma página que desce: a Trilha da sua Classe de Mago, depois as Técnicas de Mana do 9º ao 2º Estágio e, por fim, o livro dos Conhecimentos.">
+  <div class="tr" data-arvores style={`--cc:${ativa.cor}`}>
+    <nav class="tr-indice" aria-label="Partes da página" data-indice>
+      <div class="tr-indice__in wrap">
+        <a href="#classe" data-ir="classe" aria-current="true"><span aria-hidden="true">樹</span><b>Classe</b><small>01</small></a>
+        <a href="#tecnicas" data-ir="tecnicas"><span aria-hidden="true">技</span><b>Técnicas</b><small>02</small></a>
+        <a href="#conhecimentos" data-ir="conhecimentos"><span aria-hidden="true">識</span><b>Conhecimentos</b><small>03</small></a>
+        <i class="tr-indice__fio" aria-hidden="true"></i>
+      </div>
+    </nav>
+
+    <section id="classe" class="tr-parte" data-parte="classe" aria-label="Trilha da Classe">
+    <header class="tr-hd wrap">
+      <div class="tr-hd__l">
+        <span class="eyebrow"><b>01 樹</b>Trilha da Classe</span>
+        <h1 class="tr-hd__t" data-titulo>{ativa.nome}</h1>
+        <p class="tr-hd__p" data-papel>{ativa.papel}</p>
+      </div>
+      <div class="tr-hd__r">
+        <button class="btn tr-planejar" type="button" data-planejar aria-pressed="false"><span class="tr-planejar__k" aria-hidden="true">策</span>Planejar árvore</button>
+      </div>
+    </header>
+
+    <div class="tr-corpo wrap">
+      <!-- dossiê: cartaz de papel -->
+      <aside class="tr-dos" aria-label="Dossiê do Marcado">
+        <div class="tr-dos__cartaz">
+          <p class="tr-dos__selo" aria-hidden="true">{real ? '本人' : '見本'}</p>
+          <p class="t-label">{real ? 'Dossiê do Marcado' : 'Dossiê de exemplo'}</p>
+          <p class="tr-dos__nome">{f.nome}<small>{f.sobrenome}</small></p>
+          <dl class="tr-dos__dl">
+            <div><dt>Classe</dt><dd>{f.classeMago}</dd></div>
+            <div><dt>Estágio</dt><dd>{f.estagio}º</dd></div>
+            <div><dt>Próximo ponto</dt><dd>{prox ? `${prox.estagio}º Estágio (+${prox.ganha})` : 'Todos ganhos'}</dd></div>
+          </dl>
+          <div class="tr-dos__pt">
+            <b data-livres>{livres}</b>
+            <span>{livres === 1 ? 'Ponto de Trilha livre' : 'Pontos de Trilha livres'}<small>de {pontos} ganhos</small></span>
+          </div>
+          {!real && <p class="tr-dos__aviso">Mago de Batalha no 6º Estágio, de exemplo. <a href="/api/auth/login?volta=/arvores/">Entre com o Discord</a> para ver os seus pontos.</p>}
+        </div>
+
+        <div class="tr-det" data-detalhe aria-live="polite">
+          <p class="tr-det__tag" data-det-tag>Raiz · Passiva</p>
+          <h2 class="tr-det__nome" data-det-nome>{ativa.raiz.nome}</h2>
+          <p class="tr-det__ramo" data-det-ramo>{ativa.nome}</p>
+          <p class="tr-det__txt" data-det-txt>{ativa.raiz.texto}</p>
+          <p class="tr-det__st" data-det-st data-st="tem">Todo mago da classe tem desde a criação.</p>
+          <div class="tr-det__acao" data-det-acao></div>
+        </div>
+
+        <div class="tr-plano" data-plano hidden>
+          <p class="t-label">Plano</p>
+          <ol data-plano-lista></ol>
+          <p class="tr-plano__resumo" data-plano-resumo></p>
+          <div class="tr-plano__btns">
+            <button class="btn btn--solid tr-sm" type="button" data-plano-ok>Gastar pontos</button>
+            <button class="btn tr-sm" type="button" data-plano-limpa>Limpar</button>
+          </div>
+          <p class="tr-plano__msg" data-plano-msg role="status"></p>
+        </div>
+
+        <details class="tr-regras">
+          <summary>Como a árvore funciona</summary>
+          <ul>
+            <li>A Raiz é grátis. Cada ramo abre com duas entradas de Grau I.</li>
+            {regras.graus.map((g) => <li><b>{g.nome}</b>: {g.custo} {g.custo === 1 ? 'ponto' : 'pontos'}, a partir do {g.estagioMin}º Estágio.</li>)}
+            <li><b>Elo</b>: {regras.elo.custo} pontos no {regras.elo.estagioMin}º Estágio; pede {regras.elo.requer}.</li>
+            <li>{regras.tetoDeAcrescimos}</li>
+            <li>{regras.redefinir.lancamentoV2} Depois disso, redefinir custa Cristais Prismáticos.</li>
+          </ul>
+        </details>
+      </aside>
+
+      <!-- palco -->
+      <section class="tr-palco" aria-label="Árvore" data-lenis-prevent>
+        {arvores.map((a) => {
+          const { pos, arestas, ramos, aneis } = geo(a);
+          return (
+            <div class="tr-arv" data-arvore={a.id} hidden={a.id !== ativa.id} style={`--cc:${a.cor}`}>
+              <div class="tr-arv__bg" aria-hidden="true"><img src={a.img} alt="" loading={a.id === ativa.id ? 'eager' : 'lazy'} /></div>
+              <span class="tr-arv__k" aria-hidden="true">{a.kanji}</span>
+              <div class="tr-campo">
+                <svg class="tr-linhas" viewBox="0 0 100 100" aria-hidden="true">
+                  <g class="tr-aneis">
+                    {aneis.map((n) => <circle cx="50" cy="50" r={n.r} class={n.g === 5 ? 'is-apice' : undefined} />)}
+                    <circle cx="50" cy="50" r="48.5" class="tr-runa" />
+                    <circle cx="50" cy="50" r="9.5" class="tr-runa tr-runa--in" />
+                  </g>
+                  {arestas.map(([de, para, alt]) => <line x1={pos[de].x} y1={pos[de].y} x2={pos[para].x} y2={pos[para].y} data-de={de} data-para={para} class={alt ? 'is-alt' : undefined} />)}
+                </svg>
+                {ramos.map((r) => <span class="tr-ramo" style={`left:${r.x}%;top:${r.y}%`}>{r.nome}</span>)}
+                <button class="tr-no tr-no--raiz" type="button" style={`left:${pos.raiz.x}%;top:${pos.raiz.y}%`} data-no="raiz" data-st="tem" aria-label={`${a.raiz.nome}, Raiz`}>
+                  <span class="tr-no__d"><span class="tr-no__k">{a.kanji}</span></span>
+                  <span class="tr-no__nome">{a.raiz.nome}</span>
+                </button>
+                {a.nos.map((n) => (
+                  <button class:list={['tr-no', `tr-no--g${n.grau}`, n.elo && 'tr-no--elo', n.estrela && 'tr-no--estrela', pos[n.id].y < 40 && 'tr-no--cima']} type="button" style={`left:${pos[n.id].x}%;top:${pos[n.id].y}%`} data-no={n.id} data-st="bloqueado" data-tipo={n.tipo} aria-label={`${n.nome}, ${n.elo ? 'Elo' : `${ROMANO[n.grau]}`}, ${TIPO[n.tipo]}`}>
+                    <span class="tr-no__d"><span class="tr-no__ic" aria-hidden="true"></span>{n.estrela && <span class="tr-no__estrela" title="Antiga Classe Avançada">★</span>}</span>
+                    <span class="tr-no__nome">{n.nome}</span>
+                  </button>
+                ))}
+                <div class="tr-dica" data-dica hidden aria-hidden="true"><p class="tr-dica__tag"></p><b class="tr-dica__n"></b><p class="tr-dica__t"></p><p class="tr-dica__s"></p></div>
+              </div>
+            </div>
+          );
+        })}
+        <ul class="tr-legenda" aria-label="Tipos de habilidade">
+          {Object.entries(TIPO).map(([k, v]) => <li data-tipo={k}><i aria-hidden="true"></i>{v}<small>{regras.tipos[k]}</small></li>)}
+        </ul>
+      </section>
+    </div>
+
+    <!-- abas: lombadas de volume -->
+    <nav class="tr-abas wrap" aria-label="Classes de Mago">
+      {arvores.map((a, i) => (
+        <a href={`/arvores/?classe=${a.id}`} class="tr-aba" data-aba={a.id} aria-current={a.id === ativa.id ? 'page' : undefined} style={`--cc:${a.cor}`}>
+          <span class="tr-aba__n">{String(i + 1).padStart(2, '0')}</span>
+          <span class="tr-aba__k" aria-hidden="true">{a.kanji}</span>
+          <span class="tr-aba__t">{curto(a.nome)}</span>
+          {a.id === minha.id && <span class="tr-aba__sua">{real ? 'Sua' : 'Exemplo'}</span>}
+        </a>
+      ))}
+    </nav>
+    </section>
+
+    <div class="tr-desce wrap" aria-hidden="true"><i></i><span>技</span></div>
+
+    <section id="tecnicas" class="tr-parte" data-parte="tecnicas" aria-labelledby="tecnicas-t" style="--cc:#ff3b2e">
+      <header class="tr-hd wrap">
+        <div class="tr-hd__l">
+          <span class="eyebrow"><b>02 技</b>Técnicas de Mana</span>
+          <h2 class="tr-hd__t tr-hd__t--2" id="tecnicas-t">O Leque do Despertar</h2>
+          <p class="tr-hd__p">O que a sua mana aprende fora do Grimório. O sol nasce da Respiração de Mana, cada anel é um Estágio e tudo dentro do seu anel fica aceso.</p>
+        </div>
+      </header>
+      <TecnicasLeque ficha={f} real={real} />
+    </section>
+
+    <div class="tr-desce wrap" aria-hidden="true"><i></i><span>識</span></div>
+
+    <section id="conhecimentos" class="tr-parte" data-parte="conhecimentos" aria-labelledby="conhecimentos-t" style="--cc:#ff3b2e">
+      <header class="tr-hd wrap">
+        <div class="tr-hd__l">
+          <span class="eyebrow"><b>03 識</b>Conhecimentos</span>
+          <h2 class="tr-hd__t tr-hd__t--2" id="conhecimentos-t">O Livro do Marcado</h2>
+          <p class="tr-hd__p">O que o personagem sabe fazer fora da magia. Seis vagas e um livro com tudo o que se pode aprender: vire os capítulos pelas fitas e veja por onde cada um chega.</p>
+        </div>
+      </header>
+      <ConhecimentosLivro ficha={f} real={real} />
+    </section>
+  </div>
+  <script is:inline type="application/json" id="av-dados" set:html={JSON.stringify(dados)}></script>
+</Base>
+
+<script>
+  import { bloqueio, estados, gastos } from '../lib/arvore-regras.js';
+
+  type No = { id: string; nome: string; texto: string; ramo: string[]; grau: number; elo?: boolean; custo: number; estagioMin: number; requer: string[][]; tipo: string; usos?: string; estrela?: boolean };
+  type Arv = { id: string; nome: string; papel: string; raiz: { nome: string; texto: string }; ramos: { id: string; nome: string }[]; nos: No[] };
+  const D = JSON.parse(document.getElementById('av-dados')!.textContent!) as { estagio: number; pontos: number; tem: string[]; minha: string; real: boolean; podeGravar: boolean; logado: boolean; arvores: Arv[] };
+  const raiz = document.querySelector<HTMLElement>('[data-arvores]')!;
+  const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = raiz) => r.querySelector<T>(s)!;
+  const ROMANO: Record<number, string> = { 1: 'Grau I', 2: 'Grau II', 3: 'Grau III', 4: 'Grau IV', 5: 'Ápice' };
+  const TIPO: Record<string, string> = { passiva: 'Passiva', ativa: 'Ativa', reacao: 'Reação', mundo: 'Mundo' };
+  const LOGIN = '/api/auth/login?volta=/arvores/';
+
+  let ativa = (raiz.querySelector('[data-arvore]:not([hidden])') as HTMLElement).dataset.arvore!;
+  let tem = [...D.tem];
+  let plano: string[] = [];
+  let planejando = false;
+  let sel = 'raiz';
+
+  const arv = () => D.arvores.find((a) => a.id === ativa)!;
+  const temNa = (a: Arv) => (a.id === D.minha ? tem : []);
+  const palco = () => $(`[data-arvore="${ativa}"]`);
+  const pts = (n: number) => `${n} ${n === 1 ? 'ponto' : 'pontos'}`;
+
+  function pinta() {
+    const a = arv();
+    const base = temNa(a);
+    const st = estados(a, D.pontos, D.estagio, [...base, ...plano]);
+    palco().querySelectorAll<HTMLElement>('.tr-no[data-no]').forEach((el) => {
+      const id = el.dataset.no!;
+      el.classList.toggle('is-sel', id === sel);
+      if (id === 'raiz') return;
+      el.dataset.st = base.includes(id) ? 'tem' : plano.includes(id) ? 'plano' : st[id];
+    });
+    palco().querySelectorAll<SVGLineElement>('line').forEach((l) => {
+      const de = l.dataset.de!, para = l.dataset.para!;
+      const ok = (x: string) => x === 'raiz' || base.includes(x) || plano.includes(x);
+      l.dataset.st = base.includes(para) && ok(de) ? 'tem' : plano.includes(para) && ok(de) ? 'plano' : '';
+    });
+    const mine = D.arvores.find((x) => x.id === D.minha)!;
+    $('[data-livres]').textContent = String(Math.max(0, D.pontos - gastos(mine, tem)));
+    detalhe();
+    planoUI();
+  }
+
+  function detalhe() {
+    const a = arv();
+    const acao = $('[data-det-acao]');
+    acao.innerHTML = '';
+    const set = (tag: string, nome: string, ramo: string, txt: string, st: string, stTxt: string) => {
+      $('[data-det-tag]').textContent = tag; $('[data-det-nome]').textContent = nome; $('[data-det-ramo]').textContent = ramo;
+      $('[data-det-txt]').textContent = txt; const s = $('[data-det-st]'); s.dataset.st = st; s.textContent = stTxt;
+    };
+    if (sel === 'raiz') { set('Raiz · Passiva · grátis', a.raiz.nome, a.nome, a.raiz.texto, 'tem', 'Todo mago da classe tem desde a criação.'); return; }
+    const n = a.nos.find((x) => x.id === sel)!;
+    const base = temNa(a);
+    const ramo = n.ramo.map((r) => a.ramos.find((x) => x.id === r)?.nome ?? r).join(' + ');
+    const tag = `${n.elo ? 'Elo' : ROMANO[n.grau]}${n.estrela ? ' ★' : ''} · ${TIPO[n.tipo]} · ${pts(n.custo)} · ${n.estagioMin}º Estágio`;
+    const txt = n.usos ? `${n.texto} (${n.usos})` : n.texto;
+    if (base.includes(n.id)) return set(tag, n.nome, ramo, txt, 'tem', 'Você tem esta habilidade.');
+    if (plano.includes(n.id)) {
+      set(tag, n.nome, ramo, txt, 'plano', 'No seu plano.');
+      acao.append(botao('Tirar do plano', () => { plano = plano.slice(0, plano.indexOf(n.id)); pinta(); }));
+      return;
+    }
+    const motivo = bloqueio(a, D.pontos, D.estagio, [...base, ...plano], n.id);
+    const propria = a.id === D.minha;
+    if (motivo) return set(tag, n.nome, ramo, txt, 'bloqueado', propria ? motivo : `${motivo} (contando o seu Estágio)`);
+    set(tag, n.nome, ramo, txt, 'livre', propria ? 'Disponível agora.' : 'Disponível para o seu Estágio, mas esta não é a sua classe.');
+    if (planejando) acao.append(botao('Pôr no plano', () => { plano.push(n.id); pinta(); }, true));
+    else if (propria) acao.append(botao(acaoTexto([n.id]), () => acaoGastar([n.id]), true));
+  }
+
+  const acaoTexto = (nos: string[]) => {
+    if (!D.logado) return 'Entrar para gastar';
+    if (!D.podeGravar) return 'Gastar pelo bot';
+    const c = nos.reduce((s, id) => s + (arv().nos.find((n) => n.id === id)?.custo ?? 0), 0);
+    return `Gastar ${pts(c)}`;
+  };
+  function acaoGastar(nos: string[]) {
+    if (!D.logado) { location.href = LOGIN; return; }
+    if (!D.podeGravar) { aviso('A árvore nova abre no bot junto com a versão 2. Até lá, monte o plano aqui e use /trilha no Discord.'); return; }
+    gastar(nos);
+  }
+
+  function botao(txt: string, fn: () => void, forte = false) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = `btn tr-sm${forte ? ' btn--solid' : ''}`; b.textContent = txt; b.addEventListener('click', fn);
+    return b;
+  }
+
+  function planoUI() {
+    const box = $('[data-plano]');
+    box.hidden = !planejando;
+    if (!planejando) return;
+    const a = arv();
+    const ol = $('[data-plano-lista]');
+    ol.innerHTML = '';
+    if (!plano.length) { const li = document.createElement('li'); li.className = 'is-vazio'; li.textContent = 'Toque nas habilidades disponíveis para montar o plano.'; ol.append(li); }
+    plano.forEach((id) => { const n = a.nos.find((x) => x.id === id)!; const li = document.createElement('li'); li.textContent = `${n.nome} · ${pts(n.custo)}`; ol.append(li); });
+    const livres = Math.max(0, D.pontos - gastos(a, temNa(a)));
+    const custo = gastos(a, plano);
+    $('[data-plano-resumo]').textContent = `${pts(custo)} de ${livres} livres`;
+    const ok = $<HTMLButtonElement>('[data-plano-ok]');
+    ok.hidden = a.id !== D.minha;
+    ok.disabled = !plano.length;
+    ok.textContent = acaoTexto(plano);
+  }
+
+  async function gastar(nos: string[]) {
+    aviso('Gravando na sua ficha...', 'plano');
+    try {
+      const r = await fetch('/api/arvore', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ nos }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { aviso(j.erro ?? 'Não deu para gravar agora.'); return; }
+      tem = j.nos; plano = [];
+      pinta();
+      aviso('Gravado. O bot já vê as habilidades novas.', 'tem');
+    } catch { aviso('Sem conexão. Tente de novo.'); }
+  }
+  function aviso(t: string, st = 'bloqueado') {
+    const s = $('[data-det-st]'); s.dataset.st = st; s.textContent = t;
+    if (planejando) $('[data-plano-msg]').textContent = t;
+  }
+
+  raiz.addEventListener('click', (e) => {
+    const el = (e.target as Element).closest<HTMLElement>('.tr-no[data-no]');
+    if (el) { sel = el.dataset.no!; if (planejando && el.dataset.st === 'livre' && !plano.includes(sel)) plano.push(sel); pinta(); dica(el); return; }
+    dica(null);
+    const pl = (e.target as Element).closest('[data-planejar]');
+    if (pl) { planejando = !planejando; plano = []; pl.setAttribute('aria-pressed', String(planejando)); raiz.classList.toggle('is-planejando', planejando); pinta(); }
+  });
+  $('[data-plano-limpa]').addEventListener('click', () => { plano = []; pinta(); });
+  $('[data-plano-ok]').addEventListener('click', () => acaoGastar(plano));
+
+  // troca de classe sem recarregar (a transição de página não entra aqui)
+  raiz.querySelectorAll<HTMLAnchorElement>('[data-aba]').forEach((ab) => ab.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    ativa = ab.dataset.aba!; sel = 'raiz'; plano = [];
+    const a = arv();
+    raiz.querySelectorAll<HTMLElement>('[data-arvore]').forEach((p) => (p.hidden = p.dataset.arvore !== ativa));
+    raiz.querySelectorAll('[data-aba]').forEach((x) => x.removeAttribute('aria-current'));
+    ab.setAttribute('aria-current', 'page');
+    raiz.style.setProperty('--cc', ab.style.getPropertyValue('--cc'));
+    $('[data-titulo]').textContent = a.nome;
+    $('[data-papel]').textContent = a.papel;
+    const p = document.querySelector<HTMLElement>(`[data-arvore="${ativa}"]`);
+    p?.querySelector('img')?.setAttribute('loading', 'eager');
+    p?.classList.remove('is-in'); void p?.offsetWidth; p?.classList.add('is-in');
+    try { history.replaceState(null, '', ab.href); } catch { /* sem histórico */ }
+    pinta();
+  }, true));
+
+  // dica ao passar o mouse: o nome e o que falta, sem precisar clicar
+  function dica(el: HTMLElement | null) {
+    const box = palco().querySelector<HTMLElement>('[data-dica]');
+    if (!box) return;
+    if (!el) { box.hidden = true; return; }
+    const a = arv();
+    const id = el.dataset.no!;
+    const q = (s: string) => box.querySelector<HTMLElement>(s)!;
+    let st = el.dataset.st ?? 'tem';
+    let stTxt = '';
+    if (id === 'raiz') {
+      q('.tr-dica__tag').textContent = 'Raiz · grátis'; q('.tr-dica__n').textContent = a.raiz.nome; q('.tr-dica__t').textContent = a.raiz.texto; stTxt = 'Todo mago da classe tem.';
+    } else {
+      const n = a.nos.find((x) => x.id === id)!;
+      q('.tr-dica__tag').textContent = `${n.elo ? 'Elo' : ROMANO[n.grau]} · ${TIPO[n.tipo]} · ${pts(n.custo)}`;
+      q('.tr-dica__n').textContent = n.nome;
+      q('.tr-dica__t').textContent = n.texto;
+      const base = temNa(a);
+      stTxt = st === 'tem' ? 'Você tem.' : st === 'plano' ? 'No seu plano.' : st === 'livre' ? (planejando ? 'Toque ou clique para pôr no plano.' : 'Disponível agora.') : (bloqueio(a, D.pontos, D.estagio, [...base, ...plano], id) ?? 'Bloqueada.');
+    }
+    const s = q('.tr-dica__s'); s.dataset.st = st; s.textContent = stTxt;
+    const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
+    box.style.left = x > 55 ? '' : `calc(${x}% + 34px)`;
+    box.style.right = x > 55 ? `calc(${100 - x}% + 34px)` : '';
+    box.style.top = y > 60 ? '' : `calc(${y}% - 20px)`;
+    box.style.bottom = y > 60 ? `calc(${100 - y}% - 20px)` : '';
+    box.hidden = false;
+  }
+  raiz.addEventListener('pointerover', (e) => { if ((e as PointerEvent).pointerType !== 'mouse') return; dica((e.target as Element).closest<HTMLElement>('.tr-no[data-no]')); });
+  raiz.addEventListener('pointerout', (e) => { const to = (e as PointerEvent).relatedTarget as Element | null; if (!to?.closest('.tr-no[data-no]')) dica(null); });
+  raiz.addEventListener('focusin', (e) => { const el = (e.target as Element).closest<HTMLElement>('.tr-no[data-no]'); if (el && el.matches(':focus-visible')) dica(el); });
+  raiz.addEventListener('focusout', (e) => { if (!(e as FocusEvent).relatedTarget) return; dica(null); });
+
+  // índice fixo: acende a parte que está na tela; ?arvore=tecnicas (link antigo) desce até as Técnicas
+  const partes = [...document.querySelectorAll<HTMLElement>('[data-parte]')];
+  const links = [...raiz.querySelectorAll<HTMLAnchorElement>('[data-ir]')];
+  const acende = (id: string) => links.forEach((l) => l.toggleAttribute('aria-current', l.dataset.ir === id));
+  const io = new IntersectionObserver((es) => {
+    const vis = es.filter((e) => e.isIntersecting).sort((x, y) => x.boundingClientRect.top - y.boundingClientRect.top)[0];
+    if (vis) acende((vis.target as HTMLElement).dataset.parte!);
+  }, { rootMargin: '-35% 0px -55% 0px' });
+  partes.forEach((p) => io.observe(p));
+  links.forEach((l) => l.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const alvo = document.getElementById(l.dataset.ir!);
+    if (!alvo) return;
+    acende(l.dataset.ir!);
+    const lenis = (window as any).__lenis;
+    if (lenis?.scrollTo) lenis.scrollTo(alvo, { offset: -110 }); else alvo.scrollIntoView({ behavior: 'smooth' });
+    try { history.replaceState(null, '', `#${l.dataset.ir}`); } catch { /* sem histórico */ }
+  }, true));
+  const pedido = new URLSearchParams(location.search).get('arvore') === 'tecnicas' ? 'tecnicas' : location.hash.slice(1);
+  if (['tecnicas', 'conhecimentos'].includes(pedido)) requestAnimationFrame(() => document.getElementById(pedido)?.scrollIntoView());
+
+  palco().classList.add('is-in');
+  // no celular a árvore rola de lado: começa centrada na Raiz
+  const pal = document.querySelector<HTMLElement>('#classe .tr-palco');
+  if (pal && pal.scrollWidth > pal.clientWidth) pal.scrollLeft = (pal.scrollWidth - pal.clientWidth) / 2;
+  pinta();
+</script>

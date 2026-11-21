@@ -49,6 +49,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-x: clip; /* clip não cria rolagem própria: o position: sticky volta a funcionar */
   text-rendering: optimizeLegibility;
 }
 img, svg, video, canvas { display: block; max-width: 100%; }

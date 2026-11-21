@@ -1,0 +1,59 @@
+---
+// Portal do Marcado na página inicial: uma página de mangá em que cada quadro é uma tela da conta.
+import Arrow from '../Arrow.astro';
+import Gem from '../Gem.astro';
+import { patches } from '../../data/patches.js';
+import { eventos } from '../../data/eventos.js';
+
+const ultimo = patches[0];
+const vivos = eventos.filter((e) => e.estado !== 'breve');
+const manchetes = [...ultimo.secoes.flatMap((s) => s.itens.map((i) => i.titulo.replace(/`/g, ''))), ...vivos.map((e) => e.nome)];
+const quadros = [
+  { id: 'ficha', href: '/ficha/', k: '魂', t: 'Sua ficha', d: 'O seu Marcado do jeito que o bot calcula: Estágio, atributos e o que falta para subir.', img: '/img/inicio/marcado.webp' },
+  { id: 'arvores', href: '/arvores/', k: '樹', t: 'A árvore', d: '24 habilidades por Classe de Mago. Planeje e gaste os seus Pontos de Trilha.', img: '/img/classes/capa.webp' },
+  { id: 'altar', href: '/altar/', k: '運', t: 'O Altar', d: 'Vestígios da temporada, com as chances e a garantia sempre à vista.', img: '/img/grimorios/demoniaco.webp' },
+  { id: 'eventos', href: '/eventos/', k: '祭', t: 'Eventos', d: `${vivos.length} valendo agora no servidor.`, img: '/img/criaturas/dragao-negro.webp' },
+];
+---
+<section class="ph" aria-labelledby="ph-t">
+  <div class="wrap ph__hd">
+    <span class="eyebrow" data-reveal><b>門</b>Portal do Marcado</span>
+    <h2 id="ph-t" class="t-h1" data-split>A sua alma, <em>fora do Discord</em>.</h2>
+    <p class="t-body" data-reveal>Entre com a mesma conta do servidor e o site vira a sua mesa: a ficha, a árvore, os giros e tudo o que está acontecendo em Diamond.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="ph__pagina" data-ph>
+      {quadros.map((q, i) => (
+        <a class={`ph__q ph__q--${i + 1}`} href={q.href} data-ph-q data-cursor="Abrir">
+          <span class="ph__img"><img src={q.img} alt="" loading="lazy" /></span>
+          <span class="ph__k" aria-hidden="true">{q.k}</span>
+          <span class="ph__txt">
+            <span class="ph__n t-label">0{i + 1}</span>
+            <b class="ph__t">{q.t}</b>
+            <span class="ph__d">{q.d}</span>
+            <span class="ph__go">Abrir <Arrow /></span>
+          </span>
+        </a>
+      ))}
+      <a class="ph__q ph__q--patch" href="/patch/" data-ph-q data-cursor="Ler">
+        <span class="ph__patch">
+          <span class="t-label">記 Patch de {ultimo.data}</span>
+          <b class="ph__t">{ultimo.titulo}</b>
+          <span class="ph__d">{ultimo.frase}</span>
+          <span class="ph__go">Ler as notas <Arrow /></span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <div class="marquee ph__faixa" aria-label="Novidades">
+    <div class="marquee__track">
+      {[0, 1].map((k) => (
+        <div class="marquee__item" aria-hidden={k ? 'true' : undefined}>
+          {manchetes.map((m) => <><span>{m}</span><Gem /></>)}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

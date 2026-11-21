@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Gem from '../components/Gem.astro';
+import { loginPronto } from '../lib/env.js';
+import { lerSessao } from '../lib/sessao.js';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+const erro = Astro.url.searchParams.get('erro');
+const pronto = loginPronto();
+const msgs = {
+  config: 'O login com Discord ainda está sendo ligado. Enquanto isso, a Ficha, as Árvores e o Altar mostram um exemplo.',
+  negado: 'Você cancelou no Discord. Nada foi compartilhado.',
+  estado: 'O pedido de login expirou. Tente de novo.',
+  discord: 'O Discord não respondeu agora. Tente de novo em instantes.',
+};
+const msg = erro ? (msgs[erro] ?? msgs.discord) : !pronto ? msgs.config : null;
+---
+<Base title="Entrar" slug="entrar" aba="entrar" description="Entre com a sua conta do Discord para ver a sua ficha, a sua árvore e os seus Cristais.">
+  <section class="en">
+    <div class="en__card">
+      <span class="en__k" aria-hidden="true">門</span>
+      <span class="en__gem"><Gem /></span>
+      {sessao ? (
+        <>
+          <h1>Você já entrou, <em>{sessao.nome}</em>.</h1>
+          <p>Sua conta do Discord está ligada a este navegador.</p>
+          <div class="en__btns">
+            <a class="btn btn--solid" href="/ficha/">Abrir a ficha<Icon name="seta" size={18} /></a>
+            <form method="post" action="/api/auth/sair"><button class="btn" type="submit"><Icon name="sair" size={18} />Sair</button></form>
+          </div>
+        </>
+      ) : (
+        <>
+          <h1>Entre com o <em>Discord</em>.</h1>
+          <p>Use a mesma conta do servidor. O portal pede só o seu nome e o seu avatar; não lê mensagens nem a lista de servidores.</p>
+          {msg && <p class="en__msg" role="status">{msg}</p>}
+          <div class="en__btns">
+            <a class="btn btn--solid" href="/api/auth/login" aria-disabled={pronto ? undefined : 'true'}><Icon name="discord" size={18} />Entrar com Discord</a>
+            <a class="btn" href="/ficha/">Ver a ficha de exemplo</a>
+          </div>
+          <ul class="en__lista">
+            <li><Icon name="check" size={16} />Sua ficha do bot, sempre igual ao /ficha</li>
+            <li><Icon name="check" size={16} />Gastar Pontos de Trilha na árvore</li>
+            <li><Icon name="check" size={16} />Giros do Altar e saldo de Cristais Prismáticos</li>
+          </ul>
+        </>
+      )}
+    </div>
+  </section>
+</Base>

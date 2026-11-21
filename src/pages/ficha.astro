@@ -1,0 +1,337 @@
+---
+// /ficha · Grimório Vivo: a ficha é o Grimório do Marcado aberto na mesa.
+// Esquerda: retrato, selo de cera do Estágio, nome e o estado do corpo.
+// Direita: fitas-marcador (Perfil, Poder, Feitiços, Corpo, Saber, História); cada troca vira a página.
+// --c é a cor do jogador. Os dados vêm do bot (fichasWeb) ou da ficha de exemplo.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Aviso from '../components/portal/Aviso.astro';
+import { lerSessao } from '../lib/sessao.js';
+import { carregarFicha, imagemUrl } from '../lib/ficha.js';
+import { classificacoes, romanos, slugify, estagios, ranks } from '../data/canon.js';
+import { arvorePorClasse, migrarIds } from '../data/arvores.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import '../styles/ficha-grimorio.css';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+const { estado, ficha: f, aviso } = await carregarFicha(sessao);
+Astro.response.headers.set('cache-control', 'private, no-store');
+
+const fmt = new Intl.NumberFormat('pt-BR');
+const exemplo = estado !== 'ok';
+const img = imagemUrl(f.imagem) ?? (exemplo ? '/img/ficha/exemplo.png' : null);
+const cor = /^#[0-9a-f]{6}$/i.test(f.cor ?? '') ? f.cor : '#ff3b2e';
+const brasao = fs.existsSync(path.join(process.cwd(), 'public/img/brasoes', `${slugify(f.familia)}.svg`)) ? `/img/brasoes/${slugify(f.familia)}.svg` : null;
+const arvore = arvorePorClasse(f.classeMago);
+const trilhaNos = arvore ? migrarIds(arvore, f.trilha.nos).map((id) => arvore.nos.find((n) => n.id === id)).filter(Boolean) : [];
+
+const NAIPE = { Clover: '♣', Spades: '♠', Heart: '♥', Diamond: '◆' };
+const naipe = NAIPE[f.origem] ?? '✦';
+const KANJI_N = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+const ROM = ['', 'I', 'II', 'III', 'IV'];
+const pct = (a, b) => Math.max(0, Math.min(100, b ? (a / b) * 100 : 0));
+const FOLIO = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+
+// ---------- Poder: o degrau atual circulado a pincel; nada de conta à vista
+const KF = { 'Força': '力', 'Resistência': '耐', 'Velocidade': '速' };
+const fisicos = f.fisicos.map((a) => ({
+  ...a, k: KF[a.nome] ?? '体', rotulo: classificacoes[a.indice]?.nome, noTeto: a.indice >= a.teto && a.indice < 7,
+  frase: a.nome === 'Velocidade' ? `Corre a ${classificacoes[a.indice]?.vel} km/h.` : a.nome === 'Força' ? `Quebra ${classificacoes[a.indice]?.forca.toLowerCase()}.` : `Aguenta ${classificacoes[a.indice]?.resistencia.toLowerCase()}.`,
+  extra: a.treino.precisa ? ` ${a.treino.feitos} de ${a.treino.precisa} treinos feitos para ${classificacoes[a.indice + 1]?.nome}.` : '',
+}));
+
+// ---------- Ascensão
+const prox = f.proximo;
+const estProx = prox ? estagios.find((e) => parseInt(e.n, 10) === prox.estagio) : null;
+const reqs = prox ? [
+  { nome: 'Pontos de Estágio', tem: f.pe, precisa: prox.pe },
+  prox.controle ? { nome: 'Controle', tem: f.controle, precisa: prox.controle, un: '%' } : null,
+  prox.cristais.branco ? { nome: 'Cristais Brancos', tem: f.moedas.cristais.branco, precisa: prox.cristais.branco } : null,
+  prox.cristais.negro ? { nome: 'Cristais Negros', tem: f.moedas.cristais.negro, precisa: prox.cristais.negro } : null,
+  prox.cristais.dourado ? { nome: 'Cristais Dourados', tem: f.moedas.cristais.dourado, precisa: prox.cristais.dourado } : null,
+].filter(Boolean) : [];
+const pronto = prox && reqs.every((r) => r.tem >= r.precisa);
+const caminhos = [];
+for (const a of f.fisicos) if (a.treino.precisa && a.indice < a.teto) caminhos.push({ t: `Treino de ${a.nome}`, d: `${a.treino.feitos} de ${a.treino.precisa}. Subir dá 1 PE.`, href: '/atributos/' });
+if (prox?.controle && f.controle < prox.controle) caminhos.push({ t: 'Treino de Controle', d: '+1% por treino. A cada 10%, 1 PE.', href: '/mana/' });
+const rankCristal = ranks.filter((r) => r.cristais && r.cristais !== '—');
+if (prox && prox.cristais.branco > f.moedas.cristais.branco) caminhos.push({ t: 'Missões de Rank C ou B', d: rankCristal.filter((r) => /Branco/.test(r.cristais)).map((r) => `Rank ${r.r}: ${r.cristais}`).join(' · '), href: '/missoes/' });
+if (prox && prox.cristais.negro > f.moedas.cristais.negro) caminhos.push({ t: 'Missões de Rank A', d: 'Cada Rank A paga 1 Cristal Negro.', href: '/missoes/' });
+
+// nota do Conselho na margem: o que mais importa agora
+const travados = fisicos.filter((a) => a.noTeto).map((a) => a.nome);
+const juntar = (xs) => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} e ${xs.at(-1)}` : xs[0];
+const nota = travados.length && estProx
+  ? `${juntar(travados)} já ${travados.length > 1 ? 'batem' : 'bate'} no teto do ${f.estagio}º Estágio. Só o ${prox.estagio}º libera ${estProx.teto}.`
+  : pronto ? `Tudo pronto para o ${prox.estagio}º Estágio. Peça a Ascensão no Discord.`
+  : prox ? `Faltam ${reqs.filter((r) => r.tem < r.precisa).map((r) => `${r.precisa - r.tem}${r.un ?? ''} de ${r.nome}`).join(' e ')} para o ${prox.estagio}º Estágio.`
+  : 'No 1º Estágio. O topo do caminho.';
+
+const fer = f.ferimentos ?? { pior: 0, desnutrido: false, casas: [1, 1, 1, 2, 2, 3, 4].map((grau) => ({ grau, ocupada: false })) };
+const ferTxt = fer.pior ? `${ROM[fer.pior]} · ${['', 'Leve', 'Moderado', 'Grave', 'Crítico'][fer.pior]}` : 'Ileso';
+const brancas = f.feiticosTotal ? Math.max(0, f.feiticosTotal - f.feiticos.length) : 0;
+const TIPO_K = { Ataque: '攻', Defesa: '守', Suporte: '援', Cura: '癒', Controle: '縛', Movimento: '駆' };
+const usaAnti = f.moedas.antimeritos > f.moedas.meritos;
+const semTexto = 'Ainda não escrita. Escreva na aba Pessoal da /ficha no Discord.';
+
+const partes = [
+  { id: 'perfil', k: '籍', nome: 'Perfil' },
+  { id: 'poder', k: '力', nome: 'Poder' },
+  { id: 'feiticos', k: '書', nome: 'Feitiços' },
+  { id: 'corpo', k: '体', nome: 'Corpo' },
+  { id: 'saber', k: '知', nome: 'Saber' },
+  { id: 'historia', k: '史', nome: 'História' },
+];
+const inicial = 'poder';
+const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t: de === 8 ? classificacoes[i].nome : romanos[i], foi: i <= atual, agora: i === atual, teto: teto && i === atual }));
+---
+<Base title="Ficha" slug="ficha" aba="ficha" description="A ficha do seu Marcado como um Grimório aberto: retrato, Poder, feitiços, corpo, saber e história.">
+  <div class="gv" style={`--c:${cor}`} data-gv>
+    <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.currentScript.parentElement.classList.add('is-abre');</script>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="gv-pincel" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="9" /><feDisplacementMap in="SourceGraphic" scale="16" /></filter>
+      <filter id="gv-fino"><feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="2" seed="2" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
+      <filter id="gv-cera" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="3" /><feDisplacementMap in="SourceGraphic" scale="10" /></filter>
+    </svg>
+    <canvas class="gv-motes" aria-hidden="true" data-motes></canvas>
+    <Aviso estado={exemplo ? estado : null} aviso={aviso} logado={Boolean(sessao)} />
+
+    <div class="gv-livro" data-livro>
+      <!-- página esquerda: o retrato -->
+      <article class="gv-pag gv-esq" aria-label={`Retrato de ${f.nome}`}>
+        <p class="gv-num gv-mono"><span>{f.numero ? `Ficha nº ${String(f.numero).padStart(4, '0')}` : 'Prévia'}</span><span>{f.numero ? 'Aprovada pelo Conselho' : 'Aguardando o Conselho'}</span></p>
+        <div class="gv-retrato">
+          <span class="gv-moldura" aria-hidden="true"></span>
+          <span class="gv-circ" aria-hidden="true"></span>
+          <span class="gv-ret" aria-hidden="true"></span>
+          {img ? <img src={img} alt={`Imagem de ${f.nome}`} /> : <span class="gv-sem gv-mono">Sem imagem</span>}
+          <div class="gv-cera" aria-label={`${f.estagio}º Estágio`}><b>{KANJI_N[f.estagio]}</b><span>ESTÁGIO</span></div>
+        </div>
+        <h1 class="gv-nome">{f.nome}</h1>
+        {f.sobrenome && <p class="gv-sob">{f.sobrenome}</p>}
+        {f.epiteto && <p class="gv-ep">{f.epiteto}</p>}
+        <div class="gv-assin">
+          <span>{brasao && <img src={brasao} alt="" />}{f.familia} · {naipe} {f.origem ?? 'outra terra'}</span>
+          <span>{f.classeMago}</span>
+          <span>{f.racasHibrido ? `Híbrido · ${f.racasHibrido.join(' e ')}` : f.raca}</span>
+        </div>
+        <div class="gv-vitais">
+          <div><span class="gv-mono">Mana</span><b>{fmt.format(f.mana.atual)} / {fmt.format(f.mana.max)}</b><span class="gv-mbar" style={`--p:${pct(f.mana.atual, f.mana.max)}%`}></span></div>
+          <div><span class="gv-mono">Ferimentos</span><b class="is-rom">{ferTxt}{fer.desnutrido && ' · Desnutrido'}</b></div>
+          <p class="gv-margem"><b>NOTA DO CONSELHO</b>{nota}</p>
+        </div>
+      </article>
+
+      <!-- página direita: as fitas -->
+      <article class="gv-pag gv-dir" aria-label="Partes da ficha">
+        <div class="gv-fitas" role="tablist" aria-label="Marcadores do Grimório">
+          {partes.map((p, i) => (
+            <button class="gv-fita" type="button" role="tab" id={`gv-tab-${p.id}`} aria-controls={`gv-${p.id}`} aria-selected={String(p.id === inicial)} tabindex={p.id === inicial ? 0 : -1} style={`--i:${i}`} data-tab={p.id} data-rotulo={`Fólio ${FOLIO[i]} · ${p.nome}`}>
+              <i aria-hidden="true">{p.k}</i><small>{p.nome}</small>
+            </button>
+          ))}
+        </div>
+        <p class="gv-num gv-mono"><span data-folio>Fólio II · Poder</span></p>
+
+        <!-- I · perfil -->
+        <section class="gv-sec" id="gv-perfil" role="tabpanel" aria-labelledby="gv-tab-perfil" hidden>
+          <h2 class="gv-titulo">Registro</h2>
+          <p class="gv-sub">O que o Conselho Mágico registrou ao aprovar a ficha.</p>
+          <dl class="gv-dl">
+            <dt>Raça</dt><dd>{f.racasHibrido ? `Híbrido · ${f.racasHibrido.join(' e ')}` : f.raca}</dd>
+            <dt>Família</dt><dd>{f.familia}</dd>
+            <dt>Vida passada</dt><dd>{naipe} {f.origem ?? 'Outra terra'}</dd>
+            <dt>Classe social</dt><dd>{f.classeSocial} · {f.regiao}</dd>
+            <dt>Classe</dt><dd>{f.classeMago}</dd>
+            <dt>{f.milagres.length > 1 ? 'Milagres' : 'Milagre'}</dt><dd class:list={[f.milagres.length && 'is-c']}>{f.milagres.length ? f.milagres.join(' · ') : 'Nenhum ainda'}</dd>
+            <dt>Patente</dt><dd>{f.patente ?? 'Sem patente'}</dd>
+            <dt>Profissão</dt><dd>{f.profissao ?? 'Nenhuma ainda'}</dd>
+          </dl>
+          <p class="gv-h5">Bolsa{f.riqueza && ` · ${f.riqueza}`}</p>
+          <ul class="gv-bolsa">
+            <li><b class="is-c">{usaAnti ? f.moedas.antimeritos : f.moedas.meritos}</b>{usaAnti ? 'Antiméritos' : 'Méritos'}</li>
+            <li><b class="is-ouro">{fmt.format(f.moedas.yuls)}</b>Yuls</li>
+            <li><b>{f.moedas.cristais.branco}</b>Cristais Brancos</li>
+            {f.moedas.cristais.negro > 0 && <li><b>{f.moedas.cristais.negro}</b>Cristais Negros</li>}
+            {f.moedas.cristais.dourado > 0 && <li><b>{f.moedas.cristais.dourado}</b>Cristais Dourados</li>}
+          </ul>
+          <a class="gv-link" href="/cristais/">Cristais Prismáticos <Icon name="seta" size={13} /></a>
+        </section>
+
+        <!-- II · poder -->
+        <section class="gv-sec is-in" id="gv-poder" role="tabpanel" aria-labelledby="gv-tab-poder">
+          <h2 class="gv-titulo">Poder</h2>
+          <p class="gv-sub">Onde o corpo e a magia de {f.nome} estão hoje. O círculo marca o degrau atual.</p>
+          {fisicos.map((a) => (
+            <div class="gv-linha">
+              <i aria-hidden="true">{a.k}</i>
+              <header><h3>{a.nome}</h3><span class="gv-mono">{a.rotulo}</span></header>
+              <ol class="gv-escada" aria-label={`${a.nome}: ${a.rotulo}, degrau ${a.indice + 1} de 8`}>
+                {escada(0, 8, a.indice, a.noTeto).map((d) => <li class:list={[d.foi && 'is-foi', d.teto && 'is-teto']}>{d.t}{d.agora && <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="50" cy="20" rx="48" ry="17" pathLength="200" /></svg>}</li>)}
+              </ol>
+              <p>{a.frase}{a.extra}</p>
+            </div>
+          ))}
+          <div class="gv-linha">
+            <i aria-hidden="true">魔</i>
+            <header><h3>Poder Mágico</h3><span class="gv-mono">{romanos[f.poder - 1]} de VI</span></header>
+            <ol class="gv-escada" aria-label={`Poder Mágico ${f.poder} de 6`}>{escada(0, 6, f.poder - 1, false).map((d) => <li class:list={[d.foi && 'is-foi']}>{d.t}{d.agora && <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="50" cy="20" rx="48" ry="17" pathLength="200" /></svg>}</li>)}</ol>
+            <p>O peso de cada feitiço que você lança.</p>
+          </div>
+          <div class="gv-linha">
+            <i aria-hidden="true">源</i>
+            <header><h3>Reserva Mágica</h3><span class="gv-mono">{romanos[f.reserva - 1]} de X</span></header>
+            <ol class="gv-escada" aria-label={`Reserva Mágica ${f.reserva} de 10`}>{escada(0, 10, f.reserva - 1, false).map((d) => <li class:list={[d.foi && 'is-foi']}>{d.t}{d.agora && <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="50" cy="20" rx="48" ry="17" pathLength="200" /></svg>}</li>)}</ol>
+            <p>{fmt.format(f.mana.max)} de Mana no tanque.</p>
+          </div>
+          <div class="gv-linha">
+            <i aria-hidden="true">御</i>
+            <header><h3>Controle</h3><span class="gv-mono">{f.controle}%</span></header>
+            <span class="gv-termo" style={`--p:${f.controle}%`}><span></span></span>
+            <p>Mais Controle, feitiço mais barato.</p>
+          </div>
+          <div class="gv-asc">
+            <span class="gv-k" aria-hidden="true">{prox ? KANJI_N[prox.estagio] : '一'}</span>
+            <b>{pronto ? `Pronto para o ${prox.estagio}º Estágio` : prox ? `Rumo ao ${prox.estagio}º Estágio` : 'No 1º Estágio'}</b>
+            <p>{estProx ? `Ao subir: ${estProx.ganhos.replace(/;/g, ',')}. Teto ${estProx.teto}.` : 'O topo do caminho.'}</p>
+            {reqs.length > 0 && <div class="gv-bars">{reqs.map((r) => <div class:list={[r.tem >= r.precisa && 'is-ok']}>{r.nome} · {r.tem}{r.un ?? ''}/{r.precisa}{r.un ?? ''}<i style={`--p:${pct(r.tem, r.precisa)}%`}></i></div>)}</div>}
+            {caminhos.length > 0 && !pronto && <ul class="gv-como">{caminhos.slice(0, 3).map((c) => <li><a href={c.href}><b>{c.t}</b><small>{c.d}</small></a></li>)}</ul>}
+          </div>
+        </section>
+
+        <!-- III · feitiços -->
+        <section class="gv-sec" id="gv-feiticos" role="tabpanel" aria-labelledby="gv-tab-feiticos" hidden>
+          <h2 class="gv-titulo">{f.magia}</h2>
+          <p class="gv-sub">Grimório {f.grimorio}{f.magiaRaridade && `, raridade ${f.magiaRaridade}`}. {f.feiticosTotal ? `${f.feiticos.length} de ${f.feiticosTotal} páginas escritas.` : `${f.feiticos.length} páginas escritas.`}</p>
+          <ul class="gv-fts">
+            {f.feiticos.map((x) => {
+              const fi = imagemUrl(x.imagem);
+              return (
+                <li class="gv-ft">
+                  <div class="gv-ft__il">{fi ? <img src={fi} alt="" loading="lazy" /> : <span aria-hidden="true">{TIPO_K[x.tipo] ?? '術'}</span>}</div>
+                  <span class="gv-mono">{[x.tipo, x.estagio ? `${x.estagio}º Estágio` : null].filter(Boolean).join(' · ')}</span>
+                  <h4>{x.nome}</h4>
+                </li>
+              );
+            })}
+            {Array.from({ length: brancas }, () => <li class="gv-ft is-branca"><b>Página em branco</b><span class="gv-mono">ainda não escrita</span></li>)}
+          </ul>
+        </section>
+
+        <!-- IV · corpo -->
+        <section class="gv-sec" id="gv-corpo" role="tabpanel" aria-labelledby="gv-tab-corpo" hidden>
+          <h2 class="gv-titulo">Corpo e Mana</h2>
+          <p class="gv-sub">Como {f.nome} chega à próxima cena.</p>
+          <p class="gv-h5">Mana</p>
+          <p class="gv-grande">{fmt.format(f.mana.atual)} <span>de {fmt.format(f.mana.max)}</span></p>
+          <span class="gv-termo" style={`--p:${pct(f.mana.atual, f.mana.max)}%;height:14px`}><span style="background:var(--c)"></span></span>
+          <p class="gv-h5" style="margin-top:28px">Ferimentos · {ferTxt}{fer.desnutrido && ' · Desnutrido'}</p>
+          <ol class="gv-fer">{fer.casas.map((c, i) => <li class:list={[c.ocupada && 'is-on', c.fome && 'is-fome', i > 0 && fer.casas[i - 1].grau !== c.grau && 'is-grupo']}>{ROM[c.grau]}</li>)}</ol>
+          <p class="gv-nota">Encheu uma faixa, o ferimento sobe de Grau.</p>
+          {f.treinosLivres && <>
+            <p class="gv-h5" style="margin-top:28px">Treinos livres da semana</p>
+            <dl class="gv-dl"><dt>Físico</dt><dd>{f.treinosLivres.fisico.join(' de ')}</dd><dt>Mágico</dt><dd>{f.treinosLivres.magico.join(' de ')}</dd><dt>Controle</dt><dd>{f.treinosLivres.controle.join(' de ')}</dd><dt>Técnica</dt><dd>{f.treinosLivres.tecnica.join(' de ')}</dd></dl>
+          </>}
+        </section>
+
+        <!-- V · saber -->
+        <section class="gv-sec" id="gv-saber" role="tabpanel" aria-labelledby="gv-tab-saber" hidden>
+          <h2 class="gv-titulo">Saber</h2>
+          <p class="gv-sub">O que {f.nome} aprendeu, despertou e domina.</p>
+          <p class="gv-h5">Conhecimentos · {f.conhecimentos.length} de 6</p>
+          <ul class="gv-tags">{f.conhecimentos.map((c) => <li>{c}</li>)}{Array.from({ length: Math.max(0, 6 - f.conhecimentos.length) }, () => <li class="is-vaga">vaga</li>)}</ul>
+          <p class="gv-h5">Traços · {f.tracos.length} de 3</p>
+          <ul class="gv-tags">{f.tracos.map((c) => <li>{c}</li>)}{Array.from({ length: Math.max(0, 3 - f.tracos.length) }, () => <li class="is-vaga">vaga</li>)}</ul>
+          <p class="gv-h5">Técnicas de Mana</p>
+          <ul class="gv-tags">{f.tecnicas.length ? f.tecnicas.map((c) => <li>{c}</li>) : <li class="is-vaga">Nenhuma ainda</li>}</ul>
+          <p class="gv-h5">Trilha · {f.trilha.livres} {f.trilha.livres === 1 ? 'ponto livre' : 'pontos livres'}</p>
+          <ul class="gv-tags">{trilhaNos.length ? trilhaNos.map((n) => <li>{n.nome}</li>) : <li class="is-vaga">Nenhuma habilidade ainda</li>}</ul>
+          <a class="gv-link" href="/arvores/">Abrir a árvore <Icon name="seta" size={13} /></a>
+        </section>
+
+        <!-- VI · história -->
+        <section class="gv-sec" id="gv-historia" role="tabpanel" aria-labelledby="gv-tab-historia" hidden>
+          <h2 class="gv-titulo">História</h2>
+          <p class="gv-sub">Escrita pelo jogador e aprovada pela Staff.</p>
+          <div class="gv-prosa">
+            <h4>Vida passada</h4><p>{f.historia.vidaPassada || semTexto}</p>
+            <h4>O despertar</h4><p>{f.historia.renascimento || semTexto}</p>
+            <h4>Quem é</h4><p>{f.historia.personalidade || semTexto}</p>
+          </div>
+        </section>
+      </article>
+      <div class="gv-folha" aria-hidden="true" data-folha></div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>('[data-gv]');
+  if (raiz) {
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tabs = Array.from(raiz.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const folio = raiz.querySelector<HTMLElement>('p [data-folio]')!;
+    const folha = raiz.querySelector<HTMLElement>('[data-folha]')!;
+    const ids = tabs.map((t) => t.dataset.tab!);
+    let atual = 'poder';
+
+    const mostra = (id: string, animar = true, foco = false) => {
+      if (id === atual && animar) return;
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        if (on) { folio.textContent = t.dataset.rotulo ?? ''; if (foco) t.focus(); }
+      });
+      const troca = () => {
+        raiz.querySelectorAll<HTMLElement>('.gv-sec').forEach((s) => {
+          const on = s.id === `gv-${id}`;
+          s.hidden = !on;
+          s.classList.remove('is-tinta', 'is-in');
+          if (on) { void s.offsetWidth; s.classList.add('is-in'); if (animar && !reduz) s.classList.add('is-tinta'); }
+        });
+      };
+      atual = id;
+      if (animar && !reduz) {
+        folha.classList.remove('is-vira'); void folha.offsetWidth; folha.classList.add('is-vira');
+        setTimeout(troca, 330);
+      } else troca();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => { mostra(t.dataset.tab!); try { history.replaceState(null, '', `#${t.dataset.tab}`); } catch { /* sem histórico */ } });
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+        if (d) { e.preventDefault(); mostra(ids[(i + d + ids.length) % ids.length], true, true); }
+      });
+    });
+    const h = location.hash.slice(1);
+    if (ids.includes(h) && h !== 'poder') mostra(h, false);
+
+    // partículas de mana subindo do Grimório, na cor do jogador
+    const cv = raiz.querySelector<HTMLCanvasElement>('[data-motes]');
+    const cx = cv?.getContext('2d');
+    if (cv && cx && !reduz) {
+      const cor = getComputedStyle(raiz).getPropertyValue('--c').trim() || '#ff3b2e';
+      const rgb = /^#([0-9a-f]{6})$/i.test(cor) ? [0, 2, 4].map((k) => parseInt(cor.slice(1 + k, 3 + k), 16)).join(',') : '255,59,46';
+      let W = 0, H = 0;
+      const tam = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+      tam(); addEventListener('resize', tam);
+      const ps = Array.from({ length: 40 }, () => ({ x: Math.random(), y: Math.random(), v: 0.0006 + Math.random() * 0.0016, r: 0.6 + Math.random() * 2, f: Math.random() * 6 }));
+      let vivo = true;
+      document.addEventListener('visibilitychange', () => { vivo = !document.hidden; if (vivo) requestAnimationFrame(loop); });
+      const loop = (t: number) => {
+        if (!vivo || !document.body.contains(cv)) return;
+        cx.clearRect(0, 0, W, H);
+        for (const p of ps) {
+          p.y -= p.v; if (p.y < -0.02) { p.y = 1.02; p.x = Math.random(); }
+          cx.fillStyle = `rgba(${rgb},${0.22 + 0.33 * Math.sin(t / 700 + p.f) ** 2})`;
+          cx.beginPath(); cx.arc((p.x + Math.sin(t / 1800 + p.f) * 0.01) * W, p.y * H, p.r, 0, 7); cx.fill();
+        }
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    }
+  }
+</script>

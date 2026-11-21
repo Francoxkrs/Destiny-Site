@@ -1,0 +1,555 @@
+{
+ "versao": 2,
+ "classe": "Mago do Caos",
+ "slug": "caos",
+ "papel": "Potência bruta e instável",
+ "raiz": {
+  "id": "caos.raiz",
+  "nome": "Mana Indomável",
+  "texto": "+1 Acréscimo em todos os feitiços, que custam 10% a mais."
+ },
+ "ramos": [
+  {
+   "id": "explosao",
+   "nome": "Explosão",
+   "tema": "Dano que se espalha.",
+   "estrela": "caos.explosao.arauto-do-caos"
+  },
+  {
+   "id": "entropia",
+   "nome": "Entropia",
+   "tema": "Desfazer a magia dos outros."
+  },
+  {
+   "id": "preco",
+   "nome": "Preço",
+   "tema": "Pagar com o corpo pelo poder."
+  }
+ ],
+ "nos": [
+  {
+   "id": "caos.explosao.pavio-curto",
+   "nome": "Pavio Curto",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "No fim, o feitiço explode numa área com um quarto do alcance do seu Estágio.",
+   "legado": "Explosão/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "caos.explosao.estilhaco",
+   "nome": "Estilhaço",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "A explosão do Pavio Curto deixa o chão em brasas: quem fica nela no próximo turno leva Ferimento I.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "caos.explosao.reacao-em-cadeia",
+   "nome": "Reação em Cadeia",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "caos.explosao.pavio-curto"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Ao derrubar um alvo, o feitiço salta para outro.",
+   "legado": "Explosão/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "caos.explosao.dinamitador",
+   "nome": "Dinamitador",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "caos.explosao.estilhaco"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Na Mineração, abre uma jazida sem gastar Jornada, 1 vez por ciclo, e a jazida rende 1 grau acima; 10% de chance de desabar.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "caos.explosao.detonacao-remota",
+   "nome": "Detonação Remota",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "caos.explosao.reacao-em-cadeia"
+    ],
+    [
+     "caos.explosao.dinamitador"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Escolhe o momento da explosão: o feitiço fica parado no ar até 2 turnos.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "caos.explosao.onda-de-choque",
+   "nome": "Onda de Choque",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "caos.explosao.detonacao-remota"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Quem está na área da explosão é empurrado e perde o movimento no próximo turno.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "caos.explosao.arauto-do-caos",
+   "nome": "Arauto do Caos",
+   "ramo": [
+    "explosao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "caos.explosao.onda-de-choque",
+     "caos.explosao.reacao-em-cadeia",
+     "caos.explosao.dinamitador"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma vez por cena, lança um feitiço como se estivesse um Estágio acima, pagando o dobro.",
+   "estrela": true,
+   "legado": "Explosão/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "caos.entropia.ruido",
+   "nome": "Ruído",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Feitiços inimigos no seu alcance custam 10% a mais.",
+   "legado": "Entropia/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "caos.entropia.interferencia",
+   "nome": "Interferência",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Percepção de Mana dos inimigos não funciona no seu alcance.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "caos.entropia.desfazer",
+   "nome": "Desfazer",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "caos.entropia.ruido"
+    ]
+   ],
+   "tipo": "reacao",
+   "texto": "Ao colidir com um feitiço inimigo, faz ele valer como o de um Estágio abaixo.",
+   "legado": "Entropia/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "caos.entropia.disco-bruto",
+   "nome": "Disco Bruto",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "caos.entropia.interferencia"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Engasta e usa Discos Brutos e Ilegais com metade da Instabilidade.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "caos.entropia.colapso",
+   "nome": "Colapso",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "caos.entropia.desfazer"
+    ],
+    [
+     "caos.entropia.disco-bruto"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Um feitiço sustentado inimigo no seu alcance cai.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "caos.entropia.estatica",
+   "nome": "Estática",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "caos.entropia.colapso"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Quem lança feitiço a até 5 m de você perde 5% de Mana por feitiço.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "caos.entropia.caos-absoluto",
+   "nome": "Caos Absoluto",
+   "ramo": [
+    "entropia"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "caos.entropia.estatica",
+     "caos.entropia.desfazer",
+     "caos.entropia.disco-bruto"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma vez por cena, todos os feitiços na área perdem 1 Acréscimo, e os seus ganham 1.",
+   "legado": "Entropia/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "caos.preco.pagar-com-sangue",
+   "nome": "Pagar com Sangue",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "usos": "1 vez por turno",
+   "texto": "Troca o custo de um feitiço por um Ferimento I.",
+   "legado": "Preço/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "caos.preco.dor-util",
+   "nome": "Dor Útil",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Com Ferimento II ou pior, seus feitiços custam 10% menos.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "caos.preco.contrato",
+   "nome": "Contrato",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "caos.preco.pagar-com-sangue"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Aceita um Ferimento II para que o feitiço valha como o de um Estágio acima.",
+   "legado": "Preço/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "caos.preco.pacto-de-risco",
+   "nome": "Pacto de Risco",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "caos.preco.dor-util"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "1 vez por ciclo, aposta Yuls numa missão: se o grupo concluir, ganha o dobro; se falhar, perde tudo.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "caos.preco.sangue-frio",
+   "nome": "Sangue Frio",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "caos.preco.contrato"
+    ],
+    [
+     "caos.preco.pacto-de-risco"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Ferimentos que você causou em si mesmo não tiram Acréscimos.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "caos.preco.limiar",
+   "nome": "Limiar",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "caos.preco.sangue-frio"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Com Ferimento III, o próximo feitiço ganha +1 Acréscimo.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "caos.preco.sem-limite",
+   "nome": "Sem Limite",
+   "ramo": [
+    "preco"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "caos.preco.limiar",
+     "caos.preco.contrato",
+     "caos.preco.pacto-de-risco"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "No turno em que recebe Ferimento III, o próximo feitiço não custa Mana.",
+   "legado": "Preço/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "caos.elo.implosao",
+   "nome": "Implosão",
+   "ramo": [
+    "explosao",
+    "entropia"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "caos.explosao.detonacao-remota",
+     "caos.entropia.colapso"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "A explosão do Pavio Curto faz todos os feitiços na área valerem como de um Estágio abaixo.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "caos.elo.devorar",
+   "nome": "Devorar",
+   "ramo": [
+    "entropia",
+    "preco"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "caos.entropia.colapso",
+     "caos.preco.sangue-frio"
+    ]
+   ],
+   "tipo": "reacao",
+   "usos": "1 vez por cena",
+   "texto": "Ao desfazer um feitiço, troca 1 casa de Ferimento I sua pela Mana dele.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "caos.elo.martir",
+   "nome": "Mártir",
+   "ramo": [
+    "explosao",
+    "preco"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "caos.explosao.detonacao-remota",
+     "caos.preco.sangue-frio"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Aceita um Ferimento III para que a explosão atinja o alcance inteiro do seu Estágio.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

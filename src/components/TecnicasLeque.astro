@@ -1,0 +1,285 @@
+---
+/**
+ * Árvore das Técnicas de Mana em forma de leque ("Leque do Despertar", escolhido pelo Silas em 17/11/2026).
+ * Um sol nasce da Respiração de Mana na base; os quatro galhos saem como raios e cada anel é um Estágio.
+ * Tudo dentro do anel do Estágio do Marcado fica aceso em vermelho.
+ * Só "requer" (requerTecnica no bot) trava de verdade: linha vermelha com cadeado. O resto é tracejado.
+ * Só mostra e explica: quem registra os treinos é o bot.
+ */
+import { tecnicasArvore as T, grupos, regrasTecnicas } from '../data/tecnicas-arvore.js';
+
+interface Props { ficha: any; real: boolean }
+const { ficha: f, real } = Astro.props;
+
+/* ---------- estado de cada técnica (as mesmas regras do bot) ---------- */
+const sabe = new Set<string>(f.tecnicas ?? []);
+type Tec = (typeof T)[number];
+const falta = (t: Tec) => {
+  if (sabe.has(t.nome)) return [];
+  const x: string[] = [];
+  if (f.estagio > t.estagio) x.push(`${t.estagio}º Estágio`);
+  if (f.controle < t.controle) x.push(`Controle ${t.controle}%`);
+  if (t.requer && !sabe.has(t.requer)) x.push(t.requer);
+  if (t.social && !t.social.includes(f.classeSocial)) x.push('Ser da Plebe (ou 1 mês real nos Veios)');
+  if (t.elo) x.push('Criatura em Vínculo Elo');
+  return x;
+};
+// "trava": falta a técnica de antes (linha cheia); "longe": falta Estágio, Controle, Plebe ou Elo
+const st = (t: Tec) => (sabe.has(t.nome) ? 'tem' : t.requer && !sabe.has(t.requer) ? 'trava' : falta(t).length ? 'longe' : 'livre');
+
+/* ---------- geometria do leque ---------- */
+const W = 1320, H = 860, OX = 660, OY = 796;
+const est = Math.max(2, Math.min(9, f.estagio));
+const R = (s: number) => 150 + (9 - s) * 82;
+const f1 = (n: number) => Math.round(n * 10) / 10;
+const rad = (a: number) => (a * Math.PI) / 180;
+const pol = (s: number, a: number): [number, number] => [f1(OX + R(s) * Math.sin(rad(a))), f1(OY - R(s) * Math.cos(rad(a)))];
+const ANG: Record<string, number> = {
+  'Percepção de Mana': 0, 'Pele de Mana': 0, 'Matriz Rúnica': 0, 'Método de Mana': 0, 'Zona de Mana': 0, 'Forma Mágica': 0,
+  'Leitura Rúnica': 31, 'Runa Condicional': 31, 'Inscrição': 24, 'Runa em Cadeia': 38, 'Selo Rúnico': 25, 'Voto de Cristal': 37,
+  'Corpo Seco': -31, 'Eco de Veio': -37.5, 'Passo Cintilante': -24.5, 'Couraça de Pó': -31,
+  'Assimilação Parcial': -62, 'Assimilação Total': -62,
+};
+const pos = (t: Tec): [number, number] => (t.raiz ? [OX, OY - 22] : pol(t.estagio, ANG[t.nome] ?? 0));
+const arc = (r: number, a0: number, a1: number) => {
+  const p = (a: number) => [f1(OX + r * Math.sin(rad(a))), f1(OY - r * Math.cos(rad(a)))];
+  const [x0, y0] = p(a0), [x1, y1] = p(a1);
+  return `M${x0},${y0} A${r},${r} 0 ${Math.abs(a1 - a0) > 180 ? 1 : 0} ${a1 > a0 ? 1 : 0} ${x1},${y1}`;
+};
+const ray = (a: number, r0: number, r1: number) => `M${f1(OX + Math.sin(rad(a)) * r0)},${f1(OY - Math.cos(rad(a)) * r0)} L${f1(OX + Math.sin(rad(a)) * r1)},${f1(OY - Math.cos(rad(a)) * r1)}`;
+const rnd = (seed: number) => { let s = seed; return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; };
+const scallop = (r: number, amp: number, n: number, seed: number) => {
+  let d = ''; const N = n * 6;
+  for (let i = 0; i <= N; i++) { const a = (i / N) * Math.PI * 2; const rr = r + amp * Math.sin(a * n + seed) + amp * 0.35 * Math.sin(a * (n * 2 + 3) + seed * 2); d += `${i ? 'L' : 'M'}${f1(Math.cos(a) * rr)},${f1(Math.sin(a) * rr)}`; }
+  return `${d}Z`;
+};
+const wavy = (a: number, r0: number, r1: number, amp: number, fr: number, ph: number) => {
+  let d = '';
+  for (let i = 0; i <= 18; i++) { const t = i / 18; const r = r0 + (r1 - r0) * t; const off = Math.sin(t * fr + ph) * amp * t;
+    d += `${i ? 'L' : 'M'}${f1(OX + Math.cos(a) * r - Math.sin(a) * off)},${f1(OY + Math.sin(a) * r + Math.cos(a) * off)}`; }
+  return d;
+};
+const linhas = (n: string) => {
+  if (n.length <= 12) return [n];
+  const w = n.split(' '); let best = [n], bd = 1e9;
+  for (let i = 1; i < w.length; i++) { const a = w.slice(0, i).join(' '), b = w.slice(i).join(' '); const d = Math.max(a.length, b.length); if (d < bd) { bd = d; best = [a, b]; } }
+  return best;
+};
+
+const rr = R(est);
+const RED = '#ff3b2e', BONE = '#ece6d9', INK = '#0a0a0b', PAP = '#ebe0c7', SEP = '#4a2f1b';
+const runeOn = sabe.has('Matriz Rúnica'), assimOn = sabe.has('Assimilação Parcial');
+
+// campo de raios (o mesmo sorteio sempre, para o desenho não mudar a cada visita)
+const rays = (() => { const r = rnd(17); let s = '';
+  for (let i = 0; i < 150; i++) { const a = rad(-88 + (i / 149) * 176) + (r() - 0.5) * 0.01; const l = 200 + r() * 640;
+    s += `<path d="M${f1(OX + Math.sin(a) * 60)},${f1(OY - Math.cos(a) * 60)} L${f1(OX + Math.sin(a) * l)},${f1(OY - Math.cos(a) * l)}" stroke-width="${f1(0.4 + r() * 1.4)}"/>`; }
+  return s; })();
+const chamas = (() => { const r = rnd(5); let s = '';
+  for (let i = 0; i < 34; i++) { const a = Math.PI + (i / 33) * Math.PI; s += `<path d="${wavy(a, 58, 82 + r() * 28, 6 + r() * 5, 8 + r() * 5, r() * 6)}" stroke="${[RED, '#e0a54a', BONE][i % 3]}" stroke-width="${f1(1.6 + r() * 2.4)}"/>`; }
+  return s; })();
+const [fx, fy] = pol(2, 0);
+const brilho = (() => { const r = rnd(29); let s = '';
+  for (let i = 0; i < 44; i++) { const a = (i / 44) * Math.PI * 2; const l = 42 + r() * 30; s += `<path d="M${f1(fx + Math.cos(a) * 36)},${f1(fy + Math.sin(a) * 36)} L${f1(fx + Math.cos(a) * l)},${f1(fy + Math.sin(a) * l)}"/>`; }
+  return s; })();
+const lock = (x: number, y: number) => `<g transform="translate(${x},${y})"><circle r="11" fill="${INK}" stroke="${RED}" stroke-width="1.5"/><path d="M-3.6,-1.5 v-2.4 a3.6,3.6 0 0 1 7.2,0 v2.4" fill="none" stroke="${RED}" stroke-width="1.6"/><rect x="-5" y="-1.6" width="10" height="7.4" rx="1.2" fill="${RED}"/></g>`;
+const lockAssim = (() => { const m = (R(6) + R(3)) / 2; return [f1(OX + Math.sin(rad(-62)) * m), f1(OY - Math.cos(rad(-62)) * m)]; })();
+const gn = (a: number, r: number) => [f1(Math.max(70, Math.min(W - 70, OX + Math.sin(rad(a)) * r))), f1(OY - Math.cos(rad(a)) * r)];
+const G = Object.fromEntries(grupos.map((g) => [g.id, g]));
+
+const nos = T.map((t, i) => {
+  const s = st(t); const [x, y] = pos(t); const big = t.raiz || t.apice && t.grupo === 'fluxo'; const r = big ? 32 : 25;
+  return { t, s, x, y, r, i, big, dist: t.raiz ? 0 : Math.hypot(x - OX, y - OY), L: linhas(t.nome) };
+});
+const feitas = nos.filter((n) => n.s === 'tem').length;
+const livres = nos.filter((n) => n.s === 'livre').length;
+const primeira = (nos.find((n) => n.s === 'livre') ?? nos[0]).t;
+const dados = { tecnicas: nos.map(({ t, s }) => ({ id: t.id, nome: t.nome, grupo: t.grupo, estagio: t.estagio, controle: t.controle, texto: t.texto, quem: t.quem, requer: t.requer, elo: t.elo, treinos: t.treinos, st: s, falta: falta(t) })), grupos, real };
+---
+<div class="tr-corpo wrap lq" data-lq>
+  <aside class="tr-dos" aria-label="Suas Técnicas">
+    <div class="tr-dos__cartaz">
+      <p class="tr-dos__selo" aria-hidden="true">{real ? '本人' : '見本'}</p>
+      <p class="t-label">{real ? 'Suas Técnicas de Mana' : 'Técnicas de exemplo'}</p>
+      <p class="tr-dos__nome">{f.nome}<small>{f.estagio}º Estágio · Controle {f.controle}%</small></p>
+      <div class="tr-dos__pt">
+        <b>{feitas}</b>
+        <span>de {T.length} técnicas dominadas<small>{livres ? `${livres} ${livres === 1 ? 'pronta' : 'prontas'} para treinar agora` : 'Suba de Estágio ou de Controle para abrir mais'}</small></span>
+      </div>
+      {!real && <p class="tr-dos__aviso">{f.nome} no {f.estagio}º Estágio, de exemplo. <a href="/api/auth/login?volta=/arvores/%23tecnicas">Entre com o Discord</a> para ver as suas.</p>}
+    </div>
+
+    <div class="tr-det lq-det" data-lq-det aria-live="polite">
+      <p class="tr-det__tag" data-lq-tag></p>
+      <h3 class="tr-det__nome" data-lq-nome>{primeira.nome}</h3>
+      <p class="tr-det__ramo" data-lq-grupo></p>
+      <p class="tr-det__txt" data-lq-txt>{primeira.texto}</p>
+      <ul class="tc-req" data-lq-req></ul>
+      <p class="tr-det__st" data-lq-st></p>
+    </div>
+
+    <details class="tr-regras">
+      <summary>Como se aprende uma técnica</summary>
+      <ul>{regrasTecnicas.map((r) => <li>{r}</li>)}</ul>
+    </details>
+  </aside>
+
+  <section class="tr-palco lq-palco" aria-label="Leque das Técnicas de Mana" data-lenis-prevent>
+    <div class="lq-arv">
+      <svg class="lq-svg" viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`Técnicas de Mana do 9º ao 2º Estágio. Você está no ${f.estagio}º.`}>
+        <defs>
+          <radialGradient id="lq-lit" cx={OX} cy={OY} r={rr + 40} gradientUnits="userSpaceOnUse"><stop offset="0" stop-color={RED} stop-opacity=".42" /><stop offset=".75" stop-color={RED} stop-opacity=".12" /><stop offset="1" stop-color={RED} stop-opacity="0" /></radialGradient>
+          <radialGradient id="lq-sol" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff4dc" /><stop offset=".55" stop-color={PAP} /><stop offset="1" stop-color="#c9a76a" /></radialGradient>
+          <clipPath id="lq-in"><circle cx={OX} cy={OY} r={rr} /></clipPath>
+          <clipPath id="lq-cima"><rect x="0" y="0" width={W} height={OY} /></clipPath>
+          <filter id="lq-ink" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="6" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
+          <filter id="lq-inkL" filterUnits="userSpaceOnUse" x="0" y="0" width={W} height={H}><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="6" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
+        </defs>
+
+        <g clip-path="url(#lq-cima)">
+          <g class="lq-raio" style={`transform-origin:${OX}px ${OY}px`}>
+            <g class="lq-sway" style={`transform-origin:${OX}px ${OY}px`}>
+              <g stroke={BONE} opacity=".09" set:html={rays} />
+              <g stroke={RED} opacity=".55" clip-path="url(#lq-in)" set:html={rays} />
+            </g>
+          </g>
+          <circle cx={OX} cy={OY} r={rr + 40} fill="url(#lq-lit)" class="lq-fd" data-d="600" />
+
+          {[9, 8, 7, 6, 5, 4, 3, 2].map((s) => (
+            <path d={arc(R(s), -84, 84)} fill="none" stroke={s === est ? RED : BONE} stroke-opacity={s === est ? 1 : 0.16} stroke-width={s === est ? 2 : 1} stroke-dasharray={s === est ? undefined : '2 7'} class={s === est ? 'lq-drw' : 'lq-fd'} data-d={300 + (9 - s) * 60} data-t="900" />
+          ))}
+          <g class="lq-fd" data-d="900">
+            <rect x={OX + rr - 40} y={OY - 30} width="80" height="18" fill={RED} />
+            <text x={OX + rr} y={OY - 17} text-anchor="middle" class="lq-mono" fill="#fff">VOCÊ · {f.estagio}º</text>
+          </g>
+
+          <g class="lq-fd" data-d="700" stroke={BONE} stroke-opacity=".5" stroke-width="2" stroke-dasharray="6 6" fill="none">
+            <path d={ray(-31, 70, R(5))} /><path d={arc(R(6), -37.5, -24.5)} /><path d={ray(-62, 70, R(6))} /><path d={arc(R(8), 0, 31)} />
+          </g>
+          <path d={ray(0, 40, R(2))} stroke={BONE} stroke-width="12" stroke-linecap="round" filter="url(#lq-inkL)" class="lq-drw" data-d="200" data-t="1100" />
+          <path d={ray(0, 40, rr)} stroke={RED} stroke-width="6" stroke-linecap="round" class="lq-drw" data-d="800" data-t="800" />
+          {rr > 120 && (
+            <circle r="4.5" fill="#fff" cx={OX}><animate attributeName="cy" from={OY - 40} to={OY - rr} dur="2s" repeatCount="indefinite" /><animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" /></circle>
+          )}
+          <path d={`${arc(R(6), 0, 31)} ${ray(31, R(6), R(4)).replace('M', 'L')}`} stroke={RED} stroke-width={runeOn ? 3.4 : 2.4} opacity={runeOn ? 1 : 0.7} fill="none" class="lq-drw" data-d="1000" data-t="800" />
+          <path d={`${arc(R(5), 24, 38)} ${arc(R(4), 25, 37)}`} stroke={RED} stroke-width="2" opacity={runeOn ? 1 : 0.7} fill="none" class="lq-fd" data-d="1300" />
+          <path d={ray(-62, R(6), R(3))} stroke={RED} stroke-width={assimOn ? 3.4 : 2.4} opacity={assimOn ? 1 : 0.7} class="lq-drw" data-d="1100" data-t="800" />
+          {!runeOn && <g class="lq-fd" data-d="1300" set:html={lock(...pol(6, 15.5))} />}
+          {!assimOn && <g class="lq-fd" data-d="1300" set:html={lock(lockAssim[0], lockAssim[1])} />}
+
+          {[[-62, R(3) + 54, 'assimilacao'], [-31, R(4) + 20, 'diamond'], [31, R(3) + 18, 'runa']].map(([a, r, id]) => {
+            const [x, y] = gn(a as number, r as number);
+            return <text x={x} y={y} text-anchor="middle" class="lq-mono lq-fd" data-d="900" fill={BONE} opacity=".7"><tspan fill={RED}>{G[id as string].k}</tspan> {G[id as string].nome.toUpperCase()}</text>;
+          })}
+
+          <g class="lq-raio lq-flick" style={`transform-origin:${fx}px ${fy}px`} stroke={BONE} stroke-width="1" opacity=".6" set:html={brilho} />
+          <g class="lq-raio lq-flick" style={`transform-origin:${OX}px ${OY}px`} filter="url(#lq-ink)" fill="none" stroke-linecap="round" set:html={chamas} />
+          <g class="lq-raio" style={`transform-origin:${OX}px ${OY}px`}><path d={`M${OX - 62},${OY} A62,62 0 0 1 ${OX + 62},${OY} Z`} fill="url(#lq-sol)" class="lq-respira" /></g>
+        </g>
+
+        <path d={`M0,${OY} H${W}`} stroke={BONE} stroke-opacity=".3" />
+        {[9, 8, 7, 6, 5, 4, 3].map((s) => (
+          <g class="lq-fd lq-regua" data-d={400 + (9 - s) * 60} fill={s === est ? RED : BONE} opacity={s === est ? 1 : 0.4} font-size={s === est ? 26 : 19}>
+            <text x={OX - R(s)} y={OY + 26}>{s}º</text><text x={OX + R(s)} y={OY + 26}>{s}º</text>
+          </g>
+        ))}
+        <text x={OX} y={OY + 54} text-anchor="middle" class="lq-mono" fill={BONE} opacity=".6"><tspan fill={RED}>流</tspan> FLUXO · O SOL NASCE DA RESPIRAÇÃO DE MANA</text>
+
+        {nos.map(({ t, s, x, y, r, i, big, dist, L }) => {
+          const dom = s === 'tem', pronta = s === 'livre', trava = s === 'trava';
+          const fill = dom ? RED : trava ? '#1d1c20' : PAP;
+          const stroke = dom ? '#ffb3a8' : pronta ? RED : trava ? BONE : SEP;
+          const kc = dom ? INK : pronta ? RED : trava ? BONE : SEP;
+          const op = s === 'longe' ? 0.5 : trava ? 0.42 : 1;
+          const lc = s === 'longe' || trava ? 'rgba(236,230,217,.55)' : BONE;
+          const sh = scallop(r, 1.8, 10, i);
+          return (
+            <g class:list={['lq-no', t.nome === primeira.nome && 'is-sel']} data-lq-no={t.id} data-st={s} transform={`translate(${x},${y})`} tabindex="0" role="button" aria-label={`${t.nome}, ${t.estagio}º Estágio, Controle ${t.controle}%`}>
+              <g class="lq-pop" data-d={Math.round(600 + dist * 1.6)}>
+                <path d={sh} fill={INK} />
+                <g opacity={op}>
+                  {pronta && <circle r={r + 4} fill="none" stroke={RED} stroke-width="2" class="lq-pulso" />}
+                  {dom && <circle r={r + 10} fill={RED} opacity=".18" class="lq-respira" />}
+                  <path d={sh} fill={fill} stroke={stroke} stroke-width="2" stroke-dasharray={trava ? '4 3' : undefined} filter="url(#lq-ink)" />
+                  <circle r={r - 5} fill="none" stroke={dom ? INK : stroke} stroke-opacity=".5" stroke-width=".9" />
+                  <text class="lq-kj" font-size={big ? 28 : 21} fill={kc}>{t.k}</text>
+                  {trava && <g transform={`translate(${r - 3},${r - 5}) scale(.68)`} set:html={lock(0, 0)} />}
+                </g>
+                <circle r={r + 9} fill="none" stroke={RED} stroke-width="1.6" stroke-dasharray="3 5" class="lq-selo" />
+              </g>
+              {!t.raiz && (t.grupo === 'fluxo'
+                ? <text class="lq-nome" x={r + 12} y={L.length > 1 ? -3 : 4} fill={lc} text-anchor="start">{L.map((l, j) => <tspan x={r + 12} dy={j ? 14 : 0}>{l}</tspan>)}</text>
+                : <text class="lq-nome" x="0" y={r + 16} fill={lc} text-anchor="middle">{L.map((l, j) => <tspan x="0" dy={j ? 13 : 0}>{l}</tspan>)}</text>)}
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+    <ul class="lq-leg" aria-label="Legenda">
+      <li data-st="tem"><i aria-hidden="true"></i>Dominada</li>
+      <li data-st="livre"><i aria-hidden="true"></i>Pronta para treinar</li>
+      <li data-st="longe"><i aria-hidden="true"></i>Falta Estágio, Controle ou requisito</li>
+      <li class="is-trava"><i aria-hidden="true"></i>Trava: precisa da técnica de antes</li>
+      <li class="is-tracejada"><i aria-hidden="true"></i>Só a ordem dos Estágios</li>
+    </ul>
+  </section>
+  <script is:inline type="application/json" id="lq-dados" set:html={JSON.stringify(dados)}></script>
+</div>
+
+<script>
+  type Tec = { id: string; nome: string; grupo: string; estagio: number; controle: number; texto: string; quem: string | null; requer: string | null; elo: boolean; treinos: string; st: string; falta: string[] };
+  const box = document.querySelector<HTMLElement>('[data-lq]');
+  if (box) {
+    const D = JSON.parse(document.getElementById('lq-dados')!.textContent!) as { tecnicas: Tec[]; grupos: { id: string; nome: string; k: string }[]; real: boolean };
+    const q = (s: string) => box.querySelector<HTMLElement>(s)!;
+    const mostra = (id: string) => {
+      const t = D.tecnicas.find((x) => x.id === id);
+      if (!t) return;
+      const g = D.grupos.find((x) => x.id === t.grupo)!;
+      box.querySelectorAll<SVGGElement>('[data-lq-no]').forEach((el) => el.classList.toggle('is-sel', el.dataset.lqNo === id));
+      q('[data-lq-tag]').textContent = `${g.k} ${g.nome} · ${t.estagio}º Estágio · Controle ${t.controle}%`;
+      q('[data-lq-nome]').textContent = t.nome;
+      q('[data-lq-grupo]').textContent = t.treinos;
+      q('[data-lq-txt]').textContent = t.texto;
+      const req = q('[data-lq-req]');
+      req.innerHTML = '';
+      const linha = (txt: string, ok: boolean) => { const li = document.createElement('li'); li.className = ok ? 'is-ok' : ''; li.textContent = txt; req.append(li); };
+      linha(`${t.estagio}º Estágio`, !t.falta.includes(`${t.estagio}º Estágio`));
+      linha(`Controle ${t.controle}%`, !t.falta.includes(`Controle ${t.controle}%`));
+      if (t.requer) linha(`Dominar ${t.requer}`, !t.falta.includes(t.requer));
+      if (t.elo) linha('Criatura em Vínculo Elo (o bot confere)', t.st === 'tem');
+      if (t.quem) linha(t.quem, !t.falta.some((x) => x.startsWith('Ser da Plebe')));
+      const s = q('[data-lq-st]');
+      s.dataset.st = t.st === 'tem' || t.st === 'livre' ? t.st : 'bloqueado';
+      s.textContent = t.st === 'tem' ? 'Você já domina esta técnica.' : t.st === 'livre' ? (D.real ? 'Pronta: comece os Treinos de Técnica no Discord (/treinar tecnica).' : 'Pronta para treinar no Estágio deste exemplo.') : `Falta: ${t.falta.join(', ')}.`;
+    };
+    const no = (e: Event) => (e.target as Element).closest<SVGGElement>('[data-lq-no]');
+    box.addEventListener('click', (e) => { const el = no(e); if (el) mostra(el.dataset.lqNo!); });
+    box.addEventListener('keydown', (e) => { if (e.key !== 'Enter' && e.key !== ' ') return; const el = no(e); if (el) { e.preventDefault(); mostra(el.dataset.lqNo!); } });
+    box.addEventListener('pointerover', (e) => { if ((e as PointerEvent).pointerType !== 'mouse') return; const el = no(e); if (el) mostra(el.dataset.lqNo!); });
+    box.addEventListener('focusin', (e) => { const el = no(e); if (el) mostra(el.dataset.lqNo!); });
+    mostra(box.querySelector<SVGGElement>('.lq-no.is-sel')?.dataset.lqNo ?? D.tecnicas[0].id);
+
+    // entrada: só quando o leque aparece na tela (o sol nasce, a mana sobe, os selos se carimbam)
+    const svg = box.querySelector<SVGSVGElement>('.lq-svg')!;
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const E = 'cubic-bezier(.22,1,.36,1)';
+    const entra = () => {
+      svg.classList.remove('is-espera');
+      svg.querySelectorAll<SVGGeometryElement>('.lq-drw').forEach((p) => { const L = p.getTotalLength(); if (!L) return;
+        p.animate([{ strokeDasharray: `${L} ${L}`, strokeDashoffset: L }, { strokeDasharray: `${L} ${L}`, strokeDashoffset: 0 }], { duration: +(p.dataset.t ?? 900), delay: +(p.dataset.d ?? 0), easing: E, fill: 'backwards' }); });
+      svg.querySelectorAll<SVGElement>('.lq-fd').forEach((el) => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: +(el.dataset.d ?? 0), easing: 'ease-out', fill: 'backwards' }));
+      svg.querySelectorAll<SVGElement>('.lq-raio').forEach((el, i) => el.animate([{ transform: 'scale(.2)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 1400, delay: 100 + i * 150, easing: E, fill: 'backwards' }));
+      svg.querySelectorAll<SVGElement>('.lq-pop').forEach((el) => el.animate([{ transform: 'scale(1.9) rotate(-14deg)', opacity: 0 }, { transform: 'scale(.92) rotate(2deg)', opacity: 1, offset: 0.65 }, { transform: 'none', opacity: 1 }], { duration: 560, delay: +(el.dataset.d ?? 0), easing: 'cubic-bezier(.3,1.4,.5,1)', fill: 'backwards' }));
+    };
+    if (!reduz && 'IntersectionObserver' in window) {
+      svg.classList.add('is-espera');
+      const io = new IntersectionObserver((es) => { if (es.some((x) => x.isIntersecting)) { io.disconnect(); entra(); } }, { threshold: 0.25 });
+      io.observe(svg);
+    }
+    // no celular o leque rola de lado: começa centrado no tronco
+    const pal = box.querySelector<HTMLElement>('.lq-palco');
+    let centrou = false;
+    if (pal) new ResizeObserver(() => { if (centrou || !pal.clientWidth) return; if (pal.scrollWidth > pal.clientWidth) pal.scrollLeft = (pal.scrollWidth - pal.clientWidth) / 2; centrou = true; }).observe(pal);
+  }
+</script>

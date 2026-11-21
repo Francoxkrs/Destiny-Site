@@ -1,0 +1,550 @@
+{
+ "versao": 2,
+ "classe": "Mago Conjurador",
+ "slug": "conjurador",
+ "papel": "Invocações, golens e familiares",
+ "raiz": {
+  "id": "conjurador.raiz",
+  "nome": "Legião",
+  "texto": "+2 no limite de conjurados; cada um com +1 Acréscimo."
+ },
+ "ramos": [
+  {
+   "id": "pacto",
+   "nome": "Pacto",
+   "tema": "Um familiar que cresce com você."
+  },
+  {
+   "id": "horda",
+   "nome": "Horda",
+   "tema": "Muitos conjurados ao mesmo tempo.",
+   "estrela": "conjurador.horda.mestre-invocador"
+  },
+  {
+   "id": "possessao",
+   "nome": "Possessão",
+   "tema": "Vestir e fundir conjurados."
+  }
+ ],
+ "nos": [
+  {
+   "id": "conjurador.pacto.pacto-de-sangue",
+   "nome": "Pacto de Sangue",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Um conjurado permanente, com nome e memória, que sobe de Estágio junto com você.",
+   "legado": "Pacto/0",
+   "pos": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "conjurador.pacto.laco",
+   "nome": "Laço",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "O familiar ganha +1 Acréscimo no atributo que você escolher ao criá-lo.",
+   "pos": [
+    1,
+    1
+   ]
+  },
+  {
+   "id": "conjurador.pacto.olhos-emprestados",
+   "nome": "Olhos Emprestados",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "conjurador.pacto.pacto-de-sangue"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Vê, ouve e fala pelo familiar, a qualquer distância.",
+   "legado": "Pacto/1",
+   "pos": [
+    0,
+    2
+   ]
+  },
+  {
+   "id": "conjurador.pacto.batedor",
+   "nome": "Batedor",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "conjurador.pacto.laco"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "O familiar faz 1 Jornada de coleta ou entrega por ciclo no seu lugar, e explora uma região antes de uma missão.",
+   "pos": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "conjurador.pacto.proteger-o-mestre",
+   "nome": "Proteger o Mestre",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "conjurador.pacto.olhos-emprestados"
+    ],
+    [
+     "conjurador.pacto.batedor"
+    ]
+   ],
+   "tipo": "reacao",
+   "usos": "1 vez por cena",
+   "texto": "O familiar toma no seu lugar um golpe que ia em você.",
+   "pos": [
+    0.5,
+    3
+   ]
+  },
+  {
+   "id": "conjurador.pacto.vinculo-de-fera",
+   "nome": "Vínculo de Fera",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "conjurador.pacto.proteger-o-mestre"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "O familiar conta como criatura em Elo para Assimilação e para os vínculos com criaturas.",
+   "pos": [
+    0.5,
+    4
+   ]
+  },
+  {
+   "id": "conjurador.pacto.avatar",
+   "nome": "Avatar",
+   "ramo": [
+    "pacto"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "conjurador.pacto.vinculo-de-fera",
+     "conjurador.pacto.olhos-emprestados",
+     "conjurador.pacto.batedor"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Uma vez por cena, troca de lugar com o familiar e lança feitiços pela boca dele até o fim da cena.",
+   "legado": "Pacto/2",
+   "pos": [
+    0.5,
+    5
+   ]
+  },
+  {
+   "id": "conjurador.horda.enxame",
+   "nome": "Enxame",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Cria até 10 conjurados pequenos, sem Acréscimo, que contam como 1 no limite.",
+   "legado": "Horda/0",
+   "pos": [
+    3,
+    1
+   ]
+  },
+  {
+   "id": "conjurador.horda.invocacao-rapida",
+   "nome": "Invocação Rápida",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "passiva",
+   "texto": "Conjurar não gasta a ação principal, 1 vez por turno.",
+   "pos": [
+    4,
+    1
+   ]
+  },
+  {
+   "id": "conjurador.horda.sacrificio",
+   "nome": "Sacrifício",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "conjurador.horda.enxame"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Desfaz um conjurado para recuperar metade da Mana dele, ou para fazê-lo explodir com a força do seu Estágio.",
+   "legado": "Horda/1",
+   "pos": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": "conjurador.horda.mao-de-obra",
+   "nome": "Mão de Obra",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "conjurador.horda.invocacao-rapida"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Conjurados ajudam numa Jornada de Profissão: ela leva 20% menos.",
+   "pos": [
+    4,
+    2
+   ]
+  },
+  {
+   "id": "conjurador.horda.formacao",
+   "nome": "Formação",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "conjurador.horda.sacrificio"
+    ],
+    [
+     "conjurador.horda.mao-de-obra"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Conjurados ao lado uns dos outros ganham +1 Acréscimo de Resistência.",
+   "pos": [
+    3.5,
+    3
+   ]
+  },
+  {
+   "id": "conjurador.horda.mare",
+   "nome": "Maré",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "conjurador.horda.formacao"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Por 2 turnos, todos os conjurados atacam o mesmo alvo como uma ação só.",
+   "pos": [
+    3.5,
+    4
+   ]
+  },
+  {
+   "id": "conjurador.horda.mestre-invocador",
+   "nome": "Mestre Invocador",
+   "ramo": [
+    "horda"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "conjurador.horda.mare",
+     "conjurador.horda.sacrificio",
+     "conjurador.horda.mao-de-obra"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Os conjurados duram 3 turnos depois de o Grimório fechar, e a horda age antes de todos na cena.",
+   "estrela": true,
+   "legado": "Horda/2",
+   "pos": [
+    3.5,
+    5
+   ]
+  },
+  {
+   "id": "conjurador.possessao.vestir",
+   "nome": "Vestir",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Um conjurado envolve o seu corpo como armadura e passa a você os Acréscimos de Resistência dele.",
+   "legado": "Possessão/0",
+   "pos": [
+    6,
+    1
+   ]
+  },
+  {
+   "id": "conjurador.possessao.montaria",
+   "nome": "Montaria",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 1,
+   "custo": 1,
+   "estagioMin": 9,
+   "requer": [],
+   "tipo": "ativa",
+   "texto": "Um conjurado vira montaria: viagem leva metade do tempo, e você ganha +1 Acréscimo de Velocidade montado.",
+   "pos": [
+    7,
+    1
+   ]
+  },
+  {
+   "id": "conjurador.possessao.fusao",
+   "nome": "Fusão",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "conjurador.possessao.vestir"
+    ]
+   ],
+   "tipo": "ativa",
+   "texto": "Une dois conjurados num só, maior, que soma os Acréscimos dos dois.",
+   "legado": "Possessão/1",
+   "pos": [
+    6,
+    2
+   ]
+  },
+  {
+   "id": "conjurador.possessao.forma-de-carga",
+   "nome": "Forma de Carga",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 2,
+   "custo": 1,
+   "estagioMin": 7,
+   "requer": [
+    [
+     "conjurador.possessao.montaria"
+    ]
+   ],
+   "tipo": "mundo",
+   "texto": "Um conjurado carrega o dobro de peso no inventário e transporta Minério sem custo de viagem.",
+   "pos": [
+    7,
+    2
+   ]
+  },
+  {
+   "id": "conjurador.possessao.armadura-viva",
+   "nome": "Armadura Viva",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 3,
+   "custo": 2,
+   "estagioMin": 5,
+   "requer": [
+    [
+     "conjurador.possessao.fusao"
+    ],
+    [
+     "conjurador.possessao.forma-de-carga"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Vestido, o conjurado toma o primeiro Ferimento I de cada turno no seu lugar.",
+   "pos": [
+    6.5,
+    3
+   ]
+  },
+  {
+   "id": "conjurador.possessao.fusao-tripla",
+   "nome": "Fusão Tripla",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 4,
+   "custo": 2,
+   "estagioMin": 4,
+   "requer": [
+    [
+     "conjurador.possessao.armadura-viva"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "A Fusão pode unir 3 conjurados.",
+   "pos": [
+    6.5,
+    4
+   ]
+  },
+  {
+   "id": "conjurador.possessao.quimera",
+   "nome": "Quimera",
+   "ramo": [
+    "possessao"
+   ],
+   "grau": 5,
+   "custo": 3,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "conjurador.possessao.fusao-tripla",
+     "conjurador.possessao.fusao",
+     "conjurador.possessao.forma-de-carga"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Por 3 turnos, você se funde com um conjurado e ganha o corpo, os sentidos e os Acréscimos dele.",
+   "legado": "Possessão/2",
+   "pos": [
+    6.5,
+    5
+   ]
+  },
+  {
+   "id": "conjurador.elo.alfa",
+   "nome": "Alfa",
+   "ramo": [
+    "pacto",
+    "horda"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "conjurador.pacto.proteger-o-mestre",
+     "conjurador.horda.formacao"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "O familiar comanda a horda: conjurados ao lado dele ganham +1 Acréscimo.",
+   "pos": [
+    2,
+    4.5
+   ]
+  },
+  {
+   "id": "conjurador.elo.colosso",
+   "nome": "Colosso",
+   "ramo": [
+    "horda",
+    "possessao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "conjurador.horda.formacao",
+     "conjurador.possessao.armadura-viva"
+    ]
+   ],
+   "tipo": "ativa",
+   "usos": "1 vez por cena",
+   "texto": "Funde toda a horda num só conjurado gigante por 3 turnos.",
+   "pos": [
+    5,
+    4.5
+   ]
+  },
+  {
+   "id": "conjurador.elo.alma-partilhada",
+   "nome": "Alma Partilhada",
+   "ramo": [
+    "pacto",
+    "possessao"
+   ],
+   "grau": 4,
+   "elo": true,
+   "custo": 2,
+   "estagioMin": 3,
+   "requer": [
+    [
+     "conjurador.pacto.proteger-o-mestre",
+     "conjurador.possessao.armadura-viva"
+    ]
+   ],
+   "tipo": "passiva",
+   "texto": "Vestindo o familiar, usa os sentidos dele e você e ele dividem os Ferimentos.",
+   "pos": [
+    3.5,
+    6
+   ]
+  }
+ ]
+}

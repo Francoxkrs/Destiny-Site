@@ -1,0 +1,19 @@
+---
+// Grade das seções do Guia (página /guia/): cada seção é um capítulo, com o kanji como selo.
+import Arrow from './Arrow.astro';
+import { paginas, capitulos } from '../data/canon.js';
+const romano = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+---
+<div class="gd-grid">
+  {capitulos.map((c, i) => (
+    <section class="gd-sec" id={c.id} data-reveal>
+      <div class="gd-sec__h"><span class="gd-sec__n">{romano[i]}</span><h2>{c.nome}</h2><span class="gd-sec__k" aria-hidden="true">{c.kanji}</span></div>
+      <p class="gd-sec__p">{c.texto}</p>
+      <ul>
+        {paginas.filter((p) => p.cap === c.id).map((p) => (
+          <li><a href={`/${p.slug}/`}><span class="gd-sec__pn">{p.num}</span><b>{p.titulo}</b><small>{p.resumo}</small><Arrow /></a></li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>

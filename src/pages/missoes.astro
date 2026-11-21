@@ -6,6 +6,7 @@ import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Gem from '../components/Gem.astro';
 import { ranks, missaoFluxo, missaoRegras } from '../data/canon.js';
+import { missoesNovas, muralLivre } from '../data/vivo.js';
 
 const fmt = (n) => n.toLocaleString('pt-BR');
 ---
@@ -99,6 +100,13 @@ const fmt = (n) => n.toLocaleString('pt-BR');
     </div>
     <div class="wrap" style="margin-top:clamp(48px,7vw,100px)">
       <ImageSlot src="missoes/interferencia" label="Generais e Veio Negro na mesma missão" ratio="21 / 9" />
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="quadro">
+    <div class="wrap">
+      <SectionHead num="03" label="O quadro de hoje" title="Três por Rank, <em>e uma urgente</em>." lead={'O quadro vira à meia-noite. Quem não tem patente também tem o Mural Livre: veja em Diamond vivo.'} />
+      <dl class="gifts">{missoesNovas.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
     </div>
   </section>
 

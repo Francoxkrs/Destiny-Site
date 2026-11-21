@@ -6,6 +6,7 @@ import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
 import { treinos, treinosFisicos, treinosMana, treinosPoder, romanos, bibliotecas, estagios, tetoFisico, pontosEstagio, slugify } from '../data/canon.js';
+import { treinosNovos } from '../data/vivo.js';
 
 const niveisMagicos = romanos.slice(1).map((r, i) => [r, treinosMana[i], treinosPoder[i] ?? '—']);
 ---
@@ -104,6 +105,13 @@ const niveisMagicos = romanos.slice(1).map((r, i) => [r, treinosMana[i], treinos
           <div class="btns" data-reveal><a class="btn" href="/estagios/">O que cada Estágio faz e destrava</a></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="treinos-juntos">
+    <div class="wrap">
+      <SectionHead num="05" label="Treinar junto" title="Com mestre, <em>em combate</em> ou em sessão." lead={'Tudo pelos botões do /treinar. Treinar junto gasta a vaga do ciclo como sempre, mas rende mais.'} />
+      <dl class="gifts">{treinosNovos.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
     </div>
   </section>
 

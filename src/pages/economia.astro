@@ -7,8 +7,9 @@ import ImageSlot from '../components/ImageSlot.astro';
 import Table from '../components/Table.astro';
 import NextPage from '../components/NextPage.astro';
 import { economia as e } from '../data/canon.js';
+import { mercadoVivo } from '../data/vivo.js';
 
-const abas = [['moedas', 'Moedas'], ['riquezas', 'Riquezas'], ['comercio', 'Comércio'], ['mercado', 'Mercado'], ['tesouro', 'Tesouro'], ['impostos', 'Impostos'], ['contratos', 'Contratos'], ['recursos', 'Recursos']];
+const abas = [['moedas', 'Moedas'], ['riquezas', 'Riquezas'], ['comercio', 'Comércio'], ['mercado', 'Mercado'], ['tesouro', 'Tesouro'], ['impostos', 'Impostos'], ['contratos', 'Contratos'], ['recursos', 'Recursos'], ['mercado-vivo', 'Mercado vivo']];
 ---
 <Base title="Economia" slug="economia" description="Yuls, Cristais, faixas de riqueza, comércio, mercado por região, Tesouro, impostos, contratos, Recursos e custo de vida em Diamond.">
   <PageHero
@@ -108,6 +109,13 @@ const abas = [['moedas', 'Moedas'], ['riquezas', 'Riquezas'], ['comercio', 'Com�
           <p class="t-body" data-reveal>{e.cobranca}</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="mercado-vivo">
+    <div class="wrap">
+      <SectionHead num="09" label="Mercado vivo" title="O preço <em>responde a quem compra</em>." lead={'Além da região e do evento, cada mercado tem estoque próprio. As lojas com dono NPC estão em Diamond vivo.'} />
+      <dl class="gifts">{mercadoVivo.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
     </div>
   </section>
 

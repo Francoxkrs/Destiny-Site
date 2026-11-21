@@ -7,9 +7,10 @@ import ImageSlot from '../components/ImageSlot.astro';
 import Table from '../components/Table.astro';
 import NextPage from '../components/NextPage.astro';
 import { itens as it, slugify, carga } from '../data/canon.js';
+import { forja } from '../data/vivo.js';
 import { reliquias, reliquiasRegras as rr } from '../data/reliquias.js';
 
-const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 'Encantamentos'], ['avancado', 'Criatura, Cristal e Ressonância'], ['reliquias', 'Relíquias de Criatura'], ['desgaste', 'Desgaste e compra'], ['carga', 'Carga e equipamento']];
+const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 'Encantamentos'], ['avancado', 'Criatura, Cristal e Ressonância'], ['reliquias', 'Relíquias de Criatura'], ['desgaste', 'Desgaste e compra'], ['carga', 'Carga e equipamento'], ['forja', 'A forja']];
 ---
 <Base title="Itens Mágicos" slug="itens" description="Qualidade, materiais, tipos de item, encantamentos com Pó de Cristal e desgaste: o sistema de itens mágicos ligado aos Recursos.">
   <PageHero
@@ -180,6 +181,13 @@ const abas = [['qualidade', 'Qualidade'], ['tipos', 'Tipos'], ['encantamentos', 
       <h3 class="t-h3 sub-h" style="margin-top:clamp(40px,5vw,72px)">Seis espaços de equipamento</h3>
       <div class="chips" data-reveal>{carga.equipamento.map(([n]) => <span class="chip">{n}</span>)}</div>
       <p class="t-body" style="margin-top:16px" data-reveal>{carga.equipamentoTexto}</p>
+    </div>
+  </section>
+
+  <section class="sec sec--line sec--raise" id="forja">
+    <div class="wrap">
+      <SectionHead num="08" label="A forja" title="Onde se forja <em>muda o risco</em>." lead={'A peça se faz em Jornadas, pelo /forja e pelo /jornada. O lugar decide a taxa e o risco de a peça sumir no caminho.'} />
+      <dl class="gifts">{forja.map(([n, d]) => <div data-reveal><dt>{n}</dt><dd>{d}</dd></div>)}</dl>
     </div>
   </section>
 

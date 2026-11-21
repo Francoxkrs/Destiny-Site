@@ -13,10 +13,10 @@
  *   classeMago: string, magia: string, magiaRaridade?: string, grimorio: string, milagres: string[], patente?: string | null,
  *   estagio: number, pe: number, controle: number,
  *   proximo: { estagio: number, pe: number, controle: number, cristais: { branco: number, negro: number, dourado: number } } | null,
- *   mana: { atual: number, max: number }, reserva: number, poder: number,
+ *   mana: { atual: number, max: number, regenHora?: number, em?: string | Date }, reserva: number, poder: number,
  *   fisicos: FisicoWeb[],
  *   moedas: { yuls: number, meritos: number, antimeritos: number, cristais: { branco: number, negro: number, dourado: number } },
- *   trilha: { versao?: 2, pontos: number, gastos: number, livres: number, nos: string[] },  // versao 2 = o bot já usa as árvores v2 (ids "classe.ramo.no")
+ *   trilha: { versao?: 2, pontos: number, gastos: number, livres: number, feitos?: number, nos: string[] },  // versao 2 = o bot já usa as árvores v2 (ids "classe.ramo.no")
  *   conhecimentos: string[], tracos: string[], tecnicas: string[],
  *   feiticos: { nome: string, tipo?: string, estagio?: number, imagem?: string | null }[],
  *   historia: { vidaPassada?: string, renascimento?: string, personalidade?: string },
@@ -65,6 +65,14 @@ export const fichaExemplo = {
   },
 };
 
+/** A foto guarda a Mana do momento em que foi tirada; soma a regeneração até agora (mesma conta do bot). */
+export function comRegeneracao(f, agora = Date.now()) {
+  const m = f.mana;
+  if (!m?.regenHora || !m.em || m.atual >= m.max) return f;
+  const horas = Math.max(0, (agora - new Date(m.em).getTime()) / 3_600_000);
+  return { ...f, mana: { ...m, atual: Math.min(m.max, Math.floor(m.atual + m.max * m.regenHora * horas)) } };
+}
+
 /**
  * Carrega a ficha de quem entrou.
  * @returns {Promise<{ estado: 'exemplo' | 'sem-banco' | 'sem-ficha' | 'ok' | 'erro', ficha: FichaWeb, aviso?: string }>}
@@ -76,11 +84,11 @@ export async function carregarFicha(sessao) {
   if (!db) return { estado: 'sem-banco', ficha: fichaExemplo };
   try {
     const f = await db.collection('fichasWeb').findOne({ guildId: env.guildId, userId: sessao.id }, { projection: { _id: 0 } });
-    if (f) return { estado: 'ok', ficha: /** @type {FichaWeb} */ (f) };
+    if (f) return { estado: 'ok', ficha: /** @type {FichaWeb} */ (comRegeneracao(f)) };
     const p = await db.collection('personagens').findOne({ guildId: env.guildId, userId: sessao.id }, { projection: { etapa: 1 } });
     return {
       estado: 'sem-ficha', ficha: fichaExemplo,
-      aviso: p ? (p.etapa === 'aprovado' ? 'Sua ficha ainda não chegou ao site. Use /ficha uma vez no Discord para sincronizar.' : 'Seu personagem ainda está em criação ou em análise pela Staff.') : 'Você ainda não tem personagem. Use /criar-personagem no Discord.',
+      aviso: p ? (p.etapa === 'aprovado' ? 'Sua ficha ainda não chegou ao site. Use /site no Discord: o bot manda a ficha na hora.' : 'Seu personagem ainda está em criação ou em análise pela Staff.') : 'Você ainda não tem personagem. Use /criar-personagem no Discord.',
     };
   } catch {
     return { estado: 'erro', ficha: fichaExemplo, aviso: 'Não consegui ler a sua ficha agora. Tente de novo em instantes.' };

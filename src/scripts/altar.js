@@ -329,8 +329,10 @@ function resumo(res) {
 // O site cobra e põe o item na /bolsa do bot (/api/loja/comprar); quem gira é o bot, com as vagas de sempre.
 const giros = D.giros;
 let giroSel = giros[0];
-const usados = {}; // 'pedra:giroMagia' → quantos já pegou nesta temporada
-const rarDoGiro = (g) => (g.custo >= 15 ? 'lendario' : g.custo >= 4 ? 'epico' : 'raro');
+const usados = {}; // 'pedra:giroMagia' → quantos já pegou nesta temporada (pacotes dividem o limite do item)
+const idGiro = (g) => g.id ?? g.chave;
+const rarDoGiro = (g) => (g.custo >= 10 ? 'lendario' : g.custo >= 4 ? 'epico' : 'raro');
+const naoCabe = (g, u) => u + (g.qtd ?? 1) > g.limite;
 const plural = (n, um, varios) => `${fmt.format(n)} ${n === 1 ? um : varios}`;
 function custoPedra(g) {
   const insc = typeof st.insc === 'number' ? st.insc : 0;
@@ -343,16 +345,16 @@ function custoPedra(g) {
 }
 function pintaPedra() {
   const g = giroSel;
-  const u = usados[`pedra:${g.chave}`] ?? 0;
-  const cheio = u >= g.limite;
+  const u = usados[`pedra:${idGiro(g)}`] ?? 0;
+  const cheio = naoCabe(g, u);
   const c = custoPedra(g);
   $('[data-pedra-ch]').textContent = `${g.sorteio ? 'Sorteado aqui, na hora' : 'Chances no bot'}: ${g.chances}. ${st.modo === 'ok' ? `Você já pegou ${u} de ${g.limite} nesta temporada.` : `Até ${g.limite} por personagem nesta temporada.`}`;
-  $('[data-pedra-custo]').textContent = cheio ? 'Limite da temporada' : c.bloqueado ? c.bloqueado : `${c.texto} · ${g.nome}`;
+  $('[data-pedra-custo]').textContent = cheio ? (u < g.limite ? `Cabem só mais ${g.limite - u} nesta temporada` : 'Limite da temporada') : c.bloqueado ? c.bloqueado : `${c.texto} · ${g.nome}`;
   $('[data-girar-pedra]').disabled = cheio || Boolean(c.bloqueado);
   $$('[data-giro]').forEach((l) => {
-    const x = giros.find((y) => y.chave === l.dataset.giro);
-    const ux = usados[`pedra:${x.chave}`] ?? 0;
-    l.classList.toggle('is-cheio', ux >= x.limite);
+    const x = giros.find((y) => idGiro(y) === l.dataset.giro);
+    const ux = usados[`pedra:${idGiro(x)}`] ?? 0;
+    l.classList.toggle('is-cheio', naoCabe(x, ux));
     l.querySelector('[data-lim]').textContent = `${x.so ? 'Só Inscrições · ' : ''}${st.modo === 'ok' ? `${ux}/${x.limite}` : `até ${x.limite}`}`;
   });
 }
@@ -383,7 +385,7 @@ async function girarPedra() {
   try {
     let r;
     for (let t = 0; t < 2; t++) {
-      try { r = await fetch('/api/loja/comprar', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ tipo: 'pedra', id: g.chave, ref }) }); break; } catch (e) { if (t) throw e; }
+      try { r = await fetch('/api/loja/comprar', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ tipo: 'pedra', id: idGiro(g), ref }) }); break; } catch (e) { if (t) throw e; }
     }
     const corpo = await r.json().catch(() => ({}));
     if (r.status === 401) { location.href = '/api/auth/login?volta=/altar/%23pedra'; return; }
@@ -397,7 +399,7 @@ async function girarPedra() {
     const rc = corpo.recibo;
     const carta = rc.sorteio
       ? { nome: rc.nome, tipo: g.nome, rar: rc.rar || 'epico', rotulo: rc.rar === 'lendario' ? 'Lendário' : 'Épico', k: rc.k || '石', novo: true, ganho: rc.nota || 'Na sua /bolsa do bot' }
-      : { nome: g.nome, tipo: 'Pedra do Destino', rar: rarDoGiro(g), rotulo: 'Na sua /bolsa', k: '石', novo: true, ganho: 'Gire na /bolsa do bot' };
+      : { nome: g.nome, tipo: 'Pedra do Destino', rar: rarDoGiro(g), rotulo: 'Na sua /bolsa', k: '石', novo: true, ganho: (g.qtd ?? 1) > 1 ? 'Gire tudo de uma vez na /bolsa do bot' : 'Gire na /bolsa do bot' };
     sequencia([carta], `Pedra do Destino · ${gasto} · ${rc.sorteio ? `saiu ${rc.nome}` : 'use na /bolsa do bot'}`);
   } catch {
     if (!inv.hidden) fechar();

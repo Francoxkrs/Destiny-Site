@@ -17,7 +17,7 @@ export const moeda = {
 export const primeiraCompra = {
   titulo: 'Sua primeira centelha',
   texto: 'Qualquer pacote aprovado deixa um presente na sua conta.',
-  letra: 'Válido uma única vez por conta. A Classe de Mago cai na sua /bolsa na hora; a moldura e o título a Staff entrega.',
+  letra: 'Válido uma única vez por conta. A Classe de Mago cai na sua /bolsa e o título na aba Visual da ficha, na hora; a moldura a Staff entrega.',
   premios: [
     { nome: 'Moldura Centelha Prismática', texto: 'Moldura animada para a /ficha e para a ficha no site. Só se ganha assim.', icone: 'moldura' },
     { nome: 'Título "Patrono de Diamond"', texto: 'Aparece na ficha e no perfil do site.', icone: 'titulo' },

@@ -32,6 +32,7 @@ function aplica(doc, u, novo) {
   for (const [k, x] of Object.entries(u.$inc ?? {})) doc[k] = (doc[k] ?? 0) + x;
   for (const [k, x] of Object.entries(u.$push ?? {})) (doc[k] ??= []).push(x);
   for (const k of Object.keys(u.$unset ?? {})) delete doc[k];
+  for (const [k, x] of Object.entries(u.$addToSet ?? {})) { const l = (doc[k] ??= []); if (!l.includes(x)) l.push(x); }
 }
 function colecao(unico) {
   const docs = [];
@@ -55,6 +56,7 @@ function bancoFalso() {
   const cols = {
     comprasCristais: colecao((a, b) => a.status === 'pendente' && b.status === 'pendente' && a.userId === b.userId && a.pacote === b.pacote && (a.metodo ?? 'pix') === (b.metodo ?? 'pix')),
     contas: colecao((a, b) => a.userId === b.userId),
+    visuais: colecao(),
   };
   return { cols, collection: (n) => cols[n] };
 }
@@ -123,6 +125,8 @@ await caso('primeira compra fica marcada só na primeira', async () => {
   for (const n of [1, 2]) { const a = await abrirCompra(db, cfg, { ...quem, n }, { agora: T0, f: mp.f }); const d = db.cols.comprasCristais.docs.find((x) => String(x._id) === a.pedido.id); mp.pagar(d.mpId); await conferir(db, 'TESTE', d, { f: mp.f }); }
   const conta = db.cols.contas.docs[0];
   igual([conta.cp, conta.primeiraCompra.pedido === String(db.cols.comprasCristais.docs[0]._id)], [1290, true]);
+  // o título do presente vai para a aba Visual do bot, uma vez só
+  igual(db.cols.visuais.docs.map((v) => v['tem.titulos']), [['Patrono de Diamond']]);
 });
 await caso('valor menor que o do pacote não credita', async () => {
   const db = bancoFalso(), mp = mpFalso();

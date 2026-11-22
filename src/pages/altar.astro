@@ -174,6 +174,18 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde:
   <div class="inv" data-inv hidden aria-live="polite">
     <canvas class="inv__ceu" data-ceu aria-hidden="true"></canvas>
     <svg class="inv__linhas" data-inv-linhas viewBox="-50 -50 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <div class="inv__raios" data-raios aria-hidden="true"></div>
+    <div class="inv__selo" data-selo hidden>
+      <svg class="inv__selo-svg" viewBox="-100 -100 200 200" aria-hidden="true">
+        <circle class="inv__selo-a" r="92" />
+        <circle class="inv__selo-b" r="78" />
+        <g class="inv__selo-runas" data-selo-runas></g>
+        <circle class="inv__selo-c" r="52" />
+        <g class="inv__selo-racha" data-selo-racha></g>
+      </svg>
+      <span class="inv__selo-k" aria-hidden="true">運</span>
+      <p class="inv__selo-t" data-selo-t>Toque para romper o selo</p>
+    </div>
     <div class="inv__meteoro" data-meteoro aria-hidden="true"><i></i></div>
     <span class="inv__k" data-inv-k aria-hidden="true">運</span>
     <div class="inv__flash" data-flash aria-hidden="true"></div>
@@ -188,6 +200,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde:
       </div>
     </div>
     <button class="inv__pular" type="button" data-inv-pular>Pular ›</button>
+    <button class="inv__som" type="button" data-som aria-pressed="true">Som</button>
   </div>
 
   <dialog class="al-hist" data-hist>

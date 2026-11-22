@@ -1,0 +1,335 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PageNav from '../components/PageNav.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Table from '../components/Table.astro';
+import NextPage from '../components/NextPage.astro';
+import { circulo, feira, lados, balcoes } from '../data/npcs.js';
+
+const abas = [['circulo', 'Círculo Meridiano'], ['feira', 'Feira do Cristal'], ['balcoes', 'Quem atende no bot']];
+const ladoDe = (id) => lados.find((l) => l.id === id);
+const contar = (id) => feira.npcs.filter((n) => n.lado === id).length;
+// "{censura}" no texto vira um trecho riscado que embaralha sozinho.
+const partes = (t) => t.split('{censura}');
+const folhasEmBranco = circulo.dossies.reduce((a, d) => a + d.campos.filter((c) => c.s === 'indef' || c.s === 'selado').length, 0);
+const folhasTotal = circulo.dossies.reduce((a, d) => a + d.campos.length, 0);
+---
+<Base title="NPCs" slug="npcs" description="Os NPCs de Diamond: os dossiês do Círculo Meridiano e os rostos da Feira do Cristal, com aparência, falas e o que cada um quer.">
+  <PageHero
+    slug="npcs"
+    title="Os rostos <em>de Diamond</em>"
+    lead="Todo reino tem quem manda, quem cobra, quem vende e quem some. Aqui estão os que os Marcados já cruzaram."
+    intro="NPCs são personagens da Staff. Eles lembram de você, negociam, mentem e às vezes matam. Cada um tem um ponto fraco que <b>só o RP revela</b>: o site mostra apenas o que já se sabe."
+  />
+
+  <PageNav items={abas} />
+
+  <!-- ============ 01 · Círculo Meridiano ============ -->
+  <section class="sec npc-circ" id="circulo">
+    <span class="npc-circ__bg" aria-hidden="true">{circulo.kanji}</span>
+    <div class="wrap">
+      <SectionHead num="01" label="Círculo Meridiano" title="Quatro pastas, <em>metade em branco</em>." lead={circulo.texto}>
+        <p class="npc-circ__meta" slot="aside"><b>{folhasEmBranco}</b> de {folhasTotal} campos sem resposta</p>
+      </SectionHead>
+
+      <div class="dossies">
+        {circulo.dossies.map((d, i) => (
+          <article class="dossie" style={`--c:${d.cor};--r:${[-1.2, 0.9, -0.6, 1.3][i % 4]}deg`} data-dossie id={d.id}>
+            <div class="dossie__tab"><span>Nº {String(i + 1).padStart(3, '0')}</span><span>Arquivo do Conselho</span></div>
+            <div class="dossie__sheet">
+              <span class="dossie__stamp" aria-hidden="true"><b>機密</b><i>Restrito</i></span>
+              <header class="dossie__head">
+                <div class="dossie__face" aria-hidden="true">
+                  <svg viewBox="0 0 100 120" class="dossie__sil"><path d="M50 14c-13 0-22 10-22 24 0 9 3 17 8 22-14 5-25 15-28 32l-2 28h88l-2-28c-3-17-14-27-28-32 5-5 8-13 8-22 0-14-9-24-22-24z" /></svg>
+                  <span class="dossie__kanji">{d.kanji}</span>
+                  <span class="dossie__q">Sem retrato</span>
+                </div>
+                <div>
+                  <p class="dossie__eyebrow">⸻ Dossiê ⸻</p>
+                  <h3 class="dossie__name">{d.nome}</h3>
+                  {d.alcunha && <p class="dossie__alias">“{d.alcunha}”{d.alcunhaNota && <small>{d.alcunhaNota}</small>}</p>}
+                </div>
+              </header>
+              <dl class="dossie__fields">
+                {d.campos.map((c) => (
+                  <div class:list={['dossie__f', c.s && `is-${c.s}`]}>
+                    <dt>{c.r}</dt>
+                    <dd>
+                      {c.opcoes ? (
+                        <span class="dossie__opts" data-roleta>
+                          {c.opcoes.map((o) => <span>{o}</span>)}
+                          <em class="dossie__note">Uma destas. Ainda não se sabe qual.</em>
+                        </span>
+                      ) : c.s === 'indef' ? (
+                        <span class="redige redige--indef" tabindex="0" aria-label="A definir: ninguém descobriu ainda"><span class="redige__bar" aria-hidden="true"></span><span class="redige__txt">A definir</span></span>
+                      ) : c.s === 'selado' ? (
+                        <span class="redige redige--selado" tabindex="0" aria-label="Selado: a Staff sabe, os Marcados não"><span class="redige__bar" aria-hidden="true"></span><span class="redige__txt">Selado</span></span>
+                      ) : (
+                        <>
+                          {partes(c.v).map((p, j) => (
+                            <>{j > 0 && <span class="censura" data-censura aria-label="nome censurado">%#%@#$</span>}{p}</>
+                          ))}
+                          {c.s === 'incerto' && <em class="dossie__note">Suspeita. Nada confirmado.</em>}
+                        </>
+                      )}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <footer class="dossie__foot"><span>Folhas preenchidas</span><span class="dossie__meter"><i style={`width:${Math.round((d.campos.filter((c) => !c.s || c.s === 'incerto').length / d.campos.length) * 100)}%`}></i></span></footer>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="npc-circ__aviso" data-reveal>{circulo.aviso}</p>
+    </div>
+  </section>
+
+  <!-- ============ 02 · Feira do Cristal ============ -->
+  <section class="sec sec--line npc-feira" id="feira">
+    <div class="wrap">
+      <SectionHead num="02" label={`${feira.nome} · ${feira.quando}`} title="Quem estava <em>no leilão</em>." lead={feira.texto} />
+
+      <div class="npc-filtro" role="group" aria-label="Filtrar por lado" data-reveal>
+        <button type="button" class="is-on" data-lado="todos" aria-pressed="true"><b>全</b>Todos <small>{feira.npcs.length}</small></button>
+        {lados.map((l) => <button type="button" data-lado={l.id} aria-pressed="false" title={l.texto}><b>{l.kanji}</b>{l.nome} <small>{contar(l.id)}</small></button>)}
+      </div>
+
+      <div class="npcs" data-npcs>
+        {feira.npcs.map((n) => {
+          const l = ladoDe(n.lado);
+          return (
+            <article class="npc" data-lado={n.lado} id={n.id}>
+              <div class="npc__panel" aria-hidden="true">
+                <span class="npc__kanji">{n.kanji}</span>
+                <span class="npc__lado"><b>{l.kanji}</b>{l.nome}</span>
+              </div>
+              <div class="npc__body">
+                <p class="npc__papel">{n.papel}</p>
+                <h3 class="npc__nome">{n.nome}</h3>
+                {n.alcunha && <p class="npc__alcunha">“{n.alcunha}”</p>}
+
+                <button type="button" class="npc__fala" data-falas={JSON.stringify(n.falas)} aria-label={`Fala de ${n.nome}. Toque para ouvir outra.`}>
+                  <span class="npc__fala-txt">{n.falas[0]}</span>
+                  {n.falas.length > 1 && <span class="npc__fala-n"><i>1</i>/{n.falas.length}</span>}
+                </button>
+
+                <dl class="npc__kv">
+                  <div><dt>Aparência</dt><dd>{n.aparencia}</dd></div>
+                  {n.quer && <div><dt>O que quer</dt><dd>{n.quer}</dd></div>}
+                  <div><dt>Tique</dt><dd>{n.tique}</dd></div>
+                  <div><dt>Ponto fraco</dt><dd><span class="redige redige--selado redige--inline" tabindex="0" aria-label="Ponto fraco: descubra no RP"><span class="redige__bar" aria-hidden="true"></span><span class="redige__txt">Descubra no RP</span></span></dd></div>
+                </dl>
+                <p class="npc__onde"><span>Onde</span>{n.onde}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 · Balcões do bot ============ -->
+  <section class="sec sec--line sec--raise" id="balcoes">
+    <div class="wrap">
+      <SectionHead num="03" label="Quem atende no bot" title="Oito balcões <em>que respondem</em>." lead={balcoes.texto} />
+      <Table head={['NPC', 'Onde fica']} rows={balcoes.lista} />
+      <p class="t-small" style="margin-top:18px;color:var(--mute)" data-reveal>Use <code>/falar</code> dentro do canal do NPC. Até 20 falas por dia, quando a Staff ativar.</p>
+    </div>
+  </section>
+
+  <NextPage slug="npcs" />
+</Base>
+
+<style is:global>
+  /* ---------- Círculo Meridiano: pastas do Conselho ---------- */
+  .npc-circ { position: relative; overflow: clip; }
+  .npc-circ__bg { position: absolute; left: -3vw; top: 4%; font-family: var(--f-kanji); font-weight: 800; font-size: clamp(16rem, 42vw, 40rem); line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(255, 59, 46, 0.12); pointer-events: none; }
+  .npc-circ__meta { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+  .npc-circ__meta b { color: var(--mana); font-size: 15px; }
+  .npc-circ__aviso { position: relative; margin-top: clamp(28px, 4vw, 48px); font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); border-left: 2px solid var(--mana); padding-left: 14px; }
+
+  .dossies { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 4vw, 56px) clamp(20px, 3vw, 44px); margin-top: clamp(36px, 5vw, 64px); }
+  .dossie { position: relative; min-width: 0; transform: rotate(var(--r)) translateY(40px); opacity: 0; transition: transform 0.9s var(--ease), opacity 0.6s var(--ease); }
+  .dossie.is-in { transform: rotate(var(--r)); opacity: 1; }
+  @media (hover: hover) { .dossie.is-in:hover { transform: rotate(0deg) translateY(-6px); } }
+  .dossie__tab { display: inline-flex; gap: 18px; padding: 8px 16px 6px; background: #d9d0bc; color: #3a352c; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%); }
+  .dossie__sheet {
+    position: relative; padding: clamp(20px, 2.4vw, 32px); color: #141210;
+    background: radial-gradient(circle at center, rgba(13, 13, 14, 0.07) 0.8px, transparent 1.2px) 0 0 / 5px 5px, linear-gradient(170deg, #efe8d8, #e3dac5);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 0, 0, 0.25);
+  }
+  .dossie__sheet::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--c); }
+  .dossie__stamp { position: absolute; right: clamp(14px, 2vw, 26px); top: clamp(14px, 2vw, 22px); display: grid; place-items: center; padding: 6px 10px; border: 3px double var(--mana-2); color: var(--mana-2); transform: rotate(-12deg) scale(2.4); opacity: 0; mix-blend-mode: multiply; pointer-events: none; }
+  .dossie__stamp b { font-family: var(--f-kanji); font-weight: 800; font-size: 26px; line-height: 1; letter-spacing: 0.1em; }
+  .dossie__stamp i { font-style: normal; font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; }
+  .dossie.is-in .dossie__stamp { animation: carimbo 0.5s 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) forwards; }
+  @keyframes carimbo { 0% { opacity: 0; transform: rotate(-12deg) scale(2.4); } 70% { opacity: 0.9; transform: rotate(-12deg) scale(0.92); } 100% { opacity: 0.85; transform: rotate(-12deg) scale(1); } }
+
+  .dossie__head { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 18px; align-items: end; padding-right: 90px; }
+  .dossie__face { position: relative; aspect-ratio: 5 / 6; background: #1a1714; overflow: hidden; border: 1px solid rgba(0, 0, 0, 0.6); }
+  .dossie__face::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at center, rgba(235, 228, 212, 0.18) 0.9px, transparent 1.4px); background-size: 4px 4px; }
+  .dossie__sil { position: absolute; inset: 12% 0 0; width: 100%; height: 88%; fill: #0b0a09; stroke: color-mix(in srgb, var(--c) 70%, transparent); stroke-width: 1.2; }
+  .dossie__kanji { position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%); font-family: var(--f-kanji); font-weight: 800; font-size: 30px; color: var(--c); text-shadow: 0 0 18px color-mix(in srgb, var(--c) 60%, transparent); z-index: 1; }
+  .dossie__q { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-family: var(--f-mono); font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(235, 228, 212, 0.5); z-index: 1; }
+  .dossie__eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: #6b6355; }
+  .dossie__name { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.9rem, 3vw, 2.7rem); line-height: 0.95; margin-top: 6px; color: #0b0a09; }
+  .dossie__alias { margin-top: 6px; font-family: var(--f-display); font-size: 1.2rem; color: var(--mana-2); }
+  .dossie__alias small { display: block; font-family: var(--f-body); font-size: 12px; color: #6b6355; }
+
+  .dossie__fields { margin-top: 22px; display: grid; }
+  .dossie__f { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; padding: 10px 0; border-top: 1px dashed rgba(20, 18, 16, 0.25); }
+  .dossie__f dt { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #6b6355; padding-top: 3px; }
+  .dossie__f dd { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+  .dossie__note { display: block; margin-top: 4px; font-style: normal; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mana-2); }
+  .is-incerto dd { text-decoration: underline wavy rgba(197, 36, 26, 0.6); text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .is-incerto dd .dossie__note { text-decoration: none; }
+
+  .dossie__opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .dossie__opts > span { padding: 3px 9px; border: 1px solid rgba(20, 18, 16, 0.3); font-size: 0.85rem; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+  .dossie__opts > span.is-on { background: #0b0a09; color: #efe8d8; border-color: #0b0a09; }
+  .dossie__opts .dossie__note { flex-basis: 100%; }
+
+  .dossie__foot { display: flex; align-items: center; gap: 12px; margin-top: 16px; padding-top: 12px; border-top: 2px solid #141210; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #6b6355; }
+  .dossie__meter { flex: 1; height: 6px; background: repeating-linear-gradient(90deg, rgba(20, 18, 16, 0.15) 0 6px, transparent 6px 8px); }
+  .dossie__meter i { display: block; height: 100%; width: 0; background: var(--c); transition: width 1.2s 0.6s var(--ease); }
+  .dossie:not(.is-in) .dossie__meter i { width: 0 !important; }
+
+  /* tarja: o que ninguém sabe (indef) e o que só a Staff sabe (selado) */
+  .redige { position: relative; display: inline-grid; align-items: center; min-width: 12ch; padding: 2px 10px; cursor: help; outline-offset: 3px; }
+  .redige__bar { position: absolute; inset: 0; background: #0b0a09; transform-origin: left; }
+  .redige--indef .redige__bar { background: repeating-linear-gradient(-45deg, #0b0a09 0 6px, #1d1a16 6px 12px); background-size: 34px 34px; animation: estatica 1.4s linear infinite; }
+  @keyframes estatica { to { background-position: 34px 0; } }
+  .redige__txt { position: relative; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mana); }
+  .redige--selado .redige__txt { color: rgba(235, 228, 212, 0.7); }
+  .redige--indef .redige__txt::before { content: '[ '; } .redige--indef .redige__txt::after { content: ' ]'; }
+  .redige::after { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 3; width: max-content; max-width: 240px; padding: 8px 10px; background: var(--ink); color: var(--bone); font-family: var(--f-body); font-size: 12px; letter-spacing: 0; text-transform: none; line-height: 1.4; opacity: 0; transform: translateY(4px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
+  .redige--indef::after { content: 'Ninguém em Diamond descobriu isso ainda.'; }
+  .redige--selado::after { content: 'A Staff sabe. Os Marcados, ainda não.'; }
+  .npc .redige--selado::after { content: 'Todo NPC tem um. Ganhe a confiança dele ou cave no RP.'; }
+  .redige:hover::after, .redige:focus-visible::after { opacity: 1; transform: none; }
+  .dossie.is-in .redige__bar { animation-name: tarja, estatica; animation-duration: 0.5s, 1.4s; animation-timing-function: var(--ease-ink), linear; animation-iteration-count: 1, infinite; }
+  .dossie.is-in .redige--selado .redige__bar { animation: tarja 0.5s var(--ease-ink); }
+  @keyframes tarja { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .censura { display: inline-block; padding: 0 4px; background: #0b0a09; color: var(--mana); font-family: var(--f-mono); font-size: 0.85em; letter-spacing: 0.08em; }
+
+  /* ---------- Feira do Cristal: painéis de apresentação ---------- */
+  .npc-filtro { display: flex; flex-wrap: wrap; gap: 8px; margin-top: clamp(28px, 4vw, 48px); }
+  .npc-filtro button { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border: 1px solid var(--line-2); background: transparent; color: var(--bone-2); font-family: var(--f-body); font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+  .npc-filtro button b { font-family: var(--f-kanji); font-weight: 800; font-size: 1rem; color: var(--mana); letter-spacing: 0; }
+  .npc-filtro button small { font-family: var(--f-mono); font-size: 10px; color: var(--mute); }
+  .npc-filtro button.is-on { background: var(--mana); border-color: var(--mana); color: #fff; }
+  .npc-filtro button.is-on b, .npc-filtro button.is-on small { color: #fff; }
+  @media (hover: hover) { .npc-filtro button:not(.is-on):hover { border-color: var(--bone); color: var(--bone); } }
+
+  .npcs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: clamp(16px, 2vw, 24px); margin-top: 24px; }
+  .npc { position: relative; display: grid; grid-template-columns: 112px minmax(0, 1fr); min-width: 0; background: var(--ink-2); border: 1px solid var(--line); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%); opacity: 0; transform: translateY(26px); transition: opacity 0.5s var(--ease), transform 0.6s var(--ease), border-color 0.3s; }
+  .npc.is-in { opacity: 1; transform: none; }
+  .npc.is-out { display: none; }
+  @media (hover: hover) { .npc:hover { border-color: rgba(255, 59, 46, 0.45); } .npc:hover .npc__kanji { transform: scale(1.08) rotate(-4deg); } }
+  .npc__panel { position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 18px 0 14px; background: var(--mana); overflow: hidden; clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%); }
+  .npc[data-lado='fosso'] .npc__panel { background: #0b0a09; box-shadow: inset -1px 0 0 var(--line-2); }
+  .npc[data-lado='veios'] .npc__panel { background: var(--paper); }
+  .npc__panel::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(100deg, transparent 0 7px, rgba(0, 0, 0, 0.13) 7px 8px); }
+  .npc__kanji { position: relative; font-family: var(--f-kanji); font-weight: 800; font-size: 54px; line-height: 1; color: #fff; padding-right: 22px; transition: transform 0.5s var(--ease); }
+  .npc[data-lado='fosso'] .npc__kanji { color: var(--mana); }
+  .npc[data-lado='veios'] .npc__kanji { color: #0b0a09; }
+  .npc__lado { position: relative; writing-mode: vertical-rl; transform: rotate(180deg); padding-left: 22px; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); }
+  .npc[data-lado='veios'] .npc__lado { color: rgba(11, 10, 9, 0.75); }
+  .npc__lado b { font-family: var(--f-kanji); margin-bottom: 8px; }
+  .npc__body { padding: 20px clamp(16px, 2vw, 26px) 26px 6px; min-width: 0; }
+  .npc__papel { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mana); }
+  .npc__nome { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1; margin-top: 6px; }
+  .npc__alcunha { font-family: var(--f-display); color: var(--gold); margin-top: 2px; }
+
+  .npc__fala { position: relative; display: block; width: 100%; margin: 16px 0 4px; padding: 14px 16px 14px 18px; text-align: left; background: var(--bone); color: #0b0a09; border: 0; border-radius: 18px 18px 18px 4px; font-family: var(--f-body); font-size: 0.96rem; font-weight: 600; line-height: 1.4; cursor: pointer; }
+  .npc__fala::before { content: ''; position: absolute; left: -9px; bottom: 0; border: 9px solid transparent; border-right-color: var(--bone); border-bottom-color: var(--bone); }
+  .npc__fala-txt { display: block; transition: opacity 0.18s, transform 0.18s; }
+  .npc__fala.is-troca .npc__fala-txt { opacity: 0; transform: translateY(6px); }
+  .npc__fala-n { position: absolute; right: 12px; bottom: -9px; padding: 2px 7px; background: var(--mana); color: #fff; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; }
+  .npc__fala:focus-visible { outline: 2px solid var(--mana); outline-offset: 3px; }
+
+  .npc__kv { display: grid; gap: 10px; margin-top: 18px; }
+  .npc__kv dt { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
+  .npc__kv dd { margin: 3px 0 0; font-size: 0.92rem; line-height: 1.5; color: var(--bone-2); }
+  .npc__onde { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--bone); }
+  .npc__onde span { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mana); }
+
+  @media (max-width: 860px) {
+    .dossies { grid-template-columns: minmax(0, 1fr); }
+    .dossie { --r: 0deg !important; }
+  }
+  @media (max-width: 560px) {
+    .dossie__head { grid-template-columns: 72px minmax(0, 1fr); padding-right: 0; }
+    .dossie__stamp { top: auto; bottom: 64px; right: 10px; }
+    .dossie__q { display: none; }
+    .dossie__f { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .npc { grid-template-columns: 64px minmax(0, 1fr); }
+    .npc__kanji { font-size: 34px; padding-right: 12px; }
+    .npc__lado { padding-left: 12px; font-size: 9px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dossie, .npc { opacity: 1; transform: rotate(var(--r, 0deg)); transition: none; }
+    .dossie__stamp { opacity: 0.85; transform: rotate(-12deg); animation: none !important; }
+    .redige__bar { animation: none !important; }
+  }
+</style>
+
+<script>
+  const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Entrada: pastas e painéis aparecem ao rolar (o carimbo bate quando a pasta entra).
+  const vistos = document.querySelectorAll('[data-dossie], .npc');
+  if (calmo || !('IntersectionObserver' in window)) vistos.forEach((el) => el.classList.add('is-in'));
+  else {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { threshold: 0.15 });
+    vistos.forEach((el) => io.observe(el));
+  }
+
+  // Censura: o nome riscado embaralha sem parar.
+  const sujo = '%#@$!&?*';
+  document.querySelectorAll('[data-censura]').forEach((el) => {
+    if (calmo) return;
+    const n = el.textContent.length;
+    setInterval(() => { el.textContent = Array.from({ length: n }, () => sujo[(Math.random() * sujo.length) | 0]).join(''); }, 110);
+  });
+
+  // Magia em aberto: a roleta passa pelas candidatas e para no mouse.
+  document.querySelectorAll('[data-roleta]').forEach((el) => {
+    const op = [...el.querySelectorAll(':scope > span')];
+    let i = 0, parado = false;
+    el.addEventListener('pointerenter', () => { parado = true; });
+    el.addEventListener('pointerleave', () => { parado = false; });
+    const passo = () => { if (parado) return; op.forEach((o) => o.classList.remove('is-on')); op[i % op.length].classList.add('is-on'); i++; };
+    passo();
+    if (!calmo) setInterval(passo, 420);
+  });
+
+  // Falas: toque no balão para ouvir a próxima.
+  document.querySelectorAll('.npc__fala').forEach((b) => {
+    const falas = JSON.parse(b.dataset.falas || '[]');
+    if (falas.length < 2) return;
+    let i = 0;
+    const txt = b.querySelector('.npc__fala-txt');
+    const num = b.querySelector('.npc__fala-n i');
+    b.addEventListener('click', () => {
+      i = (i + 1) % falas.length;
+      b.classList.add('is-troca');
+      setTimeout(() => { txt.textContent = falas[i]; if (num) num.textContent = String(i + 1); b.classList.remove('is-troca'); }, calmo ? 0 : 180);
+    });
+  });
+
+  // Filtro por lado.
+  const botoes = document.querySelectorAll('.npc-filtro button');
+  botoes.forEach((btn) => btn.addEventListener('click', () => {
+    const lado = btn.dataset.lado;
+    botoes.forEach((x) => { const on = x === btn; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
+    document.querySelectorAll('.npc').forEach((n) => {
+      const mostra = lado === 'todos' || n.dataset.lado === lado;
+      n.classList.toggle('is-out', !mostra);
+      if (mostra && !calmo) { n.classList.remove('is-in'); requestAnimationFrame(() => requestAnimationFrame(() => n.classList.add('is-in'))); }
+    });
+  }));
+</script>

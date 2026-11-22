@@ -19,6 +19,9 @@ export const env = {
   get mpSegredo() { return e('MP_WEBHOOK_SECRET'); },
   /** Sala de Testes (/admin): ids do Discord com acesso, separados por vírgula. Vazio = a sala não existe. */
   get adminIds() { return e('ADMIN_IDS'); },
+  /** Métricas da Sala de Testes: token do bot (lê membros pela API do Discord) e a chave do agendamento diário da Vercel */
+  get botToken() { return e('DISCORD_BOT_TOKEN'); },
+  get cronSecret() { return e('CRON_SECRET'); },
 };
 
 /** O login só liga com as três chaves; o banco, com a URI e o servidor. */

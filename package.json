@@ -11,7 +11,8 @@
     "altar:teste": "node scripts/altar-teste.mjs",
     "loja:teste": "node scripts/loja-teste.mjs",
     "visual:teste": "node scripts/visual-teste.mjs",
-    "admin:teste": "node scripts/admin-teste.mjs"
+    "admin:teste": "node scripts/admin-teste.mjs",
+    "calendario:teste": "node scripts/calendario-teste.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "8.2.11",

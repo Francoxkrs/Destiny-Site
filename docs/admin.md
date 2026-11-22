@@ -46,3 +46,20 @@ O usuário `site-portal` precisa de mais estas permissões para a sala:
 
 ## Testes
 `npm run admin:teste` (banco falso em memória: quem entra, limites, conta nova, Yuls que partem da ficha, só a própria conta, atalhos, simulação).
+
+## Métricas do servidor (22/11)
+Painel "Métricas" no topo da sala: membros, online, **jogaram nesta semana** (ganharam XP do Passe nos últimos 7 dias) contra a meta de 40 do plano, jogaram hoje, novatos (7 e 30 dias), **novatos que ficam** (dos que chegaram há 1 a 5 semanas, quantos continuam), caminho do novato (entrou → criou → aprovado → jogou), última vez que jogou, entradas e saídas por semana, e as linhas diárias.
+
+Variáveis novas na Vercel:
+
+| Nome | O que é |
+| --- | --- |
+| `DISCORD_BOT_TOKEN` | O mesmo token do bot (`BOT_TOKEN` do `.env`). Lê membros e online pela API do Discord. **Nunca no chat nem no código.** O bot precisa da intenção "Server Members" ligada (Portal de Desenvolvedores → Bot). |
+| `CRON_SECRET` | 16+ caracteres aleatórios. A Vercel usa para chamar `/api/cron/metricas` todo dia às 00h de Brasília (`vercel.json` → `crons`) e tirar a foto do dia. Sem ela, a rota dá 404. |
+
+As fotos ficam em `metricasDia` (uma por dia, com os ids dos membros para saber quem saiu). Os ids nunca vão para o navegador. O botão "Tirar a foto de hoje" faz o mesmo na hora. Usuário do Atlas: `find`, `insert`, `update`, `createIndex` em `metricasDia` e `find` em `passes`.
+
+## Calendário de Eventos (22/11)
+Painel "Calendário" na sala: marca, edita e apaga eventos (título, tipo, dia, até, hora, texto, link do site ou do Discord, rascunho ou público). O público aparece em **Eventos → Calendário** (`/eventos/#calendario`), lido de `/api/calendario?mes=AAAA-MM`. Mora em `calendario`; cada mudança vai para `adminLog`. Usuário do Atlas: `find`, `insert`, `update`, `remove` em `calendario`.
+
+Testes: `npm run calendario:teste`.

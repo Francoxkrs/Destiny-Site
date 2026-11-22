@@ -8,6 +8,7 @@ import Gem from '../components/Gem.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { ehAdmin, CAMPOS, ACOES, TETO_SIMULAR } from '../lib/admin.js';
 import { raridades, garantia, inscricao } from '../data/altar.js';
+import { TIPOS } from '../lib/calendario.js';
 import '../styles/admin.css';
 export const prerender = false;
 
@@ -27,7 +28,7 @@ const atalhos = {
   yuls: [1000, 10000, 100000], meritos: [10, 100], antimeritos: [1], pe: [5, 20], estagio: [],
   cristalBranco: [1, 5], cristalNegro: [1, 5], cristalDourado: [1, 5],
 };
-const dados = { campos: CAMPOS, acoes: ACOES, atalhos, raridades, garantia, inscricao, teto: TETO_SIMULAR };
+const dados = { tipos: TIPOS, campos: CAMPOS, acoes: ACOES, atalhos, raridades, garantia, inscricao, teto: TETO_SIMULAR };
 ---
 {!admin ? (
   <Base title="Página não encontrada" slug="404" noindex>
@@ -55,6 +56,8 @@ const dados = { campos: CAMPOS, acoes: ACOES, atalhos, raridades, garantia, insc
       </header>
 
       <nav class="adm-nav wrap" aria-label="Seções da Sala de Testes">
+        <a href="#adm-met"><span aria-hidden="true">数</span>Métricas</a>
+        <a href="#adm-cal"><span aria-hidden="true">暦</span>Calendário</a>
         <a href="#adm-conta"><span aria-hidden="true">晶</span>Conta</a>
         <a href="#adm-pers"><span aria-hidden="true">魂</span>Personagem</a>
         <a href="#adm-altar"><span aria-hidden="true">運</span>Altar</a>
@@ -63,6 +66,48 @@ const dados = { campos: CAMPOS, acoes: ACOES, atalhos, raridades, garantia, insc
       </nav>
 
       <div class="wrap adm-grid">
+        <!-- MÉTRICAS: Discord + banco do bot + fotos diárias -->
+        <section class="adm-p adm-p--largo" id="adm-met" aria-labelledby="adm-met-t">
+          <header class="adm-p__hd">
+            <span class="adm-p__k" aria-hidden="true">数</span>
+            <div><h2 id="adm-met-t" class="adm-p__t">Métricas do servidor</h2><p class="adm-p__s">Quem entra, quem fica e quem joga</p></div>
+            <button type="button" class="adm-b adm-b--ink adm-p__ir" data-met-foto>Tirar a foto de hoje</button>
+          </header>
+          <p class="adm-p__nota" data-met-aviso hidden></p>
+          <div class="adm-kpis" data-met-kpis><p class="adm-vazio">Lendo o servidor…</p></div>
+          <div class="adm-graf" data-met-graf></div>
+          <p class="adm-met__nota">“Jogou” = ganhou XP do Passe no dia (post de RP, missão, treino, criatura, call). Entradas por semana contam quem entrou e continua; saídas só aparecem a partir das fotos diárias (a Vercel tira uma por dia, à meia-noite).</p>
+        </section>
+
+        <!-- CALENDÁRIO: o que aparece em /eventos/#calendario -->
+        <section class="adm-p adm-p--largo" id="adm-cal" aria-labelledby="adm-cal-t">
+          <header class="adm-p__hd">
+            <span class="adm-p__k" aria-hidden="true">暦</span>
+            <div><h2 id="adm-cal-t" class="adm-p__t">Calendário de Eventos</h2><p class="adm-p__s">Aparece na aba Calendário de Eventos</p></div>
+            <a class="adm-b adm-b--ink adm-p__ir" href="/eventos/#calendario">Ver no site <Arrow /></a>
+          </header>
+          <div class="adm-cal">
+            <form class="adm-calf" data-cal-form>
+              <input type="hidden" name="ref" />
+              <label class="adm-calf__l adm-calf__l--largo"><span>Título</span><input name="titulo" maxlength="80" required placeholder="Masmorra do Solstício" /></label>
+              <label class="adm-calf__l"><span>Tipo</span>
+                <select name="tipo">{Object.entries(TIPOS).map(([id, t]) => <option value={id}>{t.kanji} {t.nome}</option>)}</select>
+              </label>
+              <label class="adm-calf__l"><span>Dia</span><input type="date" name="data" required /></label>
+              <label class="adm-calf__l"><span>Até (opcional)</span><input type="date" name="fim" /></label>
+              <label class="adm-calf__l"><span>Hora (opcional)</span><input type="time" name="hora" /></label>
+              <label class="adm-calf__l adm-calf__l--largo"><span>Texto (opcional)</span><textarea name="texto" maxlength="500" rows="3" placeholder="O que vai rolar, onde e o que ganha."></textarea></label>
+              <label class="adm-calf__l adm-calf__l--largo"><span>Link (opcional: /altar/ ou link do Discord)</span><input name="link" maxlength="300" placeholder="https://discord.com/channels/…" /></label>
+              <label class="adm-calf__c"><input type="checkbox" name="publico" checked /> <span>Mostrar no site (sem marcar, fica como rascunho)</span></label>
+              <div class="adm-calf__b">
+                <button type="submit" class="adm-b adm-b--solid" data-cal-salvar>Marcar no calendário</button>
+                <button type="button" class="adm-b adm-b--ink" data-cal-novo hidden>Cancelar edição</button>
+              </div>
+            </form>
+            <ol class="adm-call" data-cal-lista><li class="adm-vazio">Lendo o calendário…</li></ol>
+          </div>
+        </section>
+
         {grupos.map((g) => (
           <section class="adm-p" id={`adm-${g.id}`} aria-labelledby={`adm-${g.id}-t`}>
             <header class="adm-p__hd">
@@ -176,4 +221,5 @@ const dados = { campos: CAMPOS, acoes: ACOES, atalhos, raridades, garantia, insc
 
 <script>
   import '../scripts/admin.js';
+  import '../scripts/admin-extra.js';
 </script>

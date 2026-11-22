@@ -704,6 +704,24 @@
 .ev-premios__d { color: var(--c); font-size: 11px; letter-spacing: 0.14em; }
 .ev-premios b { font-family: var(--f-display); font-weight: 700; font-size: 1.3rem; line-height: 1.05; }
 .ev-premios small { color: var(--mute); }
+/* Arquivo: eventos que já aconteceram */
+.ev-lista__h--arq { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-2); color: var(--mute); }
+@media (max-width: 999px) { .ev-lista__h--arq { display: none; } }
+.ev-item[data-estado='passado'] { background: transparent; }
+.ev-item[data-estado='passado'] .ev-item__selo { border-color: var(--bone-2); color: var(--bone-2); transform: rotate(-8deg); border-radius: 50%; }
+.ev-item[data-estado='passado'][aria-current='true'] { background: var(--bone); }
+.ev-item[data-estado='passado'][aria-current='true'] .ev-item__selo { border-color: var(--mana); color: var(--mana); }
+.ev-p[data-estado='passado'] .ev-p__arte img { filter: grayscale(1) sepia(0.25) contrast(1.2) brightness(0.62); }
+.ev-p[data-estado='passado'] .ev-p__estado { background: var(--bone); color: var(--ink); }
+.ev-p[data-estado='passado'] .ev-p__k { -webkit-text-stroke-color: var(--bone-2); opacity: 0.85; }
+.ev-p[data-estado='passado'] .ev-p__arte::before { content: '終'; position: absolute; z-index: 2; left: 22px; bottom: 22%; width: 74px; height: 74px; display: grid; place-items: center; border: 3px solid var(--mana); border-radius: 50%; color: var(--mana); font-family: var(--f-kanji); font-weight: 800; font-size: 40px; line-height: 1; transform: rotate(-12deg); box-shadow: inset 0 0 0 3px var(--ink-2), inset 0 0 0 5px var(--mana); opacity: 0.92; }
+.ev-elenco { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.ev-elenco li { display: grid; gap: 2px; padding: 10px 14px; border: 1px solid var(--line-2); background: var(--ink); }
+.ev-elenco b { font-family: var(--f-display); font-weight: 700; font-size: 1.25rem; line-height: 1.05; }
+.ev-elenco small { color: var(--mute); }
+.ev-marcas { display: grid; gap: 8px; }
+.ev-marcas li { position: relative; padding-left: 26px; color: var(--bone-2); line-height: 1.55; max-width: 64ch; }
+.ev-marcas li::before { content: ''; position: absolute; left: 4px; top: 0.55em; width: 10px; height: 10px; background: var(--mana); transform: rotate(45deg); }
 .ev-p__pe { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 14px; border-top: 1px solid var(--line-2); }
 .ev-cmds { display: flex; flex-wrap: wrap; gap: 6px; }
 

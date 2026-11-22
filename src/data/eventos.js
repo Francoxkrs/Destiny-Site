@@ -1,5 +1,7 @@
 // Eventos do servidor mostrados em /eventos/.
-// estado: 'ativo' (tem prazo e está valendo), 'sempre' (faz parte do mundo) ou 'breve' (anunciado, ainda sem data).
+// estado: 'ativo' (tem prazo e está valendo), 'sempre' (faz parte do mundo), 'breve' (anunciado, ainda sem data)
+// ou 'passado' (já aconteceu: entra no Arquivo, com crônica, quem esteve lá e o que mudou no mundo).
+// Passados vão do mais novo para o mais antigo. Só entra o que saiu no RP ou no Planeta Global: segredo da Staff fica de fora.
 // Datas em texto, do jeito que a Staff anuncia. Nada aqui inventa prêmio: cada recompensa vem do bot ou de anúncio do Silas.
 export const eventos = [
   {
@@ -87,7 +89,97 @@ export const eventos = [
     premios: [],
     link: { href: '/missoes/', texto: 'Ver as Missões de hoje' },
   },
+  // ── Arquivo: eventos que já aconteceram (mais novo primeiro) ──
+  {
+    id: 'diamond-caiu',
+    estado: 'passado',
+    tipo: 'Planeta Global',
+    nome: 'Diamond caiu',
+    kanji: '崩',
+    img: '/img/eventos/viktor.webp',
+    quando: '22/11/2026',
+    resumo: 'Vinte e quatro horas depois da Feira, o rei de Diamond estava morto. Viktor Fritz foi ao ar numa edição clandestina.',
+    texto: 'A primeira edição do Planeta Global saiu sem redação e de local não informado. Viktor Fritz contou o que a Coroa não quis contar: a vila de mineiros que virou cinza sem ajuda de ninguém, as Vielas cuidando dos feridos, a isca nas Valas do Fosso e, no fim, o rei. A Feira veio. O rei caiu. Quem quiser que faça a conta.',
+    elenco: [
+      { nome: 'Viktor Fritz', papel: 'Apresentador do Planeta Global' },
+      { nome: 'Aldric Kressel', papel: 'Lavador de Ossos da Coroa' },
+    ],
+    marcas: [
+      'O trono de Diamond está vazio, e a Temporada I corre sob essa sombra.',
+      'O Planeta Global virou a voz do que a Coroa cala: as próximas edições saem no servidor.',
+    ],
+    video: { href: 'https://www.youtube.com/watch?v=cdAGstW1KnE', texto: 'Assistir à edição' },
+    passos: [],
+    premios: [],
+  },
+  {
+    id: 'cacada-chifre-espiral',
+    estado: 'passado',
+    tipo: 'Caçada',
+    nome: 'A isca do Chifre-Espiral',
+    kanji: '狩',
+    img: '/img/criaturas/chifre-espiral.webp',
+    quando: 'Semana da Feira · 11/2026',
+    resumo: 'O caçador seguiu o Chifre-Espiral até as Valas do Fosso e achou o bicho pendurado, de cabeça para baixo. Era isca.',
+    texto: 'Kento vinha no rastro do Chifre-Espiral e o encontrou enforcado, queimando por dentro, em cima de joias de defunto e de uma carne que não era de gente. Lá de cima, o botânico Pierce viu tudo. Das sombras, um homem de jaleco branco bateu palmas e se apresentou: Professor Tomoe, com um relatório a entregar à Magnum Opus.',
+    elenco: [
+      { nome: 'Kento', papel: 'Caçador' },
+      { nome: 'Pierce', papel: 'Botânico' },
+      { nome: 'Zgy', papel: 'Esteve na cena' },
+      { nome: 'Professor Tomoe', papel: 'Magnum Opus' },
+    ],
+    marcas: [
+      'A Magnum Opus mostrou o rosto: alguém em Diamond está estudando as criaturas, e os caçadores.',
+      'As Valas do Fosso ficaram marcadas como território de caça de outra coisa.',
+    ],
+    link: { href: '/criaturas/', texto: 'Ver o Chifre-Espiral no Bestiário' },
+    passos: [],
+    premios: [],
+  },
+  {
+    id: 'vila-dos-mineiros',
+    estado: 'passado',
+    tipo: 'Caçada',
+    nome: 'O fogo na vila dos mineiros',
+    kanji: '焔',
+    img: '/img/regioes/os-veios.webp',
+    quando: 'Semana da Feira · 11/2026',
+    resumo: 'Um homem de um olho só pediu a um garoto sem magia o medo dele. Depois virou bicho e queimou a vila inteira.',
+    texto: 'Chapéu de aba larga, rosto em bandagem e um olho só. Virou monstro com ferrão, garra e cauda, abriu a boca feito flor e cuspiu fogo na vila. Luka, sem mana, socou a criatura até ver o osso dos dedos e arrancou o braço dela com uma lâmina negra que apaga magia. O homem foi embora chamando os sobreviventes de formigas e dizendo que a parte dele estava feita. Os feridos foram tirados do fogo por Rin, Miyume e Fumihiko e tratados nas Vielas por Gideon, o curandeiro, e Dee, o aprendiz.',
+    elenco: [
+      { nome: 'Luka', papel: 'Sobrevivente, lâmina antimagia' },
+      { nome: 'Melchior', papel: 'Sobrevivente' },
+      { nome: 'One', papel: 'Esteve na cena' },
+      { nome: 'Rin, Miyume e Fumihiko', papel: 'Tiraram os feridos do fogo' },
+      { nome: 'Gideon', papel: 'Curandeiro das Vielas' },
+      { nome: 'Dee Oakley', papel: 'Aprendiz' },
+    ],
+    marcas: [
+      'A Coroa não mandou ajuda; quem cuidou da vila foram as Vielas, o lugar que a Coroa jura que não existe.',
+      'Dee contou que os Generais têm acordo com contrabandistas e que a Feira era fachada.',
+      'O homem de um olho só segue solto. A parte dele estava feita: a mando de quem?',
+    ],
+    passos: [],
+    premios: [],
+  },
+  {
+    id: 'feira-do-cristal',
+    estado: 'passado',
+    tipo: 'Evento da Staff',
+    nome: 'A Feira do Cristal',
+    kanji: '市',
+    img: '/img/mundo/eventos.webp',
+    quando: '21/11/2026 · abertura da versão 2',
+    resumo: 'Mercadores de toda Diamond, leilão, rifa e desafios. Foi a festa que abriu a versão 2, e a última noite do rei.',
+    texto: 'A Feira do Cristal abriu a versão 2 do servidor: barracas de mercadores, leilão, rifa e desafios espalhados pela praça. Vinte e quatro horas depois veio o salto no tempo, e com ele a notícia que ninguém esperava.',
+    marcas: [
+      'Logo depois da Feira, o rei de Diamond foi encontrado morto.',
+      'Nas Vielas, já se diz que a Feira era fachada para algo maior.',
+    ],
+    passos: [],
+    premios: [],
+  },
 ];
 
-export const estadoNome = { ativo: 'Em andamento', sempre: 'Sempre ativo', breve: 'Em breve' };
-export const estadoKanji = { ativo: '開催', sempre: '常設', breve: '近日' };
+export const estadoNome = { ativo: 'Em andamento', sempre: 'Sempre ativo', breve: 'Em breve', passado: 'Já aconteceu' };
+export const estadoKanji = { ativo: '開催', sempre: '常設', breve: '近日', passado: '終幕' };

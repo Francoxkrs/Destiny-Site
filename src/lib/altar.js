@@ -15,6 +15,7 @@
  */
 import { altar, raridades, garantia, inscricao } from '../data/altar.js';
 import { darVisualNoBot } from './visual.js';
+import { avisarAltarStaff } from './aviso-staff.js';
 
 export const TETO_INVOCAR = 10;
 
@@ -133,6 +134,9 @@ export async function invocar(db, { userId, guildId, qtd, ref }, o = {}) {
       const p = [...altar.premios.lendario, ...altar.premios.epico].find((y) => y.id === x.id);
       if (p?.bot) await darVisualNoBot(db, { guildId, userId }, p.bot).catch((err) => console.error('altar (visual):', userId, p.id, err?.message ?? err));
     }
+    // o que o site não entrega sozinho (o emote): avisa a Staff no canal de logs
+    const manuais = s.res.filter((r) => r.novo && ![...altar.premios.lendario, ...altar.premios.epico].find((y) => y.id === r.id)?.bot).map((r) => r.nome);
+    if (manuais.length) await (o.avisar ?? avisarAltarStaff)(userId, manuais).catch(() => {});
     await giros.insertOne({ userId, guildId, ref: chave, qtd, cp: preco.cp, insc: preco.insc, res: s.res, materiais: s.materiais, em: agora })
       .catch((err) => console.error('altar (histórico):', err?.message ?? err));
     return { ok: true, res: s.res, estado: await estadoAltar(db, userId) };

@@ -5,17 +5,19 @@ import { eventos, estadoNome, estadoKanji } from '../data/eventos.js';
 import { TIPOS } from '../lib/calendario.js';
 import '../styles/calendario.css';
 
-const vivos = eventos.filter((e) => e.estado !== 'breve').length;
-const breve = eventos.length - vivos;
+const vivos = eventos.filter((e) => e.estado === 'ativo' || e.estado === 'sempre').length;
+const breve = eventos.filter((e) => e.estado === 'breve').length;
+const passados = eventos.filter((e) => e.estado === 'passado').length;
+const primeiroPassado = eventos.findIndex((e) => e.estado === 'passado');
 const md = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>');
 const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
 ---
-<Base title="Eventos" slug="eventos" aba="eventos" description="Os eventos do Black Destiny: o que está valendo agora no servidor, o que é para sempre e o que vem por aí.">
+<Base title="Eventos" slug="eventos" aba="eventos" description="Os eventos do Black Destiny: o que está valendo agora no servidor, o que é para sempre, o que vem por aí e o Arquivo do que já aconteceu.">
   <div class="ev" data-eventos>
     <header class="ev-hd wrap">
       <span class="eyebrow"><b>祭</b>Mural de Diamond</span>
       <h1 class="ev-hd__t">Eventos</h1>
-      <p class="ev-hd__c"><span><b>{vivos}</b> valendo</span><span><b>{breve}</b> em breve</span></p>
+      <p class="ev-hd__c"><span><b>{vivos}</b> valendo</span><span><b>{breve}</b> em breve</span>{passados > 0 && <span><b>{passados}</b> no Arquivo</span>}</p>
       <div class="ev-abas" role="tablist" aria-label="Eventos">
         <button type="button" role="tab" id="ev-aba-mural" aria-controls="ev-mural" aria-selected="true" data-aba="mural"><span aria-hidden="true">祭</span>Mural</button>
         <button type="button" role="tab" id="ev-aba-cal" aria-controls="calendario" aria-selected="false" data-aba="calendario"><span aria-hidden="true">暦</span>Calendário</button>
@@ -49,6 +51,8 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
       <nav class="ev-lista" aria-label="Eventos" data-lenis-prevent>
         <p class="ev-lista__h t-label">目次 · Sumário</p>
         {eventos.map((e, i) => (
+          <Fragment>
+          {i === primeiroPassado && <p class="ev-lista__h ev-lista__h--arq t-label">記録 · Arquivo — já aconteceu</p>}
           <a href={`#${e.id}`} class="ev-item" data-ev={e.id} data-estado={e.estado} aria-current={i === 0 ? 'true' : undefined}>
             <span class="ev-item__n">{String(i + 1).padStart(2, '0')}</span>
             <span class="ev-item__b">
@@ -58,6 +62,7 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
             </span>
             <span class="ev-item__selo" title={estadoNome[e.estado]}>{estadoKanji[e.estado]}</span>
           </a>
+          </Fragment>
         ))}
       </nav>
 
@@ -81,6 +86,18 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
                   <ol class="ev-passos">{e.passos.map((p) => <li><span set:html={md(p)} /></li>)}</ol>
                 </div>
               )}
+              {e.elenco && (
+                <div class="ev-p__bloco">
+                  <h3 class="t-label">Quem esteve lá</h3>
+                  <ul class="ev-elenco">{e.elenco.map((p) => <li><b>{p.nome}</b><small>{p.papel}</small></li>)}</ul>
+                </div>
+              )}
+              {e.marcas && (
+                <div class="ev-p__bloco">
+                  <h3 class="t-label">O que mudou no mundo</h3>
+                  <ul class="ev-marcas">{e.marcas.map((m) => <li><span set:html={md(m)} /></li>)}</ul>
+                </div>
+              )}
               {e.premios.length > 0 && (
                 <div class="ev-p__bloco">
                   <h3 class="t-label">Recompensas</h3>
@@ -89,9 +106,10 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
                   </ul>
                 </div>
               )}
-              {(e.comandos || e.link) && (
+              {(e.comandos || e.link || e.video) && (
                 <div class="ev-p__pe">
                   {e.comandos && <p class="ev-cmds">{e.comandos.map((c) => <code>{c}</code>)}</p>}
+                  {e.video && <a class="btn" href={e.video.href} target="_blank" rel="noopener">{e.video.texto} <Arrow /></a>}
                   {e.link && <a class="btn" href={e.link.href}>{e.link.texto} <Arrow /></a>}
                 </div>
               )}

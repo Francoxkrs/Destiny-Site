@@ -9,6 +9,8 @@ import Aviso from '../components/portal/Aviso.astro';
 import { lerSessao } from '../lib/sessao.js';
 import { carregarFicha, imagemUrl } from '../lib/ficha.js';
 import { vestigiosDaConta } from '../lib/altar.js';
+import { visualDaConta, provadorDe, ROTULO_ATIVO } from '../lib/visual.js';
+import { env } from '../lib/env.js';
 import { altar } from '../data/altar.js';
 import { banco } from '../lib/db.js';
 import { classificacoes, romanos, slugify, estagios, ranks } from '../data/canon.js';
@@ -23,10 +25,23 @@ const { estado, ficha: f, aviso } = await carregarFicha(sessao);
 Astro.response.headers.set('cache-control', 'private, no-store');
 // Vestígios do Altar: moram na conta (não na foto do bot), então vêm direto do banco
 let vest = { lista: [], fragmentos: 0 };
-if (sessao && estado === 'ok') { try { const db = await banco(); if (db) vest = await vestigiosDaConta(db, sessao.id); } catch { /* sem Vestígios agora */ } }
+// Visual (aba Visual do bot, coleção `visuais`): o que a pessoa tem e o que está equipado, igual no site e no bot
+let vis = { pecas: [], ativo: {}, selos: [] };
+if (sessao && estado === 'ok') {
+  try {
+    const db = await banco();
+    if (db) [vest, vis] = await Promise.all([vestigiosDaConta(db, sessao.id), visualDaConta(db, { guildId: env.guildId, userId: sessao.id })]);
+  } catch { /* sem Vestígios agora */ }
+}
 // a ficha de exemplo mostra dois Vestígios para quem ainda não entrou ver como fica
 if (estado !== 'ok') vest = { lista: [{ ...altar.premios.lendario[0], rar: 'lendario', n: 1 }, { ...altar.premios.epico[0], rar: 'epico', n: 1 }], fragmentos: 40 };
 const vestigiosVisuais = vest.lista.filter((v) => v.rar !== 'raro');
+// Provador (?provar=<id do prêmio>): veste a peça só para ver, sem gravar nada. Vale até na ficha de exemplo.
+const prova = provadorDe(Astro.url.searchParams.get('provar'));
+const provar = prova?.premio ?? null;
+const ativo = { ...vis.ativo, ...(prova?.ativo ? { [prova.ativo]: prova.id } : {}) };
+const temSelo = vis.selos.length > 0 || Boolean(prova?.selo);
+const podeEquipar = Boolean(sessao) && estado === 'ok';
 
 const fmt = new Intl.NumberFormat('pt-BR');
 const exemplo = estado !== 'ok';
@@ -97,7 +112,7 @@ const inicial = 'poder';
 const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t: de === 8 ? classificacoes[i].nome : romanos[i], foi: i <= atual, agora: i === atual, teto: teto && i === atual }));
 ---
 <Base title="Ficha" slug="ficha" aba="ficha" description="A ficha do seu Marcado como um Grimório aberto: retrato, Poder, feitiços, corpo, saber e história.">
-  <div class="gv" style={`--c:${cor}`} data-gv>
+  <div class="gv" style={`--c:${cor}`} data-gv data-v-capa={ativo.capa} data-v-fundo={ativo.fundo} data-v-tinta={ativo.tinta} data-v-moldura={ativo.moldura} data-v-selo={temSelo ? 'sim' : undefined}>
     <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.currentScript.parentElement.classList.add('is-abre');</script>
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
       <filter id="gv-pincel" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="9" /><feDisplacementMap in="SourceGraphic" scale="16" /></filter>
@@ -107,6 +122,14 @@ const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t
     <canvas class="gv-motes" aria-hidden="true" data-motes></canvas>
     <Aviso estado={exemplo ? estado : null} aviso={aviso} logado={Boolean(sessao)} />
 
+    {provar && (
+      <p class="gv-provador" role="status">
+        <b>Prévia · {provar.nome}</b>
+        <span>{provar.efeito} Nada foi gravado.</span>
+        <a href="/altar/#colecao">Invocar no Altar</a>
+        <a href="/ficha/">Sair da prévia</a>
+      </p>
+    )}
     <div class="gv-livro" data-livro>
       <!-- página esquerda: o retrato -->
       <article class="gv-pag gv-esq" aria-label={`Retrato de ${f.nome}`}>
@@ -119,6 +142,7 @@ const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t
           <div class="gv-cera" aria-label={`${f.estagio}º Estágio`}><b>{KANJI_N[f.estagio]}</b><span>ESTÁGIO</span></div>
         </div>
         <h1 class="gv-nome">{f.nome}</h1>
+        {ativo.titulo && <p class="gv-titulo-v">{ativo.titulo}</p>}
         {f.sobrenome && <p class="gv-sob">{f.sobrenome}</p>}
         {f.epiteto && <p class="gv-ep">{f.epiteto}</p>}
         <div class="gv-assin">
@@ -178,6 +202,20 @@ const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t
               ))}
             </ul>
           ) : <ul class="gv-tags"><li class="is-vaga">{exemplo ? 'Os Vestígios do Altar aparecem aqui' : 'Nenhum ainda'}</li></ul>}
+          {podeEquipar && vis.pecas.length > 0 && (
+            <>
+              <p class="gv-h5">Visual equipado</p>
+              <ul class="gv-vis">
+                {vis.pecas.map((p) => (
+                  <li class:list={[p.eq && 'is-eq']}>
+                    <span><small>{ROTULO_ATIVO[p.ativo]}</small><b>{p.nome}</b></span>
+                    <button type="button" class="gv-vest__eq" data-equipar={p.ativo} data-id={p.eq ? '' : p.id} aria-pressed={String(p.eq)}>{p.eq ? 'Tirar' : 'Equipar'}</button>
+                  </li>
+                ))}
+              </ul>
+              <p class="gv-vest__nota" data-equipar-aviso>É a mesma aba Visual da <code>/ficha</code> do bot: o que você equipa aqui aparece lá também.</p>
+            </>
+          )}
           <a class="gv-link" href="/altar/">Altar dos Vestígios <Icon name="seta" size={13} /></a>
         </section>
 
@@ -356,3 +394,21 @@ const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t
     }
   }
 </script>
+
+<script>
+  // Equipar: grava na aba Visual do bot (coleção `visuais`) e recarrega a ficha já com o visual novo.
+  document.querySelectorAll<HTMLButtonElement>('[data-equipar]').forEach((b) => b.addEventListener('click', async () => {
+    const aviso = document.querySelector('[data-equipar-aviso]');
+    b.disabled = true;
+    try {
+      const r = await fetch('/api/ficha-visual', { method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ ativo: b.dataset.equipar, id: b.dataset.id || null }) });
+      if (r.ok) { location.reload(); return; }
+      const c = await r.json().catch(() => ({}));
+      if (aviso) aviso.textContent = c.erro || 'Não deu certo. Tente de novo.';
+    } catch {
+      if (aviso) aviso.textContent = 'Sem conexão com o site. Tente de novo.';
+    }
+    b.disabled = false;
+  }));
+</script>
+

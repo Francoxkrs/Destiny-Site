@@ -78,7 +78,7 @@ export const nuncaAVenda = [
 ];
 
 export const regras = [
-  'Teto de gasto de R$ 150 por mês por conta.',
+  'Teto de gasto de R$ 500 por mês por conta.',
   'Reembolso em até 7 dias se os CP não foram usados.',
   'CP não se trocam entre jogadores e não viram Yuls, Cristais de Mana, PE nem Méritos.',
   'Itens do Altar e do Ateliê não se trocam.',

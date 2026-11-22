@@ -41,14 +41,14 @@ export const altar = {
     'Nada do Altar se troca entre jogadores.',
   ],
   premios: {
-    lendario: [{ id: 't1-capa-miasma', nome: 'Capa do Miasma', tipo: 'Capa de grimório animada', img: '/img/grimorios/demoniaco.webp' }],
+    lendario: [{ id: 't1-capa-miasma', nome: 'Capa do Miasma', tipo: 'Capa de grimório animada', img: '/img/grimorios/demoniaco.webp', bot: { tipo: 'capas', id: 'miasma' }, efeito: 'O Grimório ganha a capa roxa do Miasma, com a névoa correndo pelas bordas (no site e no /grimório).' }],
     // Épicos e Raros sem arte própria ainda: a carta mostra o kanji do item (k) até a arte chegar.
     epico: [
-      { id: 't1-titulo', nome: 'Título da Temporada', tipo: 'Título', k: '名' },
-      { id: 't1-fundo', nome: 'Fundo do Miasma', tipo: 'Fundo de ficha', k: '景' },
-      { id: 't1-tinta', nome: 'Tinta Negra', tipo: 'Tinta', k: '墨' },
-      { id: 't1-selo', nome: 'Selo da Temporada', tipo: 'Selo', k: '印' },
-      { id: 't1-emote', nome: 'Emote da Temporada', tipo: 'Emote', k: '顔' },
+      { id: 't1-titulo', nome: 'Título da Temporada', tipo: 'Título', k: '名', bot: { tipo: 'titulos', id: 'Arauto do Miasma' }, efeito: 'Aparece com o nome, no site e na /ficha do bot: Arauto do Miasma.' },
+      { id: 't1-fundo', nome: 'Fundo do Miasma', tipo: 'Fundo de ficha', k: '景', bot: { tipo: 'fundos', id: 'fossa-miasma' }, efeito: 'A névoa roxa da Fossa do Miasma atrás do retrato, no site e na /ficha do bot.' },
+      { id: 't1-tinta', nome: 'Tinta Negra', tipo: 'Tinta', k: '墨', bot: { tipo: 'tintas', id: 'negra' }, efeito: 'O nome escrito em tinta negra com sombra vermelha, no site e na /ficha do bot.' },
+      { id: 't1-selo', nome: 'Selo da Temporada', tipo: 'Selo', k: '印', bot: { tipo: 'selos', id: 'altar-t1' }, efeito: 'Selo da temporada ao lado do nome no /lb, e o selo de cera da ficha fica roxo.' },
+      { id: 't1-emote', nome: 'Emote da Temporada', tipo: 'Emote', k: '顔', efeito: 'Um emote do servidor só seu. A Staff libera no Discord.' },
     ],
     raro: [
       { id: 'fragmentos-3', nome: '3 Fragmentos de Vestígio', tipo: 'Fragmento', k: '片', fragmentos: 3 },
@@ -57,10 +57,17 @@ export const altar = {
       { id: 'quartzo', nome: '2 Quartzos de Mana', tipo: 'Material', k: '晶', material: { chave: 'quartzo', qtd: 2 } },
     ],
   },
+  colecao: { nome: 'Miasma', texto: 'A coleção da Temporada 1. Cada peça muda um pedaço da sua ficha, no site e no bot.' },
+  /** Onde cada prêmio cai (o Histórico e a carta mostram isso). */
+  onde: {
+    visual: 'Na sua ficha, em Vestígios: equipe e ele aparece no site e na /ficha do bot',
+    fragmentos: 'Somam na sua ficha do site, em Vestígios',
+    material: 'No /inventario do bot, em Recursos',
+  },
   oQueSai: {
     lendario: 'Capa de grimório animada, moldura animada, aura do feitiço na ficha e no site, Familiar de enfeite.',
     epico: 'Título, fundo de ficha, tinta, selo, emote da temporada.',
-    raro: '3 Fragmentos de Vestígio ou um material que cai na bolsa do bot (1 Pó de Cristal, 2 Quartzos de Mana ou 3 Couros de Besta).',
+    raro: '3 Fragmentos de Vestígio ou um material que cai no /inventario do bot, em Recursos (1 Pó de Cristal, 2 Quartzos de Mana ou 3 Couros de Besta).',
   },
 };
 

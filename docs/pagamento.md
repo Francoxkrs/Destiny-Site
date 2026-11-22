@@ -42,7 +42,7 @@ e a página de Cristais confere os Pix abertos da pessoa sempre que ela abre.
 
 Taxas: o cartão custa mais que o Pix para o vendedor; a taxa de cada um está no painel do Mercado Pago (Seu negócio → Custos).
 
-Regras aplicadas: teto de R$ 150 por mês por conta (pagos no mês, horário de Brasília, mais Pix ainda abertos).
+Regras aplicadas: teto de R$ 500 por mês por conta (era R$ 150 até 21/11/2026) (pagos no mês, horário de Brasília, mais Pix ainda abertos).
 Primeira compra da conta: `contas.primeiraCompra { pedido, em, entregue: false }`; a Staff entrega o presente (o aviso no Discord lembra).
 
 Ainda não vendido pelo site: Selo Mensal (depende do `/selo` no bot) e presente para amigo.

@@ -13,7 +13,7 @@ import { buscarPorReferencia, cancelarPix, consultarPix, criarPix, criarPreferen
 
 export const MINUTOS_PIX = 30;
 /** Teto de gasto por conta no mês (regras da página de Cristais), contando Pix ainda abertos. */
-export const TETO_MES = 150;
+export const TETO_MES = 500; // R$ 500 por mês por conta (Silas, 21/11/2026; antes 150)
 /** Folga depois do prazo do Pix antes de dar como expirado (o banco às vezes demora a compensar). */
 const FOLGA_MS = 2 * 60_000;
 
@@ -195,7 +195,7 @@ export async function abrirCompra(db, cfg, { userId, nome, guildId, n, metodo = 
   const ja = await comprometidoNoMes(db, userId, agora);
   if (centavos(ja) + centavos(pac.preco) > centavos(TETO_MES)) {
     const livre = Math.max(0, TETO_MES - ja);
-    return { ok: false, status: 409, erro: `Passa do teto de R$ 150 por mês (já usado: ${ja.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}). ${livre >= pacotes[0].preco ? 'Escolha um pacote menor ou' : 'Dá para'} comprar de novo no mês que vem.` };
+    return { ok: false, status: 409, erro: `Passa do teto de R$ ${TETO_MES} por mês (já usado: ${ja.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}). ${livre >= pacotes[0].preco ? 'Escolha um pacote menor ou' : 'Dá para'} comprar de novo no mês que vem.` };
   }
 
   const _id = new ObjectId();

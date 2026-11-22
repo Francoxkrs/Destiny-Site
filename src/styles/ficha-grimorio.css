@@ -200,3 +200,41 @@
 .gv-vest__a img { width: 100%; height: 100%; object-fit: cover; }
 .gv-vest b { display: block; font-family: var(--f-display); font-size: 20px; font-weight: 400; line-height: 1.1; }
 .gv-vest small { font-family: var(--f-mono, monospace); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.65; }
+
+/* ---------- Visual equipado (2026-11-21): a mesma aba Visual do bot; o Miasma é roxo (#8b5cf6) como lá ---------- */
+.gv-titulo-v { margin: 10px auto 0; width: fit-content; display: flex; align-items: center; gap: 8px; padding: 2px 4px; font-family: var(--f-cinzel); font-weight: 700; font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase; color: #8f6a28; }
+.gv-titulo-v::before, .gv-titulo-v::after { content: ''; width: 7px; height: 7px; background: #d9b56a; rotate: 45deg; }
+/* Tinta dourada (Passe) e Tinta Negra (Altar) */
+.gv[data-v-tinta='dourada'] .gv-nome { background: linear-gradient(#fff4c9, #f0c96a 50%, #a87a2a); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 2px 0 rgba(60, 40, 10, 0.5)); }
+.gv[data-v-tinta='negra'] .gv-nome { color: #050506; text-shadow: 3px 3px 0 var(--c), 0 0 16px color-mix(in srgb, var(--c) 35%, transparent); }
+/* Selo da temporada: a cera do Estágio fica roxa */
+.gv[data-v-selo] .gv-cera::before { background: radial-gradient(circle at 35% 30%, #c4a8ff, #8b5cf6 42%, #2a1460); box-shadow: 0 4px 0 #2a1460, 0 10px 20px rgba(0, 0, 0, 0.35); }
+.gv[data-v-selo] .gv-cera b, .gv[data-v-selo] .gv-cera span { color: rgba(16, 6, 36, 0.9); }
+/* Fossa do Miasma: névoa roxa atrás do retrato */
+.gv[data-v-fundo='fossa-miasma'] .gv-circ { background: radial-gradient(circle at 45% 40%, #8b5cf6, #3b1d7a 55%, #1e0d4a); }
+.gv[data-v-fundo='fossa-miasma'] { background: radial-gradient(ellipse 60% 50% at 30% 20%, rgba(139, 92, 246, 0.28), transparent 70%), radial-gradient(ellipse 60% 50% at 80% 85%, rgba(59, 29, 122, 0.45), transparent 70%), #0b0812; }
+/* Moldura do Miasma: borda roxa e dourada no retrato */
+.gv[data-v-moldura='miasma'] .gv-moldura { border-color: #8b5cf6; box-shadow: 0 0 18px rgba(139, 92, 246, 0.55); }
+.gv[data-v-moldura='miasma'] .gv-moldura::after { border-color: #d9b56a; }
+/* Capa do Miasma: a capa do Grimório roxa, com névoa correndo pela borda */
+.gv[data-v-capa='miasma'] .gv-livro::before { background: linear-gradient(120deg, #1e0d4a, #2a0f1c 45%, #1e0d4a); box-shadow: inset 0 0 0 2px #8b5cf6, inset 0 0 40px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.35); }
+.gv[data-v-capa='miasma'] .gv-livro::after { content: ''; position: absolute; inset: -14px -14px -18px; border-radius: 6px; z-index: -1; pointer-events: none; padding: 3px; background: conic-gradient(from var(--gv-giro, 0deg), transparent 0 70%, rgba(196, 168, 255, 0.7) 80%, transparent 90%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: gv-nevoa 7s linear infinite; }
+@property --gv-giro { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes gv-nevoa { to { --gv-giro: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .gv[data-v-capa='miasma'] .gv-livro::after { animation: none; } }
+/* Provador */
+.gv-provador { width: min(1260px, 100%); margin: 0 0 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 16px; background: rgba(10, 10, 11, 0.88); border: 1px solid #8b5cf6; color: #ebe4d4; font-size: 14px; }
+.gv-provador b { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #c4a8ff; }
+.gv-provador span { flex: 1 1 260px; }
+.gv-provador a { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #ebe4d4; text-decoration: underline; text-underline-offset: 3px; }
+/* Lista do visual com Equipar */
+.gv-vis { display: grid; gap: 8px; margin: 8px 0 12px; padding: 0; list-style: none; }
+.gv-vis li { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border: 1px solid var(--linha); }
+.gv-vis li.is-eq { border-color: #8b5cf6; box-shadow: inset 3px 0 0 #8b5cf6; }
+.gv-vis li > span { display: grid; min-width: 0; }
+.gv-vis small { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-3); }
+.gv-vis b { font-family: var(--f-display); font-size: 19px; font-weight: 400; line-height: 1.1; }
+.gv-vest__eq { margin-left: auto; flex: none; padding: 6px 10px; border: 1px solid currentColor; background: transparent; color: inherit; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
+.gv-vis li.is-eq .gv-vest__eq { opacity: 0.7; }
+.gv-vest__eq:disabled { opacity: 0.4; cursor: wait; }
+.gv-vest__nota { margin: 0 0 16px; font-size: 13px; opacity: 0.75; }

@@ -40,8 +40,10 @@ function colecao() {
     findOneAndUpdate: async (f, u) => { const d = docs.find((x) => casa(x, f)); if (!d) return null; aplica(d, u); return structuredClone(d); },
   };
 }
+// aba Visual do bot: só guarda as chamadas (visual.js tem o próprio teste)
+function visuaisFalso() { const chamadas = []; return { chamadas, updateOne: async (f, u) => { chamadas.push(u); return { matchedCount: 1 }; } }; }
 function bancoFalso({ cp = 0, inscricoes, aprovado = true } = {}) {
-  const cols = { contas: colecao(), altarGiros: colecao(), personagens: colecao() };
+  const cols = { contas: colecao(), altarGiros: colecao(), personagens: colecao(), visuais: visuaisFalso() };
   cols.contas.docs.push({ userId: 'u1', cp, ...(inscricoes != null ? { inscricoes } : {}) });
   cols.personagens.docs.push({ _id: 'p1', guildId: 'g', userId: 'u1', etapa: aprovado ? 'aprovado' : 'criacao', estado: { recursos: {} } });
   return { cols, collection: (n) => cols[n] };
@@ -143,6 +145,14 @@ await caso('estado e ficha: histórico do mais novo para o mais velho, Vestígio
   const e = await estadoAltar(db, 'u1');
   const v = await vestigiosDaConta(db, 'u1');
   igual([e.hist.map((h) => h.rar), v.lista.map((x) => x.id)], [['lendario', 'epico'], ['t1-capa-miasma', 't1-titulo']]);
+});
+await caso('visual novo vai para a aba Visual do bot; repetido e material não', async () => {
+  const db = bancoFalso({ cp: 99999 });
+  // rng 0 = Lendário (chance > 0) e o primeiro do pool: a Capa do Miasma
+  await invocar(db, { userId: 'u1', guildId: 'g', qtd: 1, ref: 'ref-visual-0001' }, { rng: () => 0 });
+  const n1 = db.cols.visuais.chamadas.length;
+  await invocar(db, { userId: 'u1', guildId: 'g', qtd: 1, ref: 'ref-visual-0002' }, { rng: () => 0 });
+  igual([n1 > 0, JSON.stringify(db.cols.visuais.chamadas[0]).includes('tem.capas'), db.cols.visuais.chamadas.length], [true, true, n1]);
 });
 await caso('todo prêmio tem id único e Raro tem Fragmento ou material', () => {
   const todos = Object.values(altar.premios).flat();

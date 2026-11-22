@@ -63,3 +63,13 @@ As fotos ficam em `metricasDia` (uma por dia, com os ids dos membros para saber 
 Painel "Calendário" na sala: marca, edita e apaga eventos (título, tipo, dia, até, hora, texto, link do site ou do Discord, rascunho ou público). O público aparece em **Eventos → Calendário** (`/eventos/#calendario`), lido de `/api/calendario?mes=AAAA-MM`. Mora em `calendario`; cada mudança vai para `adminLog`. Usuário do Atlas: `find`, `insert`, `update`, `remove` em `calendario`.
 
 Testes: `npm run calendario:teste`.
+
+## Arquivo de NPCs (`/admin/npcs`, 22/11)
+Os dossiês completos dos NPCs, **só para a Staff** (pedido do Silas: tem informação que jogador não pode ver). Link "NPCs" na barra da Sala de Testes.
+
+- O repositório é público, então **nenhum NPC fica no código**. Eles moram na coleção `npcsStaff` do banco e só saem por `/api/admin/npcs`, com a mesma trava de `ADMIN_IDS` (404 para os outros).
+- Cada NPC: nome, grupo, alcunha, papel, kanji, cor, ordem, campos (rótulo + valor, com a marca **Segredo**) e falas. Valor vazio ou `[A DEFINIR]` aparece como mistério.
+- **Importar**: escolha o arquivo `.json` (ou cole). NPC com o mesmo nome é regravado; ninguém é apagado. **Baixar cópia** salva tudo num `.json`.
+- Apagar pede dois toques. O NPC apagado fica inteiro no `adminLog`.
+- Usuário `site-portal` do Atlas: `find`, `insert`, `update`, `remove` em `npcsStaff`.
+- Testes: `npm run npcs:teste` (banco falso).

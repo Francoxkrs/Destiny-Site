@@ -9,6 +9,7 @@ import { ObjectId } from 'mongodb';
 import { pacotes } from '../data/cristais.js';
 import { avisarCompra, avisarEstorno } from './aviso-staff.js';
 import { darNaBolsa } from './loja.js';
+import { darVisualNoBot } from './visual.js';
 import { buscarPorReferencia, cancelarPix, consultarPix, criarPix, criarPreferencia, ErroMercadoPago, pagamentoValido } from './mercadopago.js';
 
 export const MINUTOS_PIX = 30;
@@ -81,6 +82,10 @@ export async function creditar(db, p, agora = new Date()) {
     await darNaBolsa(db, { guildId: p.guildId, userId: p.userId }, { classeEscolha: 1 }, 'Presente da primeira compra de Cristais', agora)
       .then(() => contas(db).updateOne({ userId: p.userId }, { $set: { 'primeiraCompra.classeNaBolsa': true } }))
       .catch((e) => console.error('cristais (presente na bolsa):', p.userId, e?.message ?? e));
+    // o título vai direto para a aba Visual do bot; só a moldura ainda fica com a Staff (o bot não desenha a Centelha ainda)
+    await darVisualNoBot(db, { guildId: p.guildId, userId: p.userId }, { tipo: 'titulos', id: 'Patrono de Diamond' }, agora)
+      .then(() => contas(db).updateOne({ userId: p.userId }, { $set: { 'primeiraCompra.tituloNoVisual': true } }))
+      .catch((e) => console.error('cristais (título do presente):', p.userId, e?.message ?? e));
   }
   await pedidos(db).updateOne({ _id: p._id }, { $set: { status: 'pago', pagoEm: p.pagoEm ?? agora, creditado: true }, $unset: { copiaCola: '', qrBase64: '' } });
   const saldo = (await contas(db).findOne({ userId: p.userId }, { projection: { cp: 1 } }))?.cp ?? 0;

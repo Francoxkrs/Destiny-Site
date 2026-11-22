@@ -33,7 +33,7 @@ export const altar = {
     texto: 'A capa do grimório se desfaz em névoa negra na sua ficha, no Discord e aqui no site.',
     img: '/img/grimorios/demoniaco.webp',
   },
-  texto: 'O gacha da temporada. Tudo o que sai aqui é visual: nada do Altar muda números da ficha. Repetidos viram Fragmentos de Vestígio, e 400 Fragmentos compram o Lendário de uma temporada passada.',
+  texto: 'O gacha da temporada. Tudo o que sai aqui é visual: nada do Altar muda números da ficha. Repetidos viram Fragmentos de Vestígio, e 400 Fragmentos vão comprar o Lendário de uma temporada passada quando a Temporada II abrir.',
   regras: [
     'Sem 50/50: quando o Lendário sai, é o destaque.',
     'A contagem da garantia passa de uma temporada para a outra.',
@@ -65,8 +65,8 @@ export const altar = {
     material: 'No /inventario do bot, em Recursos',
   },
   oQueSai: {
-    lendario: 'Capa de grimório animada, moldura animada, aura do feitiço na ficha e no site, Familiar de enfeite.',
-    epico: 'Título, fundo de ficha, tinta, selo, emote da temporada.',
+    lendario: 'Nesta temporada: a Capa do Miasma, capa de grimório animada.',
+    epico: 'Nesta temporada: título Arauto do Miasma, Fundo do Miasma, Tinta Negra, Selo da Temporada e um emote só seu.',
     raro: '3 Fragmentos de Vestígio ou um material que cai no /inventario do bot, em Recursos (1 Pó de Cristal, 2 Quartzos de Mana ou 3 Couros de Besta).',
   },
 };

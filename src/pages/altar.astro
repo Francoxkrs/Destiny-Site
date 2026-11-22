@@ -26,7 +26,7 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde:
               {i === 0 ? <h1 class="al-info__t">Altar dos <em>Vestígios</em></h1> : <h2 class="al-info__t">Pedra do <em>Destino</em></h2>}
               <p class="al-info__p">{b.texto}</p>
               <dl class="al-trato">
-                <div><dt>Gasta</dt><dd>{b.id === 'pedra' ? '1 a 15 Inscrições (as que faltarem, 160 CP cada)' : '1 Inscrição por invocação (ou 160 CP)'}</dd></div>
+                <div><dt>Gasta</dt><dd>{b.id === 'pedra' ? `1 a ${Math.max(...pedra.giros.map((g) => g.custo))} Inscrições (as que faltarem, ${inscricao.cp} CP cada)` : `1 Inscrição por invocação (ou ${inscricao.cp} CP)`}</dd></div>
                 <div><dt>Sai</dt><dd>{b.id === 'pedra' ? 'O giro que você escolher: Cápsula, Magia, Grimório, rerolls' : 'Visual da temporada: capa, título, fundo, tinta'}</dd></div>
                 <div><dt>Vai para</dt><dd>{b.id === 'pedra' ? 'Sua /bolsa no bot. Você gira lá, quando quiser' : 'Sua ficha. Não muda nenhum número'}</dd></div>
               </dl>

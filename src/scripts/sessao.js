@@ -26,6 +26,7 @@ sessao().then((s) => {
       const av = $('[data-sessao-av]');
       if (s.avatar) av.src = s.avatar; else av.remove();
     }
+    if (s.admin) $('[data-sessao-admin]')?.removeAttribute('hidden');
     const cp = $('[data-sessao-cp]');
     if (cp && typeof s.cp === 'number') { $('[data-sessao-cp-n]').textContent = fmt.format(s.cp); $('[data-sessao-cp-u]').hidden = false; cp.setAttribute('aria-label', `${fmt.format(s.cp)} Cristais Prismáticos`); }
   }

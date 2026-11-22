@@ -1,1 +1,1 @@
-{"framework":"astro","buildCommand":"npm run build"}
+{"framework":"astro","buildCommand":"npm run build","crons":[{"path":"/api/cron/metricas","schedule":"0 3 * * *"}]}

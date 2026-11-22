@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
 import { eventos, estadoNome, estadoKanji } from '../data/eventos.js';
+import { TIPOS } from '../lib/calendario.js';
+import '../styles/calendario.css';
 
 const vivos = eventos.filter((e) => e.estado === 'ativo' || e.estado === 'sempre').length;
 const breve = eventos.filter((e) => e.estado === 'breve').length;
@@ -16,9 +18,35 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
       <span class="eyebrow"><b>祭</b>Mural de Diamond</span>
       <h1 class="ev-hd__t">Eventos</h1>
       <p class="ev-hd__c"><span><b>{vivos}</b> valendo</span><span><b>{breve}</b> em breve</span>{passados > 0 && <span><b>{passados}</b> no Arquivo</span>}</p>
+      <div class="ev-abas" role="tablist" aria-label="Eventos">
+        <button type="button" role="tab" id="ev-aba-mural" aria-controls="ev-mural" aria-selected="true" data-aba="mural"><span aria-hidden="true">祭</span>Mural</button>
+        <button type="button" role="tab" id="ev-aba-cal" aria-controls="calendario" aria-selected="false" data-aba="calendario"><span aria-hidden="true">暦</span>Calendário</button>
+      </div>
     </header>
 
-    <div class="ev-corpo wrap">
+    <!-- CALENDÁRIO: o que a Staff marca na Sala de Testes (/api/calendario) -->
+    <section class="cal wrap" id="calendario" role="tabpanel" aria-labelledby="ev-aba-cal" data-cal hidden>
+      <div class="cal-topo">
+        <button type="button" class="cal-seta" data-cal-mes="-1" aria-label="Mês anterior">‹</button>
+        <h2 class="cal-mes" data-cal-titulo aria-live="polite">Calendário</h2>
+        <button type="button" class="cal-seta" data-cal-mes="1" aria-label="Próximo mês">›</button>
+        <button type="button" class="cal-hoje" data-cal-hoje>Hoje</button>
+      </div>
+      <ul class="cal-leg" aria-label="Tipos">
+        {Object.entries(TIPOS).map(([id, t]) => <li style={`--c:${t.cor}`}><span aria-hidden="true">{t.kanji}</span>{t.nome}</li>)}
+      </ul>
+      <div class="cal-corpo">
+        <div class="cal-grade" data-cal-grade role="grid" aria-label="Dias do mês"></div>
+        <aside class="cal-dia" data-cal-dia aria-live="polite">
+          <p class="t-label" data-cal-dia-t>Escolha um dia</p>
+          <ol class="cal-agenda" data-cal-agenda></ol>
+        </aside>
+      </div>
+      <p class="cal-nota" data-cal-nota>Horários de Brasília.</p>
+      <script type="application/json" id="cal-tipos" set:html={JSON.stringify(TIPOS)} />
+    </section>
+
+    <div class="ev-corpo wrap" id="ev-mural" role="tabpanel" aria-labelledby="ev-aba-mural" data-mural>
       <!-- sumário: lista de capítulos -->
       <nav class="ev-lista" aria-label="Eventos" data-lenis-prevent>
         <p class="ev-lista__h t-label">目次 · Sumário</p>
@@ -92,6 +120,10 @@ const nomeR = { lendario: 'Lendário', epico: 'Épico', raro: 'Comum' };
     </div>
   </div>
 </Base>
+
+<script>
+  import '../scripts/calendario.js';
+</script>
 
 <script>
   // Um painel por vez no computador; no celular, todos em coluna (sem JavaScript também).

@@ -18,6 +18,7 @@ Sem as variáveis abaixo, tudo funciona em modo de exemplo (ficha do Lúx, nada 
 | `MONGO_URI` | Conexão com o MongoDB do bot, com o usuário do site (abaixo) | Atlas → Connect → Drivers |
 | `DATABASE_NAME` | Nome do banco (padrão `black-destiny`) | O mesmo do `.env` do bot |
 | `GUILD_ID` | ID do servidor do Black Destiny | Discord → clique direito no servidor → Copiar ID |
+| `ADMIN_IDS` | Opcional: seu ID do Discord, abre a Sala de Testes (`/admin`). Ver [admin.md](admin.md) | Discord → Modo Desenvolvedor → clique direito no seu nome → Copiar ID |
 
 ### Redirect do Discord
 Em OAuth2 → Redirects, adicione exatamente: `https://<domínio do site>/api/auth/callback`.

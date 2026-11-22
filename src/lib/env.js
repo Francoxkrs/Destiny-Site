@@ -17,6 +17,8 @@ export const env = {
   get mpEmail() { return e('MP_PAYER_EMAIL'); },
   /** opcional: chave secreta dos avisos (Webhooks) do painel do Mercado Pago, para conferir a assinatura */
   get mpSegredo() { return e('MP_WEBHOOK_SECRET'); },
+  /** Sala de Testes (/admin): ids do Discord com acesso, separados por vírgula. Vazio = a sala não existe. */
+  get adminIds() { return e('ADMIN_IDS'); },
 };
 
 /** O login só liga com as três chaves; o banco, com a URI e o servidor. */

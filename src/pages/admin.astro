@@ -1,0 +1,179 @@
+---
+// /admin · Sala de Testes: o painel só do admin para testar o site e o bot com a própria conta.
+// Quem não está em ADMIN_IDS recebe a página 404 de sempre, com status 404: a sala não aparece para ninguém.
+// A página não traz dado nenhum: tudo vem de /api/admin/*, que confere o admin de novo a cada pedido.
+import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
+import Gem from '../components/Gem.astro';
+import { lerSessao } from '../lib/sessao.js';
+import { ehAdmin, CAMPOS, ACOES, TETO_SIMULAR } from '../lib/admin.js';
+import { raridades, garantia, inscricao } from '../data/altar.js';
+import '../styles/admin.css';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+const admin = ehAdmin(sessao);
+Astro.response.headers.set('cache-control', 'private, no-store');
+Astro.response.headers.set('x-robots-tag', 'noindex, nofollow');
+if (!admin) Astro.response.status = 404;
+
+const grupos = [
+  { id: 'conta', kanji: '晶', titulo: 'Conta', sub: 'Cristais, Inscrições e o Altar', campos: ['cp', 'inscricoes', 'fragmentos', 'altarPity', 'altarPityE'] },
+  { id: 'pers', kanji: '魂', titulo: 'Personagem', sub: 'O que mora no bot', campos: ['yuls', 'meritos', 'antimeritos', 'pe', 'estagio', 'cristalBranco', 'cristalNegro', 'cristalDourado'] },
+];
+// atalhos de cada número (o painel soma direto)
+const atalhos = {
+  cp: [160, 1440, 8640], inscricoes: [1, 10, 60], fragmentos: [100, 400], altarPity: [], altarPityE: [],
+  yuls: [1000, 10000, 100000], meritos: [10, 100], antimeritos: [1], pe: [5, 20], estagio: [],
+  cristalBranco: [1, 5], cristalNegro: [1, 5], cristalDourado: [1, 5],
+};
+const dados = { campos: CAMPOS, acoes: ACOES, atalhos, raridades, garantia, inscricao, teto: TETO_SIMULAR };
+---
+{!admin ? (
+  <Base title="Página não encontrada" slug="404" noindex>
+    <section class="cta-final" style="min-height:100svh;display:grid;place-items:center">
+      <Gem class="cta-final__gem" stroke={0.4} />
+      <div class="wrap">
+        <span class="eyebrow" style="justify-content:center"><b>404</b>Alma perdida</span>
+        <h1 class="t-display" data-hero-title>Esta página <em>não voltou</em>.</h1>
+        <div class="btns"><a class="btn btn--solid" href="/">Voltar ao início <Arrow /></a></div>
+      </div>
+    </section>
+  </Base>
+) : (
+  <Base title="Sala de Testes" slug="admin" aba="admin" description="Painel do admin." noindex>
+    <div class="adm" data-adm>
+      <header class="adm-hd">
+        <span class="adm-hd__k" aria-hidden="true">試</span>
+        <div class="wrap adm-hd__in">
+          <span class="eyebrow"><b>試</b>Só você entra aqui</span>
+          <h1 class="adm-hd__t">Sala de <em>Testes</em></h1>
+          <p class="t-body adm-hd__p">Tudo aqui mexe só na sua conta, <b>{sessao.nome}</b>, e fica anotado no histórico com o valor de antes. Qualquer ajuste dá para desfazer.</p>
+          <div class="adm-hd__st" data-adm-status role="status">Lendo a sua conta…</div>
+        </div>
+        <svg class="adm-hd__corte" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,10 100,0 100,10" /></svg>
+      </header>
+
+      <nav class="adm-nav wrap" aria-label="Seções da Sala de Testes">
+        <a href="#adm-conta"><span aria-hidden="true">晶</span>Conta</a>
+        <a href="#adm-pers"><span aria-hidden="true">魂</span>Personagem</a>
+        <a href="#adm-altar"><span aria-hidden="true">運</span>Altar</a>
+        <a href="#adm-bot"><span aria-hidden="true">機</span>Bot e site</a>
+        <a href="#adm-hist"><span aria-hidden="true">録</span>Histórico</a>
+      </nav>
+
+      <div class="wrap adm-grid">
+        {grupos.map((g) => (
+          <section class="adm-p" id={`adm-${g.id}`} aria-labelledby={`adm-${g.id}-t`}>
+            <header class="adm-p__hd">
+              <span class="adm-p__k" aria-hidden="true">{g.kanji}</span>
+              <div><h2 id={`adm-${g.id}-t`} class="adm-p__t">{g.titulo}</h2><p class="adm-p__s">{g.sub}</p></div>
+            </header>
+            {g.id === 'pers' && <p class="adm-p__nota" data-adm-sem-pers hidden>Você não tem personagem aprovado no bot. Crie e aprove um no Discord para mexer aqui.</p>}
+            <div class="adm-nums">
+              {g.campos.map((k) => (
+                <div class="adm-n" data-campo={k}>
+                  <p class="adm-n__l">{CAMPOS[k].nome}</p>
+                  <b class="adm-n__v" data-v>—</b>
+                  <div class="adm-n__at">
+                    {atalhos[k].map((x) => <button type="button" class="adm-chip" data-somar={x}>+{x.toLocaleString('pt-BR')}</button>)}
+                    {atalhos[k].length > 0 && <button type="button" class="adm-chip adm-chip--menos" data-somar={-atalhos[k][0]}>−{atalhos[k][0].toLocaleString('pt-BR')}</button>}
+                  </div>
+                  <form class="adm-n__f" data-form>
+                    <label class="sr-only" for={`adm-in-${k}`}>Valor de {CAMPOS[k].nome}</label>
+                    <input id={`adm-in-${k}`} type="number" inputmode="numeric" step="1" min={k === 'estagio' ? 1 : undefined} max={CAMPOS[k].max} placeholder="Valor" title={`De ${CAMPOS[k].min} a ${CAMPOS[k].max.toLocaleString('pt-BR')}`} required />
+                    <button type="submit" name="modo" value="somar" class="adm-b">Somar</button>
+                    <button type="submit" name="modo" value="definir" class="adm-b adm-b--ink">Definir</button>
+                  </form>
+                </div>
+              ))}
+            </div>
+            <div class="adm-acoes">
+              {g.id === 'conta' ? (
+                <>
+                  <button type="button" class="adm-b adm-b--ink" data-acao="zerar-garantia">{ACOES['zerar-garantia']}</button>
+                  <button type="button" class="adm-b adm-b--ink" data-acao="zerar-limites">{ACOES['zerar-limites']}</button>
+                  <button type="button" class="adm-b adm-b--ink" data-quase>Deixar a 1 giro do Lendário</button>
+                </>
+              ) : (
+                <>
+                  <button type="button" class="adm-b adm-b--ink" data-acao="encher-mana">{ACOES['encher-mana']}</button>
+                  <a class="adm-b adm-b--ink" href="/ficha/">Abrir a minha ficha</a>
+                </>
+              )}
+            </div>
+          </section>
+        ))}
+
+        <!-- ALTAR: simulação com as regras de verdade, sem gravar -->
+        <section class="adm-p adm-p--largo" id="adm-altar" aria-labelledby="adm-altar-t">
+          <header class="adm-p__hd">
+            <span class="adm-p__k" aria-hidden="true">運</span>
+            <div><h2 id="adm-altar-t" class="adm-p__t">Simular o Altar</h2><p class="adm-p__s">A mesma conta do giro de verdade. Não cobra, não grava, não entrega.</p></div>
+            <a class="adm-b adm-b--ink adm-p__ir" href="/altar/">Invocar de verdade <Arrow /></a>
+          </header>
+          <form class="adm-sim" data-sim>
+            <fieldset class="adm-sim__g">
+              <legend class="t-label">Quantos giros</legend>
+              {[10, 60, 100, 1000, 10000].map((n, i) => (
+                <label class="adm-sim__o"><input type="radio" name="giros" value={n} checked={i === 2} /><span>{n.toLocaleString('pt-BR')}</span></label>
+              ))}
+            </fieldset>
+            <fieldset class="adm-sim__g">
+              <legend class="t-label">Começar de</legend>
+              <label class="adm-sim__o"><input type="radio" name="partida" value="zero" checked /><span>Conta zerada</span></label>
+              <label class="adm-sim__o"><input type="radio" name="partida" value="conta" /><span>A minha garantia</span></label>
+            </fieldset>
+            <button type="submit" class="adm-b adm-b--solid">Girar <Arrow /></button>
+          </form>
+          <div class="adm-sim__r" data-sim-res hidden>
+            <div class="adm-sim__bars" data-sim-bars></div>
+            <dl class="adm-sim__dl" data-sim-dl></dl>
+            <table class="adm-t" data-sim-itens><thead><tr><th scope="col">Prêmio</th><th scope="col">Raridade</th><th scope="col">Saiu</th></tr></thead><tbody></tbody></table>
+          </div>
+        </section>
+
+        <!-- BOT E SITE -->
+        <section class="adm-p" id="adm-bot" aria-labelledby="adm-bot-t">
+          <header class="adm-p__hd">
+            <span class="adm-p__k" aria-hidden="true">機</span>
+            <div><h2 id="adm-bot-t" class="adm-p__t">Bot e site</h2><p class="adm-p__s">O que está ligado e se o bot está ouvindo</p></div>
+          </header>
+          <div class="adm-ping">
+            <p>O teste soma 1 Yul no seu personagem e espera o bot mandar a ficha nova ao site. Depois tira o Yul.</p>
+            <button type="button" class="adm-b adm-b--solid" data-ping>Testar o bot</button>
+            <p class="adm-ping__r" data-ping-res role="status"></p>
+          </div>
+          <ul class="adm-envs" data-envs></ul>
+          <dl class="adm-dl" data-bot-dl></dl>
+        </section>
+
+        <!-- HISTÓRICO -->
+        <section class="adm-p" id="adm-hist" aria-labelledby="adm-hist-t">
+          <header class="adm-p__hd">
+            <span class="adm-p__k" aria-hidden="true">録</span>
+            <div><h2 id="adm-hist-t" class="adm-p__t">Histórico</h2><p class="adm-p__s">O que mudou na sua conta</p></div>
+          </header>
+          <div class="adm-tabs" role="tablist" aria-label="Histórico">
+            {[['admin', 'Ajustes'], ['altar', 'Altar'], ['loja', 'Pedra e Loja'], ['compras', 'Compras'], ['gastos', 'Gastos']].map(([id, n], i) => (
+              <button type="button" role="tab" id={`adm-tab-${id}`} aria-controls="adm-hist-l" aria-selected={i === 0 ? 'true' : 'false'} data-tab={id}>{n}</button>
+            ))}
+          </div>
+          <ol class="adm-hist" id="adm-hist-l" role="tabpanel" data-hist></ol>
+        </section>
+
+        <section class="adm-p adm-p--largo" aria-labelledby="adm-cru-t">
+          <details class="adm-cru">
+            <summary id="adm-cru-t">Dados crus da conta e da ficha do site</summary>
+            <pre data-cru></pre>
+          </details>
+        </section>
+      </div>
+      <script type="application/json" id="adm-dados" set:html={JSON.stringify(dados).replace(/</g, '\\u003c')} />
+    </div>
+  </Base>
+)}
+
+<script>
+  import '../scripts/admin.js';
+</script>

@@ -13,7 +13,7 @@ const TIPO_DO_ATIVO = Object.fromEntries(Object.entries(ATIVO_DO_TIPO).map(([t, 
 
 /** Nome de cada peça para a tela (o id é o que fica no banco; título é o próprio texto). */
 export const NOME_VISUAL = {
-  'moldura:miasma': 'Moldura do Miasma', 'fundo:fossa-miasma': 'Fossa do Miasma', 'tinta:dourada': 'Tinta dourada',
+  'moldura:miasma': 'Moldura do Miasma', 'fundo:fossa-miasma': 'Fossa do Miasma', 'fundo:vigilia': 'Vigília', 'tinta:dourada': 'Tinta dourada',
   'tinta:negra': 'Tinta Negra', 'capa:miasma': 'Capa do Miasma',
 };
 export const ROTULO_ATIVO = { titulo: 'Título', moldura: 'Moldura', fundo: 'Fundo', tinta: 'Tinta', capa: 'Capa' };

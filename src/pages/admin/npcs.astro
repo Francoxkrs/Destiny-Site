@@ -1,0 +1,110 @@
+---
+// /admin/npcs · Arquivo de NPCs: dossiês completos, só para a Staff.
+// Mesma trava da Sala de Testes: quem não está em ADMIN_IDS recebe a 404 de sempre.
+// A página não traz NPC nenhum: tudo vem de /api/admin/npcs, que confere o admin de novo a cada pedido.
+import Base from '../../layouts/Base.astro';
+import Arrow from '../../components/Arrow.astro';
+import Gem from '../../components/Gem.astro';
+import { lerSessao } from '../../lib/sessao.js';
+import { ehAdmin } from '../../lib/admin.js';
+import { LIMITES } from '../../lib/npcs.js';
+import '../../styles/admin.css';
+import '../../styles/admin-npcs.css';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+const admin = ehAdmin(sessao);
+Astro.response.headers.set('cache-control', 'private, no-store');
+Astro.response.headers.set('x-robots-tag', 'noindex, nofollow');
+if (!admin) Astro.response.status = 404;
+---
+{!admin ? (
+  <Base title="Página não encontrada" slug="404" noindex>
+    <section class="cta-final" style="min-height:100svh;display:grid;place-items:center">
+      <Gem class="cta-final__gem" stroke={0.4} />
+      <div class="wrap">
+        <span class="eyebrow" style="justify-content:center"><b>404</b>Alma perdida</span>
+        <h1 class="t-display" data-hero-title>Esta página <em>não voltou</em>.</h1>
+        <div class="btns"><a class="btn btn--solid" href="/">Voltar ao início <Arrow /></a></div>
+      </div>
+    </section>
+  </Base>
+) : (
+  <Base title="Arquivo de NPCs" slug="admin" aba="admin" description="Arquivo da Staff." noindex>
+    <div class="adm npcs-adm" data-adm data-npcs-adm data-limites={JSON.stringify(LIMITES)}>
+      <header class="adm-hd">
+        <span class="adm-hd__k" aria-hidden="true">密</span>
+        <div class="wrap adm-hd__in">
+          <span class="eyebrow"><b>密</b>Só a Staff entra aqui</span>
+          <h1 class="adm-hd__t">Arquivo de <em>NPCs</em></h1>
+          <p class="t-body adm-hd__p">Os dossiês inteiros, com o que os jogadores não podem saber. Nada disto está no código do site: mora no banco e só abre para quem está em ADMIN_IDS.</p>
+          <div class="adm-hd__st" data-npc-status role="status">Abrindo o arquivo…</div>
+        </div>
+        <svg class="adm-hd__corte" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,10 100,0 100,10" /></svg>
+      </header>
+
+      <div class="wrap npcs-bar">
+        <a class="adm-b adm-b--ink" href="/admin/"><span aria-hidden="true">試</span> Sala de Testes</a>
+        <label class="npcs-busca"><span class="sr-only">Procurar NPC</span><input type="search" placeholder="Procurar nome, magia, lugar…" data-npc-busca /></label>
+        <div class="npcs-bar__b">
+          <button type="button" class="adm-b adm-b--solid" data-npc-novo>Novo NPC</button>
+          <button type="button" class="adm-b adm-b--ink" data-npc-importar>Importar</button>
+          <button type="button" class="adm-b adm-b--ink" data-npc-baixar>Baixar cópia</button>
+        </div>
+      </div>
+      <div class="wrap npcs-grupos" role="group" aria-label="Filtrar por grupo" data-npc-grupos></div>
+
+      <div class="wrap npcs-lista" data-npc-lista>
+        <p class="adm-vazio">Lendo os dossiês…</p>
+      </div>
+
+      <!-- editor -->
+      <dialog class="npcs-dlg" data-npc-dlg aria-labelledby="npc-dlg-t">
+        <form method="dialog" class="npcs-form" data-npc-form>
+          <header class="npcs-dlg__hd"><h2 id="npc-dlg-t" data-npc-dlg-t>Novo NPC</h2><button type="button" class="npcs-x" data-npc-fechar aria-label="Fechar">×</button></header>
+          <input type="hidden" name="antigo" />
+          <div class="npcs-form__g">
+            <label class="adm-calf__l npcs-form__largo"><span>Nome</span><input name="nome" maxlength="80" required /></label>
+            <label class="adm-calf__l"><span>Grupo</span><input name="grupo" maxlength="60" list="npc-grupos" placeholder="Círculo Meridiano" /></label>
+            <label class="adm-calf__l"><span>Alcunha</span><input name="alcunha" maxlength="60" placeholder="O Monstro" /></label>
+            <label class="adm-calf__l npcs-form__largo"><span>Papel (uma linha)</span><input name="papel" maxlength="120" placeholder="Agiota do Fosso" /></label>
+            <label class="adm-calf__l"><span>Kanji (selo)</span><input name="kanji" maxlength="2" placeholder="獣" /></label>
+            <label class="adm-calf__l"><span>Cor</span><input type="color" name="cor" value="#ff3b2e" /></label>
+            <label class="adm-calf__l"><span>Ordem no grupo</span><input type="number" name="ordem" min="0" max="9999" value="0" /></label>
+          </div>
+          <datalist id="npc-grupos" data-npc-datalist></datalist>
+          <fieldset class="npcs-campos">
+            <legend>Campos do dossiê</legend>
+            <p class="npcs-ajuda">Deixe o valor vazio ou escreva [A DEFINIR] para aparecer como mistério. Marque <b>Segredo</b> no que nem os jogadores sabem.</p>
+            <ol data-npc-campos></ol>
+            <button type="button" class="adm-b adm-b--ink" data-npc-campo-mais>+ Campo</button>
+          </fieldset>
+          <label class="adm-calf__l npcs-form__largo"><span>Falas (uma por linha)</span><textarea name="falas" rows="4" maxlength="3400"></textarea></label>
+          <p class="npcs-erro" data-npc-erro role="alert" hidden></p>
+          <footer class="npcs-dlg__ft">
+            <button type="button" class="adm-b adm-b--ink npcs-apagar" data-npc-apagar hidden>Apagar NPC</button>
+            <span></span>
+            <button type="button" class="adm-b adm-b--ink" data-npc-fechar>Cancelar</button>
+            <button type="submit" class="adm-b adm-b--solid" data-npc-salvar>Salvar</button>
+          </footer>
+        </form>
+      </dialog>
+
+      <!-- importar -->
+      <dialog class="npcs-dlg" data-npc-imp aria-labelledby="npc-imp-t">
+        <form method="dialog" class="npcs-form" data-npc-imp-form>
+          <header class="npcs-dlg__hd"><h2 id="npc-imp-t">Importar NPCs</h2><button type="button" class="npcs-x" data-npc-fechar aria-label="Fechar">×</button></header>
+          <p class="npcs-ajuda">Escolha o arquivo <code>.json</code> da Staff ou cole o conteúdo. NPC com o mesmo nome é regravado; ninguém é apagado.</p>
+          <label class="adm-calf__l npcs-form__largo"><span>Arquivo</span><input type="file" accept=".json,application/json" data-npc-arq /></label>
+          <label class="adm-calf__l npcs-form__largo"><span>Ou cole aqui</span><textarea rows="8" data-npc-colar placeholder='[{"nome":"…","grupo":"…","campos":[{"r":"Magia","v":"…"}]}]'></textarea></label>
+          <p class="npcs-erro" data-npc-imp-erro role="alert" hidden></p>
+          <footer class="npcs-dlg__ft"><span></span><button type="button" class="adm-b adm-b--ink" data-npc-fechar>Cancelar</button><button type="submit" class="adm-b adm-b--solid">Importar</button></footer>
+        </form>
+      </dialog>
+    </div>
+  </Base>
+)}
+
+<script>
+  import '../../scripts/admin-npcs.js';
+</script>

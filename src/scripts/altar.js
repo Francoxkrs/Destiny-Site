@@ -120,8 +120,79 @@ function ceuQuadro() {
     ctx.globalAlpha = p.a; ctx.fillStyle = '#f1ebdf';
     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
   }
+  faiscasQuadro();
   requestAnimationFrame(ceuQuadro);
 }
+
+/* ---------------------------------------------------------------- faíscas (no mesmo canvas do céu) */
+let faiscas = [];
+/** Explosão de faíscas na cor da raridade, saindo do centro (ou de x,y). */
+function explode(cor, n = 60, x = innerWidth / 2, y = innerHeight / 2, forca = 1) {
+  if (reduce) return;
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, v = (2 + Math.random() * 7) * forca;
+    faiscas.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5, r: 1 + Math.random() * 2.6, vida: 1, cor: Math.random() < 0.25 ? '#ffffff' : cor, decai: 0.008 + Math.random() * 0.016 });
+  }
+}
+function faiscasQuadro() {
+  if (!faiscas.length) return;
+  ctx.globalCompositeOperation = 'lighter';
+  for (const f of faiscas) {
+    f.x += f.vx; f.y += f.vy; f.vx *= 0.97; f.vy = f.vy * 0.97 + 0.09; f.vida -= f.decai;
+    ctx.globalAlpha = Math.max(0, f.vida); ctx.fillStyle = f.cor;
+    ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (0.5 + f.vida), 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  faiscas = faiscas.filter((f) => f.vida > 0);
+}
+
+/* ---------------------------------------------------------------- som (sintetizado, sem arquivos; dá para desligar) */
+const btnSom = $('[data-som]');
+let somLigado = true;
+try { somLigado = localStorage.getItem('altar-som') !== 'off'; } catch { /* sem armazenamento */ }
+let ac = null;
+const audio = () => {
+  if (!somLigado) return null;
+  try { ac ??= new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); return ac; } catch { return null; }
+};
+function tom(freq, { tipo = 'sine', dur = 0.4, vol = 0.12, ate = null, quando = 0 } = {}) {
+  const a = audio(); if (!a) return;
+  const t = a.currentTime + quando;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = tipo; o.frequency.setValueAtTime(freq, t);
+  if (ate) o.frequency.exponentialRampToValueAtTime(ate, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
+}
+function ruido(dur = 0.5, vol = 0.18, corte = 900) {
+  const a = audio(); if (!a) return;
+  const buf = a.createBuffer(1, Math.floor(a.sampleRate * dur), a.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length) ** 2;
+  const src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+  f.type = 'lowpass'; f.frequency.value = corte; g.gain.value = vol;
+  src.buffer = buf; src.connect(f).connect(g).connect(a.destination); src.start();
+}
+const NOTAS = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+const som = {
+  racha: (n) => { ruido(0.18, 0.22, 2400); tom(180 + n * 90, { tipo: 'triangle', dur: 0.25, vol: 0.1 }); },
+  carga: () => tom(110, { tipo: 'sawtooth', dur: 1.5, vol: 0.05, ate: 880 }),
+  impacto: (rar) => { ruido(rar === 'raro' ? 0.4 : 0.9, rar === 'raro' ? 0.15 : 0.3, rar === 'lendario' ? 500 : 1200); tom(rar === 'lendario' ? 55 : 80, { dur: 0.9, vol: 0.2, ate: 40 }); },
+  estrela: (i) => tom(NOTAS[Math.min(i, NOTAS.length - 1)], { tipo: 'triangle', dur: 0.35, vol: 0.09 }),
+  acorde: (rar) => {
+    const base = rar === 'lendario' ? [261.6, 329.6, 392, 523.3, 659.3] : [293.7, 370, 440, 587.3];
+    base.forEach((f, i) => tom(f, { tipo: 'sine', dur: 2.2, vol: 0.06, quando: i * 0.06 }));
+  },
+  virar: () => tom(900, { tipo: 'square', dur: 0.06, vol: 0.03, ate: 500 }),
+};
+const vibrar = (p) => { try { if (somLigado) navigator.vibrate?.(p); } catch { /* sem vibração */ } };
+function pintaSom() { btnSom?.setAttribute('aria-pressed', String(somLigado)); if (btnSom) btnSom.textContent = somLigado ? 'Som' : 'Sem som'; }
+btnSom?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  somLigado = !somLigado;
+  try { localStorage.setItem('altar-som', somLigado ? 'on' : 'off'); } catch { /* sem armazenamento */ }
+  pintaSom();
+});
+pintaSom();
 
 /* ---------------------------------------------------------------- linhas de velocidade */
 const linhas = $('[data-inv-linhas]');
@@ -151,6 +222,7 @@ function carta(p, grande = false) {
   el.querySelector('.inv-card__d').setAttribute('aria-label', p.rotulo ?? nomeR[p.rar]);
   el.querySelector('.inv-card__n').textContent = p.nome;
   el.querySelector('.inv-card__t').textContent = `${p.rotulo ?? nomeR[p.rar]} · ${p.tipo}`;
+  if (p.novo) { const nv = document.createElement('span'); nv.className = 'inv-card__novo'; nv.textContent = 'Novo'; el.append(nv); }
   if (p.ganho) { const g = document.createElement('p'); g.className = `inv-card__g${p.novo ? ' is-novo' : ''}`; g.textContent = p.ganho; el.querySelector('.inv-card__txt').append(g); }
   return el;
 }
@@ -179,6 +251,9 @@ function fechar() {
   tl?.kill();
   if (pular) pular();
   rodando = false;
+  faiscas = [];
+  if (selo) selo.hidden = true;
+  gsap.set($('[data-raios]'), { opacity: 0 });
   gsap.to(inv, { opacity: 0, duration: reduce ? 0 : 0.35, onComplete: () => { inv.hidden = true; gsap.set(inv, { opacity: 1 }); palco.innerHTML = ''; um.innerHTML = ''; fim.hidden = true; toque.hidden = true; } });
   document.documentElement.classList.remove('inv-aberto');
   window.__lenis?.start();
@@ -197,6 +272,65 @@ function espera(ms) {
   });
 }
 
+/**
+ * O selo: antes do rastro, o jogador rompe o selo com toques (ou espera, ele se rompe sozinho).
+ * Cada toque racha o selo e acende uma cor. A cor só sobe até a raridade que de fato saiu: nada aqui engana.
+ */
+const selo = $('[data-selo]');
+const seloRunas = $('[data-selo-runas]');
+const seloRacha = $('[data-selo-racha]');
+if (seloRunas && !seloRunas.children.length) {
+  const runas = '運命星火水風雷光闇月刻印';
+  seloRunas.innerHTML = Array.from(runas, (k, i) => { const a = (i / runas.length) * Math.PI * 2; return `<text x="${(Math.cos(a) * 66).toFixed(1)}" y="${(Math.sin(a) * 66).toFixed(1)}">${k}</text>`; }).join('');
+}
+function rachaPath(n) {
+  let d = '';
+  for (let r = 0; r < 2 + n; r++) {
+    let a = Math.random() * Math.PI * 2, x = Math.cos(a) * 10, y = Math.sin(a) * 10;
+    d += `M${x.toFixed(1)} ${y.toFixed(1)}`;
+    for (let k = 0; k < 5; k++) { a += (Math.random() - 0.5) * 0.9; const rr = 10 + (k + 1) * 17; x = Math.cos(a) * rr; y = Math.sin(a) * rr; d += `L${x.toFixed(1)} ${y.toFixed(1)}`; }
+  }
+  return d;
+}
+function romperSelo(melhor, minha) {
+  // passos: branco, e então a cor de cada raridade até a que saiu (raro 1, épico 2, lendário 3 toques)
+  const passos = ['raro', 'epico', 'lendario'].slice(0, ORDEM[melhor] + 1);
+  selo.hidden = false;
+  selo.style.setProperty('--sc', '#f1ebdf');
+  seloRacha.innerHTML = '';
+  $('[data-selo-t]').textContent = 'Toque para romper o selo';
+  gsap.fromTo(selo, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.6)' });
+  return new Promise((ok) => {
+    let n = 0, t = null, fim = false;
+    const svg = $('.inv__selo-svg', selo);
+    const acabar = () => {
+      if (fim) return; fim = true;
+      clearTimeout(t); inv.removeEventListener('click', toque); pular = null;
+      gsap.to(selo, { opacity: 0, scale: 1.6, duration: 0.35, ease: 'power2.in', onComplete: () => { selo.hidden = true; gsap.set(selo, { scale: 1 }); } });
+      ok();
+    };
+    const toque = (e) => { if (e?.target?.closest?.('button, a')) return; passo(); };
+    const passo = () => {
+      if (fim || minha !== vez) return acabar();
+      if (n >= passos.length) return acabar();
+      const rar = passos[n];
+      n += 1;
+      const cor = R[rar].cor;
+      selo.style.setProperty('--sc', cor);
+      seloRacha.insertAdjacentHTML('beforeend', `<path d="${rachaPath(n)}"/>`);
+      gsap.fromTo(svg, { x: -8, rotate: -2 }, { x: 0, rotate: 0, duration: 0.35, ease: 'elastic.out(1.2, 0.3)' });
+      explode(cor, 18 + n * 14, innerWidth / 2, innerHeight / 2, 0.6 + n * 0.25);
+      som.racha(n); vibrar(20 * n);
+      $('[data-selo-t]').textContent = n < passos.length ? 'De novo!' : 'Rompeu!';
+      clearTimeout(t);
+      t = setTimeout(n < passos.length ? passo : acabar, n < passos.length ? 1100 : 380);
+    };
+    setTimeout(() => inv.addEventListener('click', toque), 150);
+    t = setTimeout(passo, 1300);
+    pular = () => { n = passos.length; acabar(); };
+  });
+}
+
 function rastro(melhor) {
   const cor = R[melhor].cor;
   const met = $('[data-meteoro]');
@@ -204,6 +338,8 @@ function rastro(melhor) {
   const flash = $('[data-flash]');
   rajada(cor);
   gsap.set([linhas, k, flash], { opacity: 0 });
+  som.carga();
+  setTimeout(() => { som.impacto(melhor); explode(cor, melhor === 'raro' ? 40 : melhor === 'epico' ? 110 : 220, innerWidth / 2, innerHeight / 2, melhor === 'lendario' ? 1.6 : 1); vibrar(melhor === 'lendario' ? [60, 40, 120] : melhor === 'epico' ? 50 : 0); }, 1600);
   // Lendário: o rastro nasce violeta e vira vermelho no meio do caminho (o susto dos gachas).
   const corIni = melhor === 'lendario' ? R.epico.cor : cor;
   tl = gsap.timeline();
@@ -215,6 +351,9 @@ function rastro(melhor) {
     .to(flash, { opacity: 0, duration: 0.7, ease: 'power2.out' }, 1.7)
     .fromTo(linhas, { opacity: 0, scale: 1.4 }, { opacity: melhor === 'raro' ? 0.35 : 0.9, scale: 1, duration: 0.5, ease: 'expo.out' }, 1.62);
   if (melhor !== 'raro') tl.fromTo(k, { opacity: 0, scale: 2.6 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.6)' }, 1.66).to(k, { opacity: 0, duration: 0.5 }, 2.4);
+  if (melhor !== 'raro') tl.fromTo($('[data-raios]'), { opacity: 0, scale: 0.6 }, { opacity: melhor === 'lendario' ? 0.95 : 0.6, scale: 1, duration: 0.6, ease: 'expo.out' }, 1.64);
+  // Lendário: a tela treme no impacto
+  if (melhor === 'lendario') tl.fromTo(inv, { x: -14 }, { x: 0, duration: 0.6, ease: 'elastic.out(1.4, 0.2)' }, 1.62);
   tl.to(linhas, { opacity: 0.12, duration: 0.8 }, 2.3);
   return new Promise((ok) => {
     const acaba = () => { pular = null; ok(); };
@@ -233,12 +372,21 @@ async function revelaUma(p, i, total, minha) {
   toque.hidden = false;
   const est = c.querySelectorAll('.inv-card__d i');
   const txt = c.querySelectorAll('.inv-card__n, .inv-card__t');
+  let nEst = 0;
   const t = gsap.timeline();
   t.fromTo(c, { opacity: 0, scale: 1.25, filter: 'brightness(6) blur(8px)' }, { opacity: 1, scale: 1, filter: 'brightness(1) blur(0px)', duration: p.rar === 'raro' ? 0.45 : 0.8, ease: 'expo.out' })
-    .fromTo(est, { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.25, stagger: 0.09, ease: 'back.out(2)' }, '-=0.2')
+    .fromTo(est, { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.25, stagger: { each: 0.09, onStart: () => som.estrela(nEst++) }, ease: 'back.out(2)' }, '-=0.2')
     .fromTo(txt, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, stagger: 0.08 }, '-=0.15');
   if (p.rar === 'lendario') t.fromTo(c, { '--glow': 0 }, { '--glow': 1, duration: 0.5, yoyo: true, repeat: 3 }, 0.4).fromTo($('[data-flash]'), { opacity: 0.8 }, { opacity: 0, duration: 0.6 }, 0);
   if (p.rar !== 'raro') t.fromTo(linhas, { opacity: 0.9, scale: 1.2 }, { opacity: 0.25, scale: 1, duration: 0.8 }, 0);
+  const raios = $('[data-raios]');
+  gsap.to(raios, { opacity: p.rar === 'lendario' ? 0.95 : p.rar === 'epico' ? 0.55 : 0, duration: 0.4 });
+  if (p.rar !== 'raro') {
+    explode(R[p.rar].cor, p.rar === 'lendario' ? 160 : 70, innerWidth / 2, innerHeight / 2, p.rar === 'lendario' ? 1.4 : 0.9);
+    som.acorde(p.rar);
+    vibrar(p.rar === 'lendario' ? [40, 30, 80] : 30);
+    if (p.rar === 'lendario') t.fromTo(c, { rotate: -3 }, { rotate: 0, duration: 0.7, ease: 'elastic.out(1.3, 0.25)' }, 0.1);
+  } else som.virar();
   await espera(p.rar === 'lendario' ? 3400 : p.rar === 'epico' ? 2000 : 1100);
   t.progress(1);
   if (minha !== vez || pulouTudo) return;
@@ -259,7 +407,10 @@ async function sequencia(res, titulo) {
   gsap.set($('[data-meteoro]'), { opacity: 0 });
 
   if (!reduce) {
-    await rastro(melhor);
+    gsap.set($('[data-raios]'), { opacity: 0 });
+    await romperSelo(melhor, minha);
+    if (minha !== vez) return;
+    if (!pulouTudo) await rastro(melhor);
     for (let i = 0; i < res.length; i++) {
       if (minha !== vez || pulouTudo) break;
       await revelaUma(res[i], i, res.length, minha);
@@ -275,7 +426,27 @@ async function sequencia(res, titulo) {
     um.innerHTML = '';
     const cartas = res.map((p) => carta(p));
     cartas.forEach((c) => palco.append(c));
-    if (!reduce) gsap.fromTo(cartas, { opacity: 0, y: 40, rotate: -4 }, { opacity: 1, y: 0, rotate: 0, duration: 0.5, stagger: 0.05, ease: 'expo.out' });
+    gsap.to($('[data-raios]'), { opacity: 0.25, duration: 0.5 });
+    if (!reduce) {
+      // as dez chegam de costas e viram uma a uma; as Épicas e a Lendária brilham e soltam faíscas
+      cartas.forEach((c) => { const v = document.createElement('span'); v.className = 'inv-card__verso'; v.textContent = '運'; c.append(v); });
+      const tlg = gsap.timeline();
+      tlg.fromTo(cartas, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.04, ease: 'expo.out' });
+      cartas.forEach((c, i) => {
+        const at = 0.55 + i * 0.13;
+        tlg.to(c, { scaleX: 0, duration: 0.09, ease: 'power1.in' }, at)
+          .call(() => {
+            c.querySelector('.inv-card__verso')?.remove();
+            const rar = res[i].rar;
+            if (rar === 'raro') som.virar();
+            else {
+              c.classList.add('is-brilho'); som.estrela(rar === 'lendario' ? 4 : 2);
+              const b = c.getBoundingClientRect(); explode(R[rar].cor, rar === 'lendario' ? 90 : 30, b.left + b.width / 2, b.top + b.height / 2, rar === 'lendario' ? 1 : 0.6);
+            }
+          }, null, at + 0.09)
+          .to(c, { scaleX: 1, duration: 0.16, ease: 'back.out(2)' }, at + 0.09);
+      });
+    }
   }
   fim.hidden = false;
   if (!reduce) gsap.from(fim, { opacity: 0, y: 16, duration: 0.5, delay: 0.3 });

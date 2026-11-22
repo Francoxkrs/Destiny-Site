@@ -1,6 +1,7 @@
 import { lerSessao } from '../../lib/sessao.js';
 import { carregarFicha } from '../../lib/ficha.js';
 import { banco } from '../../lib/db.js';
+import { ehAdmin } from '../../lib/admin.js';
 export const prerender = false;
 
 /** Dia de Brasília (UTC-3) como "AAAA-MM-DD", igual ao bot (functions/diario/regras.ts). */
@@ -21,7 +22,7 @@ export async function GET({ cookies }) {
       const hoje = diaBrasilia();
       if (db && c?.diarioSite !== hoje) await db.collection('contas').updateOne({ userId: s.id }, { $set: { diarioSite: hoje } }, { upsert: true });
     } catch { /* sem saldo */ }
-    corpo.sessao = { ...s, cp, inscricoes, personagem: estado === 'ok' ? { nome: ficha.nome, estagio: ficha.estagio } : null };
+    corpo.sessao = { ...s, cp, inscricoes, ...(ehAdmin(s) ? { admin: true } : {}), personagem: estado === 'ok' ? { nome: ficha.nome, estagio: ficha.estagio } : null };
   }
   return new Response(JSON.stringify(corpo), { headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' } });
 }

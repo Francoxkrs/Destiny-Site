@@ -13,7 +13,9 @@
     "visual:teste": "node scripts/visual-teste.mjs",
     "admin:teste": "node scripts/admin-teste.mjs",
     "calendario:teste": "node scripts/calendario-teste.mjs",
-    "npcs:teste": "node scripts/npcs-teste.mjs"
+    "npcs:teste": "node scripts/npcs-teste.mjs",
+    "guias:teste": "node scripts/guias-teste.mjs",
+    "bot:exportar": "node scripts/bot-exportar.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "8.2.11",

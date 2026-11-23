@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/v2.css';
 import '../styles/sistemas.css';
 import '../styles/portal.css';
+import '../styles/guias.css';
 import Gem from '../components/Gem.astro';
 import Arrow from '../components/Arrow.astro';
 import { site, paginas, capitulos, glossario } from '../data/canon.js';
@@ -20,7 +21,7 @@ const discordExterno = site.discord !== '#';
 const cap = atual ? capitulos.find((c) => c.id === atual.cap) : null;
 const capN = (c) => ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'][capitulos.indexOf(c)];
 const titulos = Object.fromEntries([
-  ['/', 'Black Destiny'], ['/indice/', 'Índice'], ['/guia/', 'Guia'],
+  ['/', 'Black Destiny'], ['/indice/', 'Índice'], ['/guia/', 'Guia'], ['/faq/', 'Dúvidas'], ['/comandos/', 'Comandos'],
   ...portal.map((p) => [p.href, p.nome]),
   ...paginas.map((p) => [`/${p.slug}/`, p.titulo]),
 ]);
@@ -28,6 +29,8 @@ const busca = {
   paginas: [
     ...paginas.map((p) => ({ t: p.titulo, d: p.resumo, u: `/${p.slug}/`, c: capitulos.find((c) => c.id === p.cap)?.nome ?? '', e: (p.essencial || []).join(' ') })),
     ...portal.map((p) => ({ t: p.nome, d: p.texto, u: p.href, c: 'Portal', e: '' })),
+    { t: 'Dúvidas', d: 'As perguntas que mais chegam na Staff, com a resposta curta', u: '/faq/', c: 'Consulta', e: 'faq perguntas frequentes ajuda' },
+    { t: 'Comandos', d: 'Todos os comandos do bot, por assunto', u: '/comandos/', c: 'Consulta', e: 'comandos bot discord barra' },
   ],
   termos: glossario.map(([t, d, u]) => ({ t, d, u: `/${u.replace('#', '/#')}`.replace(/\/?$/, (m) => (u.includes('#') ? '' : '/')) })),
 };
@@ -157,6 +160,8 @@ const busca = {
           <div class="btns">
             <a class="btn btn--solid" href="/comecar/">Criar personagem <Arrow /></a>
             <a class="btn" href="/indice/">Índice e glossário</a>
+            <a class="btn" href="/faq/">Dúvidas</a>
+            <a class="btn" href="/comandos/">Comandos do bot</a>
             <a class="btn" href={site.discord} target={discordExterno ? '_blank' : undefined} rel="noopener">Entrar no Discord</a>
           </div>
         </div>
@@ -205,7 +210,7 @@ const busca = {
             </div>
           ))}
         </div>
-        <p class="footer__idx"><a href="/indice/">Índice, glossário e busca <Arrow /></a></p>
+        <p class="footer__idx"><a href="/indice/">Índice, glossário e busca <Arrow /></a><a href="/faq/">Dúvidas <Arrow /></a><a href="/comandos/">Comandos do bot <Arrow /></a></p>
         <p class="footer__big" aria-hidden="true"><span>Black</span> <em>Destiny</em></p>
         <div class="footer__bottom">
           <span class="t-label">© {new Date().getFullYear()} Black Destiny · Servidor de fãs</span>

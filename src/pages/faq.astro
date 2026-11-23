@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Arrow from '../components/Arrow.astro';
+import { faq, temasFaq, paginaPorSlug } from '../data/guias.js';
+
+// nome da página de destino de cada link (para "Regra completa: Atributos")
+const destino = (u) => {
+  if (!u) return null;
+  const s = u.split('/')[1];
+  return paginaPorSlug[s]?.titulo ?? ({ entrar: 'Entrar', altar: 'Altar', ficha: 'Ficha', arvores: 'Árvores' }[s] || 'Guia');
+};
+const temas = temasFaq.map((t) => ({ ...t, lista: faq.filter((p) => p.tema === t.id) })).filter((t) => t.lista.length);
+const romano = ['01', '02', '03', '04', '05', '06'];
+---
+<Base title="Dúvidas" slug="faq" aba="guia" description="As perguntas que mais chegam na Staff do Black Destiny, com a resposta curta e o link para a regra inteira.">
+  <section class="page-hero page-hero--idx">
+    <span class="page-hero__kanji" aria-hidden="true" data-hero-fade>問答</span>
+    <div class="wrap">
+      <div class="page-hero__meta" data-hero-fade>
+        <nav class="crumbs t-label" aria-label="Trilha"><a href="/guia/">Guia</a><span>/</span><a href="/guia/#regras">Consulta</a><span>/</span><span class="t-mana">Dúvidas</span></nav>
+        <p class="page-hero__leitura t-label"><span>{faq.length} perguntas</span></p>
+      </div>
+      <div class="page-hero__title"><h1 class="t-h1" data-hero-title>As <em>dúvidas</em> do Marcado</h1></div>
+      <div class="grid page-hero__grid">
+        <p class="t-lead c-1-7" data-hero-fade>O que mais perguntam para a Staff, com a resposta curta. Cada uma leva para a regra inteira.</p>
+        <p class="t-body c-8-12" data-hero-fade>As marcadas <span class="dv-bot">/ajuda</span> são as mesmas que o bot responde no Discord, com os números tirados do código dele.</p>
+      </div>
+      <label class="filtro" data-hero-fade>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg>
+        <input type="search" placeholder="Filtrar: missão, Mana, Estágio..." autocomplete="off" spellcheck="false" data-filtro aria-label="Filtrar as dúvidas" />
+        <span class="filtro__n t-label" data-filtro-n aria-live="polite"></span>
+      </label>
+    </div>
+  </section>
+
+  {temas.map((t, i) => (
+    <section class="sec sec--line dv-sec" id={t.id} data-filtro-grupo>
+      <div class="wrap">
+        <SectionHead num={romano[i]} label={t.nome} title={t.titulo}><span slot="aside" class="dv-sec__k" aria-hidden="true">{t.kanji}</span></SectionHead>
+        <div class="dv-lista">
+          {t.lista.map((p) => (
+            <details class="dv" id={p.id} data-filtro-item data-texto={`${p.pergunta} ${p.curta} ${p.blocos.map((b) => b.h).join(' ')}`.replace(/<[^>]+>/g, ' ')}>
+              <summary>
+                <span class="dv__q" aria-hidden="true">問</span>
+                <span class="dv__p">{p.pergunta}</span>
+                {p.bot && <span class="dv-bot">/ajuda</span>}
+                <span class="dv__mais" aria-hidden="true"></span>
+              </summary>
+              <div class="dv__r">
+                {p.blocos.map((b) => (b.t === 'h' ? <p class="dv__h t-label" set:html={b.h} /> : b.t === 'miudo' ? <p class="dv__miudo" set:html={b.h} /> : <p set:html={b.h} />))}
+                <div class="dv__pe">
+                  {p.link && <a class="dv__link" href={p.link}>Regra completa: <b>{destino(p.link)}</b> <Arrow /></a>}
+                  <button type="button" class="elo" data-elo={p.id} aria-label={`Copiar o link da pergunta ${p.curta}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6" /><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" /></svg><span>Link</span></button>
+                </div>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <p class="filtro__vazio wrap" data-filtro-vazio hidden>Nenhuma dúvida com isso. Tente a <button type="button" class="filtro__busca" data-search-open>busca do site</button> ou pergunte no Discord.</p>
+
+  <aside class="consulta-fim">
+    <div class="wrap consulta-fim__in">
+      <p class="t-label">Não achou?</p>
+      <p class="consulta-fim__t">Use <code>/ajuda</code> no Discord ou abra o <a href="/comandos/">Índice de comandos</a>.</p>
+      <a class="btn" href="/guia/">Voltar ao Guia <Arrow /></a>
+    </div>
+  </aside>
+</Base>
+
+<script>
+  import { initFiltro } from '../scripts/consulta.js';
+  initFiltro('perguntas');
+</script>

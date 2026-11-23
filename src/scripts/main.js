@@ -6,6 +6,7 @@ import { SplitText } from 'gsap/SplitText';
 import { Flip } from 'gsap/Flip';
 import Lenis from 'lenis';
 import { initSims } from './sims.js';
+import { initGuias } from './guias.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
 // No celular a barra de endereço muda a altura da tela ao rolar; isso não deve recalcular as animações.
@@ -55,9 +56,7 @@ function autoToc() {
   nav.dataset.pagenav = '';
   nav.innerHTML = `<div class="wrap tabs__in"><span class="tabs__h" aria-hidden="true">Nesta página</span>${items.map(([id, n], i) => `<a href="#${id}" data-tab="${id}"><span>${String(i + 1).padStart(2, '0')}</span>${n}</a>`).join('')}</div>`;
   $('.page-hero').after(nav);
-  // o id só existe depois do script: leva até a seção pedida no endereço
-  const alvo = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
-  if (alvo) addEventListener('load', () => setTimeout(() => (window.__lenis ? window.__lenis.scrollTo(alvo, { offset: -80, immediate: true }) : alvo.scrollIntoView()), 50));
+  // levar até a seção do endereço (#id) fica com o guias.js, que também acende a regra
 }
 autoToc();
 
@@ -92,6 +91,8 @@ function pageNavSpy() {
   marca();
 }
 pageNavSpy();
+// links de cada regra, índice da página, tempo de leitura e o carimbo "Lido"
+initGuias({ slugify: slugifyTxt });
 
 const searchData = (() => { try { return JSON.parse($('#bd-search')?.textContent || '{}'); } catch { return {}; } })();
 const norm = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -177,7 +178,7 @@ function glossTips() {
   // Uma dica por termo em cada seção: quem chega numa seção pelo índice também vê a definição.
   const porSecao = new Map();
   const alvos = $$('main p.t-body, main p.t-lead, main p.t-small, main .card__text, main .gifts dd, main .tbl td, main .ticks li, main .kv dd, main .ladder p, main .perk p, main .no p, main .tl-item__gain, main .tl-item__req, main .corr > div > span, main .chap__text, main li');
-  const skip = (n) => n.parentElement?.closest('a, button, h1, h2, h3, h4, .term, .tabs, .page-hero, .sim, nav, .hdr, .footer, label, select, [data-split]');
+  const skip = (n) => n.parentElement?.closest('a, button, h1, h2, h3, h4, .term, .tabs, .page-hero, .sim, nav, .hdr, .footer, label, select, summary, .fecho, .cmd, [data-split]');
   const regs = termos.map((t) => [t, new RegExp(`(^|[^\\p{L}])(${t.t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?)(?![\\p{L}])`, 'u')]);
   for (const el of alvos) {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);

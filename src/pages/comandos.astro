@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Arrow from '../components/Arrow.astro';
+import { comandosAgrupados, comandos, comandosGeradosEm, paginaDoComando, idComando, paginaPorSlug } from '../data/guias.js';
+
+const grupos = comandosAgrupados();
+const destino = (u) => {
+  const s = u.split('/')[1];
+  return paginaPorSlug[s]?.titulo ?? ({ entrar: 'Entrar', ficha: 'Ficha', arvores: 'Árvores', guia: 'Guia', faq: 'Dúvidas', eventos: 'Eventos' }[s] || 'Guia');
+};
+const data = new Date(`${comandosGeradosEm}T12:00:00Z`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+// opções obrigatórias primeiro; as opcionais levam "?"
+const assinatura = (ops) => ops.slice().sort((a, b) => Number(b.obrigatoria) - Number(a.obrigatoria));
+const textoDe = (c) => [c.nome, c.texto, ...c.subs.flatMap((s) => [s.nome, s.texto]), ...c.opcoes.map((o) => o.texto)].join(' ');
+const romano = ['01', '02', '03', '04', '05', '06', '07', '08'];
+---
+<Base title="Comandos" slug="comandos" aba="guia" description="Todos os comandos do bot do Black Destiny, por assunto: o que cada um faz, as opções e onde está a regra.">
+  <section class="page-hero page-hero--idx">
+    <span class="page-hero__kanji" aria-hidden="true" data-hero-fade>命令</span>
+    <div class="wrap">
+      <div class="page-hero__meta" data-hero-fade>
+        <nav class="crumbs t-label" aria-label="Trilha"><a href="/guia/">Guia</a><span>/</span><a href="/guia/#regras">Consulta</a><span>/</span><span class="t-mana">Comandos</span></nav>
+        <p class="page-hero__leitura t-label"><span>{comandos.length} comandos</span><span>Tirados do bot em {data}</span></p>
+      </div>
+      <div class="page-hero__title"><h1 class="t-h1" data-hero-title>Os <em>comandos</em> do bot</h1></div>
+      <div class="grid page-hero__grid">
+        <p class="t-lead c-1-7" data-hero-fade>Tudo o que o bot faz, por assunto. Toque no nome de um comando para copiar e colar no Discord.</p>
+        <p class="t-body c-8-12" data-hero-fade>A lista sai do código do bot, então o que está aqui é o que existe lá. <span class="cmd-op cmd-op--obr">opção</span> é obrigatória, <span class="cmd-op">opção?</span> é opcional.</p>
+      </div>
+      <label class="filtro" data-hero-fade>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><line x1="15.5" y1="15.5" x2="21" y2="21" /></svg>
+        <input type="search" placeholder="Filtrar: treino, Yuls, viajar..." autocomplete="off" spellcheck="false" data-filtro aria-label="Filtrar os comandos" />
+        <span class="filtro__n t-label" data-filtro-n aria-live="polite"></span>
+      </label>
+    </div>
+  </section>
+
+  {grupos.map((g, i) => (
+    <section class="sec sec--line cmd-sec" id={g.id} data-filtro-grupo>
+      <div class="wrap">
+        <SectionHead num={romano[i]} label={g.nome} title={`${g.texto.replace(/\.$/, '')}<em>.</em>`}><span slot="aside" class="dv-sec__k" aria-hidden="true">{g.kanji}</span></SectionHead>
+        <div class="cmds">
+          {g.lista.map((c) => (
+            <article class="cmd" data-filtro-item data-alvo data-texto={textoDe(c)}>
+              <h3 class="cmd__nome" id={idComando(c.nome)}><button type="button" class="cmd__copia" data-copia={`/${c.nome}`} aria-label={`Copiar /${c.nome}`}><span aria-hidden="true">/</span>{c.nome}</button></h3>
+              <p class="cmd__txt">{c.texto}</p>
+              {c.opcoes.length > 0 && (
+                <p class="cmd__ops">{assinatura(c.opcoes).map((o) => <span class:list={['cmd-op', o.obrigatoria && 'cmd-op--obr']} title={o.texto}>{o.nome}{!o.obrigatoria && '?'}</span>)}</p>
+              )}
+              {c.subs.length > 0 && (
+                <ul class="cmd__subs">
+                  {c.subs.map((s) => (
+                    <li>
+                      <p class="cmd__sub"><button type="button" class="cmd__copia cmd__copia--sub" data-copia={`/${c.nome} ${s.nome}`} aria-label={`Copiar /${c.nome} ${s.nome}`}>{s.nome}</button>{s.tag && <span class="cmd-tag">{s.tag}</span>}</p>
+                      <p class="cmd__subtxt">{s.texto}</p>
+                      {s.opcoes.length > 0 && <p class="cmd__ops">{assinatura(s.opcoes).map((o) => <span class:list={['cmd-op', o.obrigatoria && 'cmd-op--obr']} title={o.texto}>{o.nome}{!o.obrigatoria && '?'}</span>)}</p>}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {paginaDoComando[c.nome] && <a class="cmd__regra" href={paginaDoComando[c.nome]}>A regra em <b>{destino(paginaDoComando[c.nome])}</b> <Arrow /></a>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <p class="filtro__vazio wrap" data-filtro-vazio hidden>Nenhum comando com isso. Tente a <button type="button" class="filtro__busca" data-search-open>busca do site</button>.</p>
+
+  <aside class="consulta-fim">
+    <div class="wrap consulta-fim__in">
+      <p class="t-label">Comandos da Staff</p>
+      <p class="consulta-fim__t">Os comandos só da equipe não aparecem aqui. Dúvida sobre regra? Veja as <a href="/faq/">Dúvidas</a>.</p>
+      <a class="btn" href="/guia/">Voltar ao Guia <Arrow /></a>
+    </div>
+  </aside>
+</Base>
+
+<script>
+  import { initFiltro } from '../scripts/consulta.js';
+  import { copiarTexto, aviso } from '../scripts/guias.js';
+  initFiltro('comandos');
+  document.addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-copia]');
+    if (!b) return;
+    const ok = await copiarTexto(b.dataset.copia!);
+    aviso(ok ? 'Comando copiado' : 'Não deu para copiar', b.dataset.copia!);
+  });
+</script>

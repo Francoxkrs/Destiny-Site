@@ -1,0 +1,37 @@
+---
+// Fecho de toda página de regra: carimbo "Lido" (guardado no navegador e contado no Guia), páginas para ler junto e a anterior.
+// Fica dentro do NextPage, antes do "A seguir". Sem h3 aqui: o build dá id a todo h3 das seções.
+import Arrow from './Arrow.astro';
+import { paginas } from '../data/canon.js';
+import { relacionados, paginaPorSlug, vizinhas } from '../data/guias.js';
+const { slug } = Astro.props;
+const rel = (relacionados[slug] || []).map((s) => paginaPorSlug[s]).filter(Boolean);
+const { anterior } = vizinhas(slug);
+---
+<aside class="fecho" aria-label="Fim da página" data-fecho={slug}>
+  <div class="wrap fecho__in">
+    <div class="fecho__lido">
+      <span class="eyebrow"><b>終</b>Fim da página</span>
+      <button class="fecho__selo" type="button" data-lido aria-pressed="false">
+        <span class="fecho__hanko" aria-hidden="true"><span>読</span><span>了</span></span>
+        <span class="fecho__txt"><b data-lido-t>Marcar como lido</b><small data-lido-s>Fica guardado neste navegador</small></span>
+      </button>
+      <p class="fecho__conta t-small"><a href="/guia/#regras"><b data-lidas-n>0</b> de {paginas.length} páginas do Guia lidas <Arrow /></a></p>
+    </div>
+    <div class="fecho__junto">
+      {rel.length > 0 && (
+        <>
+          <p class="t-label fecho__h">Leia junto</p>
+          <ul class="fecho__rel">
+            {rel.map((p) => (
+              <li><a href={`/${p.slug}/`} data-lida-de={p.slug}><span class="fecho__n">{p.num}</span><span class="fecho__t"><b>{p.titulo}</b><small>{p.resumo}</small></span><Arrow /></a></li>
+            ))}
+          </ul>
+        </>
+      )}
+      {anterior && (
+        <a class="fecho__ant" href={`/${anterior.slug}/`}><span class="fecho__seta" aria-hidden="true">←</span><span><small class="t-label">Página anterior</small><b>{anterior.titulo}</b></span></a>
+      )}
+    </div>
+  </div>
+</aside>

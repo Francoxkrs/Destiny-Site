@@ -1,0 +1,195 @@
+{
+ "geradoEm": "2026-11-23",
+ "fonte": "bot (build/)",
+ "perguntas": [
+  {
+   "id": "resetar",
+   "curta": "Posso resetar o personagem?",
+   "pergunta": "Fiz meu personagem, mas quero fazer outro. Posso resetar?",
+   "resposta": [
+    "Pode, mas não sozinho: **peça à Staff**. Ela apaga o personagem com o `/staff liberar` e você usa o `/criar-personagem` de novo.",
+    "",
+    "**O que se perde:** o personagem antigo inteiro (Estágio, feitiços, itens, Yuls).",
+    "**O que fica:** a bolsa de recompensas. Os giros e rerolls que sobraram valem na nova criação.",
+    "",
+    "**Antes de pedir:** se o problema é só o nome, a imagem ou a história, não precisa resetar. Peça a alteração da ficha pela aba Pessoal da `/ficha`."
+   ]
+  },
+  {
+   "id": "ferimento",
+   "curta": "Que Ferimento o meu feitiço causa?",
+   "pergunta": "Como sei qual Ferimento o meu feitiço de X Estágio deu? Como os Estágios se medem contra o corpo?",
+   "resposta": [
+    "Não se rola nada: é um **confronto**. O feitiço ataca, a **Resistência** do alvo defende.",
+    "",
+    " *‹ Como medir ›*",
+    "Cada Estágio tem uma linha **Derruba** (veja em `/feitiço` → Regras). Ela está na mesma escala das classificações de Força: uma muralha do 5º aguenta o que um feitiço do 5º derruba.",
+    "",
+    "Para comparar com o corpo, use o teto físico de cada Estágio:",
+    "**9º e 8º:** Sobre-Humana",
+    "**7º e 6º:** Extrema",
+    "**5º e 4º:** Colossal",
+    "**3º e 2º:** Monstruosa",
+    "**1º:** Titânica",
+    "",
+    " *‹ Qual grau ›*",
+    "Se o feitiço não passa da Resistência, não fere. Se passa, o narrador marca o grau pela diferença:",
+    "**Empate na classificação, vence nos Acréscimos:** Ferimento I",
+    "**Uma classificação acima:** Ferimento II",
+    "**Duas acima:** Ferimento III",
+    "**Três ou mais:** Ferimento IV",
+    "-# Com +10 Acréscimos o feitiço vale como o do Estágio seguinte. Grau cheio na trilha empurra o novo para cima."
+   ]
+  },
+  {
+   "id": "conhecimentos",
+   "curta": "Medicinal e Medicina Avançada somam?",
+   "pergunta": "Tenho um Conhecimento Comum (Medicinal) e o Incomum (Medicina Avançada). Os bônus somam ou vale só um?",
+   "resposta": [
+    "**Não somam.** Um Conhecimento Incomum substitui o Comum da mesma linha: vale só o melhor.",
+    "",
+    "No tratamento de Ferimentos, Medicinal tira 1 turno e Medicina Avançada tira 3. Com os dois, continuam 3. O Avançado ainda trata o que o Comum não trata (o Ferimento III).",
+    "",
+    "O mesmo vale no treino: Corporal e Fisiologia não somam, Magia e Arcanologia também não. Fica o efeito do Incomum.",
+    "",
+    "Cada Conhecimento ocupa uma das suas vagas, então pense antes de estudar o Comum de uma linha em que você já tem o Incomum."
+   ]
+  },
+  {
+   "id": "itens",
+   "curta": "Como compro ou peço um item?",
+   "pergunta": "Como eu compro itens? E como posso pedir um?",
+   "resposta": [
+    " *‹ Comprar pronto ›*",
+    "**`/loja`**: itens comuns de NPC (armas, kits, consumíveis).",
+    "**`/mercado`**: Recursos e itens com o preço do lugar onde você está. Comprar sobe o preço, vender baixa.",
+    "**`/trocas`**: direto com outro Marcado.",
+    " *‹ Pedir um item ›*",
+    "**`/forja encomendar`**: pede a peça a um artesão. O pagamento fica guardado até a entrega e volta inteiro se der errado.",
+    "**Painel de criação**, aba **Equipamento**: para um item próprio, com nome e efeito. A Staff define a qualidade e o preço."
+   ]
+  },
+  {
+   "id": "tecnicas",
+   "curta": "Como consigo Técnicas de Mana?",
+   "pergunta": "Como eu consigo Técnicas Mágicas?",
+   "resposta": [
+    "Abra o `/treinar` e toque em **Técnica**. Cada uma pede um Estágio e um Controle mínimo, e leva 5 treinos com um mentor que já a domina ou 8 sozinho.",
+    "",
+    " *‹ As primeiras ›*",
+    "**Percepção de Mana:** 8º Estágio, Controle 10%",
+    "**Pele de Mana:** 7º Estágio, Controle 20%",
+    "**Matriz Rúnica:** 6º Estágio, Controle 30%",
+    "**Método de Mana:** 5º Estágio, Controle 40%",
+    "**Zona de Mana:** 4º Estágio, Controle 50%",
+    "**Forma Mágica:** 2º Estágio, Controle 70%",
+    "-# Há ainda as de Diamond, as Runas e a Assimilação. A lista toda, com o que falta para você, está em Progresso, no `/treinar`."
+   ]
+  },
+  {
+   "id": "profissao",
+   "curta": "Como consigo uma Profissão?",
+   "pergunta": "Como eu consigo uma Profissão?",
+   "resposta": [
+    "**1.** Abra o `/profissao` e toque em **Todas as Profissões**: cada uma diz o Conhecimento que pede e o preço.",
+    "**2.** Tenha o Conhecimento (aprenda em `/estudar`).",
+    "**3.** Tire a licença no menu da mesma tela: 200 Yuls se for da sua classe social, 1.000 se for de outra.",
+    "**4.** Trabalhe com o botão **Jornada** do painel ou com `/jornada`. As Jornadas sobem o seu grau: Aprendiz, Oficial e Mestre.",
+    "-# No 6º Estágio dá para ter uma Profissão secundária."
+   ]
+  },
+  {
+   "id": "limites",
+   "curta": "Quais os limites por Estágio?",
+   "pergunta": "Quais são os limites de status por Estágio?",
+   "resposta": [
+    "O corpo tem teto por Estágio. Chegou nele, o treino daquele atributo para até você subir.",
+    "",
+    " *‹ Força, Resistência e Velocidade ›*",
+    "**9º:** até Sobre-Humana",
+    "**8º:** até Sobre-Humana",
+    "**7º:** até Extrema",
+    "**6º:** até Extrema",
+    "**5º:** até Colossal",
+    "**4º:** até Colossal",
+    "**3º:** até Monstruosa",
+    "**2º:** até Monstruosa",
+    "**1º:** até Titânica",
+    "-# Com o Ápice da trilha o teto vai a Transcendental. O que você já tinha ao criar nunca cai.",
+    " *‹ Para subir de Estágio ›*",
+    "**8º:** 3 PE",
+    "**7º:** 7 PE · 1 Branco",
+    "**6º:** 12 PE · Controle 20% · 3 Brancos",
+    "**5º:** 17 PE · 5 Brancos",
+    "**4º:** 23 PE · Controle 40% · 12 Brancos",
+    "**3º:** 30 PE · 4 Negros",
+    "**2º:** 37 PE · Controle 60% · 8 Negros",
+    "**1º:** 44 PE · 2 Dourados"
+   ]
+  },
+  {
+   "id": "acrescimos",
+   "curta": "Feitiço pode ter Acréscimos?",
+   "pergunta": "Posso ter Acréscimos em feitiços? No máximo quantos?",
+   "resposta": [
+    "**Pode.** Os Acréscimos do feitiço vêm de:",
+    "**Poder Mágico:** até 6.",
+    "**Maestria 2** do feitiço: +1.",
+    "**Classe, Traços, Milagres e Afinidade:** no máximo 1 de cada fonte por aplicação.",
+    "**Itens:** o encanto Condutor dá +0,5 nos feitiços lançados através da arma.",
+    "",
+    " *‹ Quanto vale ›*",
+    "**Externalizado** recebe 100% dos Acréscimos; **Reforço Corporal**, metade (para baixo).",
+    "Não há teto fixo, mas com **+10** o feitiço vale como o do Estágio seguinte (o custo segue o seu). Mais que isso não sobe outro Estágio."
+   ]
+  },
+  {
+   "id": "ocupado",
+   "curta": "Posso fazer RP durante treino ou missão?",
+   "pergunta": "Posso fazer RP enquanto já estou em outra coisa? Ex.: treino, missão.",
+   "resposta": [
+    "**Treino e estudo:** um por vez. Enquanto o relógio do treino corre, você não começa outro treino nem estudo. Cena social, conversa e passeio podem.",
+    "",
+    "**Missão:** o personagem está nela. Pode fazer outras cenas que não briguem com a história (um café na cidade antes de sair, por exemplo), mas não lutar nem viajar em outro lugar ao mesmo tempo.",
+    "",
+    "**Luta:** uma por vez. Um Ferimento II que você levar vira III se lutar ou fizer Treino Físico antes de tratar.",
+    "-# Na dúvida, combine com o narrador da cena."
+   ]
+  },
+  {
+   "id": "tipos",
+   "curta": "O que são os Tipos mágicos?",
+   "pergunta": "O que são os Tipos mágicos? Como uso cada um no feitiço?",
+   "resposta": [
+    "O **Tipo** diz como a magia se manifesta. A **Função** diz o que ela faz. Todo feitiço tem os dois.",
+    "",
+    " *‹ Tipos ›*",
+    "**Externalizado:** A magia sai do corpo e age no mundo. Recebe 100% dos Acréscimos do Poder Mágico.",
+    "**Reforço Corporal:** A magia envolve o próprio corpo. Recebe 50% dos Acréscimos, arredondado para baixo.",
+    "**Criação:** Produz objetos, estruturas ou armas.",
+    "**Conjuração:** Produz seres que agem sozinhos. Pede Conjuração ou Alta Conjuração.",
+    "",
+    " *‹ Funções ›*",
+    "**Básicas (todos têm):** Ataque, Defesa, Criação, Mobilidade.",
+    "**Avançadas e Perdidas:** Barreira, Reforço, Restauração, Enfraquecimento, Comunicação, Armadilha, Maldição, Anti-Maldição, Selamento, Restrição, Ressurreição. Cada uma abre com um Conhecimento.",
+    "-# No `/feitiço` → Escrever, os menus só mostram o que você já pode usar."
+   ]
+  },
+  {
+   "id": "cristais",
+   "curta": "Como consigo Cristais para subir?",
+   "pergunta": "Como consigo Cristais para subir de Estágio?",
+   "resposta": [
+    "O 7º Estágio é o primeiro que pede Cristal. Veja quantos em **Quais os limites por Estágio?**.",
+    "",
+    " *‹ Cristal Branco ›*",
+    "**Missões** Rank C (1) e B (2), **achados** da Mineração nas jazidas Ricas e nos Veios Virgens e a **Joalheria da Avenida**, na Coroa (pouco estoque).",
+    " *‹ Cristal Negro ›*",
+    "**Missões** Rank A e as **Minas Profundas** (Mineração).",
+    " *‹ Cristal Dourado ›*",
+    "**Missões** Rank S e **eventos**.",
+    "-# Os Cristais são gastos quando você sobe. Veja os seus em `/inventario`."
+   ]
+  }
+ ]
+}

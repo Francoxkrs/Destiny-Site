@@ -16,7 +16,10 @@ const voltaQ = Astro.url.searchParams.get('volta') ?? '/ficha/';
 const volta = voltaQ.startsWith('/') && !voltaQ.startsWith('//') ? voltaQ : '/ficha/';
 const doLink = codigo ? await verCodigo(codigo) : null;
 Astro.response.headers.set('cache-control', 'private, no-store');
-Astro.response.headers.set('referrer-policy', 'no-referrer');
+// same-origin: o código do link não vaza para sites de fora, e o POST do formulário ainda leva
+// o Origin real. Com no-referrer o navegador manda "Origin: null" e o Astro recusa o POST
+// ("Cross-site POST form submissions are forbidden").
+Astro.response.headers.set('referrer-policy', 'same-origin');
 const msgs = {
   config: 'O login com Discord ainda está sendo ligado. Use /site no Discord para entrar pelo bot.',
   negado: 'Você cancelou no Discord. Nada foi compartilhado.',

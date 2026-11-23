@@ -10,8 +10,9 @@ const c = capitulos.find((x) => x.id === p.cap);
   <div class="wrap">
     <div class="page-hero__meta" data-hero-fade>
       <nav class="crumbs t-label" aria-label="Trilha">
-        <a href="/guia/">Guia</a><span>/</span><a href={`/guia/#${c.id}`}>{c.nome}</a><span>/</span><span class="t-mana">{p.titulo}</span>
+        <a href="/guia/">Guia</a><span>/</span><a href={`/guia/#cap-${c.id}`}>{c.nome}</a><span>/</span><span class="t-mana">{p.titulo}</span>
       </nav>
+      <p class="page-hero__leitura t-label"><span class="page-hero__num">{p.num} de {paginas.length}</span><span data-leitura></span><span class="lido-tag" data-lido-tag hidden>読 Lido</span></p>
     </div>
     <div class="page-hero__title">
       <h1 class="t-h1" data-hero-title set:html={Astro.props.title ?? p.titulo} />

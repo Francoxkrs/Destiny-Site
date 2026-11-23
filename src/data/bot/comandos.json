@@ -1,0 +1,2024 @@
+{
+ "geradoEm": "2026-11-23",
+ "fonte": "bot (build/)",
+ "comandos": [
+  {
+   "nome": "ajuda",
+   "texto": "Dúvidas comuns: resetar, Ferimentos, Técnicas, Profissões, Cristais e mais",
+   "pasta": "servidor",
+   "opcoes": [
+    {
+     "nome": "pergunta",
+     "texto": "Abrir direto numa pergunta",
+     "obrigatoria": false,
+     "escolhas": [
+      "Posso resetar o personagem?",
+      "Que Ferimento o meu feitiço causa?",
+      "Medicinal e Medicina Avançada somam?",
+      "Como compro ou peço um item?",
+      "Como consigo Técnicas de Mana?",
+      "Como consigo uma Profissão?",
+      "Quais os limites por Estágio?",
+      "Feitiço pode ter Acréscimos?",
+      "Posso fazer RP durante treino ou missão?",
+      "O que são os Tipos mágicos?",
+      "Como consigo Cristais para subir?"
+     ]
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "bolsa",
+   "texto": "Recompensas de Boost, do Passe e do servidor: ver, girar e usar na ficha",
+   "pasta": "bolsa",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "[Staff] A bolsa de outra pessoa",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "bounty",
+   "texto": "Mural Livre: seu Bounty, cabeças a prêmio e os maiores Caçadores",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Seu Bounty, o título, os maiores Caçadores e as cabeças abertas",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "cabeca",
+     "texto": "Põe Yuls na cabeça de outro Marcado (1.000 a 500.000, vale 14 dias)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "alvo",
+       "texto": "Quem",
+       "obrigatoria": true
+      },
+      {
+       "nome": "premio",
+       "texto": "Yuls do prêmio (saem agora e ficam guardados)",
+       "obrigatoria": true
+      },
+      {
+       "nome": "motivo",
+       "texto": "Aparece no cartaz (opcional)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "anonimo",
+       "texto": "Esconder quem pôs o cartaz",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "tirar",
+     "texto": "Tira um cartaz seu que ninguém está caçando (volta 90% dos Yuls)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "cartaz",
+       "texto": "Qual",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "classe",
+   "texto": "Trocar de Classe de Mago com o mestre: 3 provas, 5.000 Yuls e 30 dias de espera",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "mestres",
+     "texto": "Onde fica o mestre de cada classe e como está o seu treino",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "aprender",
+     "texto": "Pede ao mestre para aprender outra classe (use no lugar do mestre)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "classe",
+       "texto": "A classe nova",
+       "obrigatoria": true,
+       "escolhas": [
+        "Mago Arcano",
+        "Mago de Batalha",
+        "Mago das Sombras",
+        "Mago Balístico",
+        "Mago Curandeiro",
+        "Mago do Caos",
+        "Mago Conjurador",
+        "Mago Artífice"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "prova",
+     "texto": "Abre a próxima prova do mestre como missão (chame o grupo e mande para a Staff)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "trocar",
+     "texto": "Com as 3 provas feitas, paga o mestre e troca de classe (use no lugar do mestre)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "desistir",
+     "texto": "Larga o treino com o mestre (as provas feitas se perdem)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "clima",
+   "texto": "O tempo de hoje em cada região de Diamond e o que ele muda",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "codigo",
+   "texto": "Resgata um código do servidor (sai um a cada meta de membros) e ganha itens na bolsa",
+   "pasta": "servidor",
+   "opcoes": [
+    {
+     "nome": "codigo",
+     "texto": "O código do anúncio, ex.: DIAMOND800-K7QX",
+     "obrigatoria": true
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "comecar",
+   "texto": "Primeiro dia: quatro passos com botões para entrar no jogo depois da aprovação",
+   "pasta": "servidor",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "contrato",
+   "texto": "Contratos entre personagens: propor, ver, cumprir e quebrar",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "criar",
+     "texto": "Propõe um Contrato: a outra parte (e o Notário, se houver) assina pelo botão",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "tipo",
+       "texto": "Tipo do Contrato",
+       "obrigatoria": true,
+       "escolhas": [
+        "Emprego: Um Mestre Ferreiro paga 60 Yuls por Jornada a um Aprendiz",
+        "Empréstimo: 5.000 Yuls, devolvidos como 6.000 em 4 semanas",
+        "Arrendamento: Usa a mina de um nobre e entrega metade do minério",
+        "Encomenda: Uma espada Rara por 4.000 Yuls, entregue em 2 semanas",
+        "Escolta: Protege uma carga até a Fronteira",
+        "Sociedade: Dois sócios dividem o lucro de uma Loja",
+        "Venda de Terra: A terra passa ao comprador quando ele assina e paga"
+       ]
+      },
+      {
+       "nome": "com",
+       "texto": "A outra parte",
+       "obrigatoria": true
+      },
+      {
+       "nome": "termos",
+       "texto": "O que cada um promete, em texto",
+       "obrigatoria": true
+      },
+      {
+       "nome": "valor",
+       "texto": "Valor em Yuls (é a multa de quem quebrar; na Venda de Terra, o preço)",
+       "obrigatoria": true
+      },
+      {
+       "nome": "prazo-dias",
+       "texto": "Prazo em dias (o bot avisa quando vence)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "notario",
+       "texto": "Notário presente: o Contrato passa a valer na Coroa",
+       "obrigatoria": false
+      },
+      {
+       "nome": "terra",
+       "texto": "Só Venda de Terra: qual terra sua",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "ver",
+     "texto": "Mostra um Contrato seu (ou pelo número)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "contrato",
+       "texto": "Qual Contrato",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "lista",
+     "texto": "Seus Contratos (ativos, propostos e os antigos)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "cumprir",
+     "texto": "Marca o seu lado como cumprido (com os dois, o Contrato se encerra)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "contrato",
+       "texto": "Qual Contrato",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "quebrar",
+     "texto": "Quebra um Contrato ativo: multa igual ao valor, paga à outra parte, e 4 semanas sem Notário",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "contrato",
+       "texto": "Qual Contrato",
+       "obrigatoria": true
+      },
+      {
+       "nome": "confirmar",
+       "texto": "Digite QUEBRAR para confirmar",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "convites",
+   "texto": "Evento de convites: a lojinha, seus convites e o ranking",
+   "pasta": "evento",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "loja",
+     "texto": "Abre o Relicário, a lojinha do evento: troque convites por recompensas",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "ver",
+     "texto": "Quantos convites você tem (ou outra pessoa, para a Staff)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "[Staff] Os convites de outra pessoa",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "ranking",
+     "texto": "Quem mais chamou gente para o servidor",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "criar-personagem",
+   "texto": "Cria seu Marcado numa câmara privada: três destinos, nome, imagem e envio",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "criatura",
+   "texto": "Criaturas: o painel (ver) e, para narrador ou Staff, Domação, vínculo e aparições",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Abre o painel das suas criaturas: vínculo, físico, treino e caderno de campo",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = as suas)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "registrar",
+     "texto": "Registra a criatura domada (cobra o Laço) ou o familiar da Bruxa",
+     "tag": "Narrador/Staff",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Dono da criatura",
+       "obrigatoria": true
+      },
+      {
+       "nome": "nome",
+       "texto": "Nome da criatura",
+       "obrigatoria": true
+      },
+      {
+       "nome": "especie",
+       "texto": "Espécie do bestiário (ou escreva outra)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "rank",
+       "texto": "Rank (vazio = o do bestiário)",
+       "obrigatoria": false,
+       "escolhas": [
+        "F",
+        "E",
+        "D",
+        "C",
+        "B",
+        "A",
+        "S"
+       ]
+      },
+      {
+       "nome": "tipo",
+       "texto": "Tipo (vazio = o do bestiário)",
+       "obrigatoria": false,
+       "escolhas": [
+        "Besta Comum",
+        "Besta Mágica",
+        "Quimera",
+        "Espírito",
+        "Lenda",
+        "Anomalia",
+        "Construto"
+       ]
+      },
+      {
+       "nome": "fisico",
+       "texto": "Classificação física inicial",
+       "obrigatoria": false,
+       "escolhas": [
+        "Comum",
+        "Incomum",
+        "Sobre-Humana",
+        "Extrema",
+        "Colossal",
+        "Monstruosa",
+        "Titânica"
+       ]
+      },
+      {
+       "nome": "natural",
+       "texto": "Habilidade Natural (ou Traço da Magia do familiar)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "subjugada",
+       "texto": "Vencida no confronto (começa Arisca)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "familiar",
+       "texto": "Pacto Familiar da Bruxa (sem Laço, fora do limite)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "cena",
+     "texto": "+1 cena juntos (sobe o vínculo sozinho até Leal)",
+     "tag": "Narrador/Staff",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Dono da criatura",
+       "obrigatoria": true
+      },
+      {
+       "nome": "criatura",
+       "texto": "Qual criatura",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "vinculo",
+     "texto": "Define o vínculo (Elo, maus-tratos, fuga)",
+     "tag": "Narrador/Staff",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Dono da criatura",
+       "obrigatoria": true
+      },
+      {
+       "nome": "criatura",
+       "texto": "Qual criatura",
+       "obrigatoria": true
+      },
+      {
+       "nome": "nivel",
+       "texto": "Novo nível",
+       "obrigatoria": true,
+       "escolhas": [
+        "Arisca",
+        "Domada",
+        "Leal",
+        "Elo",
+        "Maus-tratos (cai um nível)",
+        "Fugiu"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "morte",
+     "texto": "A criatura morreu (o dono sofre Ferimento I)",
+     "tag": "Narrador/Staff",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Dono da criatura",
+       "obrigatoria": true
+      },
+      {
+       "nome": "criatura",
+       "texto": "Qual criatura",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "dar",
+   "texto": "Dá um item ou Recursos a outro personagem (presente, sem imposto)",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Para quem",
+     "obrigatoria": true
+    },
+    {
+     "nome": "coisa",
+     "texto": "O quê (do seu inventário)",
+     "obrigatoria": true
+    },
+    {
+     "nome": "quantidade",
+     "texto": "Quantos (padrão 1)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "despertar",
+   "texto": "Subir de Estágio: confere PE, Controle e Cristais e pede a Ação de Ascensão",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "diario",
+   "texto": "Marca o seu dia no servidor: XP no Passe e marcos (o dia 100 dá um Milagre exclusivo)",
+   "pasta": "servidor",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "disco",
+   "texto": "Discos de cristal engastados: ver, usar, Sobrecarga, engastar e tirar",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Seus discos, Encaixes, Rejeição e Instabilidade",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = os seus)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "lista",
+     "texto": "Os discos do Lapidário (efeito, onde vai, Rejeição)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "usar",
+     "texto": "Usa um disco em cena (conta a Instabilidade dos discos instáveis)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "disco",
+       "texto": "Qual disco",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "sobrecarga",
+     "texto": "1 vez por cena: o disco rende o dobro por 1 turno (Ferimento I e 2 marcas)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "disco",
+       "texto": "Qual disco",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "sobrecarga-total",
+     "texto": "1 vez por cena: todos os discos rendem o dobro por 3 turnos, sem Instabilidade",
+     "tag": "Arsenal Vivo",
+     "opcoes": []
+    },
+    {
+     "nome": "engastar",
+     "texto": "Engasta um disco (o dono do corpo paga)",
+     "tag": "Cirurgia Arcana / Científico / Bancada / Staff",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Em quem",
+       "obrigatoria": true
+      },
+      {
+       "nome": "disco",
+       "texto": "Qual disco",
+       "obrigatoria": true
+      },
+      {
+       "nome": "lapidacao",
+       "texto": "Lapidação",
+       "obrigatoria": true,
+       "escolhas": [
+        "Bruto (150 Yuls)",
+        "Lapidado (400 Yuls)",
+        "Facetado (1200 Yuls)",
+        "Brilhante (Arsenal Vivo ou Staff)"
+       ]
+      },
+      {
+       "nome": "cristalizar",
+       "texto": "Engastar mesmo passando do limite de Rejeição (Cristalização)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "tirar",
+     "texto": "Tira um disco (o Encaixe volta no fim do ciclo)",
+     "tag": "Cirurgia Arcana / Científico / Staff",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem",
+       "obrigatoria": true
+      },
+      {
+       "nome": "disco",
+       "texto": "Qual disco",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "equipamento",
+   "texto": "Itens mágicos: Ressonância, Sobrecarga, Reparo, Assinatura, Relíquia e Partes",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Detalhes de um item: Traço, Engastes, Ressonância",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item",
+       "obrigatoria": true
+      },
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = o seu)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "vincular",
+     "texto": "Põe um item Raro ou melhor em Ressonância (1 por Marcado; sobe com missões)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "nomear",
+     "texto": "Ressonância nível 2: batiza o item",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item",
+       "obrigatoria": true
+      },
+      {
+       "nome": "nome",
+       "texto": "O nome",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "despertar",
+     "texto": "Libera o Despertar do item (1 vez por cena)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "sobrecarga",
+     "texto": "+1 Acréscimo neste uso; o item racha no fim da cena",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "reparar",
+     "texto": "Reparo de Campo: conserta na hora um item rachado (1 vez por cena)",
+     "tag": "Artífice",
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item rachado",
+       "obrigatoria": true
+      },
+      {
+       "nome": "jogador",
+       "texto": "De quem é o item (vazio = seu)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "assinatura",
+     "texto": "Faz de uma arma Rara+ que você forjou a sua Arma-Assinatura",
+     "tag": "Arma-Assinatura",
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "A arma",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "reliquia",
+     "texto": "1 vez na vida: uma Obra-Prima sua vira Relíquia",
+     "tag": "Arma-Assinatura",
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "A Obra-Prima",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "partes",
+     "texto": "As Partes de Criatura que você guarda (cada uma dá um Traço na forja)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "esquadrao",
+   "texto": "Tropas dos Generais e alas do Veio Negro: entrar, Capitão ou Líder, pupilo e vantagens",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Quem comanda a divisão, a jurisdição, a vantagem e o seu mestre ou pupilo",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "divisao",
+       "texto": "Qual Tropa ou ala",
+       "obrigatoria": false,
+       "escolhas": [
+        "Tropa de Reconhecimento (Generais)",
+        "Tropa de Abate (Generais)",
+        "Tropa de Conquista (Generais)",
+        "Rebeldes (Veio Negro)",
+        "Desgarrados (Veio Negro)"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "entrar",
+     "texto": "Entra numa Tropa (Generais) ou numa ala (Veio Negro). Trocar só depois de 30 dias",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "divisao",
+       "texto": "Qual Tropa ou ala",
+       "obrigatoria": true,
+       "escolhas": [
+        "Tropa de Reconhecimento (Generais)",
+        "Tropa de Abate (Generais)",
+        "Tropa de Conquista (Generais)",
+        "Rebeldes (Veio Negro)",
+        "Desgarrados (Veio Negro)"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "pupilo",
+     "texto": "Capitão ou Líder: convida 1 pupilo da divisão, 2 Estágios abaixo (ele aceita num botão)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "quem",
+       "texto": "O pupilo",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "romper",
+     "texto": "Desfaz o laço com o seu mestre ou pupilo",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "cartaz",
+     "texto": "Tropa de Abate: 1 cartaz por semana contra alguém do Veio Negro, pago pelo Tesouro",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "alvo",
+       "texto": "Quem do Veio Negro",
+       "obrigatoria": true
+      },
+      {
+       "nome": "motivo",
+       "texto": "O que vai no cartaz (curto)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "premiar",
+     "texto": "Capitão ou Líder da divisão da semana: dá parte da recompensa a alguém da divisão",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "quem",
+       "texto": "Quem recebe",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quanto",
+       "texto": "Quanto (do que restou)",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "desertar",
+     "texto": "Larga a patente e a facção. A facção que você deixou põe preço na sua cabeça",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "confirmar",
+       "texto": "Marque para confirmar: não tem volta",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "estudar",
+   "texto": "Abre os estudos: aprender Conhecimentos nas Bibliotecas, Cápsulas do Fosso e esquecer",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Ver os estudos de outro jogador",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "extrato",
+   "texto": "Seu dinheiro: Yuls, patrimônio, custo de vida, salários e o que está guardado",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "falar",
+   "texto": "Fala com o NPC do lugar onde você está (taverna, balcão, escola). Ele responde na cena",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "fala",
+     "texto": "O que o seu personagem diz ao NPC",
+     "obrigatoria": true
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "feitiço",
+   "texto": "Abre o seu Grimório: escrever, lançar, ver e organizar feitiços",
+   "pasta": "grimorio",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Ver os feitiços de outro jogador",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "ferimento",
+   "texto": "Marcar ferimento (você, narrador ou Staff) e correções da Staff; ver e tratar: /saude",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "marcar",
+     "texto": "Marca um ferimento (em você; o narrador da missão e a Staff marcam em outros)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "grau",
+       "texto": "Grau do golpe",
+       "obrigatoria": true,
+       "escolhas": [
+        "I · Leve",
+        "II · Moderado",
+        "III · Grave",
+        "IV · Crítico"
+       ]
+      },
+      {
+       "nome": "regiao",
+       "texto": "Onde pegou",
+       "obrigatoria": false,
+       "escolhas": [
+        "Corpo",
+        "Braço",
+        "Perna",
+        "Cabeça"
+       ]
+      },
+      {
+       "nome": "jogador",
+       "texto": "Em quem (vazio = em você)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "origem",
+       "texto": "O que causou (vai para a ficha)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "ficha",
+   "texto": "Mostra a ficha de um personagem em imagem",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "De quem é a ficha (vazio = a sua)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "ficha-cor",
+   "texto": "Troca a cor de destaque da sua /ficha (e da capa do Grimório)",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "cor",
+     "texto": "Uma das cores prontas",
+     "obrigatoria": false,
+     "escolhas": [
+      "Vermelho Black Destiny (padrão)",
+      "Carmesim",
+      "Laranja",
+      "Dourado",
+      "Verde",
+      "Esmeralda",
+      "Ciano",
+      "Azul",
+      "Anil",
+      "Roxo",
+      "Rosa",
+      "Prata"
+     ]
+    },
+    {
+     "nome": "hex",
+     "texto": "Ou qualquer cor em hex, ex.: #ff3b2e",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "forja",
+   "texto": "Forjar peças: escolher o lugar, encomendas e o que está na forja",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "comecar",
+     "texto": "Começa uma peça: escolha a peça e onde forjar, e escreva a primeira Jornada",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "peca",
+       "texto": "O que forjar (só aparece o que você sabe fazer)",
+       "obrigatoria": true
+      },
+      {
+       "nome": "onde",
+       "texto": "Onde forjar (vazio = sua Oficina se tiver, senão a Guilda)",
+       "obrigatoria": false,
+       "escolhas": [
+        "Forja da Guilda: Segura. Cobra 10% do valor do material (mínimo 30 Yuls); o Veio Negro paga o dobro.",
+        "Oficina própria: Segura e sem taxa. Pede uma Oficina numa terra sua.",
+        "Forja dos Veios: Sem taxa e uma Jornada a menos, mas a peça pode ser roubada no caminho e nunca cheg"
+       ]
+      },
+      {
+       "nome": "encomenda",
+       "texto": "Encomenda aceita que esta peça atende (a peça vai direto para quem pediu)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "ver",
+     "texto": "O que está na sua forja, os lugares (taxa e risco) e suas encomendas",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "encomendar",
+     "texto": "Pede uma peça a um artesão; o pagamento fica guardado até a entrega (7 dias para responder)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "artesao",
+       "texto": "Quem vai forjar",
+       "obrigatoria": true
+      },
+      {
+       "nome": "peca",
+       "texto": "A peça e a qualidade",
+       "obrigatoria": true
+      },
+      {
+       "nome": "pagamento",
+       "texto": "Yuls que você paga (saem agora e ficam guardados)",
+       "obrigatoria": true
+      },
+      {
+       "nome": "pedido",
+       "texto": "Detalhes para o artesão (opcional)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "encomendas",
+     "texto": "Suas encomendas abertas (as que pediu e as que pediram a você)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "grimório",
+   "texto": "Abre o Grimório: capa, índice e as páginas com os feitiços",
+   "pasta": "grimorio",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "abrir",
+     "texto": "Abre um Grimório (o seu ou de outro jogador)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = o seu)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "capa",
+     "texto": "Troca a imagem da capa do seu Grimório (vazio = volta para a capa do tipo)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "imagem",
+       "texto": "PNG ou JPG, retrato (3:4) fica melhor",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "guia",
+   "texto": "Guia do Black Destiny: como começar, criação, ficha, treinos, grimório, mana e lutas",
+   "pasta": "servidor",
+   "opcoes": [
+    {
+     "nome": "assunto",
+     "texto": "Por onde abrir (padrão: Como começar)",
+     "obrigatoria": false,
+     "escolhas": [
+      "Como começar",
+      "Criação de personagem",
+      "Bolsa de recompensas",
+      "Ficha",
+      "Treinos e Estágios",
+      "Grimório e feitiços",
+      "Mana",
+      "Lutas e ranking",
+      "Missões",
+      "Criaturas, Discos e vínculos",
+      "Staff"
+     ]
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "inventario",
+   "texto": "Seu inventário: itens, equipamento, Recursos e a carga que a Força aguenta",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Mostra o inventário em imagem",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = o seu)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "equipar",
+     "texto": "Põe uma arma, armadura, catalisador, ferramenta ou prótese no corpo",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O item",
+       "obrigatoria": true
+      },
+      {
+       "nome": "espaco",
+       "texto": "Onde (vazio = o primeiro livre)",
+       "obrigatoria": false,
+       "escolhas": [
+        "Arma principal",
+        "Arma secundária",
+        "Armadura",
+        "Catalisador",
+        "Ferramenta",
+        "Prótese"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "desequipar",
+     "texto": "Tira um item do corpo e põe na mochila",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "espaco",
+       "texto": "Qual espaço",
+       "obrigatoria": true,
+       "escolhas": [
+        "Arma principal",
+        "Arma secundária",
+        "Armadura",
+        "Catalisador",
+        "Ferramenta",
+        "Prótese"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "usar",
+     "texto": "Usa um consumível (Poção de Cura, Bomba de Fumaça, Óleo de Lâmina...)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O consumível",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "largar",
+     "texto": "Joga fora um item ou Recursos (some do jogo)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "coisa",
+       "texto": "O quê",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quantidade",
+       "texto": "Quantos (padrão 1)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "investigar",
+   "texto": "Depois de uma cena de 400 caracteres aqui, procura os segredos do lugar (até 30 min depois)",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "jornada",
+   "texto": "Jornada de Trabalho: post de 500 caracteres, 1 por ciclo; paga o salário e produz",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "trabalho",
+     "texto": "O que fazer (minerar, refinar, forjar, encantar...). Vazio = jornada comum",
+     "obrigatoria": false
+    },
+    {
+     "nome": "profissao",
+     "texto": "Qual Profissão (vazio = a principal)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "lb",
+   "texto": "Rankings do Black Destiny",
+   "pasta": "ranking",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "status",
+     "texto": "Quem tem mais status (Estágio, físico, mágico, Méritos, Yuls...)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "categoria",
+       "texto": "Ranking de quê (padrão: geral)",
+       "obrigatoria": false,
+       "escolhas": [
+        "Geral (Estágio e PE)",
+        "Físico (soma das classificações)",
+        "Mágico (Poder e Reserva)",
+        "Controle Mágico",
+        "Méritos",
+        "Antiméritos (Veio Negro)",
+        "Yuls",
+        "Feitiços no Grimório"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "fights",
+     "texto": "Quem mais lutou e venceu, com derrotas e empates",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "ordem",
+       "texto": "Ordenar por (padrão: vitórias)",
+       "obrigatoria": false,
+       "escolhas": [
+        "Vitórias",
+        "Lutas",
+        "% de vitória (mín. 5 lutas)",
+        "Derrotas"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "passe",
+     "texto": "Quem tem mais XP no Passe de Temporada",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "loja",
+   "texto": "A loja do lugar onde você está: vitrine, comprar e vender (só no canal da loja)",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "A vitrine da loja daqui: preços, estoque do dia e o que ela compra",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "comprar",
+     "texto": "Compra um item da loja daqui",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O que comprar",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quantidade",
+       "texto": "Quantos (padrão: 1)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "vender",
+     "texto": "Vende para a loja daqui (só o que ela compra)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "item",
+       "texto": "O que vender",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quantidade",
+       "texto": "Quantos (padrão: 1)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "luta",
+   "texto": "Registrar lutas entre personagens (contam no /lb fights)",
+   "pasta": "ranking",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "registrar",
+     "texto": "Registra o resultado de uma luta sua; vale quando o adversário confirmar",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "adversario",
+       "texto": "Contra quem",
+       "obrigatoria": true
+      },
+      {
+       "nome": "resultado",
+       "texto": "Como terminou",
+       "obrigatoria": true,
+       "escolhas": [
+        "Venci",
+        "Perdi",
+        "Empate"
+       ]
+      },
+      {
+       "nome": "cena",
+       "texto": "Link da cena ou onde foi a luta",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "historico",
+     "texto": "As últimas lutas de um jogador",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = suas)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "mana",
+   "texto": "Sua Mana: ver, concentrar em combate e descansar",
+   "pasta": "grimorio",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Mana atual (ela regenera 10% da reserva por hora real fora de combate)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "concentrar",
+     "texto": "Turno de Concentração em combate: recupera 5% (o dobro em Forte Mana, nada em Mana Morta)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "descansar",
+     "texto": "Uma noite inteira de descanso recupera toda a Mana (uma vez a cada 12 h)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "mapa",
+   "texto": "A carta do lugar onde você está (clima, dia ou noite, quem domina) ou o reino inteiro",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "ver",
+     "texto": "O que mostrar (vazio = este lugar)",
+     "obrigatoria": false,
+     "escolhas": [
+      "Este lugar",
+      "Diamond inteiro"
+     ]
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "mercado",
+   "texto": "Lojas de NPC: preços de onde você está, comprar e vender",
+   "pasta": "economia",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Tabela de preços de onde você está (ou no Fosso)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "o-que",
+       "texto": "Recursos ou itens",
+       "obrigatoria": false,
+       "escolhas": [
+        "Recursos",
+        "Itens"
+       ]
+      },
+      {
+       "nome": "fosso",
+       "texto": "Negociar no Fosso (sem imposto, ×1,5, vende Raros; ilegal)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "comprar",
+     "texto": "Compra um Recurso ou item da loja",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "coisa",
+       "texto": "O quê (com o preço daqui)",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quantidade",
+       "texto": "Quantos (padrão 1)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "fosso",
+       "texto": "Negociar no Fosso (sem imposto, ×1,5, vende Raros; ilegal)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "vender",
+     "texto": "Vende a um mercador NPC (metade do preço, menos o Dízimo)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "coisa",
+       "texto": "O quê",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quantidade",
+       "texto": "Quantos (padrão 1)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "fosso",
+       "texto": "Negociar no Fosso (sem imposto, ×1,5, vende Raros; ilegal)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "missão",
+   "texto": "Abre o quadro de missões: pegar, pedir, acompanhar as suas e ver o histórico",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "lado",
+     "texto": "Qual quadro (vazio = o da sua patente)",
+     "obrigatoria": false,
+     "escolhas": [
+      "Generais Brilhantes",
+      "Veio Negro",
+      "Mural Livre (sem patente, paga Bounty)"
+     ]
+    },
+    {
+     "nome": "jogador",
+     "texto": "Ver o histórico de missões de outra pessoa",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "mural",
+   "texto": "Mural dos Notáveis: o preço da cabeça de cada Marcado, crimes e capturas",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Quanto cada lado paga pela cabeça de alguém (vazio = a sua), os crimes e os feitos",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "alvo",
+       "texto": "De quem (vazio = você)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "negociar",
+   "texto": "Oferece algo seu a outro jogador por Yuls; ele aceita ou recusa",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Quem compra",
+     "obrigatoria": true
+    },
+    {
+     "nome": "coisa",
+     "texto": "O quê (do seu inventário)",
+     "obrigatoria": true
+    },
+    {
+     "nome": "preco",
+     "texto": "Preço total em Yuls",
+     "obrigatoria": true
+    },
+    {
+     "nome": "quantidade",
+     "texto": "Quantos (padrão 1)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "pagar",
+   "texto": "Passa Yuls para outro personagem",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Para quem",
+     "obrigatoria": true
+    },
+    {
+     "nome": "yuls",
+     "texto": "Quanto",
+     "obrigatoria": true
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "passe",
+   "texto": "Passe de Temporada: níveis, recompensas e ranking",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Mostra o seu passe (ou o de outra pessoa)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem é o passe (vazio = o seu)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "pagina",
+       "texto": "Página de 1 a 6 (cada uma tem 5 níveis)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "ranking",
+     "texto": "Quem tem mais XP no passe desta temporada",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "mural",
+     "texto": "Quem chegou ao nível 30 do Premium nesta temporada",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "patente",
+   "texto": "Patentes dos Generais Brilhantes e do Veio Negro",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Sua patente, a escada e o que falta para subir",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = a sua)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "subir",
+     "texto": "Recruta → Tenente ou Pedra Bruta → Lapidador (30 Méritos/Antiméritos e 6º Estágio)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "patrulha",
+   "texto": "Ronda o lugar numa cena de 500 caracteres e dá 1 de influência à sua facção (2 por dia)",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": []
+  },
+  {
+   "nome": "profissao",
+   "texto": "Sua Profissão num painel: Jornada, licença e a lista de todas",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Ver a de outro Marcado",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "saude",
+   "texto": "Ferimentos, Sequelas e sustento num painel; trate os seus ou os de outro Marcado",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "De quem (vazio = o seu)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "segredos",
+   "texto": "Seu caderno de investigação: pistas por lugar, segredos achados e a Brecha",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "caderno",
+     "texto": "As pistas que você tem em cada lugar e os segredos que já achou (só você vê)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "ler",
+     "texto": "Relê um segredo que você achou (só você vê)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "segredo",
+       "texto": "Qual segredo",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "brecha",
+     "texto": "Usa uma Brecha achada aqui: +10 de influência para a sua facção na disputa aberta",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "sincronia",
+   "texto": "Sincronia entre dois ou três personagens",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Suas Sincronias e o que elas fazem",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "ativar",
+     "texto": "Ativa a Sincronia em cena: todos recuperam 50% da Mana (uma vez a cada 24 h)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "site",
+   "texto": "Entra no site do Black Destiny com a sua conta (link só seu, vale 10 minutos)",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "pagina",
+     "texto": "Onde abrir (vazio = Ficha)",
+     "obrigatoria": false,
+     "escolhas": [
+      "Ficha",
+      "Árvores",
+      "Altar",
+      "Cristais"
+     ]
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "sombras",
+   "texto": "Mago das Sombras: Identidade Falsa e Rede de Informantes",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "fachada",
+     "texto": "Grava a Identidade Falsa que os outros veem na /ficha",
+     "tag": "Mil Rostos",
+     "opcoes": [
+      {
+       "nome": "nome",
+       "texto": "Nome de fachada",
+       "obrigatoria": true
+      },
+      {
+       "nome": "sobrenome",
+       "texto": "Sobrenome de fachada",
+       "obrigatoria": false
+      },
+      {
+       "nome": "familia",
+       "texto": "Família de fachada",
+       "obrigatoria": false
+      },
+      {
+       "nome": "classe",
+       "texto": "Classe Social de fachada",
+       "obrigatoria": false,
+       "escolhas": [
+        "Plebe",
+        "Nobreza",
+        "Realeza"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "sem-fachada",
+     "texto": "Tira a Identidade Falsa",
+     "tag": "Mil Rostos",
+     "opcoes": []
+    },
+    {
+     "nome": "marcar",
+     "texto": "Põe um informante atrás de alguém (até 5)",
+     "tag": "Rede de Informantes",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Quem vigiar",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "desmarcar",
+     "texto": "Tira o informante de alguém",
+     "tag": "Rede de Informantes",
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Quem",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "rede",
+     "texto": "Quem você vigia e onde cada um está",
+     "tag": "Rede de Informantes",
+     "opcoes": []
+    }
+   ]
+  },
+  {
+   "nome": "terra",
+   "texto": "Suas terras num painel: comprar, construir, guardar, morar, adubar e pagar o imposto",
+   "pasta": "economia",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Ver as terras de outro Marcado",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "territorio",
+   "texto": "Quem domina cada lugar de Diamond, disputas de território e a influência das facções",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Quem domina cada lugar: placar do reino, cada região e o lugar onde você está",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "disputar",
+     "texto": "Capitão ou Líder: declara disputa pelo lugar onde o comando é usado (72 h, 1 por semana)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "faccao",
+       "texto": "[Staff] Por qual facção declarar",
+       "obrigatoria": false,
+       "escolhas": [
+        "Generais Brilhantes",
+        "Veio Negro"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "treinar",
+   "texto": "Abre o painel de treino: o que está livre, como treinar e o seu progresso",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Ver o progresso de outro jogador",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "trilha",
+   "texto": "A trilha da sua Classe de Mago: ver os ramos e gastar os Pontos de Trilha",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Mostra a trilha em imagem (a sua ou a de outro jogador)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = a sua)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "pegar",
+     "texto": "Gasta Pontos de Trilha num nó da árvore (só aparecem os que você pode pegar)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "no",
+       "texto": "Qual nó (só aparecem os que você pode pegar agora)",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "vagas",
+   "texto": "Quem ocupa cada família, magia e Milagre com vaga, e o que já está cheio",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "tipo",
+     "texto": "Qual parte (vazio = tudo)",
+     "obrigatoria": false,
+     "escolhas": [
+      "Famílias",
+      "Magias",
+      "Milagres"
+     ]
+    },
+    {
+     "nome": "mostrar",
+     "texto": "Quais vagas listar (padrão: as que têm alguém)",
+     "obrigatoria": false,
+     "escolhas": [
+      "Com alguém (padrão)",
+      "Só as cheias ou quase",
+      "Todas, até as vazias"
+     ]
+    },
+    {
+     "nome": "nome",
+     "texto": "Uma família, magia ou Milagre só (com todos que ocupam)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
+  {
+   "nome": "viajar",
+   "texto": "Deslocamento entre as regiões de Diamond",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "para",
+     "texto": "Viajar até outra região (a pé, montaria, trilho, vassoura, voo ou portal)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "destino",
+       "texto": "Para qual região",
+       "obrigatoria": true,
+       "escolhas": [
+        "A Coroa",
+        "O Lapidário",
+        "Os Veios",
+        "O Fosso",
+        "Fronteira Cinzenta"
+       ]
+      },
+      {
+       "nome": "como",
+       "texto": "Forma de viajar",
+       "obrigatoria": true,
+       "escolhas": [
+        "A pé (30 min por trecho)",
+        "Montaria (20 min por trecho)",
+        "Trilho de Cristal (10 min por trecho)",
+        "Vassoura (15 min por trecho)",
+        "Voo mágico (10 min por trecho)",
+        "Portal (2 min por trecho)"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "onde",
+     "texto": "Onde seu Marcado está e quanto tempo leva até cada região",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "De quem (vazio = o seu)",
+       "obrigatoria": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

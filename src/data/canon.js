@@ -1532,11 +1532,11 @@ export const profissoes = {
     { nome: 'Cultivador de Estufa', conhecimento: 'Herbalístico ou Botânica Arcana', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Comida e ervas raras' },
     { nome: 'Médico', conhecimento: 'Medicinal', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Tratamento cobrado e cirurgias' },
     { nome: 'Engenheiro', conhecimento: 'Científico ou Engenharia', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Máquinas, catalisadores, próteses e encantamentos' },
-    { nome: 'Lapidador de Cristais', conhecimento: 'Científico', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Lentes, Núcleos e Pó de Cristal' },
+    { nome: 'Lapidador de Cristais', conhecimento: 'Científico', classe: 'Nobreza', onde: 'O Lapidário', produz: 'Lentes, Núcleos, Pó de Cristal e Discos Virgens' },
     { nome: 'Mercador', conhecimento: 'Oratória', classe: 'Nobreza', onde: 'Qualquer cidade', produz: 'Compra e revende; abre Loja' },
     { nome: 'Notário', conhecimento: 'Retórica', classe: 'Realeza', onde: 'A Coroa', produz: 'Registra Contratos e Escrituras' },
     { nome: 'Magistrado', conhecimento: 'Retórica', classe: 'Realeza', onde: 'A Coroa', produz: 'Julga e cobra impostos de terras' },
-    { nome: 'Contrabandista', conhecimento: 'Oratória', classe: 'Nenhuma', onde: 'O Fosso', produz: 'Recursos sem imposto e itens proibidos' },
+    { nome: 'Contrabandista', conhecimento: 'Oratória', classe: 'Nenhuma', onde: 'O Fosso', produz: 'Recursos sem imposto, itens proibidos e Discos Brutos' },
   ],
   ligacoes: [
     ['Classe Social', 'A Plebe começa perto das minas, a Nobreza das academias, a Realeza dos cartórios. Trocar de mundo custa caro, mas é possível.'],
@@ -1576,6 +1576,8 @@ export const mineracao = {
     ['2 Quartzo de Mana', '1 Lente de Quartzo', 'Lapidador', '1 Jornada'],
     ['1 Cristal Branco', '1 Núcleo Branco ou 3 Pó de Cristal', 'Lapidador com Laboratório', '2 Jornadas'],
     ['2 Ferro Estelar', '1 Lingote Estelar', 'Ferreiro Mestre', '2 Jornadas'],
+    ['1 Lente de Quartzo + 1 Fio Rúnico', '1 Disco Virgem (a runa entra no engaste)', 'Lapidador', '1 Jornada'],
+    ['1 Quartzo de Mana + 1 Cobre Rúnico', '2 Discos Brutos (sem imposto)', 'Contrabandista', '1 Jornada'],
   ],
   escolha: 'O Cristal Branco tem dois destinos que competem: subir de Estágio ou virar o núcleo de um item Épico. Cada um que sai da mina obriga uma escolha.',
 };
@@ -1887,7 +1889,9 @@ export const discos = {
     ['Cristalização', 'Passar do limite de Rejeição deixa uma Sequela permanente: a pele em volta do disco vira cristal e o personagem perde 5% de Controle por ponto acima.'],
     ['Instabilidade', 'Os discos mais fortes ganham 1 marca a cada uso. Quando as marcas chegam ao limite do disco, o efeito colateral acontece na hora. As marcas somem no começo de cada ciclo. É um contador, não sorte: o jogador sempre sabe quanto falta.'],
     ['Sobrecarga', '1 vez por cena, o disco rende o dobro por 1 turno. Custa 1 Ferimento I na hora e conta 2 marcas de Instabilidade.'],
-    ['Engaste e Desengaste', 'Só com Cirurgia Arcana, Conhecimento Científico ou a Bancada de Discos do Mago Artífice, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
+    ['Engaste e Desengaste', 'Com Cirurgia Arcana, Conhecimento Científico ou a Bancada de Discos do Mago Artífice, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
+    ['Clínica de Engaste', 'Sem cirurgião por perto, a clínica do Lapidário engasta em você pelo preço da lapidação mais 150 Yuls (/disco clinica). Discos Brutos e Ilegais, só na banca do Veio Negro, no Fosso.'],
+    ['Disco Virgem', 'O cristal já cortado, sem runa. Com um no inventário, o engaste sai 400 Yuls mais barato; um Disco Bruto paga o Bruto. O Lapidador faz o Virgem e o Contrabandista faz o Bruto na Jornada; o Balcão do Ateliê e o Câmbio do Fosso vendem. Troca e vende como qualquer Recurso.'],
     ['Sem Acréscimos', 'Nenhum disco da lista dá Acréscimo. Eles dão funções: sentidos, memória, mana guardada, truques. A exceção são os Discos Autorais do Mago Artífice (até +1, num atributo físico).'],
   ],
   lapidacao: [

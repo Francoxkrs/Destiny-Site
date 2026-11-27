@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Arrow from '../components/Arrow.astro';
-import { altar, pedra, raridades, garantia, inscricao, fontes } from '../data/altar.js';
+import { altar, pedra, raridades, garantia, inscricao, fontes, xpNaoInscricao } from '../data/altar.js';
 
 const fmt = new Intl.NumberFormat('pt-BR');
 const pct = (n) => `${String(n).replace('.', ',')}%`;
@@ -160,11 +160,12 @@ const dados = { altar: { premios: altar.premios, destaque: altar.destaque, onde:
         <div class="al-sec__h">
           <span class="eyebrow"><b>札</b>Inscrições</span>
           <h2 class="t-h2">Jogando, <em>todo mundo gira</em>.</h2>
-          <p class="t-body">As mesmas Inscrições para quem paga e para quem não paga. As marcadas como "em breve" chegam nas próximas atualizações do bot. Também dá para comprar: {fmt.format(inscricao.cp)} CP cada, ou 10 por {fmt.format(inscricao.cp10)} CP.</p>
+          <p class="t-body">As mesmas Inscrições para quem paga e para quem não paga. O bot soma sozinho na sua conta, uma vez por acontecimento. Também dá para comprar: {fmt.format(inscricao.cp)} CP cada, ou 10 por {fmt.format(inscricao.cp10)} CP.</p>
         </div>
         <ol class="al-fontes">
-          {fontes.map(([o, q, l, ativo]) => <li class:list={[!ativo && 'is-breve']}><b>+{q}</b><span>{o}</span><small>{ativo ? l : `${l} · em breve`}</small></li>)}
+          {fontes.map(([o, q, l]) => <li><b>{/^\d/.test(q) ? `+${q}` : q}</b><span>{o}</span><small>{l}</small></li>)}
         </ol>
+        <p class="t-small" style="margin-top:22px">Post de RP, <code>/diario</code> e bump não dão Inscrição: dão XP do Passe. {xpNaoInscricao.map(([o, x]) => `${o}: ${x}`).join(' · ')}.</p>
         <div class="btns" style="margin-top:32px"><a class="btn btn--ink" href="/cristais/">Cristais Prismáticos <Arrow /></a><a class="btn btn--ink" href="/eventos/">Eventos valendo agora <Arrow /></a></div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 {
- "geradoEm": "2026-11-23",
+ "geradoEm": "2026-11-27",
  "fonte": "bot (build/)",
  "perguntas": [
   {
@@ -63,7 +63,7 @@
     " *‹ Comprar pronto ›*",
     "**`/loja`**: itens comuns de NPC (armas, kits, consumíveis).",
     "**`/mercado`**: Recursos e itens com o preço do lugar onde você está. Comprar sobe o preço, vender baixa.",
-    "**`/trocas`**: direto com outro Marcado.",
+    "**`/negociar`**: direto com outro Marcado, por Yuls (ele aceita ou recusa). Para dar de presente, **`/dar`**; para passar Yuls, **`/pagar`**.",
     " *‹ Pedir um item ›*",
     "**`/forja encomendar`**: pede a peça a um artesão. O pagamento fica guardado até a entrega e volta inteiro se der errado.",
     "**Painel de criação**, aba **Equipamento**: para um item próprio, com nome e efeito. A Staff define a qualidade e o preço."
@@ -83,7 +83,13 @@
     "**Método de Mana:** 5º Estágio, Controle 40%",
     "**Zona de Mana:** 4º Estágio, Controle 50%",
     "**Forma Mágica:** 2º Estágio, Controle 70%",
-    "-# Há ainda as de Diamond, as Runas e a Assimilação. A lista toda, com o que falta para você, está em Progresso, no `/treinar`."
+    "**Supressão de Mana:** 8º Estágio, Controle 15%",
+    "**Fio de Mana:** 7º Estágio, Controle 20%",
+    "**Pulso:** 6º Estágio, Controle 30%",
+    "**Ponto de Mana:** 5º Estágio, Controle 40%",
+    "**Leitura do Fluxo:** 4º Estágio, Controle 50%",
+    "**Coração de Mana:** 3º Estágio, Controle 60%",
+    "-# Há ainda as de Diamond, as Runas, a Assimilação, a Caçada, as Avançadas (partem de uma que você já tem) e as Proibidas (só no Fosso, pela Staff). A lista toda, com o que falta para você, está em Progresso, no `/treinar`."
    ]
   },
   {

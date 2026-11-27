@@ -153,7 +153,7 @@ const dados = {
           const { pos, arestas, ramos, aneis } = geo(a);
           return (
             <div class="tr-arv" data-arvore={a.id} hidden={a.id !== ativa.id} style={`--cc:${a.cor}`}>
-              <div class="tr-arv__bg" aria-hidden="true"><img src={a.img} alt="" loading={a.id === ativa.id ? 'eager' : 'lazy'} /></div>
+              <div class="tr-arv__bg" aria-hidden="true">{a.img && <img src={a.img} alt="" loading={a.id === ativa.id ? 'eager' : 'lazy'} />}</div>
               <span class="tr-arv__k" aria-hidden="true">{a.kanji}</span>
               <div class="tr-campo">
                 <svg class="tr-linhas" viewBox="0 0 100 100" aria-hidden="true">

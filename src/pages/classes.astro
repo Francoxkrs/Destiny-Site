@@ -12,14 +12,14 @@ const arvores = Object.values(jsons).map((m) => m.default ?? m).filter((t) => t.
 const arvoreDe = (nome) => arvores.find((t) => t.classe === nome);
 const grau = { 1: 'Grau I', 2: 'Grau II', 3: 'Grau III', 4: 'Grau IV', 5: 'Ápice' };
 ---
-<Base title="Classes de Mago" slug="classes" description="Oito estilos de combate, cada um com Conhecimento de classe, passiva e uma árvore de 24 habilidades onde o mago gasta os Pontos de Trilha que ganha a cada Estágio.">
+<Base title="Classes de Mago" slug="classes" description="Nove estilos de combate (o nono só para Corpo Vazio e Antimagia), cada um com Conhecimento de classe, passiva e uma árvore de 24 habilidades onde o mago gasta os Pontos de Trilha que ganha a cada Estágio.">
   <PageHero
     slug="classes"
     title="Classes <em>de Mago</em>"
     lead="A Classe de Mago é o estilo de combate do personagem. Ela vem no modelo do /criar-personagem e só muda pelo /classe, depois de três provas com o mestre da classe."
     intro="Cada classe dá um Conhecimento que não ocupa espaço, uma passiva (a Raiz) e uma árvore com três ramos e três Elos. São 13 pontos até o 1º Estágio para 39 de árvore: dois magos da mesma classe nunca saem iguais."
     image="classes/capa"
-    imageLabel="Os oito estilos de combate"
+    imageLabel="Os estilos de combate"
   />
 
   <section class="sec" id="trilha">
@@ -33,14 +33,14 @@ const grau = { 1: 'Grau I', 2: 'Grau II', 3: 'Grau III', 4: 'Grau IV', 5: 'Ápic
 
   <section class="sec sec--line">
     <div class="wrap">
-      <SectionHead num="02" label="Os oito estilos" title="Como você <em>luta</em>." lead="O Ápice marcado com ★ é o que antes era a Classe Avançada." />
+      <SectionHead num="02" label="Os nove estilos" title="Como você <em>luta</em>." lead="O Ápice marcado com ★ é o que antes era a Classe Avançada. O Mago do Vazio, o nono, é só de quem não tem mana: Corpo Vazio ou Antimagia." />
       {classesMago.map((c, i) => (
         <article class="mclass mclass--trilha" id={slugify(c.nome)}>
           <span class="mclass__n">{String(i + 1).padStart(2, '0')}</span>
           <div class="stack" style="--s:1rem">
             <h3 class="t-h2" data-split>{c.nome}</h3>
             <p class="t-lead" data-reveal>{c.papel}</p>
-            <div class="chips" data-reveal><span class="chip chip--mana">{c.conhecimento}</span></div>
+            <div class="chips" data-reveal><span class="chip chip--mana">{c.conhecimento}</span>{c.restrita && <span class="chip">Só para {c.restrita.join(' ou ')}</span>}</div>
             <div class="perk" data-reveal><span class="t-label">Raiz · Passiva</span><h4>{c.passiva[0]}</h4><p>{c.passiva[1]}</p></div>
             <div data-reveal><ImageSlot src={`classes/${slugify(c.nome)}`} label={c.nome} ratio="3 / 4" compact /></div>
           </div>
@@ -82,7 +82,7 @@ const grau = { 1: 'Grau I', 2: 'Grau II', 3: 'Grau III', 4: 'Grau IV', 5: 'Ápic
     <div class="wrap grid">
       <div class="c-1-5"><span class="eyebrow" data-reveal><b>03</b>Classe na criação</span></div>
       <div class="c-6-12 stack" style="--s:1rem">
-        <p class="t-body" data-reveal>No /criar-personagem a classe é sorteada entre as oito, com mais chance para a que combina com a família. A exceção é a família Frankenstein, que nunca recebe Mago Artífice.</p>
+        <p class="t-body" data-reveal>No /criar-personagem a classe é sorteada entre as oito comuns, com mais chance para a que combina com a família. A exceção é a família Frankenstein, que nunca recebe Mago Artífice. O Mago do Vazio nunca sai no sorteio: quem ganha o Corpo Vazio ou a Antimagia aprende com o Mestre do Vazio, nos Planaltos mortos, pelo /classe.</p>
       </div>
     </div>
   </section>

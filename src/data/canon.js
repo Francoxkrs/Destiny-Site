@@ -688,6 +688,7 @@ export const viagem = {
   regras: [
     ['Por trecho', 'O tempo e a Mana são por trecho de estrada. A Mana é uma porcentagem da Mana máxima; sem Mana suficiente, a viagem por magia não sai.'],
     ['Disco Estribo', 'Com o Estribo engastado, a viagem leva metade do tempo. Não vale na descida ao Fosso nem no Portal.'],
+    ['Disco Cartógrafo', 'Grava toda rota: a viagem leva 25% menos, e soma com o Estribo. Também não vale na descida ao Fosso nem no Portal.'],
     ['Sobrecarga', 'Quem carrega mais do que a Força aguenta viaja 50% mais devagar a pé, de montaria, de vassoura ou em voo.'],
     ['Morada', 'Sem viagem registrada, o Marcado está na região da sua morada: a da Classe Social, ou a da Terra onde mora.'],
     ['Staff', 'A Staff pode levar um personagem a outra região quando a cena pede (prisão, resgate, evento).'],
@@ -1584,6 +1585,7 @@ export const mineracao = {
     ['2 Ferro Estelar', '1 Lingote Estelar', 'Ferreiro Mestre', '2 Jornadas'],
     ['1 Lente de Quartzo + 1 Fio Rúnico', '1 Disco Virgem (a runa entra no engaste)', 'Lapidador', '1 Jornada'],
     ['1 Quartzo de Mana + 1 Cobre Rúnico', '2 Discos Brutos (sem imposto)', 'Contrabandista', '1 Jornada'],
+    ['1 Núcleo de Besta + 1 Fio Rúnico', '1 Disco Bestial', 'Lapidador Oficial', '2 Jornadas'],
   ],
   escolha: 'O Cristal Branco tem dois destinos que competem: subir de Estágio ou virar o núcleo de um item Épico. Cada um que sai da mina obriga uma escolha.',
 };
@@ -1898,6 +1900,8 @@ export const discos = {
     ['Engaste e Desengaste', 'Com Cirurgia Arcana, Conhecimento Científico ou a Bancada de Discos do Mago Artífice, em 1 cena fora de combate. Tirar um disco não devolve o Encaixe até o fim do ciclo.'],
     ['Clínica de Engaste', 'Sem cirurgião por perto, a clínica do Lapidário engasta em você pelo preço da lapidação mais 150 Yuls (/disco clinica). Discos Brutos e Ilegais, só na banca do Veio Negro, no Fosso.'],
     ['Disco Virgem', 'O cristal já cortado, sem runa. Com um no inventário, o engaste sai 400 Yuls mais barato; um Disco Bruto paga o Bruto. O Lapidador faz o Virgem e o Contrabandista faz o Bruto na Jornada; o Balcão do Ateliê e o Câmbio do Fosso vendem. Troca e vende como qualquer Recurso.'],
+    ['Núcleo de Besta', 'Criaturas de Rank B e A largam 1 Núcleo de Besta para cada um do grupo que as vence (Rank S: 2). O Lapidador Oficial transforma Núcleo + Fio Rúnico num Disco Bestial, e o Balcão do Ateliê compra os dois.'],
+    ['Valem no bot', 'Cartógrafo: viagens 25% mais curtas (soma com o Estribo). Lente de Mana: +1 pista ao investigar segredos mágicos. Leitor de Runas e Chave-Mestra valem como Arcanologia e Selamento nos segredos. Sentinela: aviso no privado 5 minutos antes de uma criatura aparecer. Disco Fantasma: as sentinelas da facção inimiga não notam você.'],
     ['Sem Acréscimos', 'Nenhum disco da lista dá Acréscimo. Eles dão funções: sentidos, memória, mana guardada, truques. A exceção são os Discos Autorais do Mago Artífice (até +1, num atributo físico).'],
   ],
   lapidacao: [
@@ -1933,6 +1937,7 @@ export const discos = {
     { nome: 'Selo', linha: 'Mana', onde: 'Mão', rejeicao: 1, efeito: 'Marca uma porta, um baú ou um grimório: só o dono abre sem arrombar.' },
     { nome: 'Filtro', linha: 'Corpo', onde: 'Peito', rejeicao: 1, efeito: 'Imune a gás de mina, poeira tóxica e venenos comuns.' },
     { nome: 'Hemostático', linha: 'Corpo', onde: 'Peito', rejeicao: 2, efeito: 'Ferimentos III não sangram por 1 cena: o Agravamento para.' },
+    { nome: 'Disco Bestial', linha: 'Corpo', onde: 'Antebraço', rejeicao: 2, efeito: 'Feito de um Núcleo de Besta: guarda uma versão pequena da Habilidade Natural da criatura de onde veio o Núcleo. Pede 1 Disco Bestial do Lapidador no inventário para engastar.' },
     { nome: 'Coração de Reserva', linha: 'Corpo', onde: 'Peito', rejeicao: 2, efeito: 'Ao chegar no Ferimento IV, fica de pé por mais 2 turnos antes de cair.', instavel: '1 uso: depois disso o disco racha e precisa ser trocado.' },
     { nome: 'Disco Fantasma', linha: 'Ilegal', onde: 'Nuca', rejeicao: 2, efeito: 'Esconde a mana do dono de quem sente mana.' },
     { nome: 'Mímico', linha: 'Ilegal', onde: 'Rosto', rejeicao: 3, efeito: 'Cópia total de alguém que o portador tocou: rosto, corpo, voz, cheiro e assinatura de mana, por 1 cena. Só não copia a magia nem as memórias.', instavel: '2 marcas: o portador se perde na cópia e, por 1 cena, acredita ser a pessoa copiada.' },

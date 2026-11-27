@@ -25,20 +25,26 @@ const falta = (t: Tec) => {
   return x;
 };
 // "trava": falta a técnica de antes (linha cheia); "longe": falta Estágio, Controle, Plebe ou Elo
-const st = (t: Tec) => (sabe.has(t.nome) ? 'tem' : t.requer && !sabe.has(t.requer) ? 'trava' : falta(t).length ? 'longe' : 'livre');
+const st = (t: Tec) => (sabe.has(t.nome) ? 'tem' : t.proibida || (t.requer && !sabe.has(t.requer)) ? 'trava' : falta(t).length ? 'longe' : 'livre');
 
 /* ---------- geometria do leque ---------- */
 const W = 1320, H = 860, OX = 660, OY = 796;
 const est = Math.max(2, Math.min(9, f.estagio));
-const R = (s: number) => 150 + (9 - s) * 82;
+const R = (s: number) => 140 + (9 - s) * 74;
 const f1 = (n: number) => Math.round(n * 10) / 10;
 const rad = (a: number) => (a * Math.PI) / 180;
 const pol = (s: number, a: number): [number, number] => [f1(OX + R(s) * Math.sin(rad(a))), f1(OY - R(s) * Math.cos(rad(a)))];
 const ANG: Record<string, number> = {
   'Percepção de Mana': 0, 'Pele de Mana': 0, 'Matriz Rúnica': 0, 'Método de Mana': 0, 'Zona de Mana': 0, 'Forma Mágica': 0,
-  'Leitura Rúnica': 31, 'Runa Condicional': 31, 'Inscrição': 24, 'Runa em Cadeia': 38, 'Selo Rúnico': 25, 'Voto de Cristal': 37,
-  'Corpo Seco': -31, 'Eco de Veio': -37.5, 'Passo Cintilante': -24.5, 'Couraça de Pó': -31,
+  'Leitura Rúnica': 31, 'Runa Condicional': 42, 'Inscrição': 28, 'Runa em Cadeia': 41, 'Selo Rúnico': 25, 'Voto de Cristal': 37,
+  'Corpo Seco': -31, 'Eco de Veio': -34.5, 'Passo Cintilante': -24, 'Couraça de Pó': -31,
   'Assimilação Parcial': -62, 'Assimilação Total': -62,
+  'Coração de Mana': 0, 'Coroa de Mana': 0,
+  'Supressão de Mana': -22, 'Pulso': -12, 'Ponto de Mana': -14, 'Leitura do Fluxo': -13,
+  'Fio de Mana': -20, 'Percepção Profunda': 28, 'Manto de Mana': 18, 'Método Profundo': 18, 'Domínio de Zona': 18,
+  'Sede de Cristal': -46, 'Olho de Lapidário': -50, 'Sangue Cristalino': -20, 'Eco Profundo': -38, 'Rastro Cintilante': -26, 'Couraça de Cristal': -40,
+  'Matriz Expandida': 49, 'Runa de Disco': 53, 'Círculo Rúnico': 31,
+  'Faro de Besta': 66, 'Ritmo de Caça': 66, 'Queima de Vida': 78, 'Sorver': 78,
 };
 const pos = (t: Tec): [number, number] => (t.raiz ? [OX, OY - 22] : pol(t.estagio, ANG[t.nome] ?? 0));
 const arc = (r: number, a0: number, a1: number) => {
@@ -78,7 +84,7 @@ const rays = (() => { const r = rnd(17); let s = '';
 const chamas = (() => { const r = rnd(5); let s = '';
   for (let i = 0; i < 34; i++) { const a = Math.PI + (i / 33) * Math.PI; s += `<path d="${wavy(a, 58, 82 + r() * 28, 6 + r() * 5, 8 + r() * 5, r() * 6)}" stroke="${[RED, '#e0a54a', BONE][i % 3]}" stroke-width="${f1(1.6 + r() * 2.4)}"/>`; }
   return s; })();
-const [fx, fy] = pol(2, 0);
+const [fx, fy] = pol(1, 0);
 const brilho = (() => { const r = rnd(29); let s = '';
   for (let i = 0; i < 44; i++) { const a = (i / 44) * Math.PI * 2; const l = 42 + r() * 30; s += `<path d="M${f1(fx + Math.cos(a) * 36)},${f1(fy + Math.sin(a) * 36)} L${f1(fx + Math.cos(a) * l)},${f1(fy + Math.sin(a) * l)}"/>`; }
   return s; })();
@@ -126,7 +132,7 @@ const dados = { tecnicas: nos.map(({ t, s }) => ({ id: t.id, nome: t.nome, grupo
 
   <section class="tr-palco lq-palco" aria-label="Leque das Técnicas de Mana" data-lenis-prevent>
     <div class="lq-arv">
-      <svg class="lq-svg" viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`Técnicas de Mana do 9º ao 2º Estágio. Você está no ${f.estagio}º.`}>
+      <svg class="lq-svg" viewBox={`0 0 ${W} ${H}`} role="group" aria-label={`Técnicas de Mana do 9º ao 1º Estágio. Você está no ${f.estagio}º.`}>
         <defs>
           <radialGradient id="lq-lit" cx={OX} cy={OY} r={rr + 40} gradientUnits="userSpaceOnUse"><stop offset="0" stop-color={RED} stop-opacity=".42" /><stop offset=".75" stop-color={RED} stop-opacity=".12" /><stop offset="1" stop-color={RED} stop-opacity="0" /></radialGradient>
           <radialGradient id="lq-sol" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff4dc" /><stop offset=".55" stop-color={PAP} /><stop offset="1" stop-color="#c9a76a" /></radialGradient>
@@ -161,13 +167,15 @@ const dados = { tecnicas: nos.map(({ t, s }) => ({ id: t.id, nome: t.nome, grupo
           {rr > 120 && (
             <circle r="4.5" fill="#fff" cx={OX}><animate attributeName="cy" from={OY - 40} to={OY - rr} dur="2s" repeatCount="indefinite" /><animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite" /></circle>
           )}
-          <path d={`${arc(R(6), 0, 31)} ${ray(31, R(6), R(4)).replace('M', 'L')}`} stroke={RED} stroke-width={runeOn ? 3.4 : 2.4} opacity={runeOn ? 1 : 0.7} fill="none" class="lq-drw" data-d="1000" data-t="800" />
-          <path d={`${arc(R(5), 24, 38)} ${arc(R(4), 25, 37)}`} stroke={RED} stroke-width="2" opacity={runeOn ? 1 : 0.7} fill="none" class="lq-fd" data-d="1300" />
+          <path d={`${arc(R(6), 0, 42)} ${ray(42, R(6), R(4)).replace('M', 'L')}`} stroke={RED} stroke-width={runeOn ? 3.4 : 2.4} opacity={runeOn ? 1 : 0.7} fill="none" class="lq-drw" data-d="1000" data-t="800" />
+          <path d={`${arc(R(5), 28, 53)} ${arc(R(4), 25, 49)}`} stroke={RED} stroke-width="2" opacity={runeOn ? 1 : 0.7} fill="none" class="lq-fd" data-d="1300" />
           <path d={ray(-62, R(6), R(3))} stroke={RED} stroke-width={assimOn ? 3.4 : 2.4} opacity={assimOn ? 1 : 0.7} class="lq-drw" data-d="1100" data-t="800" />
-          {!runeOn && <g class="lq-fd" data-d="1300" set:html={lock(...pol(6, 15.5))} />}
+          {!runeOn && <g class="lq-fd" data-d="1300" set:html={lock(...pol(6, 35))} />}
           {!assimOn && <g class="lq-fd" data-d="1300" set:html={lock(lockAssim[0], lockAssim[1])} />}
 
-          {[[-62, R(3) + 54, 'assimilacao'], [-31, R(4) + 20, 'diamond'], [31, R(3) + 18, 'runa']].map(([a, r, id]) => {
+          <path d={ray(66, R(9), R(5))} stroke={RED} stroke-width="2.4" opacity=".7" class="lq-drw" data-d="1100" data-t="800" />
+          <path d={ray(78, R(5), R(3))} stroke={BONE} stroke-width="2" stroke-dasharray="5 6" opacity=".45" class="lq-fd" data-d="1300" />
+          {[[-62, R(3) + 54, 'assimilacao'], [-33, R(3) + 30, 'diamond'], [38, R(3) + 36, 'runa'], [66, R(4) + 30, 'cacada'], [68, R(1), 'proibida']].map(([a, r, id]) => {
             const [x, y] = gn(a as number, r as number);
             return <text x={x} y={y} text-anchor="middle" class="lq-mono lq-fd" data-d="900" fill={BONE} opacity=".7"><tspan fill={RED}>{G[id as string].k}</tspan> {G[id as string].nome.toUpperCase()}</text>;
           })}
@@ -207,7 +215,7 @@ const dados = { tecnicas: nos.map(({ t, s }) => ({ id: t.id, nome: t.nome, grupo
                 </g>
                 <circle r={r + 9} fill="none" stroke={RED} stroke-width="1.6" stroke-dasharray="3 5" class="lq-selo" />
               </g>
-              {!t.raiz && (t.grupo === 'fluxo'
+              {!t.raiz && (t.grupo === 'fluxo' && !t.baixo
                 ? <text class="lq-nome" x={r + 12} y={L.length > 1 ? -3 : 4} fill={lc} text-anchor="start">{L.map((l, j) => <tspan x={r + 12} dy={j ? 14 : 0}>{l}</tspan>)}</text>
                 : <text class="lq-nome" x="0" y={r + 16} fill={lc} text-anchor="middle">{L.map((l, j) => <tspan x="0" dy={j ? 13 : 0}>{l}</tspan>)}</text>)}
             </g>

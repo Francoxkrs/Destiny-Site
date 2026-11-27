@@ -1030,6 +1030,20 @@ export const tecnicas = [
   { nome: 'Método de Mana', estagio: '5º', controle: '40%', texto: 'Puxa a mana do ambiente: regenera 5% por turno mesmo lançando. Em Diamond, só em Zonas de Forte Mana.' },
   { nome: 'Zona de Mana', estagio: '4º', controle: '50%', texto: 'Espalha a própria mana em 20 m e lança feitiços de qualquer ponto dela.' },
   { nome: 'Forma Mágica', estagio: '2º', controle: '70%', texto: 'Funde corpo e magia: +1 Acréscimo nos atributos da magia, e os feitiços valem como os de um Estágio acima. 50 de Mana por turno.' },
+  // Novas (2026-11-27)
+  { nome: 'Supressão de Mana', estagio: '8º', controle: '15%', texto: 'Esconde a própria mana de quem sente mana até você lançar um feitiço. É a versão legal do Disco Fantasma, e Percepção Profunda a vê a até 20 m.' },
+  { nome: 'Fio de Mana', estagio: '7º', controle: '20%', texto: 'Liga você a um aliado a até 20 m: passa até 10% da sua Mana para ele por turno, gastando a sua ação.' },
+  { nome: 'Pulso', estagio: '6º', controle: '30%', texto: 'Solta a mana de uma vez em volta do corpo: empurra quem está a até 3 m e desfaz a preparação de um feitiço. 1 vez por cena, 20 de Mana.' },
+  { nome: 'Ponto de Mana', estagio: '5º', controle: '40%', texto: 'Concentra a mana num golpe ou projétil: ele atravessa a Pele de Mana e as barreiras de quem está no seu Estágio ou abaixo. 25 de Mana, 1 vez por turno.' },
+  { nome: 'Leitura do Fluxo', estagio: '4º', controle: '50%', texto: 'Vê para onde a mana do alvo corre: sabe qual função de feitiço (Ataque, Defesa, Barreira...) ele vai usar no próximo turno. Contra quem tem Supressão de Mana, não funciona.' },
+  { nome: 'Coração de Mana', estagio: '3º', controle: '60%', texto: '1 vez por dia, recupera 40% da Mana de uma vez, fora do turno. Depois disso não regenera Mana pelo resto da cena.' },
+  { nome: 'Coroa de Mana', estagio: '1º', controle: '85%', requer: 'Forma Mágica', texto: 'O topo do Fluxo. Por 3 turnos, a Forma Mágica não paga Mana e um feitiço por turno não pode ser anulado. 1 vez por dia; no fim, Ferimento I de esgotamento.' },
+  // Avançadas: partem de uma Técnica que você já domina
+  { nome: 'Percepção Profunda', estagio: '6º', controle: '35%', requer: 'Percepção de Mana', avancada: true, texto: 'A Percepção vai a 150 m e atravessa paredes. Sente quem esconde a mana (Supressão de Mana, Disco Fantasma) a até 20 m e reconhece a assinatura de mana de quem já viu.' },
+  { nome: 'Manto de Mana', estagio: '5º', controle: '45%', requer: 'Pele de Mana', avancada: true, texto: 'A Pele de Mana passa a valer também contra golpes físicos carregados de mana e não cai quando você leva Ferimento II. 15 de Mana por turno (em vez de 10). Não soma com a Pele.' },
+  { nome: 'Matriz Expandida', estagio: '4º', controle: '55%', requer: 'Matriz Rúnica', avancada: true, texto: 'A Matriz Rúnica guarda 8 runas preparadas e ativa até 2 no mesmo turno.' },
+  { nome: 'Método Profundo', estagio: '3º', controle: '65%', requer: 'Método de Mana', avancada: true, texto: 'O Método de Mana funciona em qualquer lugar de Diamond (3% por turno, mesmo lançando) e chega a 8% numa Zona de Forte Mana.' },
+  { nome: 'Domínio de Zona', estagio: '2º', controle: '75%', requer: 'Zona de Mana', avancada: true, texto: 'A Zona de Mana chega a 50 m. Você escolhe quem ela afeta e sente tudo o que se move dentro dela: ninguém te pega de surpresa lá dentro.' },
 ];
 
 export const magias = [
@@ -1094,14 +1108,14 @@ export const nivelRegras = [
 // O que cada Estágio destrava, juntando todas as páginas.
 export const destravaEstagio = [
   { n: '9º', itens: [['Classes', '2 Pontos de Trilha (criação)'], ['Grimório', 'Feitiços iniciais do Grimório'], ['Mana', 'Respiração de Mana e Corpo Seco'], ['Discos', '2 Encaixes'], ['Criaturas', '1 criatura vinculada; doma Rank F e E'], ['Missões', 'Ranks F e E']] },
-  { n: '8º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Percepção de Mana e Leitura Rúnica'], ['Criaturas', 'Doma Rank D'], ['Missões', 'Ranks E e D']] },
-  { n: '7º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau II'], ['Mana', 'Pele de Mana'], ['Traços', 'Despertar de Traço'], ['Missões', 'Rank D']] },
-  { n: '6º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Matriz Rúnica, Runa Condicional, Eco de Veio e Passo Cintilante'], ['Milagres', 'Requisito do Feitiço de Alma'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank C; Assimilação Parcial'], ['Profissões', 'Profissão secundária; pode virar Mestre'], ['Carreiras', 'Tenente Brilhante ou Lapidador'], ['Missões', 'Rank C']] },
-  { n: '5º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau III'], ['Mana', 'Método de Mana, Couraça de Pó, Inscrição e Runa em Cadeia'], ['Traços', 'Despertar de Traço'], ['Criaturas', 'Doma Rank B'], ['Missões', 'Rank B']] },
-  { n: '4º', itens: [['Classes', '+1 Ponto de Trilha; abre o Grau IV'], ['Mana', 'Zona de Mana, Selo Rúnico e Voto de Cristal'], ['Carreiras', 'General Brilhante ou Quilate, se houver posto'], ['Missões', 'Rank B']] },
-  { n: '3º', itens: [['Classes', '+2 Pontos de Trilha; abre o Ápice e os Elos'], ['Traços', 'Despertar de Traço'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank A; Assimilação Total'], ['Missões', 'Rank A']] },
-  { n: '2º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Forma Mágica'], ['Missões', 'Rank A']] },
-  { n: '1º', itens: [['Classes', '+1 Ponto de Trilha (13 no total)'], ['Milagres', 'Despertar: o segundo Milagre, se ainda não tiver um do Despertar e houver vaga'], ['Missões', 'Rank S']] },
+  { n: '8º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Percepção de Mana, Leitura Rúnica, Supressão de Mana e Faro de Besta'], ['Criaturas', 'Doma Rank D'], ['Missões', 'Ranks E e D']] },
+  { n: '7º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau II'], ['Mana', 'Pele de Mana, Fio de Mana e Sede de Cristal'], ['Traços', 'Despertar de Traço'], ['Missões', 'Rank D']] },
+  { n: '6º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Matriz Rúnica, Runa Condicional, Eco de Veio, Passo Cintilante, Pulso, Olho de Lapidário e Percepção Profunda'], ['Milagres', 'Requisito do Feitiço de Alma'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank C; Assimilação Parcial'], ['Profissões', 'Profissão secundária; pode virar Mestre'], ['Carreiras', 'Tenente Brilhante ou Lapidador'], ['Missões', 'Rank C']] },
+  { n: '5º', itens: [['Classes', '+2 Pontos de Trilha; abre o Grau III'], ['Mana', 'Método de Mana, Couraça de Pó, Inscrição, Runa em Cadeia, Ponto de Mana, Manto de Mana, Runa de Disco e Ritmo de Caça'], ['Traços', 'Despertar de Traço'], ['Criaturas', 'Doma Rank B'], ['Missões', 'Rank B']] },
+  { n: '4º', itens: [['Classes', '+1 Ponto de Trilha; abre o Grau IV'], ['Mana', 'Zona de Mana, Selo Rúnico, Voto de Cristal, Leitura do Fluxo, Matriz Expandida, Eco Profundo e Rastro Cintilante'], ['Carreiras', 'General Brilhante ou Quilate, se houver posto'], ['Missões', 'Rank B']] },
+  { n: '3º', itens: [['Classes', '+2 Pontos de Trilha; abre o Ápice e os Elos'], ['Mana', 'Coração de Mana, Método Profundo, Sangue Cristalino, Couraça de Cristal e Círculo Rúnico'], ['Traços', 'Despertar de Traço'], ['Discos', '+1 Encaixe'], ['Criaturas', '+1 vinculada; doma Rank A; Assimilação Total'], ['Missões', 'Rank A']] },
+  { n: '2º', itens: [['Classes', '+1 Ponto de Trilha'], ['Mana', 'Forma Mágica e Domínio de Zona'], ['Missões', 'Rank A']] },
+  { n: '1º', itens: [['Classes', '+1 Ponto de Trilha (13 no total)'], ['Mana', 'Coroa de Mana'], ['Milagres', 'Despertar: o segundo Milagre, se ainda não tiver um do Despertar e houver vaga'], ['Missões', 'Rank S']] },
 ];
 
 export const treinos = [
@@ -1925,6 +1939,12 @@ export const tecnicasDiamond = {
     { nome: 'Eco de Veio', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Encosta a mão na pedra e sente o que se move a até 50 m pela vibração da mana no chão. Na Mineração, revela o grau de uma jazida sem gastar Jornada.' },
     { nome: 'Passo Cintilante', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Solta mana pelas solas e reaparece a até 10 m, como reação. No máximo 2 vezes por cena e nunca em turnos seguidos. Custa 20 de Mana e dobra no segundo uso da cena (40).' },
     { nome: 'Couraça de Pó', estagio: '5º', controle: '40%', quem: 'Qualquer Marcado', texto: 'Junta o pó de cristal do ar numa casca na pele por 3 turnos: o primeiro Ferimento I de cada turno é anulado. 20 de Mana por turno; não funciona molhado.' },
+    { nome: 'Sede de Cristal', estagio: '7º', controle: '20%', quem: 'Qualquer Marcado', texto: 'Gasta 1 Pó de Cristal do inventário para recuperar 15% de Mana, fora do turno. No máximo 3 vezes por cena.' },
+    { nome: 'Olho de Lapidário', estagio: '6º', controle: '30%', quem: 'Qualquer Marcado', texto: 'Vê a qualidade de um item, os discos engastados de alguém (nome e lapidação) e a Rejeição que eles somam.' },
+    { nome: 'Sangue Cristalino', estagio: '3º', controle: '60%', quem: 'Qualquer Marcado', texto: 'O corpo aceita o cristal: cada disco engastado tem -1 de Rejeição (mínimo 1).' },
+    { nome: 'Eco Profundo', estagio: '4º', controle: '55%', quem: 'Quem domina Eco de Veio', requer: 'Eco de Veio', avancada: true, texto: 'Sente pela pedra a até 200 m e ouve conversas através de paredes de rocha. Na Mineração, revela também a Reserva da jazida.' },
+    { nome: 'Rastro Cintilante', estagio: '4º', controle: '55%', quem: 'Quem domina Passo Cintilante', requer: 'Passo Cintilante', avancada: true, texto: 'O Passo Cintilante vai a 20 m, leva junto um aliado que você toca e sai até 3 vezes por cena sem dobrar o custo (20 de Mana). Continua nunca em turnos seguidos.' },
+    { nome: 'Couraça de Cristal', estagio: '3º', controle: '65%', quem: 'Quem domina Couraça de Pó', requer: 'Couraça de Pó', avancada: true, texto: 'A casca dura 5 turnos e funciona molhada. Anula o primeiro Ferimento I de cada turno, ou um Ferimento II uma vez por cena. 25 de Mana por turno.' },
   ],
 };
 
@@ -1937,6 +1957,26 @@ export const runas = {
     { nome: 'Runa em Cadeia', estagio: '5º', controle: '40%', texto: 'Liga até 3 runas preparadas: quando uma dispara, as outras disparam juntas no mesmo turno.' },
     { nome: 'Selo Rúnico', estagio: '4º', controle: '50%', texto: 'Grava uma runa de selo num grimório, num feitiço ativo ou numa criatura: o alvo fica selado por 3 turnos, ou até alguém desarmar a runa. Custa 2 runas da Matriz.' },
     { nome: 'Voto de Cristal', estagio: '4º', controle: '50%', texto: 'Grava no próprio corpo uma runa de restrição declarada em cena (ex.: "só uso um feitiço nesta luta"). Enquanto cumprir, um feitiço escolhido dobra de alcance ou custa metade da Mana. Quebrar o voto racha a runa: Ferimento II na hora.' },
+    { nome: 'Runa de Disco', estagio: '5º', controle: '40%', texto: 'Grava uma runa da Matriz num disco engastado: o disco dispara o próprio efeito sozinho quando a condição declarada acontece. Não conta marca de Instabilidade nesse disparo.' },
+    { nome: 'Círculo Rúnico', estagio: '3º', controle: '60%', texto: 'Ritual de 3 turnos que cobre um lugar inteiro (uma casa, uma Terra, um acampamento): alarme, proteção ou selo contra entrada por 1 semana real. Custa 3 Fios Rúnicos.' },
+  ],
+};
+
+// Técnicas de Caçada: nascem de quem vive atrás das criaturas que aparecem nos chats de RP.
+export const tecnicasCacada = {
+  texto: 'Técnicas de quem caça as criaturas que aparecem nos chats de RP. Seguem as regras das outras Técnicas de Mana.',
+  lista: [
+    { nome: 'Faro de Besta', estagio: '8º', controle: '15%', texto: 'Sente criaturas a até 1 km. Quando uma criatura aparece num chat de RP da sua região, você sabe o Rank dela antes de entrar na cena.' },
+    { nome: 'Ritmo de Caça', estagio: '5º', controle: '40%', texto: 'Contra criaturas, o primeiro golpe ou feitiço da cena não pode ser esquivado. Contra Rank S, só depois de 1 turno estudando o bicho.' },
+  ],
+};
+
+// Técnicas Proibidas: só se aprendem no Fosso. Nunca há mentor nem Pergaminho à venda; a Staff dá pela cena.
+export const tecnicasProibidas = {
+  texto: 'Técnicas que a Coroa caça. Só se aprendem no Fosso: por um segredo do /investigar, com o Veio Negro ou numa cena da Staff, que dá a Técnica direto. Ser visto usando uma rende cartaz no Mural.',
+  lista: [
+    { nome: 'Queima de Vida', estagio: '5º', controle: '40%', texto: 'Queima o próprio corpo como combustível: toma 1 Ferimento I e recupera 20% de Mana na hora. No máximo 2 vezes por cena.' },
+    { nome: 'Sorver', estagio: '3º', controle: '60%', texto: 'Ao tocar um alvo caído ou preso, tira até 15% da Mana dele e soma à sua. 1 vez por alvo por cena.' },
   ],
 };
 

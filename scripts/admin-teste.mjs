@@ -2,7 +2,7 @@
 process.env.SESSION_SECRET = 'x'.repeat(40);
 process.env.ADMIN_IDS = '250000000000000001, lixo,250000000000000002';
 process.env.GUILD_ID = '900000000000000001';
-const { ehAdmin, adminIds, validarAjuste, ajustar, acao, painel, simular, fotoDaFicha } = await import('../src/lib/admin.js');
+const { ehAdmin, adminIds, validarAjuste, ajustar, acao, painel, simular, fotoDaFicha, buscarContas, validarOutra, ajustarOutra, desfazerOutra, historicoOutras } = await import('../src/lib/admin.js');
 const { garantia } = await import('../src/data/altar.js');
 
 let ok = 0, falhas = 0;
@@ -15,7 +15,9 @@ const pega = (doc, k) => k.split('.').reduce((o, p) => o?.[p], doc);
 const poe = (doc, k, x) => { const ps = k.split('.'); let o = doc; for (const p of ps.slice(0, -1)) o = (o[p] ??= {}); o[ps.at(-1)] = x; };
 function casa(doc, f) {
   return Object.entries(f).every(([k, c]) => {
+    if (k === '$or') return c.some((g) => casa(doc, g));
     const d = pega(doc, k);
+    if (c && typeof c === 'object' && '$regex' in c) return typeof d === 'string' && new RegExp(c.$regex, c.$options).test(d);
     if (c && typeof c === 'object' && !Array.isArray(c) && !(c instanceof Date)) {
       return Object.entries(c).every(([op, x]) => {
         if (op === '$ne') return d !== x;
@@ -173,6 +175,83 @@ await caso('simular: nunca passa da garantia e soma os giros certos', () => {
 await caso('simular: começando a 1 giro da garantia, o 1º é Lendário', () => {
   const r = simular(1, { pity: garantia.lendario - 1 });
   igual(r.porRar.lendario, 1);
+});
+
+// ---------- outras contas (só CP, com confirmação e Desfazer) ----------
+const admin = { userId: 'u1', guildId: G, nome: 'Silas' };
+const ID2 = '300000000000000002';
+function bancoOutras() {
+  const db = bancoFalso({ conta: { cp: 10 } });
+  db.cols.contas.docs.push({ _id: 'c2', userId: ID2, cp: 500, altarV: 2 });
+  db.cols.fichasWeb.docs.push({ guildId: G, userId: ID2, nome: 'Mira', sobrenome: 'Faust', moedas: { yuls: 0 } });
+  return db;
+}
+const cpDe = (db, id) => db.cols.contas.docs.find((c) => c.userId === id)?.cp;
+
+await caso('outras: busca por ID, por nome (sem diferenciar maiúscula) e por sobrenome', async () => {
+  const db = bancoOutras();
+  igual((await buscarContas(db, ID2, G)).contas.map((c) => [c.nome, c.cp]), [['Mira Faust', 500]]);
+  igual((await buscarContas(db, 'mIrA', G)).contas.map((c) => c.userId), [ID2]);
+  igual((await buscarContas(db, 'faust', G)).contas.length, 1);
+  igual((await buscarContas(db, 'm', G)).ok, false);
+  igual((await buscarContas(db, '.*', G)).contas.length, 0); // regex escapada
+});
+await caso('outras: ID sem conta nem ficha ainda aparece com 0 CP', async () => {
+  const r = await buscarContas(bancoOutras(), '400000000000000004', G);
+  igual([r.contas[0].cp, r.contas[0].temConta, r.contas[0].nome], [0, false, null]);
+});
+await caso('outras: validação só aceita CP, ID do Discord e o saldo confirmado', () => {
+  certo(!validarOutra({ userId: 'u2', modo: 'somar', valor: 1, esperado: 0 }).ok, 'id');
+  certo(!validarOutra({ userId: ID2, campo: 'yuls', modo: 'somar', valor: 1, esperado: 0 }).ok, 'yuls');
+  certo(!validarOutra({ userId: ID2, campo: 'inscricoes', modo: 'somar', valor: 1, esperado: 0 }).ok, 'inscricoes');
+  certo(!validarOutra({ userId: ID2, modo: 'somar', valor: 1 }).ok, 'sem esperado');
+  certo(validarOutra({ userId: ID2, modo: 'somar', valor: 1, esperado: 500 }).ok, 'ok');
+});
+await caso('outras: muda o CP só da outra conta e registra quem fez', async () => {
+  const db = bancoOutras();
+  const r = await ajustarOutra(db, admin, validarOutra({ userId: ID2, modo: 'somar', valor: 1440, esperado: 500, motivo: 'prêmio do evento' }));
+  igual([r.ok, r.antes, r.depois, r.nome], [true, 500, 1940, 'Mira Faust']);
+  igual([cpDe(db, ID2), cpDe(db, 'u1'), db.cols.contas.docs[1].altarV], [1940, 10, 3]);
+  const l = db.cols.adminLog.docs[0];
+  igual([l.userId, l.outra, l.por, l.motivo], [ID2, true, { id: 'u1', nome: 'Silas' }, 'prêmio do evento']);
+});
+await caso('outras: saldo mudou depois da confirmação → não grava e devolve o de agora', async () => {
+  const db = bancoOutras();
+  const r = await ajustarOutra(db, admin, validarOutra({ userId: ID2, modo: 'definir', valor: 0, esperado: 400 }));
+  igual([r.ok, r.status, r.agora, cpDe(db, ID2), db.cols.adminLog.docs.length], [false, 409, 500, 500, 0]);
+});
+await caso('outras: conta nova é criada com o CP', async () => {
+  const db = bancoOutras();
+  const r = await ajustarOutra(db, admin, validarOutra({ userId: '400000000000000004', modo: 'somar', valor: 160, esperado: 0 }));
+  igual([r.ok, cpDe(db, '400000000000000004')], [true, 160]);
+});
+await caso('outras: Desfazer devolve a diferença em cima do saldo de agora, uma vez só', async () => {
+  const db = bancoOutras();
+  await ajustarOutra(db, admin, validarOutra({ userId: ID2, modo: 'somar', valor: 1000, esperado: 500 }));
+  db.cols.contas.docs[1].cp = 1300; // o jogador gastou 200 depois
+  const id = db.cols.adminLog.docs[0]._id;
+  const r = await desfazerOutra(db, admin, id);
+  igual([r.ok, r.antes, r.depois, cpDe(db, ID2)], [true, 1300, 300, 300]);
+  igual((await desfazerOutra(db, admin, id)).ok, false);
+  const h = await historicoOutras(db);
+  const volta = h.find((x) => x.desfaz), ida = h.find((x) => !x.desfaz);
+  igual([h.length, volta.desfaz, Boolean(ida.desfeitoEm)], [2, id, true]);
+  igual((await desfazerOutra(db, admin, volta.id)).ok, false); // não desfaz um Desfazer
+});
+await caso('outras: Desfazer recusa se o jogador já gastou e libera de novo', async () => {
+  const db = bancoOutras();
+  await ajustarOutra(db, admin, validarOutra({ userId: ID2, modo: 'somar', valor: 1000, esperado: 500 }));
+  db.cols.contas.docs[1].cp = 600;
+  const id = db.cols.adminLog.docs[0]._id;
+  const r = await desfazerOutra(db, admin, id);
+  igual([r.ok, cpDe(db, ID2), db.cols.adminLog.docs[0].desfeitoEm], [false, 600, null]);
+  certo(/já gastou/.test(r.erro), r.erro);
+});
+await caso('outras: ajustes da própria conta não aparecem no registro de outras e não podem ser desfeitos por lá', async () => {
+  const db = bancoOutras();
+  await ajustar(db, quem, validarAjuste({ campo: 'cp', modo: 'somar', valor: 5 }));
+  igual((await historicoOutras(db)).length, 0);
+  igual((await desfazerOutra(db, admin, db.cols.adminLog.docs[0]._id)).ok, false);
 });
 
 console.log(`${ok} ok, ${falhas} falha(s)`);

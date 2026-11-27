@@ -59,7 +59,7 @@ export const gruposComandos = [
 export const paginaDoComando = {
   'criar-personagem': '/comecar/#modelos', comecar: '/comecar/', guia: '/guia/', ajuda: '/faq/', site: '/entrar/', codigo: '/comecar/#codigos', bolsa: '/comecar/#apoio',
   ficha: '/ficha/', vagas: '/milagres/#milagres', treinar: '/progressao/#treinamento', estudar: '/conhecimentos/', despertar: '/progressao/#estagios', trilha: '/arvores/', classe: '/classes/', mana: '/mana/#regras-da-mana', sincronia: '/milagres/#sincronia',
-  'feitiço': '/magia/#feiticos', 'grimório': '/magia/#grimorios', disco: '/discos/', sombras: '/classes/#os-oito-estilos',
+  'feitiço': '/magia/#feiticos', 'grimório': '/magia/#grimorios', disco: '/discos/', sombras: '/classes/#mago-das-sombras',
   viajar: '/mapa/#viagem', mapa: '/mapa/', clima: '/vivo/#clima', investigar: '/vivo/#segredos', segredos: '/vivo/#segredos', patrulha: '/vivo/#territorios', territorio: '/vivo/#territorios',
   'missão': '/missoes/', criatura: '/criaturas/', bounty: '/vivo/#mural-livre', mural: '/vivo/#cabecas', esquadrao: '/vivo/#esquadroes', patente: '/generais/',
   extrato: '/economia/', inventario: '/itens/#carga', equipamento: '/itens/', loja: '/vivo/#lojas', mercado: '/economia/#mercado', forja: '/itens/#forja', profissao: '/profissoes/', jornada: '/profissoes/#regras', terra: '/terras/', contrato: '/economia/#contratos', saude: '/ferimentos/#tratar', ferimento: '/ferimentos/',

@@ -13,6 +13,7 @@ import caos from './trilhas/caos.json';
 import conjurador from './trilhas/conjurador.json';
 import artifice from './trilhas/artifice.json';
 import sombras from './trilhas/sombras.json';
+import vazio from './trilhas/vazio.json';
 import { classesMago, slugify } from './canon.js';
 
 export { regras };
@@ -20,13 +21,15 @@ export { regras };
 /** Cor de cada classe: brilho dos nós e da aba. Tudo dentro da paleta de tinta (vermelho, osso, violeta, ciano frio). */
 const CORES = {
   arcano: '#9d8cff', batalha: '#ff3b2e', balistico: '#f0b54a', curandeiro: '#5fd39b',
-  caos: '#ff4f9a', conjurador: '#4fc6d6', artifice: '#d99a5b', sombras: '#8b6fd6',
+  caos: '#ff4f9a', conjurador: '#4fc6d6', artifice: '#d99a5b', sombras: '#8b6fd6', vazio: '#d8cfbd',
 };
-const KANJI = { arcano: '魔', batalha: '戦', balistico: '弾', curandeiro: '癒', caos: '乱', conjurador: '召', artifice: '鍛', sombras: '影' };
+const KANJI = { arcano: '魔', batalha: '戦', balistico: '弾', curandeiro: '癒', caos: '乱', conjurador: '召', artifice: '鍛', sombras: '影', vazio: '虚' };
+/** Classes que ainda não têm arte de fundo em public/img/classes/. */
+const SEM_ARTE = new Set(['vazio']);
 
 export const graus = Object.fromEntries(regras.graus.map((g) => [g.grau, g]));
 
-export const arvores = [arcano, batalha, balistico, curandeiro, caos, conjurador, artifice, sombras].map((t) => {
+export const arvores = [arcano, batalha, balistico, curandeiro, caos, conjurador, artifice, sombras, vazio].map((t) => {
   const canon = classesMago.find((c) => c.nome === t.classe);
   const cols = t.nos.map((n) => n.pos[0]);
   const linhas = t.nos.map((n) => n.pos[1]);
@@ -35,7 +38,7 @@ export const arvores = [arcano, batalha, balistico, curandeiro, caos, conjurador
     nome: t.classe,
     papel: t.papel,
     conhecimento: canon?.conhecimento ?? null,
-    img: `/img/classes/${slugify(t.classe)}.webp`,
+    img: SEM_ARTE.has(t.slug) ? null : `/img/classes/${slugify(t.classe)}.webp`,
     cor: CORES[t.slug] ?? '#ff3b2e',
     kanji: KANJI[t.slug] ?? '道',
     raiz: t.raiz,

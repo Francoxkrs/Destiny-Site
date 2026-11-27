@@ -1,0 +1,539 @@
+{
+  "versao": 2,
+  "classe": "Mago do Vazio",
+  "slug": "vazio",
+  "papel": "Sem mana: caça magos e apaga a magia em volta. Só para Corpo Vazio e Antimagia",
+  "raiz": {
+    "id": "vazio.raiz",
+    "nome": "Fome do Vazio",
+    "texto": "Ganha o Vácuo: cada feitiço lançado a até 10 m, por qualquer pessoa, enche 1 (máximo 5); feitiço que você apaga ou desvia enche 2. Some no fim da cena. Com o Vácuo cheio, o próximo golpe atravessa qualquer Defesa feita com feitiço do seu Estágio ou abaixo."
+  },
+  "ramos": [
+    {
+      "id": "predador",
+      "nome": "Predador",
+      "tema": "Caçar magos: marcar um e não largar mais."
+    },
+    {
+      "id": "carne-viva",
+      "nome": "Carne Viva",
+      "tema": "Queimar o corpo como combustível."
+    },
+    {
+      "id": "zona-morta",
+      "nome": "Zona Morta",
+      "tema": "Fazer o lugar inteiro esquecer a magia.",
+      "estrela": "vazio.zona-morta.mundo-sem-magia"
+    }
+  ],
+  "nos": [
+    {
+      "id": "vazio.predador.presa",
+      "nome": "Presa",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 1,
+      "custo": 1,
+      "estagioMin": 9,
+      "requer": [],
+      "tipo": "ativa",
+      "texto": "Marca um alvo por cena. Os feitiços da Presa enchem 2 de Vácuo, onde quer que ela esteja na cena.",
+      "pos": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "vazio.predador.rastro-de-mana",
+      "nome": "Rastro de Mana",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 1,
+      "custo": 1,
+      "estagioMin": 9,
+      "requer": [],
+      "tipo": "mundo",
+      "texto": "Segue a Presa pelo cheiro da mana por até 1 dia depois da luta. Fugir de você por magia deixa rastro.",
+      "pos": [
+        1,
+        1
+      ]
+    },
+    {
+      "id": "vazio.predador.colado",
+      "nome": "Colado",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 2,
+      "custo": 1,
+      "estagioMin": 7,
+      "requer": [
+        [
+          "vazio.predador.presa"
+        ]
+      ],
+      "tipo": "reacao",
+      "texto": "Gasta 1 de Vácuo: quando a Presa se afasta por magia, você chega junto no mesmo turno.",
+      "pos": [
+        0,
+        2
+      ]
+    },
+    {
+      "id": "vazio.predador.cacador-de-magos",
+      "nome": "Caçador de Magos",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 2,
+      "custo": 1,
+      "estagioMin": 7,
+      "requer": [
+        [
+          "vazio.predador.rastro-de-mana"
+        ]
+      ],
+      "tipo": "mundo",
+      "texto": "Caçadas e cabeças a prêmio de alvos magos pagam 20% a mais.",
+      "pos": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "vazio.predador.medo-do-vazio",
+      "nome": "Medo do Vazio",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 3,
+      "custo": 2,
+      "estagioMin": 5,
+      "requer": [
+        [
+          "vazio.predador.colado"
+        ],
+        [
+          "vazio.predador.cacador-de-magos"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "A Presa sente que está sendo caçada: se ela lançar dois feitiços seguidos e errar os dois, perde o próximo turno de pânico.",
+      "pos": [
+        0.5,
+        3
+      ]
+    },
+    {
+      "id": "vazio.predador.sem-saida",
+      "nome": "Sem Saída",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 4,
+      "custo": 2,
+      "estagioMin": 4,
+      "requer": [
+        [
+          "vazio.predador.medo-do-vazio"
+        ]
+      ],
+      "tipo": "ativa",
+      "texto": "Gasta 3 de Vácuo: por 2 turnos, a Presa não consegue se teleportar, voar ou atravessar paredes por magia.",
+      "pos": [
+        0.5,
+        4
+      ]
+    },
+    {
+      "id": "vazio.predador.fim-da-linhagem",
+      "nome": "Fim da Linhagem",
+      "ramo": [
+        "predador"
+      ],
+      "grau": 5,
+      "custo": 3,
+      "estagioMin": 3,
+      "requer": [
+        [
+          "vazio.predador.sem-saida",
+          "vazio.predador.colado",
+          "vazio.predador.cacador-de-magos"
+        ]
+      ],
+      "tipo": "ativa",
+      "usos": "1 vez por cena",
+      "texto": "Gasta 5 de Vácuo: um golpe que, se acertar, faz a Presa não lançar feitiço no próximo turno. Com Antimagia, o grimório da Presa fecha por 2 turnos.",
+      "pos": [
+        0.5,
+        5
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.transbordo",
+      "nome": "Transbordo",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 1,
+      "custo": 1,
+      "estagioMin": 9,
+      "requer": [],
+      "tipo": "ativa",
+      "texto": "Gasta 1 de Vácuo para +1 classificação num atributo físico até o fim do turno.",
+      "pos": [
+        3,
+        1
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.fome-de-treino",
+      "nome": "Fome de Treino",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 1,
+      "custo": 1,
+      "estagioMin": 9,
+      "requer": [],
+      "tipo": "mundo",
+      "texto": "+1 Treino Físico por ciclo.",
+      "pos": [
+        4,
+        1
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.golpe-oco",
+      "nome": "Golpe Oco",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 2,
+      "custo": 1,
+      "estagioMin": 7,
+      "requer": [
+        [
+          "vazio.carne-viva.transbordo"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "Os golpes de mão fazem um estalo de vácuo que empurra e derruba quem está no seu Estágio ou abaixo.",
+      "pos": [
+        3,
+        2
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.carne-que-fecha",
+      "nome": "Carne que Fecha",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 2,
+      "custo": 1,
+      "estagioMin": 7,
+      "requer": [
+        [
+          "vazio.carne-viva.fome-de-treino"
+        ]
+      ],
+      "tipo": "ativa",
+      "texto": "Gasta 2 de Vácuo: fecha um Ferimento I na hora, no meio da luta.",
+      "pos": [
+        4,
+        2
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.corpo-de-pedra-morta",
+      "nome": "Corpo de Pedra Morta",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 3,
+      "custo": 2,
+      "estagioMin": 5,
+      "requer": [
+        [
+          "vazio.carne-viva.golpe-oco"
+        ],
+        [
+          "vazio.carne-viva.carne-que-fecha"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "O primeiro feitiço que acerta você em cada cena perde metade da força, e isso enche 2 de Vácuo.",
+      "pos": [
+        3.5,
+        3
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.alem-do-limite",
+      "nome": "Além do Limite",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 4,
+      "custo": 2,
+      "estagioMin": 4,
+      "requer": [
+        [
+          "vazio.carne-viva.corpo-de-pedra-morta"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "O teto físico sobe mais uma classificação (soma com o Corpo Vazio).",
+      "pos": [
+        3.5,
+        4
+      ]
+    },
+    {
+      "id": "vazio.carne-viva.corpo-proibido",
+      "nome": "Corpo Proibido",
+      "ramo": [
+        "carne-viva"
+      ],
+      "grau": 5,
+      "custo": 3,
+      "estagioMin": 3,
+      "requer": [
+        [
+          "vazio.carne-viva.alem-do-limite",
+          "vazio.carne-viva.golpe-oco",
+          "vazio.carne-viva.carne-que-fecha"
+        ]
+      ],
+      "tipo": "ativa",
+      "usos": "1 vez por cena",
+      "texto": "Gasta 5 de Vácuo: por 3 turnos ignora Ferimentos I e II e age duas vezes por turno. Quando acaba, toma Ferimento III.",
+      "pos": [
+        3.5,
+        5
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.ar-pesado",
+      "nome": "Ar Pesado",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 1,
+      "custo": 1,
+      "estagioMin": 9,
+      "requer": [],
+      "tipo": "passiva",
+      "texto": "Feitiços lançados a até 3 m de você custam 20% a mais de Mana.",
+      "pos": [
+        6,
+        1
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.silencio-de-mana",
+      "nome": "Silêncio de Mana",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 1,
+      "custo": 1,
+      "estagioMin": 9,
+      "requer": [],
+      "tipo": "mundo",
+      "texto": "Ninguém sente você pela mana, e alarmes e Armadilhas de mana não disparam com você. Em missões de infiltração, o grupo só é descoberto se você for visto.",
+      "pos": [
+        7,
+        1
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.zona-morta",
+      "nome": "Zona Morta",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 2,
+      "custo": 1,
+      "estagioMin": 7,
+      "requer": [
+        [
+          "vazio.zona-morta.ar-pesado"
+        ]
+      ],
+      "tipo": "ativa",
+      "texto": "Gasta 3 de Vácuo: por 2 turnos, uma área de 10 m onde todo feitiço custa o dobro de Mana.",
+      "pos": [
+        6,
+        2
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.eco-partido",
+      "nome": "Eco Partido",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 2,
+      "custo": 1,
+      "estagioMin": 7,
+      "requer": [
+        [
+          "vazio.zona-morta.silencio-de-mana"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "Encantamentos ditos a até 10 m de você saem tortos: o feitiço perde 1 Acréscimo.",
+      "pos": [
+        7,
+        2
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.refugio",
+      "nome": "Refúgio",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 3,
+      "custo": 2,
+      "estagioMin": 5,
+      "requer": [
+        [
+          "vazio.zona-morta.zona-morta"
+        ],
+        [
+          "vazio.zona-morta.eco-partido"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "Aliados dentro da sua Zona Morta não pagam o custo dobrado.",
+      "pos": [
+        6.5,
+        3
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.terra-seca",
+      "nome": "Terra Seca",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 4,
+      "custo": 2,
+      "estagioMin": 4,
+      "requer": [
+        [
+          "vazio.zona-morta.refugio"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "A Zona Morta dura 3 turnos, e Barreiras dentro dela se desfazem no fim de cada turno.",
+      "pos": [
+        6.5,
+        4
+      ]
+    },
+    {
+      "id": "vazio.zona-morta.mundo-sem-magia",
+      "nome": "Mundo sem Magia",
+      "ramo": [
+        "zona-morta"
+      ],
+      "grau": 5,
+      "custo": 3,
+      "estagioMin": 3,
+      "requer": [
+        [
+          "vazio.zona-morta.terra-seca",
+          "vazio.zona-morta.zona-morta",
+          "vazio.zona-morta.eco-partido"
+        ]
+      ],
+      "tipo": "ativa",
+      "usos": "1 vez por cena",
+      "texto": "Gasta 5 de Vácuo: por 2 turnos, ninguém a até 20 m lança feitiço do seu Estágio ou abaixo. Com Antimagia, nenhum feitiço, de qualquer Estágio.",
+      "estrela": true,
+      "pos": [
+        6.5,
+        5
+      ]
+    },
+    {
+      "id": "vazio.elo.mordida",
+      "nome": "Mordida",
+      "ramo": [
+        "predador",
+        "carne-viva"
+      ],
+      "grau": 4,
+      "elo": true,
+      "custo": 2,
+      "estagioMin": 3,
+      "requer": [
+        [
+          "vazio.predador.medo-do-vazio",
+          "vazio.carne-viva.corpo-de-pedra-morta"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "Cada golpe que acerta a Presa enche 1 de Vácuo.",
+      "pos": [
+        2,
+        4.5
+      ]
+    },
+    {
+      "id": "vazio.elo.pulmao-do-vazio",
+      "nome": "Pulmão do Vazio",
+      "ramo": [
+        "carne-viva",
+        "zona-morta"
+      ],
+      "grau": 4,
+      "elo": true,
+      "custo": 2,
+      "estagioMin": 3,
+      "requer": [
+        [
+          "vazio.carne-viva.corpo-de-pedra-morta",
+          "vazio.zona-morta.refugio"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "Dentro da sua Zona Morta, o Transbordo não gasta Vácuo uma vez por turno.",
+      "pos": [
+        5,
+        4.5
+      ]
+    },
+    {
+      "id": "vazio.elo.jaula",
+      "nome": "Jaula",
+      "ramo": [
+        "zona-morta",
+        "predador"
+      ],
+      "grau": 4,
+      "elo": true,
+      "custo": 2,
+      "estagioMin": 3,
+      "requer": [
+        [
+          "vazio.zona-morta.refugio",
+          "vazio.predador.medo-do-vazio"
+        ]
+      ],
+      "tipo": "passiva",
+      "texto": "Se a Presa estiver dentro da sua Zona Morta, ela não sai de lá por magia.",
+      "pos": [
+        3.5,
+        6
+      ]
+    }
+  ]
+}

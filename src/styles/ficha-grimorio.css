@@ -118,6 +118,10 @@
 .gv-ft .gv-mono { font-size: 9px; color: var(--tinta-3); }
 .gv-ft.is-branca { border-style: dashed; display: grid; place-content: center; text-align: center; min-height: 120px; color: var(--apagado); background: none; }
 .gv-ft.is-branca b { font-family: var(--f-display); font-size: 20px; }
+.gv-ft__escrever { display: grid; gap: 4px; color: var(--c-e); text-decoration: none; padding: 8px; }
+.gv-ft__escrever b { color: var(--tinta); }
+.gv-ft.is-branca:has(.gv-ft__escrever) { border-color: var(--c); border-width: 2px; }
+@media (hover: hover) { .gv-ft__escrever:hover b { color: var(--c-e); } }
 
 .gv-dl { display: grid; grid-template-columns: auto 1fr; gap: 12px 22px; margin: 0; font-size: 15px; }
 .gv-dl dt { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--tinta-3); padding-top: 4px; }

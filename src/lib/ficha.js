@@ -22,6 +22,7 @@
  *   historia: { vidaPassada?: string, renascimento?: string, personalidade?: string },
  *   // opcionais (o site mostra o que vier; sem eles, mostra o padrão da ficha do bot)
  *   profissao?: string | null, riqueza?: string, racasHibrido?: string[], feiticosTotal?: number,
+ *   escrita?: import('./feitico-regras.js').Escrita,
  *   ferimentos?: { pior: 0 | 1 | 2 | 3 | 4, desnutrido?: boolean, casas: { grau: 1 | 2 | 3 | 4, ocupada: boolean, fome?: boolean }[] },
  *   treinosLivres?: { fisico: [number, number], magico: [number, number], controle: [number, number], tecnica: [number, number] },
  * }} FichaWeb
@@ -56,6 +57,27 @@ export const fichaExemplo = {
     { nome: 'Chuva de Agulhas', tipo: 'Ataque', estagio: 6 },
   ],
   profissao: null, feiticosTotal: 7,
+  escrita: {
+    pode: true, motivo: null, estagio: 6,
+    nivel: { alcance: 50, destroi: 'Abre um rombo numa casa pequena', temperatura: '800 °C ou −80 °C', cura: 'Ferimento II em combate' },
+    grimorio: 'Demoníaco', costurado: false, espacos: 7, ocupados: 5, livres: 2,
+    tipos: [
+      { nome: 'Externalizado', texto: 'A magia sai do corpo e age no mundo. Recebe 100% dos Acréscimos do Poder Mágico.', liberado: true, exige: null },
+      { nome: 'Reforço Corporal', texto: 'A magia envolve o próprio corpo. Recebe 50% dos Acréscimos, arredondado para baixo.', liberado: true, exige: null },
+      { nome: 'Criação', texto: 'Produz objetos, estruturas ou armas.', liberado: true, exige: null },
+      { nome: 'Conjuração', texto: 'Produz seres que agem sozinhos.', liberado: false, exige: ['Conjuração', 'Alta Conjuração'] },
+    ],
+    funcoes: [
+      ['Ataque', 'Básica'], ['Defesa', 'Básica'], ['Criação', 'Básica'], ['Mobilidade', 'Básica'],
+      ['Barreira', 'Avançada', ['Magia', 'Arcanologia']], ['Reforço', 'Avançada', ['Corporal', 'Fisiologia']], ['Restauração', 'Avançada', ['Medicinal', 'Medicina Avançada']],
+      ['Enfraquecimento', 'Avançada', ['Debilitação', 'Debilitação Avançada']], ['Comunicação', 'Avançada', ['Conjuração', 'Alta Conjuração']], ['Armadilha', 'Avançada', ['Armadilha']],
+      ['Maldição', 'Avançada', ['Maldição']], ['Anti-Maldição', 'Avançada', ['Anti-Maldição']], ['Selamento', 'Perdida', ['Selamento']], ['Restrição', 'Perdida', ['Selamento']], ['Ressurreição', 'Perdida', ['Ressurreição']],
+    ].map(([nome, grupo, exige]) => ({ nome, grupo, liberado: !exige, exige: exige ?? null })),
+    custo: { base: 110, gerais: [['Controle 27%', 5]], porTipo: {}, porFuncao: {}, max: 50, instabilidade: false },
+    analise: [{ nome: 'Sangue que Ferve', threadId: null }],
+    recusados: [{ nome: 'Hemorragia Total', motivo: 'Matar com um toque passa do 6º Estágio. Diminua o efeito e mande de novo.' }],
+    limites: { nome: 60, efeitoMin: 40, efeito: 1500, encantamento: 200, duracao: 80, alcance: 80 },
+  },
   ferimentos: { pior: 1, desnutrido: false, casas: [{ grau: 1, ocupada: true }, { grau: 1, ocupada: false }, { grau: 1, ocupada: false }, { grau: 2, ocupada: false }, { grau: 2, ocupada: false }, { grau: 3, ocupada: false }, { grau: 4, ocupada: false }] },
   treinosLivres: { fisico: [1, 2], magico: [2, 2], controle: [0, 1], tecnica: [1, 1] },
   historia: {

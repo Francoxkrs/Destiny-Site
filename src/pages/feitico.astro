@@ -1,0 +1,242 @@
+---
+// /feitico · Escrivaninha do Grimório: o jogador escreve um feitiço no site e manda para o Conselho Mágico.
+// Esquerda: o manuscrito (nome, Tipo, Função, efeito, detalhes, imagem). Direita: a página do Grimório já pronta, ao vivo.
+// O que vale (Tipos e Funções liberados, páginas, custo, nível do Estágio) vem do bot em fichasWeb.escrita.
+// Ao enviar, o bot posta no fórum de feitiços com Aprovar e Recusar; aprovado, entra no Grimório e volta para a ficha.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Aviso from '../components/portal/Aviso.astro';
+import { lerSessao } from '../lib/sessao.js';
+import { carregarFicha, imagemUrl } from '../lib/ficha.js';
+import { pedidosDe, custoDe, LIMITES, MAX_IMAGEM } from '../lib/feitico.js';
+import { banco } from '../lib/db.js';
+import { env } from '../lib/env.js';
+import '../styles/feitico.css';
+export const prerender = false;
+
+const sessao = lerSessao(Astro.cookies);
+const { estado, ficha: f, aviso } = await carregarFicha(sessao);
+Astro.response.headers.set('cache-control', 'private, no-store');
+const exemplo = estado !== 'ok';
+const e = f.escrita ?? null;
+let pedidos = [];
+if (!exemplo) {
+  try { const db = await banco(); if (db) pedidos = await pedidosDe(db, env.guildId, sessao.id); } catch { /* lista vazia */ }
+}
+const L = { ...LIMITES, ...(e?.limites ?? {}) };
+const cor = /^#[0-9a-f]{6}$/i.test(f.cor ?? '') ? f.cor : '#ff3b2e';
+const KANJI_N = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+const TIPO_K = { Externalizado: '放', 'Reforço Corporal': '纏', 'Criação': '創', 'Conjuração': '召' };
+const GRUPOS = ['Básica', 'Avançada', 'Perdida'];
+const proxPagina = e ? Math.min(e.espacos, e.ocupados + 1) : (f.feiticos.length + 1);
+const podeEnviar = !exemplo && Boolean(e?.pode);
+const bloqueio = exemplo ? null : !e ? 'A sua ficha ainda não trouxe o Grimório para o site. Use /site no Discord: o bot manda tudo na hora.' : e.pode ? null : e.motivo;
+const custo0 = e ? custoDe(e.custo, e.tipos.find((t) => t.liberado)?.nome ?? '', ['Ataque']) : null;
+const discord = (threadId) => (threadId && env.guildId ? `https://discord.com/channels/${env.guildId}/${threadId}` : null);
+const STATUS = { novo: 'Na fila do bot', processando: 'O bot está postando', enviado: 'No fórum do Conselho', erro: 'Não foi' };
+const fmtData = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
+---
+<Base title="Escrever feitiço" slug="feitico" aba="ficha" description="Escreva um feitiço do seu Grimório no site, veja a página pronta e mande para o Conselho Mágico aprovar no Discord.">
+  <div class="ef" style={`--c:${cor}`} data-ef>
+    <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.currentScript.parentElement.classList.add('is-abre');</script>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="ef-pincel" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="7" /><feDisplacementMap in="SourceGraphic" scale="16" /></filter>
+      <filter id="ef-cera" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="3" /><feDisplacementMap in="SourceGraphic" scale="10" /></filter>
+    </svg>
+    <Aviso estado={exemplo ? estado : null} aviso={aviso} logado={Boolean(sessao)} volta="/feitico/" />
+
+    <header class="ef-topo">
+      <a class="ef-volta" href="/ficha/#feiticos"><Icon name="seta" size={13} /> Voltar à ficha</a>
+      <p class="ef-mono">Escrivaninha do Grimório · {f.magia}</p>
+      <h1 class="ef-h1">Escreva um feitiço</h1>
+      <p class="ef-lead">Escreva com calma, veja a página pronta e mande para o Conselho Mágico. O bot posta no fórum de feitiços e a Staff aprova ou pede ajustes por lá.</p>
+      {e && (
+        <ul class="ef-paginas" aria-label={`${e.ocupados} de ${e.espacos} páginas ocupadas`}>
+          {Array.from({ length: e.espacos }, (_, i) => <li class:list={[i < e.ocupados - e.analise.length && 'is-escrita', i >= e.ocupados - e.analise.length && i < e.ocupados && 'is-analise', i === e.ocupados && 'is-proxima']} />)}
+          <li class="ef-paginas__txt ef-mono">{e.livres} {e.livres === 1 ? 'página livre' : 'páginas livres'} · Grimório {e.grimorio}</li>
+        </ul>
+      )}
+    </header>
+
+    {bloqueio && <p class="ef-bloqueio" role="status"><b>Grimório fechado</b>{bloqueio}</p>}
+
+    <div class="ef-livro" data-livro>
+      <!-- esquerda: o manuscrito -->
+      <form class="ef-pag ef-esq" data-form novalidate aria-label="Manuscrito do feitiço">
+        <p class="ef-num ef-mono"><span>Manuscrito</span><span>{f.estagio}º Estágio · {KANJI_N[f.estagio]}</span></p>
+
+        <fieldset class="ef-passo" style="--n:'一'">
+          <legend>Nome</legend>
+          <label class="ef-campo">
+            <span class="ef-rot">Como o feitiço se chama <small data-conta="nome">0 / {L.nome}</small></span>
+            <input name="nome" type="text" maxlength={L.nome} required autocomplete="off" placeholder="Ex.: Lança Carmesim" data-campo="nome" />
+          </label>
+          <label class="ef-campo">
+            <span class="ef-rot">Encantamento <em>opcional</em> <small data-conta="encantamento">0 / {L.encantamento}</small></span>
+            <input name="encantamento" type="text" maxlength={L.encantamento} autocomplete="off" placeholder="As palavras ditas ao lançar" data-campo="encantamento" />
+          </label>
+        </fieldset>
+
+        <fieldset class="ef-passo" style="--n:'二'">
+          <legend>Tipo</legend>
+          <p class="ef-dica">Como a magia sai de você.</p>
+          <div class="ef-tipos">
+            {(e?.tipos ?? []).map((t, i) => (
+              <label class:list={['ef-tipo', !t.liberado && 'is-preso']}>
+                <input type="radio" name="tipo" value={t.nome} checked={i === 0 && t.liberado} disabled={!t.liberado} />
+                <i aria-hidden="true">{TIPO_K[t.nome] ?? '術'}</i>
+                <b>{t.nome}</b>
+                <span>{t.liberado ? t.texto : `Exige Conhecimento em ${(t.exige ?? []).join(' ou ')}.`}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset class="ef-passo" style="--n:'三'">
+          <legend>{e?.costurado ? 'Funções' : 'Função'}</legend>
+          <p class="ef-dica">{e?.costurado ? 'Grimório Costurado: escolha até duas Funções diferentes.' : 'O que o feitiço faz. As trancadas abrem com o Conhecimento certo.'}</p>
+          {GRUPOS.map((g) => {
+            const xs = (e?.funcoes ?? []).filter((x) => x.grupo === g);
+            return xs.length > 0 && (
+              <div class="ef-grupo">
+                <p class="ef-mono">{g === 'Básica' ? 'Básicas' : g === 'Avançada' ? 'Avançadas' : 'Perdidas'}</p>
+                <div class="ef-fns">
+                  {xs.map((x) => (
+                    <label class:list={['ef-fn', !x.liberado && 'is-preso']} title={x.liberado ? undefined : `Exige Conhecimento em ${(x.exige ?? []).join(' ou ')}`}>
+                      <input type={e?.costurado ? 'checkbox' : 'radio'} name="funcao" value={x.nome} checked={x.nome === 'Ataque'} disabled={!x.liberado} />
+                      <span>{x.nome}{!x.liberado && <small>{(x.exige ?? []).join(' ou ')}</small>}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          <label class="ef-sust">
+            <input type="checkbox" name="sustentado" value="1" data-campo="sustentado" />
+            <span><b>Sustentado</b> Fica ativo e paga a Mana de novo a cada 3 turnos.</span>
+          </label>
+        </fieldset>
+
+        <fieldset class="ef-passo" style="--n:'四'">
+          <legend>Efeito</legend>
+          <p class="ef-dica">O que acontece, qual atributo usa, Acréscimos e limites. O Conselho lê isto.</p>
+          {e && (
+            <dl class="ef-teto" aria-label={`O que o ${e.estagio}º Estágio alcança`}>
+              <dt>Alcance</dt><dd>{e.nivel.alcance} m</dd>
+              <dt>Destrói</dt><dd>{e.nivel.destroi}</dd>
+              <dt>Temperatura</dt><dd>{e.nivel.temperatura}</dd>
+              <dt>Cura</dt><dd>{e.nivel.cura}</dd>
+            </dl>
+          )}
+          <label class="ef-campo">
+            <span class="ef-rot">Efeito <small data-conta="efeito">0 / {L.efeito}</small></span>
+            <textarea name="efeito" rows="9" minlength={L.efeitoMin} maxlength={L.efeito} required placeholder="Uma lança de sangue endurecido nasce da palma e atravessa o alvo..." data-campo="efeito"></textarea>
+            <span class="ef-min" data-min={L.efeitoMin} aria-live="polite"></span>
+          </label>
+          <div class="ef-dupla">
+            <label class="ef-campo">
+              <span class="ef-rot">Duração <em>opcional</em></span>
+              <input name="duracao" type="text" maxlength={L.duracao} autocomplete="off" placeholder="Instantânea, 3 turnos..." data-campo="duracao" />
+            </label>
+            <label class="ef-campo">
+              <span class="ef-rot">Alcance <em>opcional</em></span>
+              <input name="alcance" type="text" maxlength={L.alcance} autocomplete="off" placeholder={e ? `Até ${e.nivel.alcance} m` : 'Até 20 m'} data-campo="alcance" />
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="ef-passo" style="--n:'五'">
+          <legend>Imagem</legend>
+          <p class="ef-dica">PNG, JPG, WEBP ou GIF animado, até 3 MB. É aprovada junto com o feitiço.</p>
+          <label class="ef-drop" data-drop>
+            <input type="file" name="imagem" accept="image/png,image/jpeg,image/webp,image/gif" data-imagem />
+            <span class="ef-drop__vazio"><i aria-hidden="true">絵</i><b>Solte a imagem aqui</b><span>ou toque para escolher</span></span>
+            <span class="ef-drop__cheio" hidden><img alt="" data-drop-img /><span data-drop-nome></span><button type="button" class="ef-x" data-tirar>Tirar</button></span>
+          </label>
+        </fieldset>
+
+        <div class="ef-enviar">
+          <p class="ef-erro" role="alert" data-erro></p>
+          <button class="btn btn--solid ef-btn" type="submit" disabled={!podeEnviar} data-enviar>
+            <span>Mandar ao Conselho</span>
+          </button>
+          <p class="ef-nota">{exemplo ? 'Entre com o Discord para mandar o seu.' : 'O rascunho fica guardado neste navegador até você mandar.'}</p>
+        </div>
+      </form>
+
+      <!-- direita: a página pronta -->
+      <aside class="ef-pag ef-dir" aria-label="Prévia da página do Grimório" aria-live="polite">
+        <p class="ef-num ef-mono"><span>Página {proxPagina}</span><span>Grimório {e?.grimorio ?? f.grimorio}</span></p>
+        <div class="ef-folha" data-folha>
+          <p class="ef-magia ef-mono">{f.magia}</p>
+          <h2 class="ef-nome" data-p="nome">Feitiço sem nome</h2>
+          <p class="ef-enc" data-p="encantamento" hidden></p>
+          <div class="ef-ilus">
+            <span class="ef-circ" aria-hidden="true"></span>
+            <span class="ef-ret" aria-hidden="true"></span>
+            <img alt="" data-p="imagem" hidden />
+            <span class="ef-ilus__k" aria-hidden="true" data-p="kanji">術</span>
+          </div>
+          <div class="ef-selos" data-p="selos"></div>
+          <p class="ef-efeito" data-p="efeito">O efeito aparece aqui enquanto você escreve.</p>
+          <dl class="ef-rodape">
+            <div><dt>Mana</dt><dd data-p="custo">{custo0 ? custo0.custo : '—'}</dd></div>
+            <div><dt>Alcance</dt><dd data-p="alcance">{e ? `${e.nivel.alcance} m` : '—'}</dd></div>
+            <div><dt>Duração</dt><dd data-p="duracao">Instantânea</dd></div>
+            <div><dt>Nível</dt><dd>{f.estagio}º Estágio</dd></div>
+          </dl>
+          <p class="ef-desc ef-mono" data-p="descontos"></p>
+          <div class="ef-selo-cera" aria-hidden="true" data-cera><b>書</b><span>ENVIADO</span></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- a mesa do Conselho: o que já foi -->
+    <section class="ef-mesa" aria-labelledby="ef-mesa-t">
+      <h2 class="ef-h2" id="ef-mesa-t">Na mesa do Conselho</h2>
+      <div class="ef-cols">
+        <div class="ef-col">
+          <p class="ef-mono">Mandados pelo site</p>
+          <ul class="ef-lista" data-pedidos>
+            {pedidos.length ? pedidos.map((p) => (
+              <li data-s={p.status}>
+                <b>{p.nome}</b>
+                <span class="ef-st">{STATUS[p.status] ?? p.status}</span>
+                <small>{fmtData.format(new Date(p.criadoEm))}{p.erro && ` · ${p.erro}`}</small>
+                {discord(p.threadId) && <a href={discord(p.threadId)} target="_blank" rel="noopener">Abrir no Discord</a>}
+              </li>
+            )) : <li class="is-vazio">{exemplo ? 'Os feitiços que você mandar aparecem aqui.' : 'Nada mandado pelo site ainda.'}</li>}
+          </ul>
+        </div>
+        <div class="ef-col">
+          <p class="ef-mono">Em análise</p>
+          <ul class="ef-lista">
+            {e?.analise.length ? e.analise.map((x) => (
+              <li data-s="analise"><b>{x.nome}</b>{discord(x.threadId) ? <a href={discord(x.threadId)} target="_blank" rel="noopener">Ver o debate</a> : <small>Esperando a Staff</small>}</li>
+            )) : <li class="is-vazio">Nenhum esperando a Staff.</li>}
+          </ul>
+        </div>
+        <div class="ef-col">
+          <p class="ef-mono">Recusados</p>
+          <ul class="ef-lista">
+            {e?.recusados.length ? e.recusados.map((x) => (
+              <li data-s="recusado"><b>{x.nome}</b><small>{x.motivo ?? 'Sem motivo escrito.'}</small><button type="button" class="ef-link" data-reescrever={x.nome}>Reescrever</button></li>
+            )) : <li class="is-vazio">Nenhum recusado.</li>}
+          </ul>
+        </div>
+      </div>
+      {f.feiticos.length > 0 && (
+        <div class="ef-escritos">
+          <p class="ef-mono">Já no Grimório</p>
+          <ul>{f.feiticos.map((x) => { const fi = imagemUrl(x.imagem); return <li>{fi ? <img src={fi} alt="" loading="lazy" /> : <i aria-hidden="true">術</i>}<span>{x.nome}</span></li>; })}</ul>
+        </div>
+      )}
+    </section>
+
+    <script type="application/json" data-dados set:html={JSON.stringify({ escrita: e, limites: L, maxImagem: MAX_IMAGEM, exemplo, pode: podeEnviar, guildId: env.guildId || null, rascunho: exemplo ? null : `bd-feitico-${sessao.id}` }).replace(/</g, '\\u003c')} />
+  </div>
+</Base>
+
+<script>
+  import '../scripts/feitico.js';
+</script>

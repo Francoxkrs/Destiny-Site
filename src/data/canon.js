@@ -746,12 +746,14 @@ export const carga = {
   equipamentoTexto: 'Seis espaços de equipamento. O bônus de qualidade e de encantamento dos itens equipados entra nos Acréscimos do atributo, até o teto de 10.',
 };
 
-// Recompensas de Boost (aprovadas pelo Silas em 2026-11-07). Tudo cai na /bolsa do bot. O VIP saiu em 2026-11-21: o que é pago vai pelos Cristais Prismáticos.
+// Recompensas de Boost: refeitas em 2026-11-28 (pedido do Silas: o forte fica nos Cristais Prismáticos; quem mantém o Boost ganha mais).
+// Mesmos números do bot (canon/recompensas.ts: PACOTES, BOOST_MENSAL, MARCOS_BOOST). Tudo cai na /bolsa; as Inscrições vão para a conta.
 export const apoio = {
-  texto: 'Quem dá Boost no servidor recebe um pacote na /bolsa. Os giros, rerolls e escolhas valem na criação do personagem ou depois, na ficha aprovada, com prévia antes de confirmar.',
+  texto: 'Quem dá Boost recebe um pacote na /bolsa e, enquanto mantém, ganha todo mês e a cada marco. Os giros, rerolls e escolhas valem na criação do personagem ou depois, na ficha aprovada, com prévia antes de confirmar.',
   pacotes: [
-    { nome: 'Primeiro Impulso', preco: '1 Boost', vip: false, itens: ['2 Rerolls de Raça', '3 Rerolls de Família (escolhe a Classe Social e gira)', '2 Giros de Magia', '1 Giro de Linhagem extra', '1.500 Yuls', '+1 PE', '3 Skip Treino', '1 Espaço de feitiço', '2 Autoclaim'], nota: 'Entregue sozinho quando o cargo de Boost aparece. O Autoclaim renova todo mês enquanto o Boost estiver ativo.' },
-    { nome: 'Segundo Impulso', preco: '2 Boosts', vip: false, itens: ['Família à escolha (menos Sorteio e Realeza)', 'Classe de Mago à escolha', '3 Giros de Magia sem Comum', '2 Giros de Grimório', '1 Giro de Linhagem extra', '1 Reroll de Milagre de família', '2 Espaços de feitiço', '2.500 Yuls, e mais 500 por mês', '+2 PE', '1 Cristal Branco', '2 Treinos Mágicos creditados', '5 Skip Treino', '4 Autoclaim'], nota: 'Substitui o Primeiro, não soma: quem já tinha recebe só a diferença. A Staff entrega, porque o Discord não diz quantos Boosts cada um deu. Tirar um Boost volta ao Primeiro; tirar os dois perde o que não foi usado.' },
+    { nome: 'Ao dar Boost', preco: 'Uma vez por conta', vip: false, itens: ['2 Rerolls de Família (escolhe a Classe Social e gira)', '2 Giros de Magia', '2 Inscrições do Altar', '1.000 Yuls', '2 Skip Treino'], nota: 'Entregue sozinho quando o cargo de Boost aparece. Segundo Boost (a Staff libera, porque o Discord não diz quantos cada um deu): mais 1 Giro de Magia sem Comum, 1 Giro de Grimório, 1 Reroll de Classe de Mago, 2 Inscrições e 1.000 Yuls.' },
+    { nome: 'Todo mês', preco: 'Com o Boost ativo', vip: false, itens: ['1 Inscrição do Altar', '400 Yuls', 'Com dois Boosts: 2 Inscrições e 800 Yuls'], nota: 'Cai na virada do mês enquanto o Boost estiver no servidor.' },
+    { nome: 'Quem mantém', preco: 'Meses seguidos', vip: false, itens: ['1 mês: Giro de Magia e 1 Inscrição', '2 meses: Reroll de Raça e 1 Skip Treino', '3 meses: Giro de Linhagem, 2 Inscrições e o título "Pilar de Diamond"', '6 meses: Espaço de feitiço e 1 Cápsula de Conhecimento', '9 meses: Reroll de Milagre de família e 2 Inscrições', '12 meses: Família à escolha (menos Sorteio e Realeza), 5 Inscrições e o título "Pedra Angular"'], nota: 'Cada marco vem uma vez por conta e fica com você. Tirou o Boost: perde o que não usou do pacote e a contagem recomeça do zero.' },
   ],
   itens: [
     ['Giros', 'Magia, Magia sem Comum, Grimório, Cápsula de Conhecimento e Giro de Linhagem. Gire no /bolsa girar ou na criação; o resultado fica salvo para usar quando quiser.'],

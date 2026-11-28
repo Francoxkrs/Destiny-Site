@@ -42,7 +42,7 @@ const msg = codigo && !doLink ? msgs.codigo : erro ? (msgs[erro] ?? msgs.discord
             <input type="hidden" name="codigo" value={codigo} />
             <input type="hidden" name="volta" value={volta} />
             <button class="btn btn--solid" type="submit"><Icon name="seta" size={18} />Entrar</button>
-            <a class="btn" href="/">Agora não</a>
+            <a class="btn" href="/entrar/">Agora não</a>
           </form>
         </>
       ) : sessao ? (
@@ -50,19 +50,18 @@ const msg = codigo && !doLink ? msgs.codigo : erro ? (msgs[erro] ?? msgs.discord
           <h1>Você já entrou, <em>{sessao.nome}</em>.</h1>
           <p>Sua conta do Discord está ligada a este navegador.</p>
           <div class="en__btns">
-            <a class="btn btn--solid" href="/ficha/">Abrir a ficha<Icon name="seta" size={18} /></a>
+            <a class="btn btn--solid" href={volta}>{volta === '/ficha/' ? 'Abrir a ficha' : 'Continuar'}<Icon name="seta" size={18} /></a>
             <form method="post" action="/api/auth/sair"><button class="btn" type="submit"><Icon name="sair" size={18} />Sair</button></form>
           </div>
         </>
       ) : (
         <>
           <h1>Entre com o <em>Discord</em>.</h1>
-          <p>Use a mesma conta do servidor. O portal pede só o seu nome e o seu avatar; não lê mensagens nem a lista de servidores.</p>
+          <p>O site do Black Destiny é só para quem está no servidor. Use a mesma conta do Discord: o portal pede só o seu nome e o seu avatar; não lê mensagens nem a lista de servidores.</p>
           {msg && <p class="en__msg" role="status">{msg}</p>}
           <p class="en__dica">Ou use <b>/site</b> no Discord: o bot manda um link que já entra com a sua conta.</p>
           <div class="en__btns">
-            <a class="btn btn--solid" href="/api/auth/login" aria-disabled={pronto ? undefined : 'true'}><Icon name="discord" size={18} />Entrar com Discord</a>
-            <a class="btn" href="/ficha/">Ver a ficha de exemplo</a>
+            <a class="btn btn--solid" href={`/api/auth/login?volta=${encodeURIComponent(volta)}`} aria-disabled={pronto ? undefined : 'true'}><Icon name="discord" size={18} />Entrar com Discord</a>
           </div>
           <ul class="en__lista">
             <li><Icon name="check" size={16} />Sua ficha do bot, sempre igual ao /ficha</li>

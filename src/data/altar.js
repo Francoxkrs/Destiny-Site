@@ -115,8 +115,12 @@ export const fontes = [
   ['Missão concluída (Rank D ou acima)', '1', '3 por semana', true],
   ['Criatura derrotada nos chats de RP', '1', '1 por semana', true],
   ['Subir de Estágio', '5', 'Por Estágio', true],
-  ['Semana de RP (500+ caracteres em 5 dias)', '2', '1 por semana', false],
-  ['Voto no bot e tag do servidor no perfil', '1', '1 por semana', false],
-  ['Evento da Staff', '3 a 5', 'Por evento', false],
-  ['Passe de Temporada, faixa grátis', '10', 'Por temporada', false],
+  ['Prêmio de evento da Staff', 'Varia', 'Quando a Staff anunciar', true],
+];
+
+/** O que NÃO dá Inscrição, mas dá XP do Passe (functions/passe/regras.ts e functions/diario do bot). */
+export const xpNaoInscricao = [
+  ['Post de RP com 500+ caracteres', '15 XP do Passe'],
+  ['/diario com a tag 丶幻 no perfil', '20 XP do Passe, fora do teto do dia'],
+  ['Bump do servidor', '10 XP do Passe, até 30 por dia'],
 ];

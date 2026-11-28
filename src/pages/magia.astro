@@ -5,11 +5,17 @@ import SectionHead from '../components/SectionHead.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import NextPage from '../components/NextPage.astro';
 import Table from '../components/Table.astro';
-import { magias, grimorios, nivelFeitico, tiposFeitico, funcoes, maestria, slugify } from '../data/canon.js';
+import { magias, grimorios, nivelFeitico, tiposFeitico, funcoesDetalhe, funcoesRegras, maestria, slugify } from '../data/canon.js';
+
+const gruposFuncao = [
+  { id: 'basica', titulo: 'Básicas', sub: 'Todo Marcado tem', chip: '' },
+  { id: 'avancada', titulo: 'Avançadas', sub: 'Vêm de Conhecimentos', chip: 'chip--mana' },
+  { id: 'perdida', titulo: 'Perdidas', sub: 'Vêm de Conhecimentos Perdidos', chip: 'chip--gold' },
+];
 
 const trio = [
   ['Magia', 'O atributo mágico do personagem: fogo, cristal, sombras. Vem do giro na criação.'],
-  ['Grimório', 'O livro que registra os feitiços. Recebido na Torre dos Grimórios, com um diamante na capa.'],
+  ['Grimório', 'O livro que registra os feitiços. O Marcado já renasce com o seu, sorteado na criação, com um diamante na capa.'],
   ['Feitiço', 'Cada técnica escrita no Grimório. Criada pelo jogador e aprovada pelo Conselho Mágico.'],
 ];
 ---
@@ -105,11 +111,7 @@ const trio = [
           <ol class="steps" style="margin-top:20px">{tiposFeitico.map(([t, d]) => <li data-reveal><div><h4>{t}</h4><p>{d}</p></div></li>)}</ol>
         </div>
         <div class="c-7-12 stack" style="--s:1.6rem">
-          <h3 class="t-h3" data-reveal>Funções Mágicas</h3>
-          <div data-reveal><p class="t-label" style="margin-bottom:10px">Básicas · todos têm</p><div class="chips">{funcoes.basicas.map((f) => <span class="chip">{f}</span>)}</div></div>
-          <div data-reveal><p class="t-label" style="margin-bottom:10px">Avançadas · vêm de Conhecimentos</p><div class="chips">{funcoes.avancadas.map((f) => <span class="chip chip--mana">{f}</span>)}</div></div>
-          <div data-reveal><p class="t-label" style="margin-bottom:10px">Perdidas · vêm de Conhecimentos Perdidos</p><div class="chips">{funcoes.perdidas.map((f) => <span class="chip chip--gold">{f}</span>)}</div></div>
-          <h3 class="t-h3" style="margin-top:2.4rem" data-reveal>Maestria <span class="t-mana">0–3</span></h3>
+          <h3 class="t-h3" data-reveal>Maestria <span class="t-mana">0–3</span></h3>
           <p class="t-body" data-reveal>Cada feitiço ganha 1 ponto de Maestria a cada 5 cenas registradas em que foi usado.</p>
           <Table head={['Maestria', 'Efeito']} rows={maestria} />
         </div>
@@ -117,5 +119,85 @@ const trio = [
     </div>
   </section>
 
+  <section class="sec sec--line sec--raise" id="funcoes">
+    <div class="wrap">
+      <SectionHead num="04" label="Funções Mágicas" title="O que o feitiço <em>pode fazer</em>." lead="A Função diz para que serve o feitiço. As Básicas todo Marcado tem; as outras vêm de Conhecimentos. Abra cada uma para ver os números base, os limites e o que dá para fazer sem ela. Os bônus de Conhecimento somam em cima desses números." />
+      <dl class="fn-regras" data-reveal>
+        {funcoesRegras.map(([t, d]) => <div><dt>{t}</dt><dd>{d}</dd></div>)}
+      </dl>
+      {gruposFuncao.map((g) => (
+        <div class="fn-grupo">
+          <p class="t-label fn-grupo__t" data-reveal>{g.titulo} · {g.sub}</p>
+          <div class="fn-lista">
+            {funcoesDetalhe.filter((f) => f.grupo === g.id).map((f) => (
+              <details class="fn" id={`funcao-${slugify(f.nome)}`} data-reveal>
+                <summary>
+                  <span class:list={['chip', g.chip]}>{f.nome}</span>
+                  <span class="fn__libera">{f.libera}</span>
+                  <span class="fn__faz">{f.faz}</span>
+                </summary>
+                <div class="fn__corpo">
+                  <div>
+                    <h4 class="fn__k">Números base</h4>
+                    <ul class="ticks">{f.numeros.map((x) => <li>{x}</li>)}</ul>
+                  </div>
+                  <div>
+                    <h4 class="fn__k">Limites</h4>
+                    <ul class="ticks">{f.limites.map((x) => <li>{x}</li>)}</ul>
+                  </div>
+                  <div class="fn__sem">
+                    <h4 class="fn__k">{g.id === 'basica' ? 'Onde ela para' : 'Sem ela'}</h4>
+                    <p>{f.sem}</p>
+                  </div>
+                  {f.conhecimento && (
+                    <div>
+                      <h4 class="fn__k">Conhecimentos e famílias</h4>
+                      <dl class="fn__con">{f.conhecimento.map(([n, b]) => <div><dt>{n}</dt><dd>{b}</dd></div>)}</dl>
+                    </div>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div class="btns" style="margin-top:36px" data-reveal><a class="btn" href="/conhecimentos/">Ver os Conhecimentos</a><a class="btn" href="/ferimentos/">Ferimentos e cura</a></div>
+    </div>
+  </section>
+
   <NextPage slug="magia" />
 </Base>
+
+<style>
+  .fn-regras { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 18px 28px; margin: 0 0 clamp(36px, 5vw, 64px); }
+  .fn-regras > div { min-width: 0; border-top: 1px solid var(--line-2); padding-top: 12px; }
+  .fn-regras dt { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mana); }
+  .fn-regras dd { margin: 8px 0 0; color: var(--bone-2); font-size: 0.94rem; line-height: 1.55; }
+  .fn-grupo { margin-top: clamp(28px, 4vw, 48px); }
+  .fn-grupo__t { margin-bottom: 12px; }
+  .fn-lista { border-top: 1px solid var(--line); }
+  .fn { border-bottom: 1px solid var(--line); }
+  .fn summary { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr) auto; grid-template-areas: 'nome faz mais' 'lib faz mais'; gap: 6px 24px; align-items: start; padding: 18px 2px; cursor: pointer; list-style: none; }
+  .fn summary::-webkit-details-marker { display: none; }
+  .fn summary::after { content: '+'; grid-area: mais; font-family: var(--f-mono); color: var(--mana); transition: transform 0.3s var(--ease); }
+  .fn[open] summary::after { transform: rotate(45deg); }
+  .fn summary:focus-visible { outline: 2px solid var(--mana); outline-offset: 2px; }
+  .fn summary .chip { grid-area: nome; justify-self: start; }
+  .fn__libera { grid-area: lib; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--mute); }
+  .fn__faz { grid-area: faz; color: var(--bone); line-height: 1.55; min-width: 0; }
+  @media (hover: hover) { .fn summary:hover .fn__faz { color: var(--mana); } }
+  .fn__corpo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 22px 36px; padding: 4px 2px 28px; }
+  .fn__corpo > div { min-width: 0; }
+  .fn__k { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); margin: 0 0 8px; }
+  .fn__corpo .ticks { margin-top: 0; }
+  .fn__corpo .ticks li { color: var(--bone-2); font-size: 0.94rem; line-height: 1.55; }
+  .fn__sem p { margin: 0; color: var(--bone); font-size: 0.94rem; line-height: 1.55; border-left: 2px solid var(--blood); padding-left: 12px; }
+  .fn__con { margin: 0; display: grid; gap: 8px; }
+  .fn__con > div { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 12px; font-size: 0.9rem; }
+  .fn__con dt { color: var(--bone); font-weight: 600; }
+  .fn__con dd { margin: 0; color: var(--bone-2); }
+  @media (max-width: 640px) {
+    .fn summary { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'nome mais' 'lib lib' 'faz faz'; gap: 6px 12px; }
+    .fn__con > div { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>

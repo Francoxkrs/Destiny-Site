@@ -13,8 +13,8 @@ export const eventos = [
     img: '/img/grimorios/demoniaco.webp',
     quando: 'Começou em 15/11/2026',
     resumo: '30 níveis de recompensas, na trilha Grátis e na Premium. O XP vem jogando, não pagando.',
-    texto: 'Cada post de RP com 500 caracteres ou mais, call com outros jogadores, missão, treino, criatura vencida e evento dá XP. O teto é 120 XP por dia, para que quem joga um pouco todo dia ande junto com quem joga muito num dia só.',
-    passos: ['Use `/passe ver` para ver o seu nível e o que falta.', 'Jogue: posts de RP, missões, treinos e criaturas dão XP.', 'Resgate cada nível no próprio `/passe ver`.'],
+    texto: 'Cada post de RP com 500 caracteres ou mais (15 XP), call com outros jogadores (5 a cada 15 min), missão (40), treino (10), criatura vencida (15 a 40) e evento (50) dá XP, e o bump do servidor também (10, até 30 por dia). O teto é 120 XP por dia, para que quem joga um pouco todo dia ande junto com quem joga muito num dia só. O `/diario`, com a tag do servidor no perfil, dá mais 20 XP por dia fora desse teto. O Premium custa 600 Cristais Prismáticos, no botão Premium do `/passe ver`.',
+    passos: ['Use `/passe ver` para ver o seu nível e o que falta.', 'Jogue: posts de RP, missões, treinos e criaturas dão XP. Faça o `/diario` todo dia.', 'Resgate cada nível no próprio `/passe ver`.'],
     premios: [
       { nome: 'Armadura do Miasma', nota: 'Nível 30, à escolha', raro: 'lendario' },
       { nome: 'Sorteio de Grimório', nota: 'Nível 30, à escolha', raro: 'lendario' },
@@ -30,9 +30,9 @@ export const eventos = [
     nome: 'Aparições de Criaturas',
     kanji: '獣',
     img: '/img/criaturas/dragao-negro.webp',
-    quando: 'Quatro vezes por dia',
+    quando: 'Oito vezes por dia',
     resumo: 'Criaturas surgem nos chats de RP dos lugares com Perigo. Quem chega primeiro decide a cena.',
-    texto: 'O bot solta criaturas nos lugares de Diamond que têm Perigo, quatro vezes por dia. Algumas só saem em certas horas: o Dragão Negro só aparece à noite. Criatura vencida dá Partes para a forja, XP do Passe e Ressonância nos itens.',
+    texto: 'O bot solta criaturas nos lugares de Diamond que têm Perigo, oito vezes por dia. Rank B sai em metade dos dias, Rank A em um a cada quatro, e uma criatura de Rank S aparece uma vez por mês. Algumas só saem em certas horas: o Dragão Negro só aparece à noite. Criatura vencida dá Partes para a forja, XP do Passe e Ressonância nos itens.',
     passos: ['Fique nos chats de RP das regiões com Perigo.', 'Quando a criatura surgir, entre na cena e lute pela ficha.', 'Recolha as Partes e leve para a forja.'],
     premios: [
       { nome: 'Partes de Criatura', nota: 'Material de forja', raro: 'raro' },

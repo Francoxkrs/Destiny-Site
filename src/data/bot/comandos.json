@@ -1,7 +1,25 @@
 {
- "geradoEm": "2026-11-23",
+ "geradoEm": "2026-11-27",
  "fonte": "bot (build/)",
  "comandos": [
+  {
+   "nome": "acrescimos",
+   "texto": "Seus Acréscimos: de Conhecimentos, Traços, Milagres, itens e buffs de feitiço, já somados",
+   "pasta": "rp",
+   "opcoes": [
+    {
+     "nome": "jogador",
+     "texto": "Ver os de outro Marcado (vazio = os seus)",
+     "obrigatoria": false
+    },
+    {
+     "nome": "mostrar",
+     "texto": "Postar no canal para a cena ver (sem os menus)",
+     "obrigatoria": false
+    }
+   ],
+   "subs": []
+  },
   {
    "nome": "ajuda",
    "texto": "Dúvidas comuns: resetar, Ferimentos, Técnicas, Profissões, Cristais e mais",
@@ -95,6 +113,112 @@
    ]
   },
   {
+   "nome": "chefe",
+   "texto": "Chefe de Diamond: uma criatura enorme contra o servidor inteiro",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "Mostra o chefe marcado ou lutando agora, e o seu dano",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "agendar",
+     "texto": "(Staff) Marca um chefe num canal: o bot anuncia, abre, conta o dano e paga sozinho",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "canal",
+       "texto": "Onde ele aparece",
+       "obrigatoria": true
+      },
+      {
+       "nome": "quando",
+       "texto": "dd/mm hh:mm (Brasília). Vazio = daqui a 5 minutos",
+       "obrigatoria": false
+      },
+      {
+       "nome": "horas",
+       "texto": "Quanto tempo ele fica antes de fugir (padrão 2)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "vida",
+       "texto": "Vida total (vazio = pelo número de Marcados ativos)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "criatura",
+       "texto": "Qual chefe (vazio = o da semana)",
+       "obrigatoria": false,
+       "escolhas": [
+        "O Colosso de Quartzo",
+        "A Serpente de Fuligem",
+        "O Devorador de Brilho",
+        "A Rainha Cinzenta",
+        "O Arauto dos Espelhos",
+        "A Besta do Veio Rubro"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "semanal",
+     "texto": "(Staff) Liga ou desliga o chefe automático de toda semana",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "ligado",
+       "texto": "Ligar ou desligar",
+       "obrigatoria": true
+      },
+      {
+       "nome": "canal",
+       "texto": "Onde ele aparece",
+       "obrigatoria": false
+      },
+      {
+       "nome": "dia",
+       "texto": "Dia da semana (padrão sábado)",
+       "obrigatoria": false,
+       "escolhas": [
+        "domingo",
+        "segunda",
+        "terça",
+        "quarta",
+        "quinta",
+        "sexta",
+        "sábado"
+       ]
+      },
+      {
+       "nome": "hora",
+       "texto": "Hora de Brasília (padrão 20)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "horas",
+       "texto": "Quanto tempo ele fica (padrão 2)",
+       "obrigatoria": false
+      },
+      {
+       "nome": "vida",
+       "texto": "Vida fixa (0 = pelo número de Marcados ativos)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "cancelar",
+     "texto": "(Staff) Cancela o chefe marcado ou lutando (sem prêmios)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
    "nome": "classe",
    "texto": "Trocar de Classe de Mago com o mestre: 3 provas, 5.000 Yuls e 30 dias de espera",
    "pasta": "rp",
@@ -123,7 +247,8 @@
         "Mago Curandeiro",
         "Mago do Caos",
         "Mago Conjurador",
-        "Mago Artífice"
+        "Mago Artífice",
+        "Mago do Vazio"
        ]
       }
      ]
@@ -515,7 +640,7 @@
   },
   {
    "nome": "diario",
-   "texto": "Marca o seu dia no servidor: XP no Passe e marcos (o dia 100 dá um Milagre exclusivo)",
+   "texto": "Marca o seu dia (precisa da tag 丶幻 no perfil): XP no Passe e marcos até o Milagre do dia 100",
    "pasta": "servidor",
    "opcoes": [],
    "subs": []
@@ -598,6 +723,33 @@
         "Lapidado (400 Yuls)",
         "Facetado (1200 Yuls)",
         "Brilhante (Arsenal Vivo ou Staff)"
+       ]
+      },
+      {
+       "nome": "cristalizar",
+       "texto": "Engastar mesmo passando do limite de Rejeição (Cristalização)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "clinica",
+     "texto": "Clínica de Engaste: um cirurgião NPC engasta em você (Lapidário; Bruto e Ilegal no Fosso)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "disco",
+       "texto": "Qual disco",
+       "obrigatoria": true
+      },
+      {
+       "nome": "lapidacao",
+       "texto": "Lapidação",
+       "obrigatoria": true,
+       "escolhas": [
+        "Bruto (150 Yuls + 150 da clínica, no Fosso)",
+        "Lapidado (400 Yuls + 150 da clínica)",
+        "Facetado (1200 Yuls + 150 da clínica)"
        ]
       },
       {
@@ -1305,6 +1457,91 @@
    ]
   },
   {
+   "nome": "lembretes",
+   "texto": "Seus avisos no privado (treino, missão, bump, diário) e, para a Staff, os lembretes do chat",
+   "pasta": "staff",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "meus",
+     "texto": "Liga ou desliga os seus avisos no privado: treino, missões, bump e diário",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "hora-diario",
+       "texto": "Hora de Brasília do aviso do /diario (padrão 9)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "ver",
+     "texto": "Mostra como estão os lembretes, o bump e a DM de ficha",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "ligar",
+     "texto": "Liga ou desliga o card automático no chat",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "ligado",
+       "texto": "Ligado?",
+       "obrigatoria": true
+      },
+      {
+       "nome": "canal",
+       "texto": "Onde o card sai (vazio = continua onde está; padrão: o bate-papo)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "voto",
+     "texto": "Link da página de voto (top.gg ou outra). Vazio tira o voto do card",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "link",
+       "texto": "https://...",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "bump",
+     "texto": "Cargo marcado quando o bump do Disboard libera de novo (vazio = não marca ninguém)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "cargo",
+       "texto": "Cargo (ex.: quem quer ajudar com o bump)",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "dm-ficha",
+     "texto": "Liga ou desliga a DM (uma vez só) para quem entrou há 1 dia e não fez ficha",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "ligado",
+       "texto": "Ligada?",
+       "obrigatoria": true
+      }
+     ]
+    },
+    {
+     "nome": "agora",
+     "texto": "Posta o card agora (zera a contagem e apaga o card anterior)",
+     "tag": null,
+     "opcoes": []
+    }
+   ]
+  },
+  {
    "nome": "loja",
    "texto": "A loja do lugar onde você está: vitrine, comprar e vender (só no canal da loja)",
    "pasta": "rp",
@@ -1398,6 +1635,19 @@
      ]
     }
    ]
+  },
+  {
+   "nome": "magia-composta",
+   "texto": "Junta um feitiço seu com o de outro Marcado nesta cena: um efeito só, um Estágio acima",
+   "pasta": "grimorio",
+   "opcoes": [
+    {
+     "nome": "parceiro",
+     "texto": "Quem junta o feitiço com você",
+     "obrigatoria": true
+    }
+   ],
+   "subs": []
   },
   {
    "nome": "mana",
@@ -1848,6 +2098,91 @@
    ]
   },
   {
+   "nome": "tema",
+   "texto": "Sua Música Tema: guarde o link, escolha a Nota e toque na cena",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "definir",
+     "texto": "Guarda a sua Música Tema (link do Spotify ou YouTube) e a Nota. Troca uma vez por semana",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "link",
+       "texto": "Link da faixa (open.spotify.com/track/...)",
+       "obrigatoria": true
+      },
+      {
+       "nome": "nota",
+       "texto": "O efeito do seu tema enquanto toca",
+       "obrigatoria": false,
+       "escolhas": [
+        "Fúria: o primeiro acerto de cada post ignora a defesa de Pele de Mana do alvo",
+        "Muralha: anula o próximo Ferimento que você receberia",
+        "Vento: você age primeiro na rodada e pode trocar de posição sem gastar ação",
+        "Foco: o seu feitiço não pode ser interrompido nem cortado por choque de magia"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "nota",
+     "texto": "Escolhe ou troca a Nota do seu tema (uma vez por semana)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "nota",
+       "texto": "O efeito do seu tema enquanto toca",
+       "obrigatoria": true,
+       "escolhas": [
+        "Fúria: o primeiro acerto de cada post ignora a defesa de Pele de Mana do alvo",
+        "Muralha: anula o próximo Ferimento que você receberia",
+        "Vento: você age primeiro na rodada e pode trocar de posição sem gastar ação",
+        "Foco: o seu feitiço não pode ser interrompido nem cortado por choque de magia"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "ver",
+     "texto": "Vê a sua Música Tema (ou a de outro jogador) e como ela funciona",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Ver de outro jogador",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "tocar",
+     "texto": "Abertura depois de 5 posts seus aqui; Refrão 3 posts depois",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "climax",
+     "texto": "Derrubado com o tema tocando: levanta com Ferimento II para uma última ação (uma vez por cena)",
+     "tag": null,
+     "opcoes": []
+    },
+    {
+     "nome": "dueto",
+     "texto": "Chama um aliado para o seu tema: a Magia Composta dos dois sai sem Mana para ele",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "parceiro",
+       "texto": "Quem entra no Dueto",
+       "obrigatoria": true
+      }
+     ]
+    }
+   ]
+  },
+  {
    "nome": "terra",
    "texto": "Suas terras num painel: comprar, construir, guardar, morar, adubar e pagar o imposto",
    "pasta": "economia",
@@ -1884,6 +2219,81 @@
        "escolhas": [
         "Generais Brilhantes",
         "Veio Negro"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "nome": "traje",
+   "texto": "Manto da sua Tropa e trajes de região: ver, vestir, tirar e comprar",
+   "pasta": "rp",
+   "opcoes": [],
+   "subs": [
+    {
+     "nome": "ver",
+     "texto": "O manto e o traje que você (ou outro jogador) veste",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "jogador",
+       "texto": "Ver de outro jogador",
+       "obrigatoria": false
+      }
+     ]
+    },
+    {
+     "nome": "comprar",
+     "texto": "Compra um traje de região (precisa estar na região dele)",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "traje",
+       "texto": "Qual traje",
+       "obrigatoria": true,
+       "escolhas": [
+        "Traje de Gala da Coroa (2.500 Yuls)",
+        "Jaleco do Lapidário (1.500 Yuls)",
+        "Roupa de Mineiro dos Veios (600 Yuls)",
+        "Gibão de Couro do Fosso (900 Yuls)",
+        "Couraça da Fronteira Cinzenta (1.200 Yuls)"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "vestir",
+     "texto": "Veste o manto de novo ou um traje que você já tem",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "o-que",
+       "texto": "Manto ou traje",
+       "obrigatoria": true,
+       "escolhas": [
+        "Manto da facção",
+        "Traje de Gala da Coroa",
+        "Jaleco do Lapidário",
+        "Roupa de Mineiro dos Veios",
+        "Gibão de Couro do Fosso",
+        "Couraça da Fronteira Cinzenta"
+       ]
+      }
+     ]
+    },
+    {
+     "nome": "tirar",
+     "texto": "Guarda o manto ou tira o traje",
+     "tag": null,
+     "opcoes": [
+      {
+       "nome": "o-que",
+       "texto": "Manto ou traje",
+       "obrigatoria": true,
+       "escolhas": [
+        "Manto",
+        "Traje de região"
        ]
       }
      ]

@@ -694,16 +694,17 @@ export const viagem = {
   ],
 };
 
-// Criaturas que aparecem sozinhas nos lugares de RP (bot, /criatura). Rank S nunca aparece assim.
+// Criaturas que aparecem sozinhas nos lugares de RP (bot, functions/criaturas/aparicoes.ts). Rank S: uma por mês.
 export const aparicoes = {
-  texto: 'Quatro vezes por dia, entre 10h e 2h da madrugada (Brasília), uma criatura do bestiário aparece num lugar de RP com Perigo. O bot avisa no canal, e quem estiver por perto decide o que fazer.',
+  texto: 'Oito vezes por dia, entre 10h e 2h da madrugada (Brasília), uma criatura do bestiário aparece num lugar de RP com Perigo. O bot avisa no canal, e quem estiver por perto decide o que fazer.',
   regras: [
-    ['Onde', 'Só nos lugares com Perigo, e só criaturas dos Ranks escritos na placa. Canais com conversa nas últimas 24 horas têm preferência. Há pelo menos 2 horas entre uma aparição e a próxima.'],
+    ['Onde', 'Só nos lugares com Perigo, e só criaturas dos Ranks escritos na placa. Canais com conversa nas últimas 24 horas têm preferência. Há pelo menos 1 hora entre uma aparição e a próxima.'],
     ['Enfrentar', 'Até 4 Marcados entram no grupo. Um narrador assume, abre um tópico de caça e narra a criatura; a cena termina com Vencida ou Fugiu.'],
     ['Observar', 'Quem só observa anota a espécie no caderno de campo. Não dá bônus, mas fica registrado.'],
     ['Se ninguém vier', 'Sem grupo em 30 minutos, ou sem narrador em 2 horas, a criatura vai embora.'],
     ['Domação', 'Vencer conta como a primeira cena de Domação daquela criatura.'],
-    ['Fora dos limites', 'A caça não dá Méritos nem Acréscimos e não gasta o limite de missões.'],
+    ['Fora dos limites', 'A caça não dá Méritos nem Acréscimos e não gasta o limite de missões. Dá XP do Passe e 1 Inscrição do Altar por semana.'],
+    ['Aviso', 'Quando sai uma de Rank B, A ou S, o bot marca o cargo de alerta para quem quer caçar.'],
   ],
   // Rank, chance de ser o Rank sorteado, Yuls divididos no grupo, material para cada um.
   ranks: [
@@ -711,9 +712,9 @@ export const aparicoes = {
     ['E', '25%', '120', '2'],
     ['D', '18%', '250', '1'],
     ['C', '12%', '500', '1'],
-    ['B', '7%', '1.200', '2'],
-    ['A', '3%', '3.000', '3'],
-    ['S', 'Nunca', '—', 'Só em evento'],
+    ['B', '1 em metade dos dias', '1.200', '2'],
+    ['A', '1 a cada 4 dias', '3.000', '3'],
+    ['S', '1 por mês', '8.000', '4'],
   ],
   material: 'Bestas Comuns deixam Couro de Besta; as outras deixam Parte Mágica de Criatura.',
 };
@@ -1255,6 +1256,136 @@ export const funcoes = {
   avancadas: ['Barreira', 'Reforço', 'Restauração', 'Enfraquecimento', 'Comunicação', 'Armadilha', 'Maldição', 'Anti-Maldição'],
   perdidas: ['Selamento', 'Restrição', 'Ressurreição'],
 };
+
+
+// Funções Mágicas por extenso (pedido de jogador no fórum, 2026-11-27): o que cada uma faz, os números base, os limites
+// e o que dá para fazer SEM ela. Conhecimento libera a Função (bot: functions/canon/magia.ts FUNCOES) e soma por cima
+// destes números. Regras gerais que valem para todas: nivelRegras (Choque entre feitiços, O que destrói, Custo).
+export const funcoesRegras = [
+  ['Nível', 'O nível de um feitiço é o Estágio em que ele é lançado. Com +10 Acréscimos, vale como o Estágio seguinte.'],
+  ['Choque', 'Quando duas Funções se encontram (Ataque contra Defesa, Restrição contra quem tenta escapar), vence o nível mais alto. Empatou, vencem os Acréscimos.'],
+  ['Turno', 'Durações em turnos contam a partir do turno em que o feitiço acerta. "Sustentado" paga a Mana de novo a cada 3 turnos e acaba quando o Grimório fecha ou a cena termina.'],
+  ['Uma por feitiço', 'Cada feitiço tem uma Função. Só o Grimório Costurado põe duas no mesmo feitiço.'],
+];
+
+export const funcoesDetalhe = [
+  {
+    nome: 'Ataque', grupo: 'basica', libera: 'Todos têm',
+    faz: 'Fere e destrói: disparo, corte, explosão, golpe carregado de magia.',
+    numeros: ['Força pela linha "O que destrói" do Estágio e alcance do Estágio (9º: 10 m; 5º: 80 m; 1º: 500 m).', 'Instantâneo, ou sustentado (uma lâmina que fica na mão, uma chuva que continua).', 'Externalizado recebe todos os Acréscimos do Poder Mágico; Reforço Corporal, metade.'],
+    limites: ['Só fere e destrói. Empurrar, queimar o chão ou derrubar uma parede entram na narração; tirar Acréscimo, prender ou curar, não.', 'Contra uma Defesa ou Barreira, vale o Choque.'],
+    sem: 'Todo Marcado tem. É a Função que as outras não substituem: nenhuma outra causa Ferimento acima de I.',
+  },
+  {
+    nome: 'Defesa', grupo: 'basica', libera: 'Todos têm',
+    faz: 'Bloqueia, desvia ou apara o que vem em você: escudo na mão, parede curta, couraça para um golpe.',
+    numeros: ['Aguenta o que um feitiço do mesmo Estágio derruba (uma muralha do 5º segura um ataque do 5º).', 'Dura 1 turno, ou sustentada.', 'Pode ser lançada como reação ao golpe.'],
+    limites: ['Cobre só você e o que está colado em você.', 'Um golpe de nível acima atravessa.'],
+    sem: 'Todo Marcado tem. Para proteger outra pessoa, uma área ou deixar a proteção de pé, é preciso Barreira.',
+  },
+  {
+    nome: 'Criação', grupo: 'basica', libera: 'Todos têm',
+    faz: 'Produz objetos, estruturas e armas: ponte, gaiola, espada, escada.',
+    numeros: ['O que é criado aguenta o que um feitiço do mesmo Estágio derruba.', 'Dura até o fim da cena, até o Grimório fechar ou até ficar mais longe que a distância do Grimório.'],
+    limites: ['Arma criada usa os Acréscimos do feitiço, não ganha os seus.', 'Não cria seres que agem sozinhos: isso é o Tipo Conjuração, com o Conhecimento.', 'Não cria remédio que cura nem veneno que enfraquece: precisa de Restauração ou Enfraquecimento.'],
+    sem: 'Todo Marcado tem.',
+  },
+  {
+    nome: 'Mobilidade', grupo: 'basica', libera: 'Todos têm',
+    faz: 'Desloca você: voo, salto, impulso, deslize, passo curto pelo espaço (este só em magias espaciais).',
+    numeros: ['Em combate, até o alcance do Estágio num turno.', 'Fora de combate, voo e portal mudam o tempo do /viajar: Voo mágico 10 min por trecho (10% da Mana), Portal 2 min (20%).'],
+    limites: ['Leva você e o que você carrega no colo. Arrastar alguém que não quer é Restrição.', 'Não atravessa Barreira nem Selamento.'],
+    sem: 'Todo Marcado tem. Sem magia de voo ou portal, o /viajar vai a pé, montado ou de trilho.',
+  },
+  {
+    nome: 'Barreira', grupo: 'avancada', libera: 'Conhecimento em Magia ou Arcanologia',
+    faz: 'Proteção que fica de pé e cobre outras pessoas: domo, muralha, escudo posto num aliado.',
+    numeros: ['Cobre uma área de raio até metade do alcance do Estágio (9º: 5 m; 5º: 40 m; 1º: 250 m), ou um aliado à vista.', 'Sustentada: paga a Mana de novo a cada 3 turnos.', 'Segura tudo do mesmo nível ou abaixo; um golpe de nível acima quebra a Barreira.'],
+    limites: ['Uma Barreira sua de pé por vez.', 'Parada: quem a lançou pode andar, a Barreira não vai junto.'],
+    sem: 'Só Defesa: protege você mesmo, por 1 turno. Aliado e área ficam descobertos.',
+    conhecimento: [['Magia', 'libera'], ['Arcanologia', 'libera e +1 Acréscimo nos feitiços']],
+  },
+  {
+    nome: 'Reforço', grupo: 'avancada', libera: 'Conhecimento Corporal ou Fisiologia',
+    faz: 'Fortalece: um atributo físico (Força, Resistência ou Velocidade) ganha os Acréscimos do feitiço.',
+    numeros: ['O bônus é o Acréscimo do feitiço, num físico à escolha, e dura a cena. Aparece na /acrescimos.', 'Feitiço Externalizado com Reforço passa 100%; Tipo Reforço Corporal passa metade, arredondada para baixo (100% com Corpo de Guerra).', 'Teto de 10 Acréscimos por atributo, somando tudo.'],
+    limites: ['Lançar o mesmo feitiço de novo renova a duração; feitiços diferentes somam, até o teto.', 'Reforçar um aliado ou um objeto vale na cena, com o mesmo valor.'],
+    sem: 'Só o Tipo Reforço Corporal envolve o seu próprio corpo, com metade dos Acréscimos. Sem a Função, não dá para reforçar ninguém além de você nem passar os 100%.',
+    conhecimento: [['Corporal', 'libera'], ['Fisiologia', 'libera e +1 Acréscimo no Reforço']],
+  },
+  {
+    nome: 'Restauração', grupo: 'avancada', libera: 'Conhecimento Medicinal ou Medicina Avançada',
+    faz: 'Cura Ferimentos com magia.',
+    numeros: ['Cada Estágio cura o que a linha "Cura" diz: 9º fecha um Ferimento I; 6º trata Ferimento II em combate; 4º trata III em combate; 1º devolve um membro.', 'Tempo: Ferimento I em 1 turno, II em 3, III em 5. Mínimo 1 turno.', 'Custa a Mana do Estágio usado.'],
+    limites: ['Não devolve Mana, não tira Maldição e não traz ninguém da morte.', 'Quem foi atingido por Toque Seco não recebe cura por feitiço até o fim da cena.'],
+    sem: 'Sem a Função, magia não cura (a família Valerian é a exceção). Sobra estabilizar com kit médico, que só segura o agravamento por 1 cena, ou tratar I e II pelo Conhecimento Medicinal, sem magia.',
+    conhecimento: [['Medicinal', 'libera; cura 1 turno mais rápido'], ['Medicina Avançada', 'libera; trata III; cura 3 turnos mais rápido'], ['Mãos Restauradoras (Curandeiro)', '20% mais barata; 1 turno mais rápido']],
+  },
+  {
+    nome: 'Enfraquecimento', grupo: 'avancada', libera: 'Conhecimento em Debilitação ou Debilitação Avançada',
+    faz: 'Debilita: o alvo perde Acréscimos num atributo (físico ou Poder Mágico), ou fica lento, cego, surdo ou tonto.',
+    numeros: ['Base: -1 Acréscimo num atributo, ou um estado, por 2 turnos.', 'Mínimo 1 turno, máximo 2 turnos sem Conhecimento.', 'Alvo de Estágio acima: 1 turno a menos para cada Estágio de diferença (nunca menos de 1).', 'Estado vale como -1 Acréscimo: lento tira de Velocidade; cego e tonto, da reação.'],
+    limites: ['O mesmo efeito não acumula no mesmo alvo: lançar de novo renova a duração.', 'Ninguém perde mais de 3 Acréscimos no mesmo atributo por Enfraquecimento, somando todas as fontes.', 'Não causa Ferimento acima de I.'],
+    sem: 'O feitiço só fere. Tirar Acréscimo de alguém sem a Função só com Técnica ou trilha (Toque Debilitante, Presença Impactante) ou causando Ferimento.',
+    conhecimento: [['Debilitação', 'libera; +1 turno (base 3, máximo 3)'], ['Debilitação Avançada', 'libera; +2 turnos e +1 Acréscimo (base 4 turnos, -2); junta dois efeitos no mesmo feitiço. Substitui a Comum']],
+  },
+  {
+    nome: 'Comunicação', grupo: 'avancada', libera: 'Conhecimento em Conjuração ou Alta Conjuração',
+    faz: 'Liga mentes: mensagem de mente a mente, ver e ouvir pelos olhos de um conjurado, manter o grupo em contato.',
+    numeros: ['Liga até 4 pessoas (o tamanho de um grupo de missão).', 'Alcance do Estágio. Um conjurado mensageiro leva o recado a qualquer lugar da mesma região.', 'Sustentada, até o fim da cena.'],
+    limites: ['Só passa o que a pessoa manda: não lê pensamento nem memória.', 'Quem não aceita a ligação não recebe.'],
+    sem: 'Falar em voz alta e mandar alguém. Os conjurados não levam recado nem mostram o que veem.',
+    conhecimento: [['Conjuração', 'libera; até 3 conjurados'], ['Alta Conjuração', 'libera; até 10 conjurados, cada um com +1 Acréscimo']],
+  },
+  {
+    nome: 'Armadilha', grupo: 'avancada', libera: 'Conhecimento em Armadilha (sorteios e eventos)',
+    faz: 'Deixa um feitiço armado num lugar, que dispara sozinho quando a condição escrita acontece: pisar, tocar, cruzar uma linha.',
+    numeros: ['Armar gasta o turno e a Mana do feitiço; disparar não gasta ação.', 'Até 3 armadas por vez, até o fim da cena.', '+1 Acréscimo no disparo, pelo Conhecimento.'],
+    limites: ['Quem tem Controle Mágico maior que o seu sente a mana da armadilha.', 'O disparo usa a Função escrita no feitiço (só Grimório Costurado junta Armadilha com outra).'],
+    sem: 'O feitiço age na hora em que é lançado. Para algo que fica gravado por dias, só as runas da Matriz Rúnica (Inscrição dura 1 semana).',
+    conhecimento: [['Armadilha', 'libera; +1 Acréscimo'], ['Ideale', 'família: +4 espaços no Grimório só para Armadilha']],
+  },
+  {
+    nome: 'Maldição', grupo: 'avancada', libera: 'Conhecimento em Maldição (sorteios e eventos)',
+    faz: 'Um efeito que gruda no alvo e passa da cena: um Acréscimo a menos, uma proibição (não consegue mentir, não consegue tocar no Grimório), uma marca que denuncia onde ele está.',
+    numeros: ['Pega ao tocar ou acertar o alvo.', 'Dura 3 cenas ou até cumprir a condição escrita, o que vier antes.', 'Tira no máximo 1 Acréscimo, ou impõe uma proibição.', '+1 Acréscimo, pelo Conhecimento.'],
+    limites: ['Uma Maldição sua por alvo.', 'Alvo de Estágio acima: dura 1 cena.', 'Não mata nem causa Ferimento.', 'Anti-Maldição desfaz.'],
+    sem: 'Todo efeito acaba junto com o feitiço ou a cena.',
+    conhecimento: [['Maldição', 'libera; +1 Acréscimo'], ['Agrippa e Enoteca', 'famílias que já nascem com o Conhecimento']],
+  },
+  {
+    nome: 'Anti-Maldição', grupo: 'avancada', libera: 'Conhecimento em Anti-Maldição (sorteios e eventos)',
+    faz: 'Desfaz Maldições e protege contra elas. Não é a magia Antimagia: é uma Função que qualquer magia pode ter.',
+    numeros: ['Desfaz a Maldição de nível igual ou menor que o do feitiço.', 'Contra Maldição de nível acima, corta 1 cena da duração.', 'Como proteção: sustentada, a próxima Maldição de nível igual ou menor não pega.'],
+    limites: ['Não mexe em Selamento nem em Restrição: essas são Perdidas e pedem o Conhecimento em Selamento.', 'Não cura Ferimento.'],
+    sem: 'A Maldição fica até a condição ou o prazo acabar.',
+    conhecimento: [['Anti-Maldição', 'libera; +1 Acréscimo e +1 de Resistência contra Maldições']],
+  },
+  {
+    nome: 'Selamento', grupo: 'perdida', libera: 'Conhecimento Perdido em Selamento',
+    faz: 'Tranca algo num selo: um feitiço, um objeto, uma porta, uma criatura, uma parte do corpo.',
+    numeros: ['Fica até alguém quebrar ou até quem selou soltar. Não depende da cena.', 'Sela feitiço, objeto ou lugar do mesmo nível ou abaixo.', 'Ser vivo só se estiver preso (Restrição) ou com Ferimento III ou pior.', 'Quebrar o selo pede um Ataque de nível acima.'],
+    limites: ['Até 3 selos seus de pé por vez.'],
+    sem: 'Nada fica preso depois da cena. Criação faz uma gaiola, mas ela some e pode ser quebrada no mesmo nível.',
+    conhecimento: [['Selamento', 'libera Selamento e Restrição'], ['Swallowtail', 'família: Selamento sem requisito']],
+  },
+  {
+    nome: 'Restrição', grupo: 'perdida', libera: 'Conhecimento Perdido em Selamento',
+    faz: 'Impede o alvo de fazer uma coisa: se mover, lançar feitiço ou abrir o Grimório.',
+    numeros: ['Alvo de nível abaixo: até 3 turnos. Mesmo nível: 1 turno. Acima: não pega.', 'O alvo pode tentar escapar a cada turno: vale o Choque, com a Força dele contra o feitiço.', 'Com o Conhecimento em Selamento, custa 20% menos.'],
+    limites: ['Uma coisa proibida por feitiço.', 'Anti-Maldição não desfaz.'],
+    sem: 'Segurar alguém só na força ou com uma corrente de Criação, que ele quebra se tiver nível para isso.',
+    conhecimento: [['Selamento', 'libera; Restrição 20% mais barata']],
+  },
+  {
+    nome: 'Ressurreição', grupo: 'perdida', libera: 'Conhecimento Perdido em Ressurreição',
+    faz: 'Traz um morto de volta.',
+    numeros: ['Só em evento, com a Staff.', 'O corpo precisa estar inteiro e a morte ter sido na mesma cena.', 'Gasta toda a Mana de quem lança. Quem volta acorda com Ferimento III e uma Sequela.'],
+    limites: ['Uma vez por alma.'],
+    sem: 'Morte é morte. Antes dela, só Voto de Vida (Curandeiro) tira alguém do Ferimento IV.',
+    conhecimento: [['Ressurreição', 'libera']],
+  },
+];
 
 export const maestria = [['0', 'Feitiço recém-criado'], ['1', 'Custa 10% menos Mana'], ['2', '+1 Acréscimo'], ['3', 'Lançado sem encantamento e mais 10% de desconto']];
 
@@ -1877,7 +2008,7 @@ export const glossario = [
   ['Mana Morta', 'Lugar onde a mana morreu: sem Concentração e sem Treino de Controle.', 'mapa#zonas'],
   ['Placa', 'A mensagem fixada de cada lugar de RP: quem entra, mana, perigo, ofícios e terras.', 'mapa#placas'],
   ['Viagem', 'Ir de uma região a outra com o /viajar: de 2 a 70 minutos reais.', 'mapa#viagem'],
-  ['Aparição', 'Criatura que surge sozinha num lugar com Perigo, 4 vezes por dia.', 'criaturas#aparicoes'],
+  ['Aparição', 'Criatura que surge sozinha num lugar com Perigo, 8 vezes por dia.', 'criaturas#aparicoes'],
   ['Carga', 'Quantos espaços o Marcado carrega, pela Força.', 'itens#carga'],
   ['Bolsa', 'Onde ficam os giros e recompensas de Boost, do Passe e dos eventos.', 'comecar#apoio'],
 ];

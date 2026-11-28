@@ -5,7 +5,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/portao-vercel.mjs",
+    "portao:teste": "node scripts/portao-teste.mjs",
     "preview": "astro preview",
     "cristais:teste": "node scripts/cristais-teste.mjs",
     "altar:teste": "node scripts/altar-teste.mjs",

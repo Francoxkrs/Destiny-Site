@@ -21,7 +21,7 @@ Sem `ADMIN_IDS`, a sala não existe para ninguém.
 - A checagem é no servidor, a cada pedido: a página `/admin` e todas as rotas `/api/admin/*` respondem **404** para quem não está em `ADMIN_IDS` (logado ou não). Esconder o link é só conforto; a trava é a rota.
 - A sessão é o mesmo cookie assinado do login (HMAC com `SESSION_SECRET`); com `SESSION_SECRET` menor que 32 caracteres a sala fecha.
 - Pedidos que alteram exigem a origem do próprio site (`Origin` e `Sec-Fetch-Site`) e corpo JSON, então um formulário ou link de outro site não consegue mexer em nada.
-- O admin só mexe na **própria** conta (o id da sessão). Não há campo para escolher outra pessoa.
+- Conta e Personagem mexem só na **própria** conta (o id da sessão). A exceção é **Outras contas**, que muda só os Cristais Prismáticos de outro jogador (`CAMPOS_OUTRAS`).
 - Só os campos da lista `CAMPOS` (`src/lib/admin.js`) podem ser mexidos, cada um com mínimo e máximo.
 - Cada mudança fica em `adminLog` com o valor de antes e o de depois, e pode ser desfeita no Histórico.
 - A página manda `noindex` e não entra no sitemap nem na busca.
@@ -32,6 +32,7 @@ Sem `ADMIN_IDS`, a sala não existe para ninguém.
 | --- | --- | --- |
 | Conta | Cristais Prismáticos, Inscrições, Fragmentos, garantia do Altar (Lendário e Épico); zerar garantia; zerar os limites da Pedra e da Loja; deixar a 1 giro do Lendário | `contas` (sobe `altarV`, a mesma trava do Altar e da Loja) |
 | Personagem | Yuls, Méritos, Antiméritos, PE, Estágio, Cristais Brancos/Negros/Dourados; encher a Mana | `personagens.estado.*` + `updatedAt` (o bot refaz a ficha do site) |
+| Outras contas | Procura por ID do Discord ou nome do personagem e muda os **Cristais Prismáticos** do jogador (Somar ou Definir, motivo opcional). Sempre passa por um quadro de confirmação, e o servidor só grava se o saldo ainda for o que você confirmou. Registro com quem fez, motivo e **Desfazer** | `contas.cp` (sobe `altarV`) + `adminLog` com `outra: true` e `por` |
 | Simular o Altar | 10 a 10.000 giros com a mesma função do giro de verdade (`sortear`), do zero ou da sua garantia | Nada: não cobra, não grava, não entrega |
 | Bot e site | Quais partes estão ligadas (só sim/não, nunca o valor das chaves), ping do banco, contagens, e o **teste do bot** | O teste soma 1 Yul, espera o bot mandar a ficha nova e tira o Yul |
 | Histórico | Ajustes (com Desfazer), invocações do Altar, Pedra e Loja, compras de Cristais, gastos da conta | Só leitura |
@@ -39,9 +40,14 @@ Sem `ADMIN_IDS`, a sala não existe para ninguém.
 ### Teste do bot
 O bot ouve o banco (change stream) e regrava a ficha do site em até ~2 s. Se a resposta vier em mais de 10 s, a escuta está desligada e o bot só pegou pela varredura de 2 min. Sem resposta em 2 min e meio, o bot está fora do ar ou sem acesso ao banco.
 
+### Outras contas (27/11)
+- Só CP. Inscrições, Yuls, PE e o resto não mudam por aqui.
+- Buscar por nome procura no nome e no sobrenome do personagem em `fichasWeb` (até 8). Um ID do Discord sem conta ainda funciona: a conta é criada e a pessoa vê o CP quando entrar no site.
+- **Desfazer** devolve a diferença em cima do saldo de agora (não volta ao número antigo, porque o jogador pode ter gastado ou ganhado depois). Se ele já gastou esses Cristais, recusa. Cada ajuste só se desfaz uma vez.
+
 ## Usuário do MongoDB do site
 O usuário `site-portal` precisa de mais estas permissões para a sala:
-- `find`, `insert` em `adminLog`
+- `find`, `insert` e `update` em `adminLog` (o `update` é para marcar um ajuste de Outras contas como desfeito)
 - `update` em `personagens` (já existe para a trilha) e em `contas` (já existe para os Cristais)
 
 ## Testes

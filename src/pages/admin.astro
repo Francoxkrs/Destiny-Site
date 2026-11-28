@@ -49,7 +49,7 @@ const dados = { tipos: TIPOS, campos: CAMPOS, acoes: ACOES, atalhos, raridades, 
         <div class="wrap adm-hd__in">
           <span class="eyebrow"><b>試</b>Só você entra aqui</span>
           <h1 class="adm-hd__t">Sala de <em>Testes</em></h1>
-          <p class="t-body adm-hd__p">Tudo aqui mexe só na sua conta, <b>{sessao.nome}</b>, e fica anotado no histórico com o valor de antes. Qualquer ajuste dá para desfazer.</p>
+          <p class="t-body adm-hd__p">Conta e Personagem mexem só na sua conta, <b>{sessao.nome}</b>. Em Outras contas você muda os Cristais Prismáticos de qualquer jogador, sempre com confirmação. Tudo fica anotado com o valor de antes e dá para desfazer.</p>
           <div class="adm-hd__st" data-adm-status role="status">Lendo a sua conta…</div>
         </div>
         <svg class="adm-hd__corte" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,10 100,0 100,10" /></svg>
@@ -60,6 +60,7 @@ const dados = { tipos: TIPOS, campos: CAMPOS, acoes: ACOES, atalhos, raridades, 
         <a href="#adm-cal"><span aria-hidden="true">暦</span>Calendário</a>
         <a href="#adm-conta"><span aria-hidden="true">晶</span>Conta</a>
         <a href="#adm-pers"><span aria-hidden="true">魂</span>Personagem</a>
+        <a href="#adm-outras"><span aria-hidden="true">他</span>Outras contas</a>
         <a href="#adm-altar"><span aria-hidden="true">運</span>Altar</a>
         <a href="#adm-bot"><span aria-hidden="true">機</span>Bot e site</a>
         <a href="#adm-hist"><span aria-hidden="true">録</span>Histórico</a>
@@ -151,6 +152,59 @@ const dados = { tipos: TIPOS, campos: CAMPOS, acoes: ACOES, atalhos, raridades, 
           </section>
         ))}
 
+        <!-- OUTRAS CONTAS: só os Cristais Prismáticos de outro jogador, com confirmação e Desfazer -->
+        <section class="adm-p adm-p--largo" id="adm-outras" aria-labelledby="adm-outras-t" data-out>
+          <header class="adm-p__hd">
+            <span class="adm-p__k" aria-hidden="true">他</span>
+            <div><h2 id="adm-outras-t" class="adm-p__t">Outras contas</h2><p class="adm-p__s">Cristais Prismáticos de qualquer jogador</p></div>
+          </header>
+          <div class="adm-out">
+            <div class="adm-out__col">
+              <form class="adm-out__busca" data-out-busca role="search">
+                <label class="adm-calf__l"><span>ID do Discord ou nome do personagem</span><input name="q" maxlength="40" autocomplete="off" required placeholder="123456789012345678 ou Lúx" /></label>
+                <button type="submit" class="adm-b adm-b--solid">Procurar</button>
+              </form>
+              <ul class="adm-out__res" data-out-res aria-live="polite"></ul>
+
+              <div class="adm-out__sel" data-out-sel hidden>
+                <div class="adm-out__quem">
+                  <span class="adm-out__av" data-out-av aria-hidden="true"></span>
+                  <div><b data-out-nome></b><small data-out-id></small></div>
+                  <button type="button" class="adm-chip" data-out-ler title="Ler o saldo de novo">Atualizar</button>
+                </div>
+                <div class="adm-n" data-out-n>
+                  <p class="adm-n__l">Cristais Prismáticos</p>
+                  <b class="adm-n__v" data-out-v>—</b>
+                  <div class="adm-n__at">
+                    {atalhos.cp.map((x) => <button type="button" class="adm-chip" data-out-somar={x}>+{x.toLocaleString('pt-BR')}</button>)}
+                    <button type="button" class="adm-chip adm-chip--menos" data-out-somar={-atalhos.cp[0]}>−{atalhos.cp[0].toLocaleString('pt-BR')}</button>
+                  </div>
+                  <form class="adm-n__f" data-out-form>
+                    <label class="sr-only" for="adm-out-valor">Valor de Cristais Prismáticos</label>
+                    <input id="adm-out-valor" type="number" inputmode="numeric" step="1" max={CAMPOS.cp.max} placeholder="Valor" required />
+                    <button type="submit" name="modo" value="somar" class="adm-b">Somar</button>
+                    <button type="submit" name="modo" value="definir" class="adm-b adm-b--ink">Definir</button>
+                  </form>
+                  <label class="adm-out__mot"><span class="sr-only">Motivo</span><input data-out-motivo maxlength="80" placeholder="Motivo (opcional): prêmio do evento, reembolso…" /></label>
+                </div>
+              </div>
+              <div class="adm-out__conf" data-out-conf role="alertdialog" aria-labelledby="adm-out-conf-t" hidden>
+                <p id="adm-out-conf-t" class="adm-out__conf-t" data-out-conf-t></p>
+                <p class="adm-out__conf-s" data-out-conf-s></p>
+                <div class="adm-out__conf-b">
+                  <button type="button" class="adm-b adm-b--solid" data-out-sim>Confirmar e salvar</button>
+                  <button type="button" class="adm-b adm-b--ink" data-out-nao>Cancelar</button>
+                </div>
+              </div>
+              <p class="adm-ping__r" data-out-msg role="status"></p>
+            </div>
+            <div class="adm-out__col">
+              <p class="t-label adm-out__h">Registro das mudanças</p>
+              <ol class="adm-hist" data-out-hist><li class="adm-hist__vazio">Lendo o registro…</li></ol>
+            </div>
+          </div>
+        </section>
+
         <!-- ALTAR: simulação com as regras de verdade, sem gravar -->
         <section class="adm-p adm-p--largo" id="adm-altar" aria-labelledby="adm-altar-t">
           <header class="adm-p__hd">
@@ -223,4 +277,5 @@ const dados = { tipos: TIPOS, campos: CAMPOS, acoes: ACOES, atalhos, raridades, 
 <script>
   import '../scripts/admin.js';
   import '../scripts/admin-extra.js';
+  import '../scripts/admin-outras.js';
 </script>

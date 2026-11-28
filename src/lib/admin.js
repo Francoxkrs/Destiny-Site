@@ -5,8 +5,9 @@
  * Sem a variável, a sala não existe para ninguém. A checagem é sempre no servidor: a página e cada rota /api/admin/*
  * respondem 404 a quem não é admin (nem dizem que a sala existe).
  *
- * O admin só mexe na PRÓPRIA conta (userId da sessão) e em nada mais. Cada mudança fica em `adminLog`
- * com o valor de antes e o de depois, e pode ser desfeita pelo painel.
+ * Os painéis Conta e Personagem mexem só na PRÓPRIA conta (userId da sessão). A única exceção é "Outras contas"
+ * (2026-11-27, pedido do Silas): o admin muda os Cristais Prismáticos de outro jogador, e só eles (CAMPOS_OUTRAS).
+ * Cada mudança fica em `adminLog` com o valor de antes e o de depois (e quem fez), e pode ser desfeita pelo painel.
  *
  * Onde cada número mora:
  *   contas (por conta do Discord, a mesma dos Cristais e do Altar): cp, inscricoes, fragmentos, altarPity, altarPityE, limites
@@ -88,10 +89,13 @@ export function validarAjuste(corpo) {
 }
 
 /**
- * Muda um número da própria conta. Grava só se ninguém mexeu no mesmo campo entre a leitura e a escrita.
- * @param {{ userId: string, guildId: string, nome?: string }} quem
+ * Muda um número de uma conta. Grava só se ninguém mexeu no mesmo campo entre a leitura e a escrita.
+ * Sem `opcoes`, é a própria conta do admin. Com `opcoes.por`, é a conta de outro jogador (Outras contas).
+ * `opcoes.esperado`: o saldo que o admin viu ao confirmar; se mudou desde então, não grava.
+ * @param {{ userId: string, guildId: string, nome?: string }} quem  a conta que muda
+ * @param {{ por?: { id: string, nome?: string }, esperado?: number, desfaz?: any }} [opcoes]
  */
-export async function ajustar(db, quem, pedido, agora = new Date()) {
+export async function ajustar(db, quem, pedido, agora = new Date(), opcoes = {}) {
   const c = CAMPOS[pedido.campo];
   for (let tentativa = 0; tentativa < 3; tentativa++) {
     const docs = {
@@ -100,6 +104,9 @@ export async function ajustar(db, quem, pedido, agora = new Date()) {
     };
     if (c.onde === 'pers' && !docs.pers) return { ok: false, status: 409, erro: 'Você não tem personagem aprovado no bot: Yuls, Méritos, PE e Estágio moram nele.' };
     const antes = await valorAtual(db, quem, pedido.campo, docs);
+    if (opcoes.esperado != null && antes !== opcoes.esperado) {
+      return { ok: false, status: 409, erro: `O saldo mudou de ${opcoes.esperado.toLocaleString('pt-BR')} para ${antes.toLocaleString('pt-BR')} desde que você abriu a conta (um giro, uma compra ou outro ajuste). Confira e confirme de novo.`, agora: antes };
+    }
     const depois = pedido.modo === 'somar' ? antes + pedido.valor : pedido.valor;
     if (depois < c.min || depois > c.max) return { ok: false, status: 400, erro: `${c.nome} fica entre ${c.min} e ${c.max.toLocaleString('pt-BR')}. Ficaria ${depois.toLocaleString('pt-BR')}.` };
     if (depois === antes) return { ok: false, status: 400, erro: `${c.nome} já está em ${antes.toLocaleString('pt-BR')}.` };
@@ -128,7 +135,9 @@ export async function ajustar(db, quem, pedido, agora = new Date()) {
       gravou = r.modifiedCount === 1;
     }
     if (!gravou) continue; // alguém mexeu no meio: lê de novo
-    await log(db).insertOne({ userId: quem.userId, nome: quem.nome ?? null, campo: pedido.campo, onde: c.onde, modo: pedido.modo, valor: pedido.valor, antes, depois, motivo: pedido.motivo || null, em: agora })
+    const registro = { userId: quem.userId, nome: quem.nome ?? null, campo: pedido.campo, onde: c.onde, modo: pedido.modo, valor: pedido.valor, antes, depois, motivo: pedido.motivo || null, em: agora };
+    if (opcoes.por) Object.assign(registro, { outra: true, por: { id: opcoes.por.id, nome: opcoes.por.nome ?? null } }, opcoes.desfaz != null ? { desfaz: opcoes.desfaz } : {});
+    await log(db).insertOne(registro)
       .catch((e) => console.error('admin (log):', e?.message ?? e));
     return { ok: true, campo: pedido.campo, antes, depois };
   }
@@ -160,6 +169,99 @@ export async function acao(db, quem, id, agora = new Date()) {
   }
   await log(db).insertOne({ userId: quem.userId, nome: quem.nome ?? null, acao: id, antes, depois, em: agora }).catch((e) => console.error('admin (log):', e?.message ?? e));
   return { ok: true, acao: id };
+}
+
+/* ------------------------------------------------------------------ outras contas (só Cristais Prismáticos) */
+
+/** O que o admin pode mudar na conta de outro jogador. Só CP: o resto mora no bot e tem fluxo próprio. */
+export const CAMPOS_OUTRAS = ['cp'];
+
+export const ehIdDiscord = (x) => /^\d{17,20}$/.test(String(x ?? ''));
+const escaparRegex = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Nome que aparece para a conta: o do personagem no site, ou nada. */
+const nomeDaFicha = (f) => (f ? [f.nome, f.sobrenome].filter(Boolean).join(' ') : null);
+
+/**
+ * Procura contas por ID do Discord (exato) ou pelo nome do personagem (pedaço do nome ou do sobrenome).
+ * Um ID sem conta nem ficha ainda volta: o CP fica guardado e a pessoa vê quando entrar no site.
+ */
+export async function buscarContas(db, termo, guildId = env.guildId) {
+  const t = String(termo ?? '').trim().slice(0, 40);
+  if (ehIdDiscord(t)) {
+    const [c, f] = await Promise.all([
+      conta(db).findOne({ userId: t }, { projection: { cp: 1 } }),
+      db.collection('fichasWeb').findOne({ guildId, userId: t }, { projection: { nome: 1, sobrenome: 1, imagem: 1 } }),
+    ]);
+    return { ok: true, contas: [{ userId: t, nome: nomeDaFicha(f), imagem: f?.imagem ?? null, cp: Math.floor(c?.cp ?? 0), temConta: Boolean(c) }] };
+  }
+  if (t.length < 2) return { ok: false, erro: 'Escreva pelo menos 2 letras do nome do personagem, ou o ID do Discord.' };
+  const rx = { $regex: escaparRegex(t), $options: 'i' };
+  const fichas = await db.collection('fichasWeb').find({ guildId, $or: [{ nome: rx }, { sobrenome: rx }] }, { projection: { userId: 1, nome: 1, sobrenome: 1, imagem: 1 } }).limit(8).toArray();
+  const ids = fichas.map((f) => f.userId);
+  const contas = ids.length ? await conta(db).find({ userId: { $in: ids } }, { projection: { userId: 1, cp: 1 } }).toArray() : [];
+  const porId = new Map(contas.map((c) => [c.userId, c]));
+  return { ok: true, contas: fichas.map((f) => ({ userId: f.userId, nome: nomeDaFicha(f), imagem: f.imagem ?? null, cp: Math.floor(porId.get(f.userId)?.cp ?? 0), temConta: porId.has(f.userId) })) };
+}
+
+/** Confere o pedido de mudar o CP de outro jogador. `esperado` (o saldo que o admin confirmou) é obrigatório. */
+export function validarOutra(corpo) {
+  const userId = String(corpo?.userId ?? '');
+  if (!ehIdDiscord(userId)) return { ok: false, erro: 'ID do Discord inválido.' };
+  const v = validarAjuste({ ...corpo, campo: corpo?.campo ?? 'cp' });
+  if (!v.ok) return v;
+  if (!CAMPOS_OUTRAS.includes(v.campo)) return { ok: false, erro: 'Em outras contas, só os Cristais Prismáticos podem mudar.' };
+  const esperado = Number(corpo?.esperado);
+  if (!Number.isSafeInteger(esperado) || esperado < 0) return { ok: false, erro: 'Falta o saldo que você confirmou. Recarregue a conta.' };
+  return { ...v, userId, esperado };
+}
+
+/** Muda o CP de outro jogador. `admin` é quem está fazendo (vai para o registro). */
+export async function ajustarOutra(db, admin, pedido, agora = new Date()) {
+  const f = await db.collection('fichasWeb').findOne({ guildId: admin.guildId, userId: pedido.userId }, { projection: { nome: 1, sobrenome: 1 } });
+  const alvo = { userId: pedido.userId, guildId: admin.guildId, nome: nomeDaFicha(f) };
+  const r = await ajustar(db, alvo, pedido, agora, { por: { id: admin.userId, nome: admin.nome }, esperado: pedido.esperado });
+  return r.ok ? { ...r, userId: alvo.userId, nome: alvo.nome } : r;
+}
+
+/** O id do registro vem do navegador: vira ObjectId quando tem o formato, senão fica como texto (o banco falso dos testes). */
+async function idDoRegistro(id) {
+  const t = String(id ?? '');
+  if (!/^[a-f\d]{24}$/i.test(t)) return t.slice(0, 40);
+  const { ObjectId } = await import('mongodb');
+  return new ObjectId(t);
+}
+
+/**
+ * Desfaz um ajuste de outra conta: devolve a DIFERENÇA (não volta ao número antigo), porque o jogador pode ter
+ * gastado ou ganhado CP depois. Cada ajuste só pode ser desfeito uma vez; a marca é gravada antes, para dois
+ * cliques não desfazerem duas vezes.
+ */
+export async function desfazerOutra(db, admin, id, agora = new Date()) {
+  const _id = await idDoRegistro(id);
+  const l = await log(db).findOne({ _id });
+  if (!l || !l.outra || !CAMPOS_OUTRAS.includes(l.campo) || l.desfaz != null) return { ok: false, status: 404, erro: 'Esse ajuste não existe ou não pode ser desfeito.' };
+  if (l.desfeitoEm) return { ok: false, status: 409, erro: 'Esse ajuste já foi desfeito.' };
+  const diferenca = l.depois - l.antes;
+  const marca = await log(db).updateOne({ _id, desfeitoEm: { $in: [null] } }, { $set: { desfeitoEm: agora, desfeitoPor: { id: admin.userId, nome: admin.nome ?? null } } });
+  if (marca.modifiedCount !== 1) return { ok: false, status: 409, erro: 'Esse ajuste já foi desfeito.' };
+  const alvo = { userId: l.userId, guildId: admin.guildId, nome: l.nome ?? null };
+  const r = await ajustar(db, alvo, { campo: l.campo, modo: 'somar', valor: -diferenca, motivo: 'desfazer' }, agora, { por: { id: admin.userId, nome: admin.nome }, desfaz: l._id });
+  if (!r.ok) {
+    await log(db).updateOne({ _id }, { $set: { desfeitoEm: null, desfeitoPor: null } }).catch(() => null);
+    return r.status === 400 ? { ...r, erro: `Não dá para desfazer: ${r.erro} O jogador já gastou parte desses Cristais.` } : r;
+  }
+  return { ...r, userId: l.userId, nome: l.nome ?? null };
+}
+
+/** Os últimos ajustes em outras contas, do mais novo ao mais velho. */
+export async function historicoOutras(db, limite = 30) {
+  const l = await log(db).find({ outra: true }).sort({ em: -1 }).limit(limite).toArray().catch(() => []);
+  return l.map((x) => ({
+    id: String(x._id), userId: x.userId, nome: x.nome ?? null, campo: x.campo, antes: x.antes, depois: x.depois,
+    motivo: x.motivo ?? null, por: x.por?.nome ?? x.por?.id ?? null, em: iso(x.em),
+    desfeitoEm: iso(x.desfeitoEm), desfaz: x.desfaz != null ? String(x.desfaz) : null,
+  }));
 }
 
 /* ------------------------------------------------------------------ leitura */

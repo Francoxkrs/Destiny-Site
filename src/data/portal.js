@@ -6,5 +6,6 @@ export const portal = [
   { id: 'altar', href: '/altar/', nome: 'Altar dos Vestígios', curto: 'Altar', kanji: '運', texto: 'Giros da temporada e a Pedra do Destino.', cabecalho: true },
   { id: 'eventos', href: '/eventos/', nome: 'Eventos', kanji: '祭', texto: 'O que está valendo agora no servidor.', cabecalho: true },
   { id: 'patch', href: '/patch/', nome: 'Patch Notes', curto: 'Patch', kanji: '記', texto: 'Tudo o que mudou no bot, patch por patch.', cabecalho: true },
+  { id: 'feitico', href: '/feitico/', nome: 'Escrever feitiço', kanji: '書', texto: 'Escreva um feitiço do seu Grimório e mande ao Conselho Mágico.' },
   { id: 'cristais', href: '/cristais/', nome: 'Cristais Prismáticos', kanji: '晶', texto: 'Pacotes, Selo Mensal e a loja da conta.' },
 ];

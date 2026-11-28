@@ -15,6 +15,7 @@
     "calendario:teste": "node scripts/calendario-teste.mjs",
     "npcs:teste": "node scripts/npcs-teste.mjs",
     "guias:teste": "node scripts/guias-teste.mjs",
+    "feitico:teste": "node scripts/feitico-teste.mjs",
     "bot:exportar": "node scripts/bot-exportar.mjs"
   },
   "dependencies": {

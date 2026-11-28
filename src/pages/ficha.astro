@@ -275,8 +275,9 @@ const escada = (n, de, atual, teto) => Array.from({ length: de }, (_, i) => ({ t
                 </li>
               );
             })}
-            {Array.from({ length: brancas }, () => <li class="gv-ft is-branca"><b>Página em branco</b><span class="gv-mono">ainda não escrita</span></li>)}
+            {Array.from({ length: brancas }, (_, i) => <li class="gv-ft is-branca">{i === 0 ? <a class="gv-ft__escrever" href="/feitico/"><b>Escrever nesta página</b><span class="gv-mono">pelo site, direto ao Conselho</span></a> : <><b>Página em branco</b><span class="gv-mono">ainda não escrita</span></>}</li>)}
           </ul>
+          <a class="gv-link" href="/feitico/">Escrever feitiço <Icon name="seta" size={13} /></a>
         </section>
 
         <!-- IV · corpo -->

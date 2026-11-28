@@ -31,6 +31,7 @@ O site lê a ficha e grava só o que ele muda. Crie no Atlas (Database Access �
 - `find` em `personagens`, `fichasWeb`, `assets`, `contas`, `acessosWeb`, `comprasCristais`
 - `update` em `personagens` (só para a trilha; o site valida as regras antes), `fichasWeb` e `acessosWeb` (marcar o link do /site como usado)
 - `insert`, `update` e `createIndex` em `contas` e `comprasCristais` (compra de Cristais pelo Pix, ver [pagamento.md](pagamento.md))
+- `find` e `insert` em `pedidosFeitico` (escrever feitiço pelo site, abaixo)
 
 e um usuário com essa função. Em Network Access, a Vercel não tem IP fixo, então é preciso liberar `0.0.0.0/0`; por isso o usuário do site deve ter senha forte e só essa função.
 
@@ -64,3 +65,15 @@ Saldo de Cristais Prismáticos: coleção `contas` `{ userId, cp, pedidosCredita
 | Cristais | `src/data/cristais.js` | `aprovado: false` mostra o selo de proposta. Nada cobra até existir o pagamento |
 | Eventos | `src/data/eventos.js` | Um item por evento: `estado` ativo, sempre ou breve |
 | Patch Notes | `src/data/patches.js` | Copiar o `PATCH_ATUAL` de `functions/patch/notas.ts` do bot para o topo da lista |
+
+## Escrever feitiço pelo site (`/feitico/`, 2026-11-28)
+
+O jogador escreve o feitiço no site e o bot posta no fórum de feitiços (`/config feiticos`) com os mesmos botões Aprovar e Recusar do `/feitiço`.
+
+1. O bot põe na `fichasWeb` o campo `escrita` (`functions/portal/escrita.ts`): Tipos e Funções com `liberado`/`exige` (pelos Conhecimentos), páginas (`espacos`, `ocupados`, `livres`), Grimório Costurado, nível do Estágio, descontos de Mana (`custo.gerais`, `porTipo`, `porFuncao`), feitiços em análise (com o post) e os 5 últimos recusados (com o motivo).
+2. A página mostra só o que vale e desenha a página do Grimório ao vivo. O rascunho fica no navegador.
+3. `POST /api/feitico` (multipart) confere de novo com a `escrita` (`src/lib/feitico.js`), limita a 6 pedidos por 24 h e às páginas livres, e grava em `pedidosFeitico` `{ guildId, userId, status: "novo", dados, imagem?: { dados (bytes, até 3 MB), nome, tipo }, criadoEm }`. A imagem é conferida pelos bytes (PNG, JPG, WEBP, GIF).
+4. O bot (`functions/portal/pedidos-feitico.ts`) pega a cada 15 s, cria o feitiço pelo `criarFeitico` (as mesmas regras do Discord), guarda a imagem como pendente e posta. O pedido vira `enviado` (com `threadId`) ou `erro` (com o motivo), e os bytes da imagem saem do pedido.
+5. A Staff decide no fórum. Aprovado, o feitiço entra no Grimório e a `fichasWeb` muda sozinha. `GET /api/feitico` lista os pedidos da conta.
+
+Feitiço de Alma e a segunda alma (Dupla Alma) continuam só pelo `/feitiço` no Discord. Teste: `npm run feitico:teste` (site) e `npm run feitico-site:teste` (bot).
